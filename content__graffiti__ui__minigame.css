@@ -1,0 +1,26 @@
+.graffiti-screen{background:#060b13e8;backdrop-filter:blur(7px);padding:12px}
+.graffiti-card{width:min(850px,100%);padding:16px 20px;border:2px solid #535b68;background:#121923;box-shadow:8px 8px 0 #04070b;max-height:calc(100dvh - 24px);overflow:auto}
+.graffiti-heading h2{font:700 19px LocalMono,monospace;letter-spacing:1px}.graffiti-heading .eyebrow{font-size:9px;letter-spacing:2px}
+.phase-track{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:14px 0 10px;border:0;padding:0;font:9px LocalMono,monospace}
+.phase-track span{padding:9px 5px;border:1px solid #394553;text-align:center;color:#7f8b9a;background:#0d141e}
+.phase-track .active{color:#eed787;background:#3a3325;border-color:#e8c663}.phase-track .complete{color:#c590dd;border-color:#846496;background:#2c2037}
+.graffiti-stage{position:relative;border:2px solid #333e4b;overflow:hidden;background:#0d141c}
+#graffiti-canvas{width:100%;height:auto;max-height:none;touch-action:none;cursor:crosshair}
+.graffiti-state{position:absolute;top:12px;left:12px;pointer-events:none;background:#0d1621e8;border-left:3px solid #d8b958;padding:7px 10px;font:9px LocalMono,monospace;letter-spacing:1px;color:#ece5d5}
+.graffiti-reward{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);width:max-content;max-width:95%;display:flex;align-items:center;gap:20px;padding:10px 24px;border:2px solid #e9c762;background:#111922f5;box-shadow:4px 4px 0 #090d15;animation:graffiti-win .25s ease-out}
+.graffiti-reward strong{font:700 25px LocalMono,monospace;color:#f1d273}.graffiti-reward span{font:700 13px LocalMono,monospace;color:#f08b80}
+.graffiti-bottom{margin-top:12px;gap:12px}.graffiti-bottom strong{font:700 18px LocalMono,monospace;letter-spacing:1px}.graffiti-bottom p{margin:5px 0 10px;line-height:1.45;font-size:11px}
+#coverage-label{font:700 26px LocalMono,monospace;color:#d698ea;white-space:nowrap}
+#graffiti-progress{height:12px;border:2px solid #080e17;outline:1px solid #4e5866}
+#graffiti-screen[data-phase="shake"] progress::-webkit-progress-value{background:#efd06c}
+#confirm-stencil{margin-top:12px;width:100%;justify-content:center;padding:12px}
+.graffiti-screen.exiting{opacity:0;transition:opacity .4s ease;pointer-events:none}
+@keyframes graffiti-win{from{opacity:0;translate:0 8px}to{opacity:1;translate:0 0}}
+@media(min-width:760px) and (max-height:820px){.graffiti-card{width:min(850px,calc((100dvh - 285px)*1.5))}.graffiti-heading h2{font-size:16px}.phase-track{margin-top:10px}.graffiti-bottom strong{font-size:15px}}
+@media(max-width:759px){.graffiti-screen{padding:9px}.graffiti-card{padding:12px 10px}.graffiti-heading h2{font-size:13px;letter-spacing:0}.graffiti-heading .eyebrow{font-size:7px;letter-spacing:1px}.graffiti-heading .secondary{font-size:9px;padding:8px}.phase-track{font-size:7px;gap:4px;margin-top:12px}.phase-track span{padding:8px 2px}.graffiti-state{font-size:6px;padding:5px;top:6px;left:6px}.graffiti-bottom strong{font-size:13px}.graffiti-bottom p{font-size:10px}#coverage-label{font-size:20px}.graffiti-reward{padding:6px 15px;gap:16px;bottom:6px}.graffiti-reward strong{font-size:18px}.graffiti-reward span{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.graffiti-reward{animation:none}.graffiti-screen.exiting{transition:none}}
+#motion-controls{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px}
+#motion-controls button{font-size:9px;padding:9px 10px;justify-content:center}
+#motion-status{width:100%;font-size:10px;color:#c7bdd0;line-height:1.4}
+#graffiti-screen[data-phase="shake"]:has(#motion-controls:not([hidden])) .graffiti-card{width:min(700px,calc((100dvh - 385px)*1.5))}
+@media(max-width:759px){#graffiti-screen[data-phase="shake"]:has(#motion-controls:not([hidden])) .graffiti-card{width:min(100%,650px)}}

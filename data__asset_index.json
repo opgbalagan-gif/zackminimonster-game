@@ -1,0 +1,148 @@
+{
+  "version": 2,
+  "assets": [
+    {
+      "asset_id": "D01_BUILDINGS",
+      "path": "./content__district_01__art__buildings.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "file_size": 3133028,
+      "sha256": "79f9757d74cac4dc2eab4fe82eca250886225cc16f86fce0a21e4c0360047f12",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_CHARACTERS",
+      "path": "./content__district_01__art__characters.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "file_size": 1244757,
+      "sha256": "5b956bd9a4e34026471d005bba343a9d3c1b4e964a7f98547294a40933b9608a",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_CITIZENS",
+      "path": "./content__district_01__art__citizens.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "file_size": 964363,
+      "sha256": "52514de00c5dae01c3cebc61196b9f6d1bd8855654b916868243b753ec00bac1",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_CITY-GROUND",
+      "path": "./content__district_01__art__city-ground.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "file_size": 3170244,
+      "sha256": "4df0e47a852d42924bd0ac3c32750b50de5e4ff86129ba8604f157e39c8080cc",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_EXPANDED-BUILDINGS",
+      "path": "./content__district_01__art__expanded-buildings.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "file_size": 2989649,
+      "sha256": "5ab0eaf7d24dc6e1edfb270299df5f5d62cc85556d3ed847bd94925830f2d44a",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_HIDEOUT-ROOM",
+      "path": "./content__district_01__art__hideout-room.png",
+      "category": "room_background",
+      "district": "district_01",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "file_size": 3262711,
+      "sha256": "0e4f6d326b483374ac070fa83c7445e1c6abf07a65b4465f431fb2b668489ada",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_OUTFITS",
+      "path": "./content__district_01__art__outfits.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "file_size": 1213540,
+      "sha256": "3866e37bb4d7735d7806c4549394be121711804202e32275d2590f8116fed766",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_PROPS",
+      "path": "./content__district_01__art__props.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "file_size": 2231101,
+      "sha256": "ed27e6e2bdfb38d1202faf4d46d223bda1949bae9d826418ae833eee3703b22b",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_PANDA-KING",
+      "path": "./content__graffiti__assets__panda-king.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1225,
+        1284
+      ],
+      "file_size": 1085067,
+      "sha256": "c660c1e3d66db5ed6ce2d5801a695a4a5255e2fd571172a019fd1474162ae50f",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_SPRAY-CAN-ATLAS",
+      "path": "./content__graffiti__assets__spray-can-atlas.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "file_size": 1906956,
+      "sha256": "626ad23fd48f93ddc5d7bb622a1f26d0c15c00702b3ccd44d38033541799302b",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_URBAN-WALL",
+      "path": "./content__graffiti__assets__urban-wall.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "file_size": 1923914,
+      "sha256": "791efa7a92663155f0eaedc41ba1582c4318224d6eeb6653895aab183543103c",
+      "usage": "lazy district pack"
+    }
+  ]
+}

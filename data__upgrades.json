@@ -1,0 +1,16 @@
+[
+  {
+    "id": "spray_rack",
+    "name": "SPRAY RACK",
+    "cost": 500,
+    "effect": "spray_bonus",
+    "description": "Спрей захватывает большую область"
+  },
+  {
+    "id": "police_scanner",
+    "name": "POLICE SCANNER",
+    "cost": 750,
+    "effect": "police_warning",
+    "description": "Показывает направление к полиции"
+  }
+]

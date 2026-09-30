@@ -1,0 +1,55 @@
+[
+  {
+    "id": "panda_king",
+    "name": "PANDA KING / ZACK",
+    "texture": "atlas:graffiti_panda",
+    "stencil_texture": "alpha:graffiti_panda",
+    "wall_asset": "urban_blocks",
+    "rarity": "signature",
+    "size": "L",
+    "required_progress": 0.88,
+    "spray_time": 5,
+    "rep_reward": 250,
+    "heat": 1,
+    "unlock_condition": "default"
+  },
+  {
+    "id": "zack_tag",
+    "name": "ZACK / ORIGINAL",
+    "texture": "procedural:zack-tag",
+    "stencil_texture": "alpha:zack-tag",
+    "rarity": "common",
+    "size": "M",
+    "required_progress": 0.88,
+    "spray_time": 4,
+    "rep_reward": 250,
+    "heat": 1,
+    "unlock_condition": "default"
+  },
+  {
+    "id": "monster",
+    "name": "MINI MONSTER",
+    "texture": "atlas:companion",
+    "stencil_texture": "alpha:monster",
+    "rarity": "rare",
+    "size": "L",
+    "required_progress": 0.88,
+    "spray_time": 5,
+    "rep_reward": 400,
+    "heat": 2,
+    "unlock_condition": "default"
+  },
+  {
+    "id": "crown",
+    "name": "EAST BLOCK CROWN",
+    "texture": "procedural:crown",
+    "stencil_texture": "alpha:crown",
+    "rarity": "common",
+    "size": "M",
+    "required_progress": 0.88,
+    "spray_time": 4,
+    "rep_reward": 300,
+    "heat": 1,
+    "unlock_condition": "default"
+  }
+]

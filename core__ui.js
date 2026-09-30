@@ -1,0 +1,129 @@
+import {GraffitiView} from './core__graffiti-view.js';
+import {HideoutUI} from './core__hideout-ui.js';
+import {GRAFFITI_CONFIG} from './content__graffiti__config.js';
+import {URBAN_WALL} from './content__graffiti__walls__urban.js';
+const $=id=>document.getElementById(id);
+export class GameUI{
+  constructor(callbacks){
+    this.callbacks=callbacks;this.mapOpen=false;this.debug=false;this.toastUntil=0;this.lastMode='';
+    $('start-button').onclick=callbacks.start;$('leave-button').onclick=callbacks.leave;
+    $('upgrade-button').onclick=callbacks.upgrade;$('action-button').onclick=callbacks.action;
+    $('map-button').onclick=()=>this.toggleMap();$('close-map').onclick=()=>this.toggleMap(false);
+    $('home-route').onclick=callbacks.home;$('sound-button').onclick=callbacks.sound;
+    $('cancel-graffiti').onclick=callbacks.cancel;$('confirm-stencil').onclick=callbacks.confirm;
+    $('route-button').onclick=()=>{
+      const id=$('route-select').value;this.toggleMap(false);callbacks.route(id);
+    };
+  }
+  loading(progress,error=''){
+    $('start-button').disabled=!error;$('load-progress').hidden=!!error;$('load-progress').value=progress;
+    $('load-status').textContent=error||'ЗАГРУЗКА EAST BLOCK · '+Math.round(progress*100)+'%';
+    if(error)$('start-button').textContent='ПОВТОРИТЬ';
+  }
+  bind(session,renderer,audio){
+    this.session=session;this.renderer=renderer;this.audio=audio;
+    this.graffitiView=new GraffitiView($('graffiti-canvas'),session,renderer,audio);
+    $('motion-enable').onclick=async()=>{await this.graffitiView.motion.enable();this.sync();};
+    $('motion-touch').onclick=()=>{this.graffitiView.motion.useTouch();this.sync();};
+    this.hideoutUI=new HideoutUI(session,renderer,()=>this.sync(),audio);
+    $('radio-stop').onclick=()=>{audio.radio.stop();this.sync();};
+    $('radio-retry').onclick=()=>{audio.radio.start();this.sync();};
+    $('radio-volume').value=Math.round(audio.radio.media.volume*100);
+    $('radio-volume').oninput=()=>{audio.radio.setVolume(Number($('radio-volume').value)/100);this.sync();};
+    $('radio-volume').onchange=()=>{session.save.settings.radioVolume=audio.radio.media.volume;session.persist();};
+    $('title-screen').hidden=true;$('hud').hidden=false;
+    this.updateRoutes();this.sync();
+  }
+  updateRoutes(){
+    const s=this.session,select=$('route-select'),old=select.value;select.replaceChildren();
+    const options=[{id:'home',name:'⌂ Убежище'},...s.world.targets.map(t=>({id:t.wall_id,name:(s.painted.has(t.wall_id)?'✓ ':'▣ ')+t.name+' · '+t.rep_reward+' REP'})),...s.world.safeSpots.map(t=>({id:t.id,name:'? '+t.name}))];
+    for(const opt of options){const el=document.createElement('option');el.value=opt.id;el.textContent=opt.name;select.append(el);}
+    if(old)select.value=old;
+  }
+  toggleMap(force){
+    if(!this.session||this.session.mode==='graffiti'||this.session.mode==='caught')return;
+    this.mapOpen=force??!this.mapOpen;$('map-screen').hidden=!this.mapOpen;
+    if(this.mapOpen){this.updateRoutes();this.drawMap();}
+  }
+  drawMap(){
+    if(!this.mapOpen)return;const canvas=$('map-canvas'),rect=canvas.getBoundingClientRect();
+    canvas.width=Math.max(1,Math.round(rect.width));canvas.height=Math.max(1,Math.round(rect.height-60));
+    this.renderer.world(canvas.getContext('2d'),this.session,canvas.width,canvas.height,true);
+    $('map-progress').textContent=this.session.painted.size+' / '+this.session.world.targets.length+' СТЕН';
+  }
+  showToast(text){$('toast').textContent=text;$('toast').hidden=false;this.toastUntil=performance.now()+4500;}
+  sync(){
+    const s=this.session;if(!s)return;
+    $('app').dataset.mode=s.mode;
+    const radio=this.audio.radio;
+    $('radio-panel').hidden=radio.state==='off';
+    $('radio-status').textContent=radio.state==='error'?radio.message:radio.state==='loading'?'Подключаемся к эфиру…':!this.audio.enabled?'Звук выключен · кнопка ♪':radio.media.volume===0?'Громкость 0%':'В ЭФИРЕ · HIP-HOP / R&B';
+    $('radio-panel').dataset.state=radio.state;
+    $('radio-retry').hidden=radio.state!=='error';
+    $('radio-volume-value').textContent=Math.round(radio.media.volume*100)+'%';
+    if(s.mode==='hideout')this.hideoutUI?.sync();
+    $('hideout-ui').hidden=s.mode!=='hideout';$('district-ui').hidden=!['district','caught'].includes(s.mode);
+    $('graffiti-screen').hidden=s.mode!=='graffiti';
+    $('rep-label').innerHTML=s.save.rep+' <small>REP</small>';$('run-rep').textContent='Вылазка +'+s.runRep;
+    $('heat-stars').textContent='★'.repeat(s.heat)+'☆'.repeat(5-s.heat);
+    $('heat-stars').setAttribute('aria-label','Розыск '+s.heat+' из 5');
+    $('heat-note').textContent=s.hiddenFor>0?'СКРЫТ':s.police.units.some(u=>u.state==='CHASE')?'ПОГОНЯ':s.heat?'Патрули активны':'Чисто';
+    $('home-rep').textContent=s.save.rep;$('home-walls').textContent=s.save.painted_walls.length+' / '+s.world.targets.length;
+    const bought=s.save.hideout.upgrades.includes('spray_rack');
+    $('upgrade-button').disabled=bought;$('upgrade-button').querySelector('b').textContent=bought?'УСТАНОВЛЕН':'500 REP';
+    $('objective-label').textContent=s.knockedFor>0?'СБИЛИ · Зак поднимается…':s.waypoint?'↗ '+s.waypoint.label:s.runRep?'Вернись в убежище, чтобы сохранить':s.painted.size===s.world.targets.length?'Район полностью твой':'Найди свободную стену · берегись машин';
+    const near=s.near;$('interaction').hidden=!near||s.hiddenFor>0||s.mode!=='district';
+    if(near){
+      $('interaction-type').textContent=near.type==='target'?'GRAFFITI SPOT':near.type==='safe'?'SAFE SPOT':'HIDEOUT / SAVE';
+      $('interaction-name').textContent=near.item.name;
+      $('interaction-detail').textContent=near.type==='target'?'+'+near.item.rep_reward+' REP · HEAT +'+near.item.heat_reward:near.type==='safe'?(near.item.cooldown>0?'Повторно через '+Math.ceil(near.item.cooldown)+' сек.':'Спрятаться и снизить розыск'):'Сохранить вылазку и сбросить HEAT';
+      $('action-button').disabled=near.type==='safe'&&near.item.cooldown>0;
+    }
+    $('sound-button').textContent=s.save.settings.sound?'♪':'×';
+    if(s.mode==='graffiti'){
+      const g=s.graffiti;if(this.graffitiView.game!==g)this.graffitiView.bind(g);
+      $('graffiti-screen').dataset.phase=g.phase;
+      $('graffiti-screen').classList.toggle('exiting',g.done&&g.resultTime>GRAFFITI_CONFIG.resultSeconds-.4);
+      $('graffiti-wall-state').textContent=URBAN_WALL.states[g.phase==='shake'?'clean':g.phase];
+      $('graffiti-reward').hidden=!g.done;$('graffiti-rep').textContent='+'+g.target.rep_reward+' REP';$('graffiti-heat').textContent='HEAT +'+g.target.heat_reward;
+      $('cancel-graffiti').hidden=g.done;
+      $('wall-id').textContent=g.target.buildingId?'EAST BLOCK / ФАСАД':'EAST BLOCK / СТЕНА';$('wall-name').textContent=g.target.name;
+      const phases=['shake','stencil','spray','result'];
+      for(const el of document.querySelectorAll('[data-phase]')){
+        el.classList.toggle('active',el.dataset.phase===g.phase);el.classList.toggle('complete',phases.indexOf(el.dataset.phase)<phases.indexOf(g.phase));
+      }
+      const title={shake:'ВСТРЯХНИ БАЛЛОН',stencil:'РАЗМЕСТИ ТРАФАРЕТ',spray:'ОСТАВЬ СВОЙ СЛЕД',result:'СТЕНА ТВОЯ!'};
+      const help={shake:'Зажми баллон и води влево-вправо. SHAKE THE CAN!',stencil:'Подвинь рисунок в рамке и закрепи. POSITION IT.',spray:'Води баллоном по силуэту. Нужно закрасить '+Math.round(g.required*100)+'%.',result:'Работа готова. Забери награду и возвращайся на улицу.'};
+      $('phase-title').textContent=title[g.phase];$('phase-help').textContent=help[g.phase];
+      const motion=this.graffitiView.motion;
+      $('motion-controls').hidden=g.phase!=='shake'||!motion.mobile;
+      if(g.phase==='shake'&&motion.mobile){
+        $('motion-enable').hidden=motion.listening&&!motion.manual;
+        $('motion-enable').disabled=!motion.supported||motion.status==='requesting';
+        $('motion-enable').textContent=motion.status==='requesting'?'ОЖИДАЕМ РАЗРЕШЕНИЕ…':'ВКЛЮЧИТЬ ВСТРЯХИВАНИЕ';
+        $('motion-touch').hidden=motion.manual||(!motion.allowed&&motion.status!=='requesting');
+        const messages={unavailable:'Датчик недоступен. Открой игру по HTTPS или двигай баллон пальцем.',
+          denied:'Доступ не разрешён. Можно двигать баллон пальцем.',
+          'no-data':'Нет данных датчика. Попробуй режим «Пальцем».',requesting:'Разреши доступ к движению телефона.',
+          listening:'Держи телефон крепко и встряхивай его.',off:'Включи датчик движения или двигай баллон пальцем.'};
+        $('motion-status').textContent=messages[motion.status]??'';
+        if(motion.listening&&!motion.manual){$('phase-title').textContent='ПОТРЯСИ ТЕЛЕФОНОМ';$('phase-help').textContent='Несколько движений — и баллон готов.';}
+      }
+      const progress=g.done?1:g.phase==='shake'?g.shakeProgress:g.phase==='stencil'?0:g.coverage;
+      $('coverage-label').textContent=g.phase==='stencil'?'READY':Math.round(progress*100)+'%';$('graffiti-progress').value=progress;
+      $('confirm-stencil').hidden=!['stencil','result'].includes(g.phase);
+      $('confirm-stencil').textContent=g.done?'ЗАБРАТЬ НАГРАДУ →':'ЗАКРЕПИТЬ ТРАФАРЕТ';
+    }
+    this.graffitiView.motion.setActive(this.graffitiView.motion.mobile&&s.mode==='graffiti'&&s.graffiti?.phase==='shake');
+    $('debug-overlay').hidden=!this.debug;
+    if(this.debug)$('debug-overlay').textContent='FPS '+s.metrics.fps+'\nFRAME '+s.metrics.frame+' ms\nMEM '+s.metrics.memory+'\nPACK '+s.world.id+'\nDRAW '+s.metrics.drawCalls+'\nPOLICE '+s.metrics.activePolice+'\nNPC '+s.citizens.people.length+'\nTRAFFIC '+s.traffic.cars.filter(c=>c.travel>0).length+' / '+s.traffic.cars.length+'\nHEAT '+s.heat;
+    if(performance.now()>this.toastUntil)$('toast').hidden=true;
+    for(const event of s.events.splice(0)){
+      if(event.type==='notice')this.showToast(event.message);
+      if(event.type==='graffiti-start'){
+        $('transition').classList.add('flash');requestAnimationFrame(()=>requestAnimationFrame(()=>$('transition').classList.remove('flash')));
+      }
+    }
+  }
+}
+

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111720"><title>ZACKMINIMONSTER — East Block</title>
+  <link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./hideout.css"><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./content__graffiti__ui__minigame.css">
+</head>
+<body>
+  <main id="app">
+    <canvas id="game" aria-label="Игровой район ZACKMINIMONSTER"></canvas>
+    <div id="title-screen" class="screen title-screen">
+      <div class="title-art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="title-content"><span class="eyebrow">SMALL BLOCK / BIG STORIES</span>
+        <div class="brand"><span class="crown">♛</span>ZACK<span>MINIMONSTER</span></div>
+        <div class="edition">DISTRICT 01 <b>EAST BLOCK</b></div>
+        <p class="title-copy">Твой район. Твои стены.<br>Оставь свой след и вернись домой.</p>
+        <button id="start-button" class="primary large">ВОЙТИ В РАЙОН <span>↗</span></button>
+        <p id="load-status" role="status">TECH DEMO · 07 / BIGGER BLOCK</p><progress id="load-progress" max="1" value="0" hidden></progress>
+      </div><div class="title-footer">TAG. EXPLORE. SURVIVE.<span>ZACKMINIMONSTER © 2026</span></div>
+    </div>
+    <header id="hud" hidden>
+      <div class="player-card"><canvas id="portrait" width="64" height="64" aria-label="Портрет Зака"></canvas><div><span class="micro">ZACK / EAST BLOCK</span><strong id="rep-label">0 <small>REP</small></strong><span id="run-rep">Вылазка +0</span></div></div>
+      <div class="heat-card"><span class="micro">HEAT</span><div id="heat-stars" aria-label="Розыск 0 из 5">☆☆☆☆☆</div><span id="heat-note">Чисто</span></div>
+      <button id="map-button" class="square-button" aria-label="Открыть карту" title="Карта [M]">M<span>КАРТА</span></button>
+      <button id="sound-button" class="square-button compact" aria-label="Переключить звук">♪</button>
+    </header>
+    <audio id="radio-audio" preload="none"></audio>
+    <section id="radio-panel" class="radio-panel" aria-label="Хип-хоп радио" hidden>
+      <div class="radio-heading"><span>♫ <b>181.FM · THE BEAT</b></span><button id="radio-stop" aria-label="Остановить радио" title="Остановить радио">×</button></div>
+      <p id="radio-status" role="status"></p>
+      <div class="radio-controls"><label for="radio-volume">ГРОМКОСТЬ</label><input id="radio-volume" type="range" min="0" max="100" value="22"><output id="radio-volume-value" for="radio-volume">22%</output><button id="radio-retry" hidden>Повторить</button></div>
+    </section>
+    <section id="hideout-ui" class="hideout-ui" hidden>
+      <div class="hideout-brand"><span class="eyebrow">ZACKMINIMONSTER / MY SAFEHOUSE</span><h1>HIDEOUT<span>СВОИ. ВЕЩИ. ИСТОРИИ.</span></h1></div>
+      <div id="room-hotspots" aria-label="Предметы убежища">
+        <button class="room-hotspot" data-hotspot="wardrobe" data-home-tab="wardrobe" aria-label="Открыть гардероб"><i>♟</i><span>ОДЕЖДА</span></button>
+        <button class="room-hotspot" data-hotspot="sprays" data-home-tab="sprays" aria-label="Открыть баллоны"><i>▥</i><span>БАЛЛОНЫ</span></button>
+        <button class="room-hotspot" data-hotspot="collection" data-home-tab="collection" aria-label="Открыть коллекцию"><i>♛</i><span>КОЛЛЕКЦИЯ</span></button>
+        <button class="room-hotspot" data-hotspot="rest" data-room-action="rest" aria-label="Отдохнуть"><i>☾</i><span>ОТДЫХ</span></button>
+        <button class="room-hotspot" data-hotspot="save" data-room-action="save" aria-label="Сохранить прогресс"><i>▣</i><span>СОХРАНИТЬ</span></button>
+        <button class="room-hotspot stereo-hotspot" data-hotspot="music" data-room-action="music" aria-label="Включить хип-хоп радио" aria-pressed="false"><i>♫</i><span>РАДИО</span></button>
+        <button class="pet-touch" data-hotspot="pet" data-room-action="pet" aria-label="Поздороваться с мини-монстром"></button>
+      </div>
+      <div class="home-status"><span class="status-dot"></span><strong>ZACK + MINI</strong><span id="home-status-text">Дома. Можно выдохнуть.</span><button data-room-action="music" aria-label="Включить хип-хоп радио" aria-pressed="false">♫</button></div>
+      <aside id="hideout-panel" class="hideout-panel panel" aria-label="Подготовка к вылазке">
+        <div class="hideout-panel-heading"><div><span class="eyebrow" id="home-panel-kicker">MAKE YOURSELF AT HOME</span><h2 id="home-panel-title">Твоя территория</h2></div><button id="home-panel-close" aria-label="Закрыть панель убежища">×</button></div>
+        <div data-home-pane="home">
+          <p class="home-intro">Город подождёт.<br>Собери свой образ и оставь место для новой истории.</p>
+          <div class="home-stats"><div><span>РЕПУТАЦИЯ</span><strong id="home-rep">0</strong></div><div><span>ТВОИ СТЕНЫ</span><strong id="home-walls">0 / 10</strong></div></div>
+          <div class="loadout-summary"><span>СЕЙЧАС С ТОБОЙ</span><strong id="equipped-outfit"></strong><small id="equipped-ink"></small></div>
+          <p class="next-unlock" id="next-unlock"></p>
+          <button data-home-tab="wardrobe" class="secondary home-wide">СОБРАТЬ ОБРАЗ <span>↗</span></button>
+          <p class="save-note" id="save-note">Образ и снаряжение сохраняются сразу. Стены — после возвращения.</p>
+        </div>
+        <div data-home-pane="wardrobe" hidden><p class="pane-description">Один Зак. Три настроения улицы.</p><div id="outfit-list" class="outfit-list"></div><p class="pane-footnote">Образ виден дома, в районе и во время граффити.</p></div>
+        <div data-home-pane="sprays" hidden><p class="pane-description">Выбери акцент для следующей стены.</p><div id="ink-list" class="ink-list"></div><div class="spray-preview"><canvas id="home-tag-preview" width="260" height="135" aria-label="Предпросмотр выбранной краски"></canvas></div><button id="upgrade-button" class="upgrade-button"><span>SPRAY RACK <small>Радиус распыления +45%</small></span><b>500 REP</b></button><p class="pane-footnote">Баллоны в демо не заканчиваются. Выбранный цвет сохраняется на каждой новой стене.</p></div>
+        <div data-home-pane="collection" hidden><p class="pane-description">Каждый трофей — история твоего района.</p><div id="trophy-list" class="trophy-list"></div><p class="pane-footnote">Выбранный трофей появится на столике в комнате.</p></div>
+      </aside>
+      <nav class="home-dock" aria-label="Разделы убежища">
+        <button data-home-tab="home" class="active"><i>⌂</i><span>УБЕЖИЩЕ</span></button>
+        <button data-home-tab="wardrobe"><i>♟</i><span>ОДЕЖДА</span></button>
+        <button data-home-tab="sprays"><i>▥</i><span>БАЛЛОНЫ</span></button>
+        <button data-home-tab="collection"><i>♛</i><span>КОЛЛЕКЦИЯ</span></button>
+        <button id="leave-button"><i>↗</i><span>В РАЙОН</span></button>
+      </nav>
+    </section>
+    <div id="district-ui" hidden>
+      <div class="district-title"><span class="eyebrow">DISTRICT 01</span><strong>EAST BLOCK</strong><span id="objective-label">Оставь первый тег</span></div>
+      <div id="interaction" class="interaction" hidden><div><span id="interaction-type" class="micro">GRAFFITI SPOT</span><strong id="interaction-name"></strong><small id="interaction-detail"></small></div><button id="action-button" class="primary">ДЕЙСТВИЕ <kbd>E</kbd></button></div>
+      <div id="joystick" role="group" aria-label="Экранный джойстик"><span class="stick-direction up">▲</span><span class="stick-direction down">▼</span><span class="stick-direction left">◀</span><span class="stick-direction right">▶</span><span class="stick-knob"></span></div>
+      <button id="home-route" class="home-route" aria-label="Маршрут в убежище">⌂ <span>ДОМОЙ</span></button>
+      <span class="control-hint">WASD / стрелки · E действие · M карта · клик по дороге — маршрут</span>
+    </div>
+    <section id="map-screen" class="screen map-screen" hidden>
+      <div class="map-header"><div><span class="eyebrow">DISTRICT 01 / OVERVIEW</span><h1>EAST BLOCK</h1></div><button id="close-map" class="secondary">НАЗАД <kbd>M</kbd></button></div>
+      <canvas id="map-canvas" aria-label="Карта района с реальной геометрией"></canvas>
+      <div class="map-sidebar panel"><span class="eyebrow">ВЫБЕРИ МАРШРУТ</span><h2>Куда дальше?</h2><label for="route-select">Точка назначения</label><select id="route-select"></select><button id="route-button" class="primary">ПРОЛОЖИТЬ МАРШРУТ ↗</button><p>Маршрут проходит по улицам и переулкам. Управление прерывает автодвижение.</p><div class="map-legend"><span><i class="gold"></i> Убежище</span><span><i class="purple"></i> Граффити</span><span><i class="blue"></i> Полиция</span><span><i class="white"></i> Укрытие</span></div><strong id="map-progress">0 / 10 СТЕН</strong></div>
+    </section>
+    <section id="graffiti-screen" class="screen graffiti-screen" hidden>
+      <div class="graffiti-card panel"><div class="graffiti-heading"><div><span id="wall-id" class="eyebrow"></span><h2 id="wall-name"></h2></div><button id="cancel-graffiti" class="secondary">НАЗАД <kbd>Esc</kbd></button></div>
+        <div class="phase-track"><span data-phase="shake">01 / SHAKE</span><span data-phase="stencil">02 / STENCIL</span><span data-phase="spray">03 / SPRAY</span><span data-phase="result">04 / DONE</span></div>
+        <div class="graffiti-stage"><canvas id="graffiti-canvas" width="768" height="512" aria-label="Стена: встряхни баллон, размести трафарет и закрась рисунок"></canvas><span id="graffiti-wall-state" class="graffiti-state">CLEAN WALL</span><div id="graffiti-reward" class="graffiti-reward" role="status" hidden><strong id="graffiti-rep"></strong><span id="graffiti-heat"></span></div></div>
+        <div class="graffiti-bottom"><div><strong id="phase-title"></strong><p id="phase-help"></p></div><strong id="coverage-label"></strong></div>
+        <div id="motion-controls" hidden><button id="motion-enable" class="secondary">ВКЛЮЧИТЬ ВСТРЯХИВАНИЕ</button><button id="motion-touch" class="secondary">ПАЛЬЦЕМ</button><span id="motion-status" role="status"></span></div><progress id="graffiti-progress" max="1" value="0"></progress><button id="confirm-stencil" class="primary" hidden>ЗАКРЕПИТЬ ТРАФАРЕТ</button>
+      </div>
+    </section>
+    <div id="toast" role="status" aria-live="polite" hidden></div><pre id="debug-overlay" hidden></pre>
+    <div id="transition" aria-hidden="true"></div>
+  </main>
+  <script type="module" src="./core__boot.js"></script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,36 @@
+{
+  "id": "district_01",
+  "version": 7,
+  "scene": "./content__district_01__district.js",
+  "renderer": "./content__district_01__renderer.js",
+  "dependencies": [
+    "./data__graffiti__definitions.json",
+    "./content__graffiti__config.js",
+    "./content__graffiti__walls__urban.js"
+  ],
+  "graffiti_data": "./data__graffiti__definitions.json",
+  "atlas_data": "./content__district_01__art__atlas.json",
+  "art_base": "",
+  "atlases": [
+    "./content__district_01__art__buildings.png",
+    "./content__district_01__art__characters.png",
+    "./content__district_01__art__props.png",
+    "./content__district_01__art__outfits.png",
+    "./content__district_01__art__hideout-room.png",
+    "./content__graffiti__assets__spray-can-atlas.png",
+    "./content__graffiti__assets__urban-wall.png",
+    "./content__graffiti__assets__panda-king.png",
+    "./content__district_01__art__citizens.png",
+    "./content__district_01__art__city-ground.png",
+    "./content__district_01__art__expanded-buildings.png"
+  ],
+  "audio": [],
+  "graffiti": [
+    "zack_tag",
+    "monster",
+    "crown",
+    "panda_king"
+  ],
+  "cutscenes": [],
+  "estimated_download_size": 23125330
+}
