@@ -61,7 +61,7 @@ export class HideoutUI{
     const signature=JSON.stringify([s.save.player,s.save.hideout,s.save.painted_walls.length,s.save.basketball]);
     if(signature===this.signature)return;this.signature=signature;
     $('court-trophy').hidden=!s.save.basketball.completed;
-    if(s.save.basketball.completed){const ball=$('court-trophy').querySelector('canvas'),bc=ball.getContext('2d');bc.clearRect(0,0,160,160);drawBall(bc,s.save.basketball.pixels,160);}
+    if(s.save.basketball.completed){const ball=$('court-trophy').querySelector('canvas'),bc=ball.getContext('2d');bc.clearRect(0,0,160,160);drawBall(bc,s.save.basketball,160,{atlas:this.renderer.atlas});}
     const walls=s.save.painted_walls.length;
     for(const el of document.querySelectorAll('.loadout-card')){
       const kind=el.dataset.kind,id=el.dataset.id,catalog=kind==='outfit'?OUTFITS:kind==='ink'?INKS:TROPHIES,item=catalog.find(x=>x.id===id);

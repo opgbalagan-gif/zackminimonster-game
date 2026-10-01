@@ -31,3 +31,14 @@
 #app[data-mode="court-dialogue"] #hud{visibility:hidden}
 @media(max-width:600px){.court-screen{padding:12px}.court-screen .court-card{height:calc(100dvh - 24px);min-height:0}.court-screen .court-heading{padding:8px 0}.court-screen .comic-cast{padding-top:170px;min-height:0}.court-screen .comic-cast canvas{width:48%;max-height:36dvh}.court-screen .speech-bubble{top:18px}.court-screen .court-footer{padding:15px 0 max(10px,env(safe-area-inset-bottom))}}
 @media(max-height:530px) and (min-width:600px){.court-screen .court-card{min-height:0}.court-screen .comic-cast{min-height:0;padding-top:100px}.court-screen .comic-cast canvas{max-height:50dvh}.court-screen .speech-bubble{top:0;left:25%;width:50%}.court-screen[data-speaker=right] .speech-bubble{left:25%}}
+#sticker-tray{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}
+#sticker-tray button{padding:5px 3px;background:#253741;border:2px solid #65767c;border-radius:8px;color:#f3e7ce;min-width:0}
+#sticker-tray button[aria-pressed=true]{border-color:#ffe36b;background:#465043;transform:translateY(-3px)}
+#sticker-tray canvas{width:100%;height:55px;object-fit:contain;pointer-events:none}
+#sticker-tray span{display:block;font:700 9px monospace;white-space:nowrap}
+#sticker-tools{display:flex;justify-content:center;gap:8px;margin:8px 0}
+#sticker-tools button{min-height:42px;min-width:45px;padding:8px 12px;border:1px solid #718b95;background:#263c45;color:#fff0d0;font:700 13px monospace}
+#sticker-tools button:disabled,#sticker-tray button:disabled{opacity:.4}
+.ball-screen #ball-canvas{width:min(100%,35dvh);cursor:grab;margin:9px auto}
+.ball-screen #ball-canvas:active{cursor:grabbing}.ball-meter{margin:10px 0}
+@media(max-width:600px){.ball-card{padding:13px}.ball-screen #ball-canvas{width:min(100%,32dvh)}#sticker-tray canvas{height:45px}#sticker-tray span{font-size:8px}#sticker-tools button{min-height:40px}.ball-meter strong{font-size:11px}.ball-heading h2{font-size:18px}}

@@ -17,7 +17,7 @@
         <div class="edition">DISTRICT 01 <b>EAST BLOCK</b></div>
         <p class="title-copy">Твой район. Твои стены.<br>Оставь свой след и вернись домой.</p>
         <button id="start-button" class="primary large">ВОЙТИ В РАЙОН <span>↗</span></button>
-        <p id="load-status" role="status">TECH DEMO · 09 / ARTIST SERIES</p><progress id="load-progress" max="1" value="0" hidden></progress>
+        <p id="load-status" role="status">TECH DEMO · 10 / STICKER BALL</p><progress id="load-progress" max="1" value="0" hidden></progress>
       </div><div class="title-footer">TAG. EXPLORE. SURVIVE.<span>ZACKMINIMONSTER © 2026</span></div>
     </div>
     <header id="hud" hidden>
@@ -93,11 +93,12 @@
         <div class="court-footer"><span id="court-count"></span><button id="court-next" class="primary">ДАЛЬШЕ →</button></div>
       </div>
     </section>
-    <section id="ball-screen" class="screen ball-screen" aria-label="Рисование маркерами на баскетбольном мяче" hidden>
-      <div class="ball-card"><div class="ball-heading"><div><span class="eyebrow">COURT CUSTOM / MARKER SESSION</span><h2 id="ball-title">НЕ ПРОСТО МЯЧ</h2></div><button id="ball-cancel" class="secondary">НАЗАД</button></div>
-        <canvas id="ball-canvas" width="600" height="600" aria-label="Мяч: води пальцем или мышью по светлым силуэтам"></canvas>
-        <p id="ball-help"></p><div id="marker-colors" role="group" aria-label="Цвет маркера"></div>
-        <div class="ball-meter"><progress id="ball-progress" max="1" value="0" aria-label="Закрашено рисунка"></progress><strong id="ball-coverage" aria-live="polite">0%</strong></div>
+    <section id="ball-screen" class="screen ball-screen" aria-label="Наклейки на баскетбольном мяче" hidden>
+      <div class="ball-card"><div class="ball-heading"><div><span class="eyebrow">COURT CUSTOM / STICKER SESSION</span><h2 id="ball-title">НЕ ПРОСТО МЯЧ</h2></div><button id="ball-cancel" class="secondary">НАЗАД</button></div>
+        <canvas id="ball-canvas" width="600" height="600" aria-label="Мяч: коснись, чтобы приклеить наклейку, затем двигай её пальцем"></canvas>
+        <p id="ball-help"></p><div id="sticker-tray" role="group" aria-label="Наклейки художника"></div>
+        <div id="sticker-tools" role="group" aria-label="Изменить выбранную наклейку"><button id="sticker-smaller" aria-label="Уменьшить наклейку">−</button><button id="sticker-larger" aria-label="Увеличить наклейку">+</button><button id="sticker-turn" aria-label="Повернуть наклейку">↻ 15°</button><button id="sticker-delete">УБРАТЬ</button></div>
+        <div class="ball-meter"><progress id="ball-progress" max="1" value="0" aria-label="Наклеено до трёх наклеек"></progress><strong id="ball-coverage" aria-live="polite">0 / 3</strong></div>
         <div class="ball-buttons"><button id="ball-clear" class="secondary">ОЧИСТИТЬ</button><button id="ball-finish" class="primary" disabled>ПОДАРИТЬ МЯЧ →</button></div>
       </div>
     </section>

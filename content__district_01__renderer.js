@@ -159,7 +159,7 @@ export function createRenderer(pack){
       else if(entry.kind==='courtNpc'){
         c.fillStyle='#11172355';c.beginPath();c.ellipse(p.x,p.y,16,6,0,0,Math.PI*2);c.fill();
         sprite(c,o.sprite,p.x,p.y-Math.sin(session.time*2+o.x)*.7,null,70);
-        if(session.save.basketball.completed&&o.sprite==='court_ti'){c.save();c.translate(p.x+5,p.y-33);drawBall(c,session.save.basketball.pixels,24);c.restore();}
+        if(session.save.basketball.completed&&o.sprite==='court_ti'){c.save();c.translate(p.x+5,p.y-33);drawBall(c,session.save.basketball,24,{atlas:this.atlas});c.restore();}
       }
       else if(entry.kind==='npc'){
         c.fillStyle='#11172338';c.beginPath();c.ellipse(p.x,p.y,11,4,0,0,Math.PI*2);c.fill();

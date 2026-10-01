@@ -96,7 +96,7 @@ export class GameUI{
     if(near){
       $('interaction-type').textContent=near.type==='court'?'COURT STORY':near.type==='target'?'GRAFFITI SPOT':near.type==='safe'?'SAFE SPOT':'HIDEOUT / SAVE';
       $('interaction-name').textContent=near.item.name;
-      $('interaction-detail').textContent=near.type==='court'?(s.save.basketball.completed?'Поговорить и нарисовать новый мяч':'Два друга спорят о мяче · +300 REP'):near.type==='target'?'+'+near.item.rep_reward+' REP · HEAT +'+near.item.heat_reward:near.type==='safe'?(near.item.cooldown>0?'Повторно через '+Math.ceil(near.item.cooldown)+' сек.':'Спрятаться и снизить розыск'):'Сохранить вылазку и сбросить HEAT';
+      $('interaction-detail').textContent=near.type==='court'?(s.save.basketball.completed?'Поговорить и украсить новый мяч':'Два друга спорят о мяче · +300 REP'):near.type==='target'?'+'+near.item.rep_reward+' REP · HEAT +'+near.item.heat_reward:near.type==='safe'?(near.item.cooldown>0?'Повторно через '+Math.ceil(near.item.cooldown)+' сек.':'Спрятаться и снизить розыск'):'Сохранить вылазку и сбросить HEAT';
       $('action-button').disabled=near.type==='safe'&&near.item.cooldown>0;
     }
     $('sound-button').textContent=s.save.settings.sound?'♪':'×';

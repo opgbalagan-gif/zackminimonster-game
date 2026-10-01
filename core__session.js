@@ -146,7 +146,7 @@ export class GameSession{
     if(this.mode==='ball-result')return this.cancelCourt();
     if(this.mode!=='ball-art'||!this.ballGame?.ready)return false;
     this.ballGame.end();this.ballReward=!this.save.basketball.completed;
-    this.save.basketball={completed:true,pixels:[...this.ballGame.pixels]};
+    this.save.basketball={completed:true,pixels:[],stickers:this.ballGame.snapshot()};
     if(this.ballReward)this.save.rep+=COURT.reward;
     this.persist();this.mode='ball-result';this.emit('mode');return true;
   }
