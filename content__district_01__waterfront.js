@@ -4,20 +4,22 @@ import {box,polygon} from './content__district_01__terrain.js';
 export function drawWater(c,cam,width,height,time){
   const left=cam.x-width/2/cam.zoom-180,top=cam.y-height/2/cam.zoom-180;
   const right=cam.x+width/2/cam.zoom+180,bottom=cam.y+height/2/cam.zoom+180;
-  c.fillStyle='#183844';c.fillRect(left,top,right-left,bottom-top);
+  c.fillStyle='#18576b';c.fillRect(left,top,right-left,bottom-top);
   const step=cam.zoom<.2?220:75;
   c.lineWidth=1.4/Math.max(.45,cam.zoom);
   for(let y=Math.floor(top/step)*step;y<bottom;y+=step)for(let x=Math.floor(left/step)*step;x<right;x+=step){
-    const seed=Math.abs(Math.sin(x*13+y*7)),shift=Math.sin(time*.65+seed*12)*7;
-    c.strokeStyle=seed>.5?'#51858455':'#32637066';
-    c.beginPath();c.moveTo(x+shift,y+seed*step);c.lineTo(x+shift+18+seed*30,y+seed*step);c.stroke();
+    const seed=Math.abs(Math.sin(x*13+y*7)),shift=Math.sin(time*.65+seed*12)*12;
+    c.fillStyle=seed>.5?'#216e7a35':'#103e5624';c.fillRect(x+shift,y+seed*step,step*.8,14+seed*16);
+    c.strokeStyle=seed>.5?'#9bd9cd55':'#56a8b266';
+    c.beginPath();c.moveTo(x+shift,y+seed*step);c.lineTo(x+shift+18+seed*30,y+seed*step);c.lineTo(x+shift+27+seed*30,y+seed*step-3);c.stroke();
   }
 }
 export function drawShore(c,world){
   if(world.landPolygons){
     for(const poly of world.landPolygons){
-      polygon(c,poly.map(p=>project(p.x,p.y,-12)),null,world.beaches?'#68b5aa77':'#659a9966',world.beaches?38:16);
+      if(!world.beaches)polygon(c,poly.map(p=>project(p.x,p.y,-12)),null,'#659a9966',16);
       for(let i=0;i<poly.length;i++){
+        if(world.beaches&&!(poly[i].x===poly[(i+1)%poly.length].x&&[3008,3200].includes(poly[i].x)))continue;
         const a=poly[i],b=poly[(i+1)%poly.length],beach=world.beaches&&a.y>5700&&b.y>5700,z=beach?-5:-28;
         polygon(c,[project(a.x,a.y),project(b.x,b.y),project(b.x,b.y,z),project(a.x,a.y,z)],beach?'#ead7aa':'#52686b',beach?'#f2e4c7':'#273d46',beach?4:2);
         if(beach){
@@ -53,4 +55,50 @@ export function drawBridges(c,session,plate){
       }
     }
   }
+}
+
+const shores=new WeakMap();
+export function sandyShoreSegments(world){
+  if(shores.has(world))return shores.get(world);
+  const edges=[];
+  for(const poly of world.landPolygons??[])for(let i=0;i<poly.length;i++){
+    let a={...poly[i]},b={...poly[(i+1)%poly.length]};
+    // River quays and northern foothills keep their own treatment.
+    if(a.x===b.x&&(a.x===3008||a.x===3200)||Math.max(a.y,b.y)<400)continue;
+    if(a.x===48&&b.x===48){if(a.y<3900)a.y=3900;if(b.y<3900)b.y=3900;}
+    const length=Math.hypot(b.x-a.x,b.y-a.y);if(length<1)continue;
+    edges.push({a,b,length,nx:-(b.y-a.y)/length,ny:(b.x-a.x)/length});
+  }
+  let distance=0;
+  const same=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y)<1;
+  const join=(a,b)=>{const x=a.nx+b.nx,y=a.ny+b.ny,scale=Math.max(.6,x*b.nx+y*b.ny);return{x:x/scale,y:y/scale};};
+  for(const e of edges){
+    const previous=edges.find(o=>o!==e&&same(o.b,e.a)),next=edges.find(o=>o!==e&&same(e.b,o.a));
+    e.startNormal=previous?join(previous,e):{x:e.nx,y:e.ny};e.endNormal=next?join(e,next):{x:e.nx,y:e.ny};
+    e.distance=distance;distance+=e.length;
+  }
+  shores.set(world,edges);return edges;
+}
+export function tideOffset(time,distance){return 12+18*Math.sin(time*.32)+7*Math.sin(distance*.017-time*.8);}
+export function drawSandyCoast(c,world,textures,time){
+  if(!world.beaches)return;
+  c.save();c.transform(1,.5,-1,.5,0,0);
+  for(const e of sandyShoreSegments(world)){
+    const {a,b,nx,ny,length}=e,count=Math.ceil(length/18);
+    const sample=(i,offset)=>{const t=i/count,d=t*length,start=Math.max(0,1-d/80),end=Math.max(0,1-(length-d)/80),normalX=nx+(e.startNormal.x-nx)*start+(e.endNormal.x-nx)*end,normalY=ny+(e.startNormal.y-ny)*start+(e.endNormal.y-ny)*end;return{x:Math.round(a.x+(b.x-a.x)*t+normalX*offset),y:Math.round(a.y+(b.y-a.y)*t+normalY*offset)};};
+    const ribbon=(front,back,fill)=>{const points=[];for(let i=0;i<=count;i++)points.push(sample(i,typeof front==='function'?front(i):front));for(let i=count;i>=0;i--)points.push(sample(i,typeof back==='function'?back(i):back));polygon(c,points,fill);};
+    const inner=Math.min(a.y,b.y)>5400?170:100;
+    ribbon(i=>inner+Math.sin((e.distance+i*length/count)*.035)*9,-100,textures.sand);
+    ribbon(47,-80,'#b6a87899');
+    ribbon(i=>tideOffset(time,e.distance+i*length/count),-145,'#2c8c967a');
+    ribbon(i=>tideOffset(time,e.distance+i*length/count)-25,-160,'#227789cc');
+    ribbon(i=>tideOffset(time,e.distance+i*length/count)-66,-185,'#18576b');
+    for(let i=0;i<=count;i++){
+      const d=e.distance+i*length/count,front=tideOffset(time,d),p=sample(i,front);
+      c.fillStyle=i%4===0?'#f7ecd3b5':'#c0e4d4b0';c.fillRect(p.x,p.y,8+(i%3)*3,3);
+      if(i%3===0){const q=sample(i,front-35);c.fillStyle='#9ed5cd66';c.fillRect(q.x,q.y,17,2);}
+      const dry=sample(i,inner-15-(i%5)*6);c.fillStyle=i%2?'#a28a613b':'#f2dba544';c.fillRect(dry.x,dry.y,5,3);
+    }
+  }
+  c.restore();
 }

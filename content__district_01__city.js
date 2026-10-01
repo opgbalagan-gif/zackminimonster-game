@@ -3,6 +3,8 @@ import {onLand} from './core__land.js';
 import {expandCoast} from './content__district_01__coastal-expansion.js';
 import {metroRoute,loopPosition} from './content__district_01__metro.js';
 import {planRoadEnds} from './content__district_01__road-ends.js';
+import {planCityLots,placeMetroSupports} from './content__district_01__city-layout.js';
+import {courtHoops} from './content__district_01__court-props.js';
 export function createDistrict(){
   const base=createBlock(),world={...base,width:6400,height:5632,name:'MINI MONSTER CITY',version:15};
   world.regions=[
@@ -71,20 +73,13 @@ export function createDistrict(){
   world.meetCars=[{x:488,y:990,type:'blue_car',color:'#6dd8ec'},{x:590,y:990,type:'taxi',color:'#f59cab'},{x:690,y:990,type:'blue_car',color:'#a3df76'},{x:5860,y:5330,type:'blue_car',color:'#6dd8ec'},{x:5960,y:5330,type:'taxi',color:'#f5bd5c'},{x:6060,y:5330,type:'blue_car',color:'#f594c7'}];
   for(const car of world.meetCars)world.props.push({...car,width:88,meet:true,collision:{x:-48,y:-32,w:58,h:28}});
   world.meetPeople=[{x:708,y:1048,look:2},{x:684,y:1080,look:1},{x:5800,y:5360,look:0},{x:5900,y:5270,look:3}];
-  world.metro={...base.metro,x:60,end:2950,loop:[{x:884,y:674},{x:5696,y:674},{x:5696,y:4600},{x:884,y:4600}]};
+  world.metro={...base.metro,x:60,end:2950,loop:[{x:884,y:674},{x:6430,y:674},{x:6430,y:4600},{x:884,y:4600}]};
   world.metro.cornerRadius=360;
   world.metro.underground={entry:1740,start:2380,end:3410,exit:4100};
   world.metroStations=metroRoute(world.metro).stops.map((s,i)=>({...loopPosition(world.metro,s),name:['EAST BLOCK','HARBOUR','COLOUR','DOWNTOWN'][i]}));
-  world.metroPortals=[{x:5696,y:2380},{x:5696,y:3410}];
+  world.metroPortals=[{x:6430,y:2380},{x:6430,y:3410}];
   expandCoast(world);
-  for(const [y,h] of [[1740,640],[3410,690]])world.obstacles.push({x:5660,y,w:72,h,tunnelCollider:true});
-  for(const b of world.buildings)if(b.type==='skyline_glass'||b.type==='skyline_deco')b.heightScale=Math.max(2.1,(b.heightScale??1.35)*1.55);
-  for(let i=0;i<4;i++){
-    const a=world.metro.loop[i],b=world.metro.loop[(i+1)%4],vertical=a.x===b.x,len=Math.hypot(b.x-a.x,b.y-a.y);
-    for(let n=140;n<len;n+=320){const x=vertical?a.x+24:Math.min(a.x,b.x)+n,y=vertical?Math.min(a.y,b.y)+n:a.y+24;
-      if(vertical&&a.x===5696&&y>1650&&y<4200)continue;
-      if(onLand(world,x,y,16)&&!world.buildings.some(b=>x>b.x-20&&x<b.x+b.w+20&&y>b.y-20&&y<b.y+b.h+20))world.obstacles.push({x,y,w:12,h:16,pillar:true});}
-  }
+  for(const [y,h] of [[1740,640],[3410,690]])world.obstacles.push({x:6394,y,w:72,h,tunnelCollider:true});
   // Keep traffic on real land, and outside the crew-controlled service barriers.
   world.roads=world.roads.flatMap(r=>{
     const vertical=r.h>r.w,axis=vertical?'y':'x',size=vertical?'h':'w',out=[];let start=null;
@@ -94,8 +89,11 @@ export function createDistrict(){
       if(!valid&&start!==null){const end=Math.min(n,r[size]);if(end-start>180)out.push({...r,[axis]:r[axis]+start,[size]:end-start});start=null;}
     }return out;
   });
-  // Cars use neighbouring streets beside the reserved metro descent.
-  world.roads=world.roads.filter(r=>!(r.h>r.w&&Math.abs(r.x+r.w/2-5696)<8));
+  planCityLots(world);
+  world.hoops=world.courts.flatMap(courtHoops);
+  world.obstacles=world.obstacles.filter(o=>!o.hoopBase);
+  for(const h of world.hoops)world.obstacles.push({x:h.x-6,y:h.y-6,w:12,h:12,hoopBase:true});
+  placeMetroSupports(world);
   world.roadEnds=planRoadEnds(world);
   world.river={name:'РЕКА FLOW',x:3110,y:740};return world;
 }

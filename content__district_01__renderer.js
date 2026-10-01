@@ -14,7 +14,7 @@ import {drawBall} from './core__ball-art.js';
 import {POSTERS,drawPoster} from './content__district_01__posters.js';
 import {drawHoop} from './content__district_01__court-props.js';
 import {wallPieces,fencePieces,coversHero} from './content__district_01__depth-pieces.js';
-import {drawWater,drawShore,drawBridges} from './content__district_01__waterfront.js';
+import {drawWater,drawShore,drawBridges,drawSandyCoast} from './content__district_01__waterfront.js';
 import {drawCoastalGround,drawMountains,drawBeachUmbrella,createCoastalTextures} from './content__district_01__coastal-renderer.js';
 import {buildingOccludesZack} from './content__district_01__occlusion.js';
 
@@ -147,6 +147,7 @@ export function createRenderer(pack){
     if(world.regions){drawWater(c,cam,width,height,session.time);drawShore(c,world);}
     drawCoastalGround(c,world,coastTextures);
     ground(c,world,plate,cam,width,height,coastTextures);
+    drawSandyCoast(c,world,coastTextures,session.time);
     drawMountains(c,world,atlas);
     drawBridges(c,session,plate);
     drawTrafficSignals(c,session.traffic);
@@ -165,7 +166,9 @@ export function createRenderer(pack){
     for(const n of session.court.friends)queue.push({kind:'courtNpc',item:n,depth:n.x+n.y});
     for(const car of session.traffic.cars)if(car.x>=0&&car.x<=world.width&&car.y>=0&&car.y<=world.height)queue.push({kind:'traffic',item:car,depth:car.x+car.y+22});
     for(const car of trainCars(world.metro,session.time))queue.push({kind:'train',item:car,depth:car.x+car.y+210});
-    queue.sort((a,b)=>a.depth-b.depth);
+    // Elevated infrastructure is a foreground layer; buildings cannot cut holes in the viaduct.
+    const metroLayer={loopRail:1,loopStation:2,train:3,portal:4};
+    queue.sort((a,b)=>(metroLayer[a.kind]??0)-(metroLayer[b.kind]??0)||a.depth-b.depth);
     const minX=cam.x-width/2/cam.zoom-340,maxX=cam.x+width/2/cam.zoom+340,minY=cam.y-height/2/cam.zoom-50,maxY=cam.y+height/2/cam.zoom+500;
     const playerP=project(session.player.x,session.player.y);
     const zackBounds={x:playerP.x-16,y:playerP.y-62,w:32,h:60,depth:session.player.x+session.player.y};
@@ -202,7 +205,13 @@ export function createRenderer(pack){
         wall(c,o,session,entry.clip,!map&&coversHero(points,session.player,entry.depth)?.28:1);
       }
       else if(entry.kind==='hoop')drawHoop(c,o);
-      else if(entry.kind==='pillar')box(c,o.x,o.y,o.w,o.h,104,'#a5a799','#727b7e','#8c9492');
+      else if(entry.kind==='pillar'){
+        const z=o.height??104;box(c,o.x,o.y,o.w,o.h,z,'#a5a799','#727b7e','#8c9492');
+        if(o.beamTo){const a={x:o.x+o.w/2,y:o.y+o.h/2},b=o.beamTo;
+          polygon(c,[project(a.x-5,a.y-5,z),project(b.x-5,b.y-5,z),project(b.x+5,b.y+5,z),project(a.x+5,a.y+5,z)],'#919d98','#36464d',2);
+          polygon(c,[project(a.x+5,a.y+5,z),project(b.x+5,b.y+5,z),project(b.x+5,b.y+5,z-9),project(a.x+5,a.y+5,z-9)],'#64767a');
+        }
+      }
       else if(entry.kind==='fence'){
         c.save();
         const points=[project(o.x,o.y,30),project(o.x+o.w,o.y,30),project(o.x,o.y+o.h),project(o.x+o.w,o.y+o.h)];
