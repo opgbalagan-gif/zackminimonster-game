@@ -16,6 +16,7 @@ import {drawHoop} from './content__district_01__court-props.js';
 import {wallPieces,fencePieces,coversHero} from './content__district_01__depth-pieces.js';
 import {drawWater,drawShore,drawBridges} from './content__district_01__waterfront.js';
 import {drawCoastalGround,drawMountains,drawBeachUmbrella,createCoastalTextures} from './content__district_01__coastal-renderer.js';
+import {revealRegions} from './content__district_01__occlusion.js';
 
 const INK='#111722';
 export function marker(c,x,y,type,size=28,active=false){
@@ -155,24 +156,29 @@ export function createRenderer(pack){
     queue.sort((a,b)=>a.depth-b.depth);
     const minX=cam.x-width/2/cam.zoom-340,maxX=cam.x+width/2/cam.zoom+340,minY=cam.y-height/2/cam.zoom-50,maxY=cam.y+height/2/cam.zoom+500;
     const playerP=project(session.player.x,session.player.y);
-    const visiblePeople=queue.filter(e=>['hero','npc','courtNpc','gang','companion','officer'].includes(e.kind)).map(e=>({...project(e.item.x,e.item.y),depth:e.depth})).filter(p=>p.x>minX&&p.x<maxX&&p.y>minY&&p.y<maxY);
+    const visiblePeople=queue.filter(e=>['hero','npc','courtNpc','gang','companion','officer'].includes(e.kind)).map(e=>{
+      const o=e.item,p=project(o.x,o.y),height={hero:66,npc:55,courtNpc:70,gang:65,companion:38,officer:60}[e.kind];
+      const id=e.kind==='hero'?heroSprite(session.save.player.skin,o.state,o.facing,false):e.kind==='npc'?'citizen_'+o.look+'_'+(o.back?2:0):e.kind==='companion'?'companion':e.kind==='officer'?'officer':o.sprite;
+      const rect=atlas.rect(id),width=rect?height*rect[2]/rect[3]:height;
+      return{x:p.x-width/2-9,y:p.y-height-9,w:width+18,h:height+17,depth:e.depth};
+    }).filter(p=>p.x+p.w>minX&&p.x<maxX&&p.y+p.h>minY&&p.y<maxY);
     for(const entry of queue){
       const o=entry.item,p=project(o.x,o.y??world.metro.y);
       const extraHeight=entry.kind==='building'?(o.w+o.h+22)*atlas.rect(o.type)[3]/atlas.rect(o.type)[2]*(o.heightScale??1):0;
       if(p.x<minX||p.x>maxX||p.y<minY||p.y>maxY+extraHeight)continue;
       if(entry.kind==='building'){
         const foot=project(o.x+o.w,o.y+o.h),buildingWidth=o.w+o.h+22,rect=atlas.rect(o.type),buildingHeight=buildingWidth*rect[3]/rect[2]*(o.heightScale??1);
-        const occluded=map?[]:visiblePeople.filter(p=>p.depth<entry.depth&&p.x+15>foot.x-buildingWidth/2&&p.x-15<foot.x+buildingWidth/2&&p.y-52<foot.y&&p.y>foot.y-buildingHeight);
+        const bounds={x:foot.x-buildingWidth/2-2,y:foot.y-buildingHeight-2,w:buildingWidth+4,h:buildingHeight+4};
+        const holes=map?[]:revealRegions(bounds,visiblePeople.filter(p=>p.depth<entry.depth));
         const target=world.targets.find(t=>t.buildingId===o.id);
         const poster=POSTERS.find(p=>p.buildingId===o.id);
         let points=null;
         const paint=alpha=>{sprite(c,o.type,foot.x,foot.y,buildingWidth,buildingHeight,false,alpha);if(target)drawFacade(c,o,target,session,atlas,alpha);if(poster)points=drawPoster(c,o,poster,atlas,alpha);};
-        if(!occluded.length)paint(o.backdrop?.78:1);
+        if(!holes.length)paint(o.backdrop?.78:1);
         else{
-          // Reveal only the character silhouette area, keeping the rest of the facade solid.
-          c.save();c.beginPath();c.rect(foot.x-buildingWidth/2-2,foot.y-buildingHeight-2,buildingWidth+4,buildingHeight+4);
-          for(const p of occluded)c.rect(p.x-19,p.y-65,38,70);c.clip('evenodd');paint(1);c.restore();
-          c.save();c.beginPath();for(const p of occluded)c.rect(p.x-19,p.y-65,38,70);c.clip();paint(.18);c.restore();
+          c.save();c.beginPath();c.rect(bounds.x,bounds.y,bounds.w,bounds.h);
+          for(const p of holes)c.rect(p.x,p.y,p.w,p.h);c.clip('evenodd');paint(1);c.restore();
+          c.save();c.beginPath();for(const p of holes)c.rect(p.x,p.y,p.w,p.h);c.clip();paint(.06);c.restore();
         }
         if(poster){
           if(!map&&points){
