@@ -2,7 +2,7 @@ import {project} from './core__geometry.js';
 import {polygon} from './content__district_01__terrain.js';
 export function createCoastalTextures(plate,sand){
   const make=(image,x,y,w,h,size)=>{const tile=document.createElement('canvas');tile.width=tile.height=size;const c=tile.getContext('2d');c.imageSmoothingEnabled=false;c.drawImage(image,x,y,w,h,0,0,size,size);return c.createPattern(tile,'repeat');};
-  return {sand:sand?make(sand,0,0,sand.width,sand.height,440):'#d8bf8a',paving:make(plate,450,90,200,170,170),grass:make(plate,730,550,65,65,100),asphalt:make(plate,450,1210,160,25,128)};
+  return {sand:sand?make(sand,0,0,sand.width,sand.height,440):'#d8bf8a',paving:make(plate,450,90,200,170,170),grass:make(plate,660,540,100,100,150),asphalt:make(plate,450,1210,160,25,128)};
 }
 
 export function drawCoastalGround(c,w,textures){
