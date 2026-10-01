@@ -14,6 +14,7 @@ import {drawBall} from './core__ball-art.js';
 import {POSTERS,drawPoster} from './content__district_01__posters.js';
 import {drawHoop} from './content__district_01__court-props.js';
 import {wallPieces,fencePieces,coversHero} from './content__district_01__depth-pieces.js';
+import {drawWater,drawShore,drawBridges} from './content__district_01__waterfront.js';
 
 const INK='#111722';
 export function marker(c,x,y,type,size=28,active=false){
@@ -119,9 +120,12 @@ export function createRenderer(pack){
     c.imageSmoothingEnabled=false;atlas.drawCalls=0;c.clearRect(0,0,width,height);
     if(!map)posterHits.length=0;
     c.fillStyle='#1b2531';c.fillRect(0,0,width,height);
-    const cam=map?{x:(world.width-world.height)/2,y:(world.width+world.height)/4-70,zoom:Math.min((width-40)/(world.width+world.height+160),(height-80)/((world.width+world.height)/2+260))}:session.camera;
+    const region=map&&world.regions?.find(r=>r.id===session.mapRegion),bounds=region??{x:0,y:0,w:world.width,h:world.height};
+    const cam=map?{x:bounds.x-bounds.y+(bounds.w-bounds.h)/2,y:(bounds.x+bounds.y)/2+(bounds.w+bounds.h)/4-70,zoom:Math.max(.001,Math.min((width-40)/(bounds.w+bounds.h+400),(height-80)/((bounds.w+bounds.h)/2+400)))}:session.camera;
     c.save();c.translate(width/2,height/2);c.scale(cam.zoom,cam.zoom);c.translate(-cam.x,-cam.y);
+    if(world.regions){drawWater(c,cam,width,height,session.time);drawShore(c,world);}
     ground(c,world,plate,cam,width,height);
+    drawBridges(c,session);
     drawTrafficSignals(c,session.traffic);
     if(!map&&session.player.path.length){
       c.strokeStyle='#e9ce7f90';c.lineWidth=3/cam.zoom;c.setLineDash([4/cam.zoom,8/cam.zoom]);c.beginPath();
@@ -141,18 +145,18 @@ export function createRenderer(pack){
     const playerP=project(session.player.x,session.player.y);
     for(const entry of queue){
       const o=entry.item,p=project(o.x,o.y??world.metro.y);
-      if(!map&&(p.x<minX||p.x>maxX||p.y<minY||p.y>maxY))continue;
+      if(p.x<minX||p.x>maxX||p.y<minY||p.y>maxY)continue;
       if(entry.kind==='building'){
-        const foot=project(o.x+o.w,o.y+o.h),width=o.w+o.h+22,rect=atlas.rect(o.type),height=width*rect[3]/rect[2];
-        const occludes=!map&&session.player.x+session.player.y<entry.depth&&playerP.x>foot.x-width/2&&playerP.x<foot.x+width/2&&playerP.y<foot.y&&playerP.y>foot.y-height;
+        const foot=project(o.x+o.w,o.y+o.h),buildingWidth=o.w+o.h+22,rect=atlas.rect(o.type),buildingHeight=buildingWidth*rect[3]/rect[2];
+        const occludes=!map&&session.player.x+session.player.y<entry.depth&&playerP.x>foot.x-buildingWidth/2&&playerP.x<foot.x+buildingWidth/2&&playerP.y<foot.y&&playerP.y>foot.y-buildingHeight;
         const alpha=o.backdrop?.78:occludes?.4:1;
-        sprite(c,o.type,foot.x,foot.y,width,null,false,alpha);
+        sprite(c,o.type,foot.x,foot.y,buildingWidth,null,false,alpha);
         const target=world.targets.find(t=>t.buildingId===o.id);
         if(target)drawFacade(c,o,target,session,atlas,alpha);
         const poster=POSTERS.find(p=>p.buildingId===o.id);
         if(poster){
           const points=drawPoster(c,o,poster,atlas,alpha);
-          if(!map&&points&&alpha>.9){
+          if(!map&&points){
             const screen=points.map(p=>({x:(p.x-cam.x)*cam.zoom+width/2,y:(p.y-cam.y)*cam.zoom+height/2}));
             const x=Math.min(...screen.map(p=>p.x)),y=Math.min(...screen.map(p=>p.y));
             posterHits.push({id:poster.id,x,y,w:Math.max(...screen.map(p=>p.x))-x,h:Math.max(...screen.map(p=>p.y))-y});
@@ -190,19 +194,25 @@ export function createRenderer(pack){
       }
       else actor(c,o,entry.kind,session);
     }
-    for(const t of world.targets)if(!session.painted.has(t.wall_id)){
+    for(const t of world.targets)if(!session.painted.has(t.wall_id)&&(!map||!world.regions||(region&&t.regionId===region.id))){
       const building=t.buildingId&&world.buildings.find(b=>b.id===t.buildingId);
-      const p=building?facadeGeometry(building,atlas).marker:project(t.x,t.y,68);marker(c,p.x,p.y,'graffiti',(map?19:24)/cam.zoom,t.state==='AVAILABLE');
+      const p=(building&&facadeGeometry(building,atlas)?.marker)||project(t.x,t.y,68);marker(c,p.x,p.y,'graffiti',(map?19:24)/cam.zoom,t.state==='AVAILABLE');
     }
-    for(const s of world.safeSpots){const p=project(s.x,s.y,16);c.globalAlpha=s.cooldown>0?.35:1;marker(c,p.x,p.y,'safe',(map?18:22)/cam.zoom);c.globalAlpha=1;}
-    const home=project(world.hideout.x,world.hideout.y,34);marker(c,home.x,home.y,'home',(map?23:28)/cam.zoom,true);
+    if(!map||!world.regions)for(const s of world.safeSpots){const p=project(s.x,s.y,16);c.globalAlpha=s.cooldown>0?.35:1;marker(c,p.x,p.y,'safe',(map?18:22)/cam.zoom);c.globalAlpha=1;}
+    for(const h of world.hideouts??[world.hideout]){const home=project(h.x,h.y,34);marker(c,home.x,home.y,'home',(map?16:28)/cam.zoom,true);}
     const court=project(session.court.x,session.court.y-44,88);marker(c,court.x,court.y,'court',(map?23:26)/cam.zoom,session.near?.type==='court');
     if(map){
+      if(!region)for(const r of session.city??[]){
+        const p=project(r.x+r.w/2,r.y+r.h/2,100);
+        c.save();c.translate(p.x,p.y);c.scale(1/cam.zoom,1/cam.zoom);label(c,r.name,0,0,r.color);
+        label(c,r.open?'ОТКРЫТ':r.required+' REP',0,25,r.open?'#b9d2a1':'#bbc4ca');c.restore();
+      }
+      if(world.river){const p=project(world.river.x,world.river.y);c.save();c.translate(p.x,p.y);c.scale(1/cam.zoom,1/cam.zoom);label(c,world.river.name,0,0,'#97ccc9');c.restore();}
       for(const z of world.zones){
         if(width<560&&!['hideout','metro','construction'].includes(z.id))continue;
         const p=project(z.x,z.y,16);c.save();c.translate(p.x,p.y);c.scale(1/cam.zoom,1/cam.zoom);label(c,z.name,0,0);c.restore();
       }
-      for(const u of session.police.units){const p=project(u.x,u.y);marker(c,p.x,p.y,'police',16/cam.zoom);}
+      if(!world.regions)for(const u of session.police.units){const p=project(u.x,u.y);marker(c,p.x,p.y,'police',16/cam.zoom);}
       const p=project(session.player.x,session.player.y);c.fillStyle='#f5d775';c.beginPath();c.arc(p.x,p.y,6/cam.zoom,0,Math.PI*2);c.fill();
     }else for(const e of session.effects.items)if(e.life>0){c.globalAlpha=Math.min(1,e.life*2);c.fillStyle=e.color;c.fillRect(e.x,e.y,4,4);}c.globalAlpha=1;
     c.restore();session.metrics.drawCalls=atlas.drawCalls;

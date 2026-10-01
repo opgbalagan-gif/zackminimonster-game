@@ -11,7 +11,7 @@ export function posterGeometry(building,atlas){
   const facade=facadeGeometry(building,atlas);if(!facade)return null;
   const [a,b,d]=facade.points;
   const at=(u,v)=>({x:a.x+(b.x-a.x)*u+(d.x-a.x)*v,y:a.y+(b.y-a.y)*u+(d.y-a.y)*v});
-  return [at(.24,.04),at(.78,.04),at(.24,.94),at(.78,.94)];
+  return [at(.12,.02),at(.88,.02),at(.12,.98),at(.88,.98)];
 }
 export function drawPoster(c,building,poster,atlas,alpha){
   const points=posterGeometry(building,atlas);if(!points)return null;

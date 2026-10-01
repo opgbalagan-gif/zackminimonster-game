@@ -18,7 +18,8 @@ export class CitizenSystem{
     const rows=intervals(world.roads.filter(r=>r.w>r.h),'y','h',world.height);
     for(const [left,right] of columns)for(const [top,bottom] of rows){
       const points=[];
-      for(let id=0;id<this.nav.blocked.length;id++){
+      for(let row=Math.max(0,Math.floor(top/16));row<=Math.min(this.nav.rows-1,Math.ceil(bottom/16));row++)for(let col=Math.max(0,Math.floor(left/16));col<=Math.min(this.nav.cols-1,Math.ceil(right/16));col++){
+        const id=row*this.nav.cols+col;
         const p=this.nav.point(id);
         if(this.nav.valid(id)&&p.x>=left&&p.x<=right&&p.y>=top&&p.y<=bottom&&
           (p.x<left+32||p.x>right-32||p.y<top+32||p.y>bottom-32))points.push(p);
@@ -31,8 +32,9 @@ export class CitizenSystem{
       }
     }
   }
-  update(dt){
+  update(dt,focus=null){
     for(const p of this.people){
+      if(focus&&Math.hypot(p.x-focus.x,p.y-focus.y)>1500)continue;
       if(p.pause>0){p.pause-=dt;p.moving=false;continue;}
       if(!p.path.length){
         for(let attempt=0;attempt<5&&!p.path.length;attempt++){

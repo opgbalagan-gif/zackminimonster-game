@@ -8,11 +8,14 @@ import {TrafficSystem} from './core__traffic.js';
 import {CitizenSystem} from './core__citizens.js';
 import {COURT,COURT_LINES,BallArtGame} from './core__basketball.js';
 import {GRAFFITI_CONFIG} from './content__graffiti__config.js';
+import {cityProgress,canEnter,regionAt,gateMessage} from './core__city-progress.js';
+import {POSTERS,posterApproach} from './content__district_01__posters.js';
 
 export class GameSession{
   constructor(pack,store){
     this.world=pack.world;this.definitions=pack.graffiti;this.store=store;this.save=store.load();
     this.nav=new NavigationGrid(this.world);this.camera=new Camera();this.effects=new EffectPool();
+    this.refreshCity();
     this.player={...this.world.spawn,facing:'down',moving:false,state:'IDLE',path:[]};
     this.companion={x:this.player.x-24,y:this.player.y+24,path:[],moving:false,alert:0,repathIn:0};
     this.police=new PoliceSystem(this.world.police,this.nav);
@@ -44,10 +47,13 @@ export class GameSession{
   }
   refreshWalls(){
     for(const t of this.world.targets)t.state=this.painted.has(t.wall_id)?'PAINTED':'CLEAN';
+    this.refreshCity();
   }
+  refreshCity(){this.city=cityProgress(this.world,this.save);this.nav.access=(x,y)=>canEnter(this.world,this.city,x,y);}
   enterDistrict(){
     this.room.action='idle';this.room.remaining=0;this.runStyles={};
-    Object.assign(this.player,this.world.spawn,{path:[],state:'IDLE',moving:false});
+    const home=this.world.hideouts?.find(h=>h.regionId===this.save.district_progress[this.world.id]?.home&&this.city.find(r=>r.id===h.regionId)?.open);
+    Object.assign(this.player,home?{x:home.x+38,y:home.y}:this.world.spawn,{path:[],state:'IDLE',moving:false});
     Object.assign(this.companion,{x:this.player.x-26,y:this.player.y+24,path:[],repathIn:0});
     this.camera.ready=false;this.mode='district';this.heat=0;this.runRep=0;this.runWalls=[];
     this.painted=new Set(this.save.painted_walls);this.police=new PoliceSystem(this.world.police,this.nav);
@@ -59,6 +65,9 @@ export class GameSession{
     this.notice(this.painted.has(this.world.targets[0].wall_id)?'Выбери следующую стену на карте. Возвращайся домой, чтобы сохранить вылазку.':'Найди фиолетовый баллон. Первая стена — рядом с гаражом.');
   }
   returnHideout(caught=false){
+    const openBefore=new Set(this.city.filter(r=>r.open).map(r=>r.id));
+    const region=regionAt(this.world,this.player);
+    if(region)(this.save.district_progress[this.world.id]??={visits:0}).home=region.id;
     const reward=caught?Math.floor(this.runRep*.5):this.runRep;
     this.save.rep+=reward;
     if(!caught){
@@ -73,7 +82,8 @@ export class GameSession{
     this.runStyles={};
     this.painted=new Set(this.save.painted_walls);this.refreshWalls();
     this.mode='hideout';this.player.path=[];this.player.state=caught?'CAUGHT':'VICTORY';this.near=null;this.waypoint=null;
-    this.notice(caught?'Поймали! Стены этой вылазки потеряны; спасено '+reward+' REP.':'Сохранено. +'+reward+' REP в коллекцию.');
+    const opened=this.city.filter(r=>r.open&&!openBefore.has(r.id)).map(r=>r.name);
+    this.notice(caught?'Поймали! Стены этой вылазки потеряны; спасено '+reward+' REP.':'Сохранено. +'+reward+' REP в коллекцию.'+(opened.length?' Открыт мост: '+opened.join(', ')+'.':''));
     this.emit('mode');
   }
   upgrade(){
@@ -103,13 +113,19 @@ export class GameSession{
   }
   routeTo(point,label='Точка назначения'){
     if(this.knockedFor>0)return;
+    if(!canEnter(this.world,this.city,point.x,point.y)){
+      const region=regionAt(this.world,point),bridge=this.world.bridges?.find(b=>point.x>=b.x&&point.x<=b.x+b.w&&point.y>=b.y&&point.y<=b.y+b.h);
+      this.notice(gateMessage(this.city,region?.id??bridge?.to));return;
+    }
     this.player.path=this.nav.path(this.player,point);this.waypoint={...point,label};
     if(!this.player.path.length){this.notice('К этой точке пока нет прохода.');this.waypoint=null;}
   }
   nearest(){
     const options=[];
     const add=(type,item,p,radius)=>{const d=distance(this.player,p);if(d<radius)options.push({type,item,d});};
-    add('hideout',this.world.hideout,this.world.hideout,62);
+    for(const home of this.world.hideouts??[this.world.hideout])add('hideout',home,home,62);
+    for(const poster of POSTERS)add('poster',{...poster,name:'Плакат '+poster.brand},posterApproach(this.world,poster),65);
+    for(const bridge of this.world.bridges??[])add('bridge',bridge,bridge.approach,100);
     add('court',this.court,this.court,68);
     for(const t of this.world.targets)if(!this.painted.has(t.wall_id))add('target',t,t.approach,62);
     for(const s of this.world.safeSpots)add('safe',s,s,48);
@@ -119,6 +135,8 @@ export class GameSession{
     if(this.mode!=='district'||this.hiddenFor>0||this.knockedFor>0||!this.near)return;
     const {type,item}=this.near;this.player.path=[];this.waypoint=null;
     if(type==='hideout')return this.returnHideout();
+    if(type==='poster'){this.emit('poster-open',{id:item.id});return;}
+    if(type==='bridge'){this.notice(gateMessage(this.city,item.to));return;}
     if(type==='court'){
       this.courtLine=0;this.mode='court-dialogue';this.player.state='IDLE';this.player.moving=false;this.emit('mode');return;
     }
@@ -148,7 +166,7 @@ export class GameSession{
     this.ballGame.end();this.ballReward=!this.save.basketball.completed;
     this.save.basketball={completed:true,pixels:[],stickers:this.ballGame.snapshot()};
     if(this.ballReward)this.save.rep+=COURT.reward;
-    this.persist();this.mode='ball-result';this.emit('mode');return true;
+    this.persist();this.refreshCity();this.mode='ball-result';this.emit('mode');return true;
   }
   cancelGraffiti(){
     if(!this.graffiti)return;
@@ -230,7 +248,7 @@ export class GameSession{
     }
     moveAlongPath(this.companion,this.companion.path,190,dt);
     this.companion.alert=this.police.units.some(u=>u.active&&distance(u,this.player)<210&&this.heat>0)?1:0;
-    this.citizens.update(dt);
+    this.citizens.update(dt,this.player);
   }
   hitByTraffic(car){
     this.knockedFor=1.6;this.trafficGrace=4;this.grace=Math.max(this.grace,2.5);this.victoryFor=0;

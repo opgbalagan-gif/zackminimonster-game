@@ -16,7 +16,7 @@ export class TrafficSystem{
   constructor(world){
     this.time=0;this.cars=[];this.crossings=[];
     const vertical=world.roads.filter(r=>r.h>r.w),horizontal=world.roads.filter(r=>r.w>r.h);
-    for(const v of vertical)for(const h of horizontal)this.crossings.push({x:v.x,y:h.y,w:v.w,h:h.h});
+    for(const v of vertical)for(const h of horizontal)if(v.x<h.x+h.w&&v.x+v.w>h.x&&h.y<v.y+v.h&&h.y+h.h>v.y)this.crossings.push({x:v.x,y:h.y,w:v.w,h:h.h});
     world.roads.forEach((road,index)=>{
       const axis=road.w>road.h?'x':'y',other=axis==='x'?'y':'x',length=axis==='x'?road.w:road.h;
       for(const direction of [-1,1])for(let n=0;n<2;n++){

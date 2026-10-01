@@ -11,13 +11,16 @@ const loader=new ContentLoader(),store=new SaveStore(),audio=new AudioManager();
 let session=null,renderer=null,starting=false;
 const ui=new GameUI({
   start,leave,action,upgrade:()=>session?.upgrade(),
-  home:()=>session?.routeTo(session.world.hideout,'Убежище / сохранить'),
+  home:()=>{if(session){const h=(session.world.hideouts??[session.world.hideout]).reduce((a,b)=>Math.hypot(a.x-session.player.x,a.y-session.player.y)<Math.hypot(b.x-session.player.x,b.y-session.player.y)?a:b);session.routeTo(h,h.name);}},
   route:id=>{
     if(session.mode==='hideout')leave();
     if(id==='home')session.routeTo(session.world.hideout,'Убежище / сохранить');
     else if(id==='court')session.routeTo(session.court,'Баскетбол · Не просто мяч');
     else if(id.startsWith('poster_')){const p=POSTERS.find(p=>'poster_'+p.id===id);if(p)session.routeTo(posterApproach(session.world,p),'Плакат '+p.brand+' × ZAK MINI MONSTER');}
     else{
+      const bridge=session.world.bridges?.find(b=>b.id===id),home=session.world.hideouts?.find(h=>h.id===id);
+      if(bridge){session.routeTo(bridge.approach,bridge.name);ui.sync();return;}
+      if(home){session.routeTo(home,home.name);ui.sync();return;}
       const target=session.world.targets.find(t=>t.wall_id===id);
       const safe=session.world.safeSpots.find(t=>t.id===id);
       if(target)session.routeTo(target.approach,target.name);else if(safe)session.routeTo(safe,safe.name);
@@ -32,7 +35,7 @@ const ui=new GameUI({
 });
 const input=new InputController(canvas,{
   action,map:()=>ui.toggleMap(),back:()=>{
-    if(ui.mapOpen)ui.toggleMap(false);else if(session?.mode==='graffiti')session.cancelGraffiti();
+    if(session?.mode==='poster')ui.closePoster();else if(ui.mapOpen)ui.toggleMap(false);else if(session?.mode==='graffiti')session.cancelGraffiti();
     else if(['court-dialogue','ball-art','ball-result'].includes(session?.mode)){session.cancelCourt();ui.sync();}
     else if(session?.mode==='hideout')ui.hideoutUI.open('home');
   },
