@@ -2,6 +2,19 @@
   "version": 2,
   "assets": [
     {
+      "asset_id": "D01_BEACH-SAND",
+      "path": "./content__district_01__art__beach-sand.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "file_size": 3304192,
+      "sha256": "942272dec5a3a80c4452791f9e1dfc22607489f5d287740f89f0e66a7808f386",
+      "usage": "lazy district pack"
+    },
+    {
       "asset_id": "D01_BUILDINGS",
       "path": "./content__district_01__art__buildings.png",
       "category": "sprite_atlas",

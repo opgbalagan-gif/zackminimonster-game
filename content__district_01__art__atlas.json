@@ -1106,6 +1106,10 @@
     {
       "id": "coastal_nature",
       "file": "./content__district_01__art__coastal-nature.png"
+    },
+    {
+      "id": "beach_sand",
+      "file": "./content__district_01__art__beach-sand.png"
     }
   ]
 }

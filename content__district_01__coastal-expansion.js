@@ -1,6 +1,6 @@
 // The old street blocks retain their wall IDs; natural land extends around them.
 export function expandCoast(w){
-  w.version=16;w.width=7200;w.height=7100;
+  w.version=17;w.width=7200;w.height=7100;
   w.mapBounds={x:-500,y:-1000,w:8000,h:8300};
   w.urbanPolygons=structuredClone(w.landPolygons);
   const points=a=>a.map(([x,y])=>({x,y}));

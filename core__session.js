@@ -51,7 +51,7 @@ export class GameSession{
     for(const t of this.world.targets)t.state=this.painted.has(t.wall_id)?'PAINTED':'CLEAN';
     this.refreshCity();
   }
-  refreshCity(){this.city=cityProgress(this.world,this.save);this.nav.access=(x,y)=>canEnter(this.world,this.city,x,y);}
+  refreshCity(){this.city=cityProgress(this.world,this.save);this.nav.access=null;}
   enterDistrict(){
     this.gangs.reset();
     this.room.action='idle';this.room.remaining=0;this.runStyles={};
@@ -117,10 +117,6 @@ export class GameSession{
   }
   routeTo(point,label='Точка назначения'){
     if(this.knockedFor>0||this.gangs.push)return;
-    if(!canEnter(this.world,this.city,point.x,point.y)){
-      const region=regionAt(this.world,point),bridge=this.world.bridges?.find(b=>point.x>=b.x&&point.x<=b.x+b.w&&point.y>=b.y&&point.y<=b.y+b.h);
-      this.notice(gateMessage(this.city,region?.id??bridge?.to));return;
-    }
     this.player.path=this.nav.path(this.player,point);this.waypoint={...point,label};
     if(!this.player.path.length){this.notice('К этой точке пока нет прохода.');this.waypoint=null;}
   }
@@ -244,7 +240,7 @@ export class GameSession{
     }
     this.knockedFor=Math.max(0,this.knockedFor-dt);this.trafficGrace=Math.max(0,this.trafficGrace-dt);
     const previous={x:this.player.x,y:this.player.y};
-    this.movePlayer(dt,movement);this.gangs.update(dt,this);this.traffic.update(dt);
+    this.movePlayer(dt,movement);this.gangs.update(dt,this,previous);this.traffic.update(dt);
     const car=this.hiddenFor<=0&&this.trafficGrace<=0&&this.grace<=0&&this.traffic.collision(previous,this.player);
     if(car)this.hitByTraffic(car);
     this.near=this.knockedFor>0||this.gangs.push?null:this.nearest();

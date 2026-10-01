@@ -20,6 +20,10 @@ export function drawShore(c,world){
       for(let i=0;i<poly.length;i++){
         const a=poly[i],b=poly[(i+1)%poly.length],beach=world.beaches&&a.y>5700&&b.y>5700,z=beach?-5:-28;
         polygon(c,[project(a.x,a.y),project(b.x,b.y),project(b.x,b.y,z),project(a.x,a.y,z)],beach?'#ead7aa':'#52686b',beach?'#f2e4c7':'#273d46',beach?4:2);
+        if(beach){
+          const len=Math.hypot(b.x-a.x,b.y-a.y),nx=-(b.y-a.y)/len,ny=(b.x-a.x)/len;
+          for(let n=0;n<len;n+=16){const t=n/len,noise=Math.sin(n*.17)*6,p=project(a.x+(b.x-a.x)*t-nx*(8+noise),a.y+(b.y-a.y)*t-ny*(8+noise),-6);c.fillStyle=n%48?'#b7d9c7':'#f0e7cc';c.fillRect(Math.round(p.x),Math.round(p.y),10+n%7,3);}
+        }
       }
     }return;
   }
@@ -47,11 +51,6 @@ export function drawBridges(c,session,plate){
         c.strokeStyle='#bbc0a4';c.lineWidth=3;c.beginPath();c.moveTo(p.x,p.y);c.lineTo(p.x,p.y-28);c.stroke();
         c.fillStyle='#ead8a0';c.fillRect(p.x-3,p.y-31,6,5);
       }
-    }
-    const open=session.city.find(r=>r.id===b.to)?.open;
-    if(!open){
-      const x=b.approach.x+(vertical?0:(b.from==='arts'?-44:44)),y=b.approach.y+(vertical?48:0);
-      box(c,x-(vertical?44:4),y-(vertical?4:40),vertical?88:8,vertical?8:80,28,'#ecc66a','#9c653f','#d59d52');
     }
   }
 }

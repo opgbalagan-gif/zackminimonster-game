@@ -1,23 +1,27 @@
 import {project} from './core__geometry.js';
 import {polygon} from './content__district_01__terrain.js';
+export function createCoastalTextures(plate,sand){
+  const make=(image,x,y,w,h,size)=>{const tile=document.createElement('canvas');tile.width=tile.height=size;const c=tile.getContext('2d');c.imageSmoothingEnabled=false;c.drawImage(image,x,y,w,h,0,0,size,size);return c.createPattern(tile,'repeat');};
+  return {sand:sand?make(sand,0,0,sand.width,sand.height,440):'#d8bf8a',paving:make(plate,450,90,200,170,170),grass:make(plate,730,550,65,65,100),asphalt:make(plate,450,1210,160,25,128)};
+}
 
-export function drawCoastalGround(c,w){
+export function drawCoastalGround(c,w,textures){
   if(!w.beaches)return;
   // Continuous foothills along the two northern edges, rather than water on all sides.
   polygon(c,[[-800,-950],[7000,-950],[7100,-200],[6350,220],[5900,48],[48,48],[48,2200],[-650,2400]].map(([x,y])=>project(x,y)),'#384339');
   c.save();c.transform(1,.5,-1,.5,0,0);
   c.beginPath();for(const poly of w.landPolygons){poly.forEach((p,i)=>i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));c.closePath();}c.clip();
-  c.fillStyle='#879078';c.fillRect(0,0,w.width,w.height);
-  c.fillStyle='#d8bf8a';c.fillRect(0,5830,w.width,w.height-5830);
-  for(const poly of w.beaches){polygon(c,poly,'#d8bf8a','#e9d4a4',14);}
+  c.fillStyle=textures.grass;c.fillRect(0,0,w.width,w.height);
+  c.fillStyle=textures.sand;c.fillRect(0,5830,w.width,w.height-5830);
+  for(const poly of w.beaches){polygon(c,poly,textures.sand,'#ddc79b',5);}
   for(let y=5250;y<7000;y+=39)for(let x=100;x<6800;x+=47){const n=Math.sin(x*31+y*7);c.fillStyle=n>.25?'#f3dfaa55':'#525c4b22';c.fillRect(x+n*11,y+n*18,5,2);}
   // Street-to-promenade entrances and a broad paved walk along both beaches.
   const stroke=(path,color,width)=>{c.strokeStyle=color;c.lineWidth=width;c.lineJoin='round';c.lineCap='round';c.beginPath();path.forEach((p,i)=>i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));c.stroke();};
   for(const [x,y] of [[896,5680],[2460,5680],[4096,5790],[5180,6100]]){
-    const path=[{x,y:5200},{x,y}];stroke(path,'#555a57',92);stroke(path,'#aaa899',68);
+    const path=[{x,y:5200},{x,y}];stroke(path,'#555a57',92);stroke(path,textures.paving,68);
   }
   for(const path of w.promenades){
-    stroke(path,'#686b63',132);stroke(path,'#c0b6a0',116);
+    stroke(path,'#686b63',132);stroke(path,textures.paving,116);
     c.lineCap='butt';c.lineWidth=1.5;c.strokeStyle='#918d7c';
     for(let i=1;i<path.length;i++){
       const a=path[i-1],b=path[i],len=Math.hypot(b.x-a.x,b.y-a.y),dx=(b.x-a.x)/len,dy=(b.y-a.y)/len;

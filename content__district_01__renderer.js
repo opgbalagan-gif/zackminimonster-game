@@ -1,7 +1,7 @@
 import {facadeGeometry,drawFacade} from './content__district_01__facades.js';
 import {perimeterPieces,drawPerimeter} from './content__district_01__perimeter.js';
 import {createGroundPlate} from './content__district_01__ground-plate.js';
-import {trainCars,drawTrain,loopRails,drawLoopRail} from './content__district_01__metro.js';
+import {trainCars,drawTrain,loopRails,drawLoopRail,drawTunnelPortal,drawLoopStation} from './content__district_01__metro.js';
 import {project,distance} from './core__geometry.js';
 import {SpriteAtlas} from './core__sprites.js';
 import {polygon,box,ground} from './content__district_01__terrain.js';
@@ -15,7 +15,7 @@ import {POSTERS,drawPoster} from './content__district_01__posters.js';
 import {drawHoop} from './content__district_01__court-props.js';
 import {wallPieces,fencePieces,coversHero} from './content__district_01__depth-pieces.js';
 import {drawWater,drawShore,drawBridges} from './content__district_01__waterfront.js';
-import {drawCoastalGround,drawMountains,drawBeachUmbrella} from './content__district_01__coastal-renderer.js';
+import {drawCoastalGround,drawMountains,drawBeachUmbrella,createCoastalTextures} from './content__district_01__coastal-renderer.js';
 
 const INK='#111722';
 export function marker(c,x,y,type,size=28,active=false){
@@ -37,12 +37,13 @@ function label(c,text,x,y,color='#eee8d8'){
 export function createRenderer(pack){
   const atlas=new SpriteAtlas(pack.atlas,pack.images),world=pack.world;
   const plate=createGroundPlate(pack.images.city_ground,world);
+  const coastTextures=createCoastalTextures(plate,pack.images.beach_sand);
   const entries=[],posterHits=[],wallTextures=new Map();
   for(const b of [...world.backdrop,...world.buildings])entries.push({kind:'building',item:b,depth:b.x+b.y+b.w+b.h});
   for(const p of world.props)entries.push({kind:'prop',item:p,depth:p.x+p.y});
   for(const p of world.beachProps??[])entries.push({kind:'umbrella',item:p,depth:p.x+p.y});
   for(const t of world.targets)if(!t.buildingId)entries.push(...wallPieces(t));
-  for(const o of world.obstacles)if(!o.wallCollider&&!o.boundary&&!o.hoopBase){
+  for(const o of world.obstacles)if(!o.wallCollider&&!o.boundary&&!o.hoopBase&&!o.tunnelCollider){
     if(o.pillar)entries.push({kind:'pillar',item:o,depth:o.x+o.y+o.w+o.h});
     else entries.push(...fencePieces(o));
   }
@@ -50,7 +51,9 @@ export function createRenderer(pack){
   if(world.metro.loop)for(const r of loopRails(world.metro))entries.push({kind:'loopRail',item:r,depth:r.x+r.y+r.w+r.h});
   else for(let x=world.metro.x;x<world.metro.end;x+=world.metro.segment)entries.push({kind:'rail',item:{x},depth:x+world.metro.segment+world.metro.y+world.metro.width});
   for(const o of perimeterPieces(world))entries.push({kind:'perimeter',item:o,depth:o.x+o.y+o.w+o.h});
-  entries.push({kind:'station',item:{x:world.metro.station.x},depth:world.metro.station.x+world.metro.station.w+world.metro.y+120});
+  if(!world.metro.loop)entries.push({kind:'station',item:{x:world.metro.station.x},depth:world.metro.station.x+world.metro.station.w+world.metro.y+120});
+  for(const p of world.metroPortals??[])entries.push({kind:'portal',item:p,depth:p.x+p.y+100});
+  for(const p of world.metroStations??[])entries.push({kind:'loopStation',item:p,depth:p.x+p.y+120});
 
   function sprite(c,id,x,y,width,height=null,flip=false,alpha=1){atlas.draw(c,id,x,y,width,height,flip,alpha);}
   function paintWall(c,t,session){
@@ -129,8 +132,8 @@ export function createRenderer(pack){
     const cam=map?{x:bounds.x-bounds.y+(bounds.w-bounds.h)/2,y:(bounds.x+bounds.y)/2+(bounds.w+bounds.h)/4-70,zoom:Math.max(.001,Math.min((width-40)/(bounds.w+bounds.h+400),(height-80)/((bounds.w+bounds.h)/2+400)))}:session.camera;
     c.save();c.translate(width/2,height/2);c.scale(cam.zoom,cam.zoom);c.translate(-cam.x,-cam.y);
     if(world.regions){drawWater(c,cam,width,height,session.time);drawShore(c,world);}
-    drawCoastalGround(c,world);
-    ground(c,world,plate,cam,width,height);
+    drawCoastalGround(c,world,coastTextures);
+    ground(c,world,plate,cam,width,height,coastTextures);
     drawMountains(c,world,atlas);
     drawBridges(c,session,plate);
     drawTrafficSignals(c,session.traffic);
@@ -155,7 +158,8 @@ export function createRenderer(pack){
     const visiblePeople=queue.filter(e=>['hero','npc','courtNpc','gang','companion','officer'].includes(e.kind)).map(e=>({...project(e.item.x,e.item.y),depth:e.depth})).filter(p=>p.x>minX&&p.x<maxX&&p.y>minY&&p.y<maxY);
     for(const entry of queue){
       const o=entry.item,p=project(o.x,o.y??world.metro.y);
-      if(p.x<minX||p.x>maxX||p.y<minY||p.y>maxY)continue;
+      const extraHeight=entry.kind==='building'?(o.w+o.h+22)*atlas.rect(o.type)[3]/atlas.rect(o.type)[2]*(o.heightScale??1):0;
+      if(p.x<minX||p.x>maxX||p.y<minY||p.y>maxY+extraHeight)continue;
       if(entry.kind==='building'){
         const foot=project(o.x+o.w,o.y+o.h),buildingWidth=o.w+o.h+22,rect=atlas.rect(o.type),buildingHeight=buildingWidth*rect[3]/rect[2]*(o.heightScale??1);
         const occluded=map?[]:visiblePeople.filter(p=>p.depth<entry.depth&&p.x+15>foot.x-buildingWidth/2&&p.x-15<foot.x+buildingWidth/2&&p.y-52<foot.y&&p.y>foot.y-buildingHeight);
@@ -204,6 +208,8 @@ export function createRenderer(pack){
       else if(entry.kind==='rail')rail(c,o.x,session,map);
       else if(entry.kind==='station')station(c,session,map);
       else if(entry.kind==='train')drawTrain(c,o,world.metro,atlas);
+      else if(entry.kind==='portal')drawTunnelPortal(c,o,world.metro);
+      else if(entry.kind==='loopStation')drawLoopStation(c,o,world.metro);
       else if(entry.kind==='courtNpc'){
         c.fillStyle='#11172355';c.beginPath();c.ellipse(p.x,p.y,16,6,0,0,Math.PI*2);c.fill();
         sprite(c,o.sprite,p.x,p.y-Math.sin(session.time*2+o.x)*.7,null,70);
