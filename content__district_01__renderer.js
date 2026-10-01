@@ -10,6 +10,8 @@ import {wallSurface} from './core__surfaces.js';
 import {heroSprite,ink} from './core__hideout.js';
 import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js';
 import {drawTrafficCar,drawTrafficSignals} from './content__district_01__traffic-renderer.js';
+import {drawBall} from './core__ball-art.js';
+import {POSTERS,drawPoster} from './content__district_01__posters.js';
 
 const INK='#111722';
 export function marker(c,x,y,type,size=28,active=false){
@@ -19,6 +21,7 @@ export function marker(c,x,y,type,size=28,active=false){
   if(type==='graffiti'){c.fillStyle='#d08bea';c.fillRect(-5,-20,10,16);c.fillStyle='#f1d9ff';c.fillRect(-3,-25,6,4);c.fillRect(-3,-17,2,8);}
   else if(type==='home'){c.fillStyle='#f5cd59';c.beginPath();c.moveTo(-9,-16);c.lineTo(0,-25);c.lineTo(9,-16);c.closePath();c.fill();c.fillRect(-7,-16,14,12);c.fillStyle=INK;c.fillRect(-2,-12,4,8);}
   else if(type==='police'){c.fillStyle='#82b9db';c.beginPath();c.moveTo(-8,-23);c.lineTo(8,-23);c.lineTo(7,-10);c.lineTo(0,-4);c.lineTo(-7,-10);c.closePath();c.fill();}
+  else if(type==='court'){c.fillStyle='#f29c49';c.beginPath();c.arc(0,-15,9,0,Math.PI*2);c.fill();c.strokeStyle=INK;c.lineWidth=1.5;c.beginPath();c.moveTo(-9,-15);c.lineTo(9,-15);c.moveTo(0,-24);c.lineTo(0,-6);c.stroke();}
   else{c.fillStyle='#eee9d8';c.font='bold 22px monospace';c.textAlign='center';c.fillText('?',0,-6);}
   c.restore();
 }
@@ -30,7 +33,7 @@ function label(c,text,x,y,color='#eee8d8'){
 export function createRenderer(pack){
   const atlas=new SpriteAtlas(pack.atlas,pack.images),world=pack.world;
   const plate=createGroundPlate(pack.images.city_ground,world);
-  const entries=[];
+  const entries=[],posterHits=[];
   for(const b of [...world.backdrop,...world.buildings])entries.push({kind:'building',item:b,depth:b.x+b.y+b.w+b.h});
   for(const p of world.props)entries.push({kind:'prop',item:p,depth:p.x+p.y});
   for(const t of world.targets)if(!t.buildingId)entries.push({kind:'wall',item:t,depth:t.x+t.y+5});
@@ -101,6 +104,7 @@ export function createRenderer(pack){
   }
   function renderWorld(c,session,width,height,map=false){
     c.imageSmoothingEnabled=false;atlas.drawCalls=0;c.clearRect(0,0,width,height);
+    if(!map)posterHits.length=0;
     c.fillStyle='#1b2531';c.fillRect(0,0,width,height);
     const cam=map?{x:(world.width-world.height)/2,y:(world.width+world.height)/4-70,zoom:Math.min((width-40)/(world.width+world.height+160),(height-80)/((world.width+world.height)/2+260))}:session.camera;
     c.save();c.translate(width/2,height/2);c.scale(cam.zoom,cam.zoom);c.translate(-cam.x,-cam.y);
@@ -116,6 +120,7 @@ export function createRenderer(pack){
       {kind:'companion',item:session.companion,depth:session.companion.x+session.companion.y});
     for(const u of session.police.units)queue.push({kind:u.kind==='car'?'car':'officer',item:u,depth:u.x+u.y});
     for(const n of session.citizens.people)queue.push({kind:'npc',item:n,depth:n.x+n.y});
+    for(const n of session.court.friends)queue.push({kind:'courtNpc',item:n,depth:n.x+n.y});
     for(const car of session.traffic.cars)if(car.x>=0&&car.x<=world.width&&car.y>=0&&car.y<=world.height)queue.push({kind:'traffic',item:car,depth:car.x+car.y+22});
     for(const car of trainCars(world.metro,session.time))queue.push({kind:'train',item:car,depth:car.x+car.y+210});
     queue.sort((a,b)=>a.depth-b.depth);
@@ -131,6 +136,15 @@ export function createRenderer(pack){
         sprite(c,o.type,foot.x,foot.y,width,null,false,alpha);
         const target=world.targets.find(t=>t.buildingId===o.id);
         if(target)drawFacade(c,o,target,session,atlas,alpha);
+        const poster=POSTERS.find(p=>p.buildingId===o.id);
+        if(poster){
+          const points=drawPoster(c,o,poster,atlas,alpha);
+          if(!map&&points&&alpha>.9){
+            const screen=points.map(p=>({x:(p.x-cam.x)*cam.zoom+width/2,y:(p.y-cam.y)*cam.zoom+height/2}));
+            const x=Math.min(...screen.map(p=>p.x)),y=Math.min(...screen.map(p=>p.y));
+            posterHits.push({id:poster.id,x,y,w:Math.max(...screen.map(p=>p.x))-x,h:Math.max(...screen.map(p=>p.y))-y});
+          }
+        }
       }else if(entry.kind==='perimeter')drawPerimeter(c,o);
       else if(entry.kind==='traffic')drawTrafficCar(c,o);
       else if(entry.kind==='prop')sprite(c,o.type,p.x,p.y,o.width);
@@ -142,6 +156,11 @@ export function createRenderer(pack){
       }else if(entry.kind==='rail')rail(c,o.x,session,map);
       else if(entry.kind==='station')station(c,session,map);
       else if(entry.kind==='train')drawTrain(c,o,world.metro,atlas);
+      else if(entry.kind==='courtNpc'){
+        c.fillStyle='#11172355';c.beginPath();c.ellipse(p.x,p.y,16,6,0,0,Math.PI*2);c.fill();
+        sprite(c,o.sprite,p.x,p.y-Math.sin(session.time*2+o.x)*.7,null,70);
+        if(session.save.basketball.completed&&o.sprite==='court_ti'){c.save();c.translate(p.x+5,p.y-33);drawBall(c,session.save.basketball.pixels,24);c.restore();}
+      }
       else if(entry.kind==='npc'){
         c.fillStyle='#11172338';c.beginPath();c.ellipse(p.x,p.y,11,4,0,0,Math.PI*2);c.fill();
         const frame=(o.back?2:0)+(o.moving?Math.floor(o.walkTime*7)%2:0);
@@ -155,6 +174,7 @@ export function createRenderer(pack){
     }
     for(const s of world.safeSpots){const p=project(s.x,s.y,16);c.globalAlpha=s.cooldown>0?.35:1;marker(c,p.x,p.y,'safe',(map?18:22)/cam.zoom);c.globalAlpha=1;}
     const home=project(world.hideout.x,world.hideout.y,34);marker(c,home.x,home.y,'home',(map?23:28)/cam.zoom,true);
+    const court=project(session.court.x,session.court.y-44,88);marker(c,court.x,court.y,'court',(map?23:26)/cam.zoom,session.near?.type==='court');
     if(map){
       for(const z of world.zones){
         if(width<560&&!['hideout','metro','construction'].includes(z.id))continue;
@@ -166,7 +186,7 @@ export function createRenderer(pack){
     c.restore();session.metrics.drawCalls=atlas.drawCalls;
     return cam;
   }
-  return {atlas,world:renderWorld,hideout:(c,s,w,h)=>renderHideout(c,s,w,h,atlas),
+  return {atlas,posterHits,world:renderWorld,hideout:(c,s,w,h)=>renderHideout(c,s,w,h,atlas),
     drawTrophy:(c,id,x,y,size)=>drawTrophy(c,id,atlas,x,y,size),
     drawGraffiti:(c,id,x,y,w,h,color)=>drawGraffiti(c,id,x,y,w,h,atlas,color)};
 }

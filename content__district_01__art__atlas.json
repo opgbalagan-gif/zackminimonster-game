@@ -875,6 +875,60 @@
           0.767379679144385
         ]
       ]
+    },
+    "court_dan": {
+      "sheet": "court_friends",
+      "rect": [
+        61,
+        57,
+        654,
+        929
+      ]
+    },
+    "court_ti": {
+      "sheet": "court_friends",
+      "rect": [
+        919,
+        68,
+        552,
+        917
+      ]
+    },
+    "poster_reebok": {
+      "sheet": "poster_reebok",
+      "rect": [
+        0,
+        0,
+        1024,
+        1536
+      ]
+    },
+    "poster_wilson": {
+      "sheet": "poster_wilson",
+      "rect": [
+        0,
+        0,
+        1024,
+        1536
+      ]
+    },
+    "poster_posca": {
+      "sheet": "poster_posca",
+      "rect": [
+        0,
+        0,
+        1024,
+        1536
+      ]
+    },
+    "poster_converse": {
+      "sheet": "poster_converse",
+      "rect": [
+        0,
+        0,
+        1024,
+        1536
+      ]
     }
   },
   "version": 1,
@@ -922,6 +976,26 @@
     {
       "id": "expanded_buildings",
       "file": "./content__district_01__art__expanded-buildings.png"
+    },
+    {
+      "id": "court_friends",
+      "file": "./content__district_01__art__court-friends.png"
+    },
+    {
+      "id": "poster_reebok",
+      "file": "./content__district_01__art__poster-reebok.png"
+    },
+    {
+      "id": "poster_wilson",
+      "file": "./content__district_01__art__poster-wilson.png"
+    },
+    {
+      "id": "poster_posca",
+      "file": "./content__district_01__art__poster-posca.png"
+    },
+    {
+      "id": "poster_converse",
+      "file": "./content__district_01__art__poster-converse.png"
     }
   ]
 }

@@ -6,6 +6,7 @@ import {EffectPool} from './core__effects.js';
 import {OUTFITS,INKS,TROPHIES} from './core__hideout.js';
 import {TrafficSystem} from './core__traffic.js';
 import {CitizenSystem} from './core__citizens.js';
+import {COURT,COURT_LINES,BallArtGame} from './core__basketball.js';
 import {GRAFFITI_CONFIG} from './content__graffiti__config.js';
 
 export class GameSession{
@@ -21,7 +22,7 @@ export class GameSession{
     this.hiddenFor=0;this.hideTick=0;this.grace=0;this.victoryFor=0;this.caughtFor=0;this.graffiti=null;
     this.metrics={fps:0,frame:0,memory:'—',activePolice:0,drawCalls:0};this.refreshWalls();
     this.room={action:'idle',remaining:0,beat:false,reaction:'',reactionFor:0};
-    this.runStyles={};
+    this.runStyles={};this.court=COURT;this.courtLine=0;this.ballGame=null;this.ballReward=false;
     const checkpoint=this.save.active_run;
     if(checkpoint?.district===this.world.id){
       this.runWalls=checkpoint.walls.filter(id=>this.world.targets.some(t=>t.wall_id===id)&&!this.painted.has(id));
@@ -109,6 +110,7 @@ export class GameSession{
     const options=[];
     const add=(type,item,p,radius)=>{const d=distance(this.player,p);if(d<radius)options.push({type,item,d});};
     add('hideout',this.world.hideout,this.world.hideout,62);
+    add('court',this.court,this.court,68);
     for(const t of this.world.targets)if(!this.painted.has(t.wall_id))add('target',t,t.approach,62);
     for(const s of this.world.safeSpots)add('safe',s,s,48);
     options.sort((a,b)=>a.d-b.d);return options[0]??null;
@@ -117,6 +119,9 @@ export class GameSession{
     if(this.mode!=='district'||this.hiddenFor>0||this.knockedFor>0||!this.near)return;
     const {type,item}=this.near;this.player.path=[];this.waypoint=null;
     if(type==='hideout')return this.returnHideout();
+    if(type==='court'){
+      this.courtLine=0;this.mode='court-dialogue';this.player.state='IDLE';this.player.moving=false;this.emit('mode');return;
+    }
     if(type==='safe'){
       if(item.cooldown>0)return this.notice('Укрытие восстановится через '+Math.ceil(item.cooldown)+' сек.');
       this.hiddenFor=3.2;this.hideTick=0;item.cooldown=26;this.player.state='HIDE';
@@ -126,6 +131,24 @@ export class GameSession{
     this.graffiti=new GraffitiGame(item,this.definitions.find(g=>g.id===item.graffiti_id),this.save.hideout.upgrades.includes('spray_rack'));
     this.graffiti.ink=this.save.player.ink;
     this.mode='graffiti';this.player.state='SHAKE_CAN';this.emit('graffiti-start');
+  }
+  advanceCourt(){
+    if(this.mode!=='court-dialogue')return;
+    if(this.courtLine<COURT_LINES.length-1)this.courtLine++;
+    else{this.ballGame=new BallArtGame();this.mode='ball-art';this.ballReward=false;}
+    this.emit('mode');
+  }
+  cancelCourt(){
+    if(!['court-dialogue','ball-art','ball-result'].includes(this.mode))return;
+    this.ballGame?.end();this.ballGame=null;this.mode='district';this.grace=2;this.player.state='IDLE';this.emit('mode');
+  }
+  finishBall(){
+    if(this.mode==='ball-result')return this.cancelCourt();
+    if(this.mode!=='ball-art'||!this.ballGame?.ready)return false;
+    this.ballGame.end();this.ballReward=!this.save.basketball.completed;
+    this.save.basketball={completed:true,pixels:[...this.ballGame.pixels]};
+    if(this.ballReward)this.save.rep+=COURT.reward;
+    this.persist();this.mode='ball-result';this.emit('mode');return true;
   }
   cancelGraffiti(){
     if(!this.graffiti)return;

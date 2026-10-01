@@ -54,6 +54,19 @@
       "usage": "lazy district pack"
     },
     {
+      "asset_id": "D01_COURT-FRIENDS",
+      "path": "./content__district_01__art__court-friends.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "file_size": 1400984,
+      "sha256": "84d997bb9a2001399b332defa9e93d44e0818818de2920e5949fc3bead42507a",
+      "usage": "lazy district pack"
+    },
+    {
       "asset_id": "D01_EXPANDED-BUILDINGS",
       "path": "./content__district_01__art__expanded-buildings.png",
       "category": "sprite_atlas",
@@ -90,6 +103,58 @@
       ],
       "file_size": 1213540,
       "sha256": "3866e37bb4d7735d7806c4549394be121711804202e32275d2590f8116fed766",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_POSTER-CONVERSE",
+      "path": "./content__district_01__art__poster-converse.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "file_size": 3103172,
+      "sha256": "38f2357ba8935bfaa5984a56cb9aeeccdaa34f9e0c1454f0ff9421f8c7f09725",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_POSTER-POSCA",
+      "path": "./content__district_01__art__poster-posca.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "file_size": 2506831,
+      "sha256": "d70e291849f6fcc7fa4fbac1283f006502b7c29ffca95dc78a767cbc94763031",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_POSTER-REEBOK",
+      "path": "./content__district_01__art__poster-reebok.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "file_size": 2622470,
+      "sha256": "355a47c9bfbed990011eb94429040b1888f20cc5d239308334fb92c4da3a9af8",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_POSTER-WILSON",
+      "path": "./content__district_01__art__poster-wilson.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "file_size": 2854854,
+      "sha256": "7f58ea255f513a6019e98b346bc9281542a59132ab0e1fad6a69e15e94dac4d0",
       "usage": "lazy district pack"
     },
     {

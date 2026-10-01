@@ -4,6 +4,7 @@ import {AudioManager} from './core__audio.js';
 import {GameSession} from './core__session.js';
 import {InputController} from './core__input.js';
 import {GameUI} from './core__ui.js';
+import {POSTERS,posterApproach} from './content__district_01__posters.js';
 
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d',{alpha:false});
 const loader=new ContentLoader(),store=new SaveStore(),audio=new AudioManager();
@@ -14,6 +15,8 @@ const ui=new GameUI({
   route:id=>{
     if(session.mode==='hideout')leave();
     if(id==='home')session.routeTo(session.world.hideout,'Убежище / сохранить');
+    else if(id==='court')session.routeTo(session.court,'Баскетбол · Не просто мяч');
+    else if(id.startsWith('poster_')){const p=POSTERS.find(p=>'poster_'+p.id===id);if(p)session.routeTo(posterApproach(session.world,p),'Плакат '+p.brand+' × ZAK MINI MONSTER');}
     else{
       const target=session.world.targets.find(t=>t.wall_id===id);
       const safe=session.world.safeSpots.find(t=>t.id===id);
@@ -30,6 +33,7 @@ const ui=new GameUI({
 const input=new InputController(canvas,{
   action,map:()=>ui.toggleMap(),back:()=>{
     if(ui.mapOpen)ui.toggleMap(false);else if(session?.mode==='graffiti')session.cancelGraffiti();
+    else if(['court-dialogue','ball-art','ball-result'].includes(session?.mode)){session.cancelCourt();ui.sync();}
     else if(session?.mode==='hideout')ui.hideoutUI.open('home');
   },
   debug:()=>{ui.debug=!ui.debug;ui.sync();},
@@ -53,6 +57,8 @@ function action(){
   if(!session){start();return;}
   if(ui.mapOpen)return;
   if(session.mode==='hideout')leave();
+  else if(session.mode==='court-dialogue')session.advanceCourt();
+  else if(['ball-art','ball-result'].includes(session.mode))session.finishBall();
   else if(session.mode==='graffiti')session.graffiti.confirm();
   else session.interact();
   input.reset();ui.sync();
@@ -75,6 +81,7 @@ function frame(now){
     else{
       session.camera.follow(session.player,dt,canvas.width);
       renderer.world(ctx,session,canvas.width,canvas.height);
+      ui.updatePosterLinks();
     }
     if(session.mode==='graffiti')ui.graffitiView.draw(dt);
     uiElapsed+=dt;if(uiElapsed>.1||session.events.length){ui.sync();if(ui.mapOpen)ui.drawMap();uiElapsed=0;}

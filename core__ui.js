@@ -1,5 +1,7 @@
 import {GraffitiView} from './core__graffiti-view.js';
 import {HideoutUI} from './core__hideout-ui.js';
+import {CourtView} from './core__court-view.js';
+import {POSTERS,ARTIST_URL} from './content__district_01__posters.js';
 import {GRAFFITI_CONFIG} from './content__graffiti__config.js';
 import {URBAN_WALL} from './content__graffiti__walls__urban.js';
 const $=id=>document.getElementById(id);
@@ -23,6 +25,13 @@ export class GameUI{
   bind(session,renderer,audio){
     this.session=session;this.renderer=renderer;this.audio=audio;
     this.graffitiView=new GraffitiView($('graffiti-canvas'),session,renderer,audio);
+    this.courtView=new CourtView(session,renderer);
+    this.posterLinks=new Map();
+    for(const poster of POSTERS){
+      const link=document.createElement('a');link.className='world-poster-link';link.href=ARTIST_URL;link.target='_blank';link.rel='noopener noreferrer';
+      link.setAttribute('aria-label','Плакат '+poster.brand+' × ZAK MINI MONSTER — Instagram художника');link.title=poster.brand+' × ZAK MINI MONSTER · Instagram ↗';link.innerHTML='<span>↗</span>';
+      link.hidden=true;$('poster-links').append(link);this.posterLinks.set(poster.id,link);
+    }
     $('motion-enable').onclick=async()=>{await this.graffitiView.motion.enable();this.sync();};
     $('motion-touch').onclick=()=>{this.graffitiView.motion.useTouch();this.sync();};
     this.hideoutUI=new HideoutUI(session,renderer,()=>this.sync(),audio);
@@ -34,14 +43,23 @@ export class GameUI{
     $('title-screen').hidden=true;$('hud').hidden=false;
     this.updateRoutes();this.sync();
   }
+  updatePosterLinks(){
+    if(!this.posterLinks)return;
+    const canvas=$('game'),r=canvas.getBoundingClientRect();
+    for(const [id,link] of this.posterLinks){
+      const hit=this.renderer.posterHits.find(p=>p.id===id);link.hidden=this.session.mode!=='district'||this.mapOpen||!hit||hit.x+hit.w<0||hit.y+hit.h<0||hit.x>canvas.width||hit.y>canvas.height;
+      if(!link.hidden){link.style.left=hit.x*r.width/canvas.width+'px';link.style.top=hit.y*r.height/canvas.height+'px';link.style.width=Math.max(24,hit.w*r.width/canvas.width)+'px';link.style.height=Math.max(36,hit.h*r.height/canvas.height)+'px';}
+    }
+  }
   updateRoutes(){
     const s=this.session,select=$('route-select'),old=select.value;select.replaceChildren();
-    const options=[{id:'home',name:'⌂ Убежище'},...s.world.targets.map(t=>({id:t.wall_id,name:(s.painted.has(t.wall_id)?'✓ ':'▣ ')+t.name+' · '+t.rep_reward+' REP'})),...s.world.safeSpots.map(t=>({id:t.id,name:'? '+t.name}))];
+    const options=[{id:'home',name:'⌂ Убежище'},{id:'court',name:'◉ Баскетбол · Не просто мяч'},...s.world.targets.map(t=>({id:t.wall_id,name:(s.painted.has(t.wall_id)?'✓ ':'▣ ')+t.name+' · '+t.rep_reward+' REP'})),...s.world.safeSpots.map(t=>({id:t.id,name:'? '+t.name}))];
+    options.splice(2,0,...POSTERS.map(p=>({id:'poster_'+p.id,name:'↗ Плакат '+p.brand+' × ZAK MINI MONSTER'})));
     for(const opt of options){const el=document.createElement('option');el.value=opt.id;el.textContent=opt.name;select.append(el);}
     if(old)select.value=old;
   }
   toggleMap(force){
-    if(!this.session||this.session.mode==='graffiti'||this.session.mode==='caught')return;
+    if(!this.session||!['hideout','district'].includes(this.session.mode))return;
     this.mapOpen=force??!this.mapOpen;$('map-screen').hidden=!this.mapOpen;
     if(this.mapOpen){this.updateRoutes();this.drawMap();}
   }
@@ -64,6 +82,7 @@ export class GameUI{
     if(s.mode==='hideout')this.hideoutUI?.sync();
     $('hideout-ui').hidden=s.mode!=='hideout';$('district-ui').hidden=!['district','caught'].includes(s.mode);
     $('graffiti-screen').hidden=s.mode!=='graffiti';
+    this.courtView.sync();
     $('rep-label').innerHTML=s.save.rep+' <small>REP</small>';$('run-rep').textContent='Вылазка +'+s.runRep;
     $('heat-stars').textContent='★'.repeat(s.heat)+'☆'.repeat(5-s.heat);
     $('heat-stars').setAttribute('aria-label','Розыск '+s.heat+' из 5');
@@ -74,9 +93,9 @@ export class GameUI{
     $('objective-label').textContent=s.knockedFor>0?'СБИЛИ · Зак поднимается…':s.waypoint?'↗ '+s.waypoint.label:s.runRep?'Вернись в убежище, чтобы сохранить':s.painted.size===s.world.targets.length?'Район полностью твой':'Найди свободную стену · берегись машин';
     const near=s.near;$('interaction').hidden=!near||s.hiddenFor>0||s.mode!=='district';
     if(near){
-      $('interaction-type').textContent=near.type==='target'?'GRAFFITI SPOT':near.type==='safe'?'SAFE SPOT':'HIDEOUT / SAVE';
+      $('interaction-type').textContent=near.type==='court'?'COURT STORY':near.type==='target'?'GRAFFITI SPOT':near.type==='safe'?'SAFE SPOT':'HIDEOUT / SAVE';
       $('interaction-name').textContent=near.item.name;
-      $('interaction-detail').textContent=near.type==='target'?'+'+near.item.rep_reward+' REP · HEAT +'+near.item.heat_reward:near.type==='safe'?(near.item.cooldown>0?'Повторно через '+Math.ceil(near.item.cooldown)+' сек.':'Спрятаться и снизить розыск'):'Сохранить вылазку и сбросить HEAT';
+      $('interaction-detail').textContent=near.type==='court'?(s.save.basketball.completed?'Поговорить и нарисовать новый мяч':'Два друга спорят о мяче · +300 REP'):near.type==='target'?'+'+near.item.rep_reward+' REP · HEAT +'+near.item.heat_reward:near.type==='safe'?(near.item.cooldown>0?'Повторно через '+Math.ceil(near.item.cooldown)+' сек.':'Спрятаться и снизить розыск'):'Сохранить вылазку и сбросить HEAT';
       $('action-button').disabled=near.type==='safe'&&near.item.cooldown>0;
     }
     $('sound-button').textContent=s.save.settings.sound?'♪':'×';

@@ -1,6 +1,6 @@
 {
   "id": "district_01",
-  "version": 7,
+  "version": 8,
   "scene": "./content__district_01__district.js",
   "renderer": "./content__district_01__renderer.js",
   "dependencies": [
@@ -22,7 +22,12 @@
     "./content__graffiti__assets__panda-king.png",
     "./content__district_01__art__citizens.png",
     "./content__district_01__art__city-ground.png",
-    "./content__district_01__art__expanded-buildings.png"
+    "./content__district_01__art__expanded-buildings.png",
+    "./content__district_01__art__court-friends.png",
+    "./content__district_01__art__poster-reebok.png",
+    "./content__district_01__art__poster-wilson.png",
+    "./content__district_01__art__poster-posca.png",
+    "./content__district_01__art__poster-converse.png"
   ],
   "audio": [],
   "graffiti": [
@@ -32,5 +37,5 @@
     "panda_king"
   ],
   "cutscenes": [],
-  "estimated_download_size": 23125330
+  "estimated_download_size": 35613641
 }

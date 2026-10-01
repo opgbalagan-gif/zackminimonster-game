@@ -5,6 +5,7 @@
   <meta name="theme-color" content="#111720"><title>ZACKMINIMONSTER — East Block</title>
   <link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./hideout.css"><link rel="icon" href="data:,">
   <link rel="stylesheet" href="./content__graffiti__ui__minigame.css">
+<link rel="stylesheet" href="./content__basketball__ui.css">
 </head>
 <body>
   <main id="app">
@@ -12,11 +13,11 @@
     <div id="title-screen" class="screen title-screen">
       <div class="title-art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
       <div class="title-content"><span class="eyebrow">SMALL BLOCK / BIG STORIES</span>
-        <div class="brand"><span class="crown">♛</span>ZACK<span>MINIMONSTER</span></div>
+        <div class="brand">ZACK<span>MINIMONSTER</span></div>
         <div class="edition">DISTRICT 01 <b>EAST BLOCK</b></div>
         <p class="title-copy">Твой район. Твои стены.<br>Оставь свой след и вернись домой.</p>
         <button id="start-button" class="primary large">ВОЙТИ В РАЙОН <span>↗</span></button>
-        <p id="load-status" role="status">TECH DEMO · 07 / BIGGER BLOCK</p><progress id="load-progress" max="1" value="0" hidden></progress>
+        <p id="load-status" role="status">TECH DEMO · 08 / COURT STORY</p><progress id="load-progress" max="1" value="0" hidden></progress>
       </div><div class="title-footer">TAG. EXPLORE. SURVIVE.<span>ZACKMINIMONSTER © 2026</span></div>
     </div>
     <header id="hud" hidden>
@@ -36,7 +37,7 @@
       <div id="room-hotspots" aria-label="Предметы убежища">
         <button class="room-hotspot" data-hotspot="wardrobe" data-home-tab="wardrobe" aria-label="Открыть гардероб"><i>♟</i><span>ОДЕЖДА</span></button>
         <button class="room-hotspot" data-hotspot="sprays" data-home-tab="sprays" aria-label="Открыть баллоны"><i>▥</i><span>БАЛЛОНЫ</span></button>
-        <button class="room-hotspot" data-hotspot="collection" data-home-tab="collection" aria-label="Открыть коллекцию"><i>♛</i><span>КОЛЛЕКЦИЯ</span></button>
+        <button class="room-hotspot" data-hotspot="collection" data-home-tab="collection" aria-label="Открыть коллекцию"><i>◉</i><span>КОЛЛЕКЦИЯ</span></button>
         <button class="room-hotspot" data-hotspot="rest" data-room-action="rest" aria-label="Отдохнуть"><i>☾</i><span>ОТДЫХ</span></button>
         <button class="room-hotspot" data-hotspot="save" data-room-action="save" aria-label="Сохранить прогресс"><i>▣</i><span>СОХРАНИТЬ</span></button>
         <button class="room-hotspot stereo-hotspot" data-hotspot="music" data-room-action="music" aria-label="Включить хип-хоп радио" aria-pressed="false"><i>♫</i><span>РАДИО</span></button>
@@ -61,11 +62,12 @@
         <button data-home-tab="home" class="active"><i>⌂</i><span>УБЕЖИЩЕ</span></button>
         <button data-home-tab="wardrobe"><i>♟</i><span>ОДЕЖДА</span></button>
         <button data-home-tab="sprays"><i>▥</i><span>БАЛЛОНЫ</span></button>
-        <button data-home-tab="collection"><i>♛</i><span>КОЛЛЕКЦИЯ</span></button>
+        <button data-home-tab="collection"><i>◉</i><span>КОЛЛЕКЦИЯ</span></button>
         <button id="leave-button"><i>↗</i><span>В РАЙОН</span></button>
       </nav>
     </section>
     <div id="district-ui" hidden>
+      <div id="poster-links" aria-label="Постеры коллабораций"></div>
       <div class="district-title"><span class="eyebrow">DISTRICT 01</span><strong>EAST BLOCK</strong><span id="objective-label">Оставь первый тег</span></div>
       <div id="interaction" class="interaction" hidden><div><span id="interaction-type" class="micro">GRAFFITI SPOT</span><strong id="interaction-name"></strong><small id="interaction-detail"></small></div><button id="action-button" class="primary">ДЕЙСТВИЕ <kbd>E</kbd></button></div>
       <div id="joystick" role="group" aria-label="Экранный джойстик"><span class="stick-direction up">▲</span><span class="stick-direction down">▼</span><span class="stick-direction left">◀</span><span class="stick-direction right">▶</span><span class="stick-knob"></span></div>
@@ -83,6 +85,20 @@
         <div class="graffiti-stage"><canvas id="graffiti-canvas" width="768" height="512" aria-label="Стена: встряхни баллон, размести трафарет и закрась рисунок"></canvas><span id="graffiti-wall-state" class="graffiti-state">CLEAN WALL</span><div id="graffiti-reward" class="graffiti-reward" role="status" hidden><strong id="graffiti-rep"></strong><span id="graffiti-heat"></span></div></div>
         <div class="graffiti-bottom"><div><strong id="phase-title"></strong><p id="phase-help"></p></div><strong id="coverage-label"></strong></div>
         <div id="motion-controls" hidden><button id="motion-enable" class="secondary">ВКЛЮЧИТЬ ВСТРЯХИВАНИЕ</button><button id="motion-touch" class="secondary">ПАЛЬЦЕМ</button><span id="motion-status" role="status"></span></div><progress id="graffiti-progress" max="1" value="0"></progress><button id="confirm-stencil" class="primary" hidden>ЗАКРЕПИТЬ ТРАФАРЕТ</button>
+      </div>
+    </section>
+    <section id="court-screen" class="screen court-screen" aria-label="Комикс: Не просто мяч" hidden>
+      <div class="court-card"><div class="court-heading"><div><span class="eyebrow">EAST BLOCK / COURT STORY</span><h2>НЕ ПРОСТО МЯЧ.</h2></div><button id="court-close" class="secondary" aria-label="Закрыть разговор">ПОЗЖЕ ×</button></div>
+        <div class="comic-cast"><canvas id="court-left" width="300" height="390" aria-label="Собеседник слева"></canvas><canvas id="court-right" width="300" height="390" aria-label="Ти с мячом"></canvas><div class="speech-bubble" aria-live="polite"><strong id="court-who"></strong><p id="court-text"></p></div></div>
+        <div class="court-footer"><span id="court-count"></span><button id="court-next" class="primary">ДАЛЬШЕ →</button></div>
+      </div>
+    </section>
+    <section id="ball-screen" class="screen ball-screen" aria-label="Рисование маркерами на баскетбольном мяче" hidden>
+      <div class="ball-card"><div class="ball-heading"><div><span class="eyebrow">COURT CUSTOM / MARKER SESSION</span><h2 id="ball-title">НЕ ПРОСТО МЯЧ</h2></div><button id="ball-cancel" class="secondary">НАЗАД</button></div>
+        <canvas id="ball-canvas" width="600" height="600" aria-label="Мяч: води пальцем или мышью по светлым силуэтам"></canvas>
+        <p id="ball-help"></p><div id="marker-colors" role="group" aria-label="Цвет маркера"></div>
+        <div class="ball-meter"><progress id="ball-progress" max="1" value="0" aria-label="Закрашено рисунка"></progress><strong id="ball-coverage" aria-live="polite">0%</strong></div>
+        <div class="ball-buttons"><button id="ball-clear" class="secondary">ОЧИСТИТЬ</button><button id="ball-finish" class="primary" disabled>ПОДАРИТЬ МЯЧ →</button></div>
       </div>
     </section>
     <div id="toast" role="status" aria-live="polite" hidden></div><pre id="debug-overlay" hidden></pre>

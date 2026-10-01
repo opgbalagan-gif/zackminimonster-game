@@ -1,8 +1,9 @@
+import {cleanBallSave} from './core__basketball.js';
 export const SAVE_KEY='zackminimonster.save';
 export const SAVE_VERSION=3;
 export function freshSave(){
   return {save_version:SAVE_VERSION,player:{skin:'zack',ink:'purple'},rep:0,
-    district_progress:{district_01:{visits:0}},painted_walls:[],graffiti_by_wall:{},
+    district_progress:{district_01:{visits:0}},painted_walls:[],graffiti_by_wall:{},basketball:{completed:false,pixels:[]},
     wall_styles:{},active_run:null,graffiti_unlocks:['zack_tag','monster','crown','panda_king'],hideout:{upgrades:[],collectibles:[],display:'mini'},settings:{sound:true,radioVolume:.22}};
 }
 export function migrateSave(raw){
@@ -14,6 +15,7 @@ export function migrateSave(raw){
     skin:['zack','night','metro'].includes(raw.player?.skin)?raw.player.skin:'zack',
     ink:['purple','cyan','gold'].includes(raw.player?.ink)?raw.player.ink:'purple'},
     rep:Number.isFinite(raw.rep)?Math.max(0,Math.floor(raw.rep)):0,
+    basketball:cleanBallSave(raw.basketball),
     district_progress:{...base.district_progress,...raw.district_progress},
     painted_walls:strings(raw.painted_walls),graffiti_by_wall:raw.graffiti_by_wall??{},
     wall_styles:raw.wall_styles&&typeof raw.wall_styles==='object'?raw.wall_styles:{},

@@ -4,7 +4,8 @@ export function drawTrophy(c,id,atlas,x,y,size){
   else if(id==='metro')atlas.draw(c,'train_front',x,y,size*1.8);
   else{
     c.save();c.translate(x,y);c.scale(size/50,size/50);c.fillStyle=id==='king'?'#edc853':'#cb73e5';c.strokeStyle='#161722';c.lineWidth=4;
-    c.beginPath();c.moveTo(-22,-5);c.lineTo(-26,-38);c.lineTo(-10,-27);c.lineTo(0,-46);c.lineTo(11,-27);c.lineTo(26,-38);c.lineTo(22,-5);c.closePath();c.fill();c.stroke();
+    c.beginPath();c.ellipse(0,-24,22,22,0,0,Math.PI*2);c.fill();c.stroke();
+    c.fillStyle='#161722';c.fillRect(-13,-28,10,5);c.fillRect(4,-28,10,5);c.fillRect(-6,-15,12,3);
     if(id==='king'){c.fillStyle='#fff0a0';c.fillRect(-15,0,30,5);}c.restore();
   }
 }

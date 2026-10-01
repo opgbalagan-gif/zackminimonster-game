@@ -1,5 +1,6 @@
 import {OUTFITS,INKS,TROPHIES,outfit,ink,heroSprite,roomLayout,ROOM_POINTS,wallCount} from './core__hideout.js';
 import {homeIcon} from './core__home-icons.js';
+import {drawBall} from './core__ball-art.js';
 const $=id=>document.getElementById(id);
 export class HideoutUI{
   constructor(session,renderer,onChange,audio){
@@ -44,6 +45,8 @@ export class HideoutUI{
     for(const item of OUTFITS)create('outfit-list',item,'outfit');
     for(const item of INKS)create('ink-list',item,'ink');
     for(const item of TROPHIES)create('trophy-list',item,'display');
+    const trophy=document.createElement('div');trophy.id='court-trophy';trophy.className='court-trophy';trophy.hidden=true;
+    trophy.innerHTML='<canvas width="160" height="160" aria-label="Твой расписанный мяч"></canvas><div><strong>COURT CUSTOM</strong><p>Мяч с твоим рисунком.<br>Подарок от Дэна и Ти.</p></div>';$('trophy-list').append(trophy);
   }
   sync(){
     const s=this.s,canvas=$('game'),rect=canvas.getBoundingClientRect(),r=roomLayout(canvas.width,canvas.height);
@@ -55,8 +58,10 @@ export class HideoutUI{
       el.setAttribute('aria-pressed',String(this.audio.radio.wanted));
       el.setAttribute('aria-label',this.audio.radio.wanted?'Выключить радио':'Включить хип-хоп радио');
     }
-    const signature=JSON.stringify([s.save.player,s.save.hideout,s.save.painted_walls.length]);
+    const signature=JSON.stringify([s.save.player,s.save.hideout,s.save.painted_walls.length,s.save.basketball]);
     if(signature===this.signature)return;this.signature=signature;
+    $('court-trophy').hidden=!s.save.basketball.completed;
+    if(s.save.basketball.completed){const ball=$('court-trophy').querySelector('canvas'),bc=ball.getContext('2d');bc.clearRect(0,0,160,160);drawBall(bc,s.save.basketball.pixels,160);}
     const walls=s.save.painted_walls.length;
     for(const el of document.querySelectorAll('.loadout-card')){
       const kind=el.dataset.kind,id=el.dataset.id,catalog=kind==='outfit'?OUTFITS:kind==='ink'?INKS:TROPHIES,item=catalog.find(x=>x.id===id);

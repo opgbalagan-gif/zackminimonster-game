@@ -6,7 +6,7 @@ export const OUTFITS=[
 export const INKS=[
   {id:'purple',name:'MONSTER PURPLE',color:'#cb73e5'},
   {id:'cyan',name:'SUBWAY CYAN',color:'#70d5dc'},
-  {id:'gold',name:'CROWN GOLD',color:'#edc853'}
+  {id:'gold',name:'SUNNY YELLOW',color:'#edc853'}
 ];
 export const TROPHIES=[
   {id:'mini',name:'MINI MONSTER',detail:'Твой первый напарник',walls:0},
