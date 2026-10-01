@@ -4,6 +4,16 @@ import {wallSurface} from './core__surfaces.js';
 import {ink} from './core__hideout.js';
 import {GRAFFITI_CONFIG as CONFIG} from './content__graffiti__config.js';
 
+export function renderPaintLayer(context,art,game,width,height){
+  context.clearRect(0,0,width,height);
+  context.save();context.beginPath();
+  for(let i=0;i<game.covered.length;i++)if(game.covered[i])
+    context.rect(i%game.cols*width/game.cols,Math.floor(i/game.cols)*height/game.rows,width/game.cols,height/game.rows);
+  // An empty clipping region paints nothing. Filling an empty destination-in path
+  // leaves the original image untouched, which previously revealed all art at 0%.
+  context.clip();context.drawImage(art,0,0);context.restore();
+}
+
 export class GraffitiView{
   constructor(canvas,session,renderer,audio){
     this.canvas=canvas;this.c=canvas.getContext('2d');this.session=session;this.renderer=renderer;this.audio=audio;
@@ -62,7 +72,7 @@ export class GraffitiView{
     }else{
       const x=a.x+g.stencilOffset.x,y=a.y+g.stencilOffset.y;
       if(g.phase==='stencil'||g.phase==='spray'){
-        c.globalAlpha=g.phase==='stencil'?.32:.22;c.drawImage(this.stencil,x,y);c.globalAlpha=1;
+        c.globalAlpha=g.phase==='stencil'?.20:.12;c.drawImage(this.stencil,x,y);c.globalAlpha=1;
         if(g.phase==='stencil'){
           c.strokeStyle='#de98f2';c.lineWidth=5;
           for(const [px,py,sx,sy] of [[x,y,1,1],[x+a.w,y,-1,1],[x,y+a.h,1,-1],[x+a.w,y+a.h,-1,-1]]){
@@ -71,10 +81,7 @@ export class GraffitiView{
           atlas.draw(c,'can_threequarter',705,462,null,114);
         }else{
           if(this.lastStroke!==g.strokeCount){
-            const p=this.painted.getContext('2d');p.clearRect(0,0,a.w,a.h);p.drawImage(this.art,0,0);
-            p.globalCompositeOperation='destination-in';p.beginPath();
-            for(let i=0;i<g.covered.length;i++)if(g.covered[i])p.rect(i%g.cols*a.w/g.cols,Math.floor(i/g.cols)*a.h/g.rows,a.w/g.cols+1,a.h/g.rows+1);
-            p.fill();p.globalCompositeOperation='source-over';this.lastStroke=g.strokeCount;
+            renderPaintLayer(this.painted.getContext('2d'),this.art,g,a.w,a.h);this.lastStroke=g.strokeCount;
           }
           c.drawImage(this.painted,x,y);
           if(this.cursor){
