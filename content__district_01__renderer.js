@@ -16,7 +16,7 @@ import {drawHoop} from './content__district_01__court-props.js';
 import {wallPieces,fencePieces,coversHero} from './content__district_01__depth-pieces.js';
 import {drawWater,drawShore,drawBridges} from './content__district_01__waterfront.js';
 import {drawCoastalGround,drawMountains,drawBeachUmbrella,createCoastalTextures} from './content__district_01__coastal-renderer.js';
-import {revealRegions,withinRevealRange} from './content__district_01__occlusion.js';
+import {buildingOccludesZack} from './content__district_01__occlusion.js';
 
 const INK='#111722';
 export function marker(c,x,y,type,size=28,active=false){
@@ -40,6 +40,18 @@ export function createRenderer(pack){
   const plate=createGroundPlate(pack.images.city_ground,world);
   const coastTextures=createCoastalTextures(plate,pack.images.beach_sand);
   const entries=[],posterHits=[],wallTextures=new Map();
+  const buildingMasks=new Map();
+  function opaqueBuildingPixel(id,u,v){
+    let mask=buildingMasks.get(id);
+    if(!mask){
+      const meta=pack.atlas.sprites[id],[x,y,w,h]=meta.rect,canvas=document.createElement('canvas');
+      canvas.width=w;canvas.height=h;const ctx=canvas.getContext('2d',{willReadFrequently:true});
+      ctx.drawImage(pack.images[meta.sheet],x,y,w,h,0,0,w,h);
+      mask={w,h,data:ctx.getImageData(0,0,w,h).data};buildingMasks.set(id,mask);
+    }
+    const x=Math.min(mask.w-1,Math.max(0,Math.floor(u*mask.w))),y=Math.min(mask.h-1,Math.max(0,Math.floor(v*mask.h)));
+    return mask.data[(y*mask.w+x)*4+3]>100;
+  }
   for(const b of [...world.backdrop,...world.buildings])entries.push({kind:'building',item:b,depth:b.x+b.y+b.w+b.h});
   for(const p of world.props)entries.push({kind:'prop',item:p,depth:p.x+p.y});
   for(const p of world.beachProps??[])entries.push({kind:'umbrella',item:p,depth:p.x+p.y});
@@ -156,30 +168,20 @@ export function createRenderer(pack){
     queue.sort((a,b)=>a.depth-b.depth);
     const minX=cam.x-width/2/cam.zoom-340,maxX=cam.x+width/2/cam.zoom+340,minY=cam.y-height/2/cam.zoom-50,maxY=cam.y+height/2/cam.zoom+500;
     const playerP=project(session.player.x,session.player.y);
-    const visiblePeople=queue.filter(e=>['hero','npc','courtNpc','gang','companion','officer'].includes(e.kind)&&withinRevealRange(e.item,session.player)).map(e=>{
-      const o=e.item,p=project(o.x,o.y),height={hero:66,npc:55,courtNpc:70,gang:65,companion:38,officer:60}[e.kind];
-      const id=e.kind==='hero'?heroSprite(session.save.player.skin,o.state,o.facing,false):e.kind==='npc'?'citizen_'+o.look+'_'+(o.back?2:0):e.kind==='companion'?'companion':e.kind==='officer'?'officer':o.sprite;
-      const rect=atlas.rect(id),width=rect?height*rect[2]/rect[3]:height;
-      return{x:p.x-width/2-9,y:p.y-height-9,w:width+18,h:height+17,depth:e.depth};
-    }).filter(p=>p.x+p.w>minX&&p.x<maxX&&p.y+p.h>minY&&p.y<maxY);
+    const zackBounds={x:playerP.x-16,y:playerP.y-62,w:32,h:60,depth:session.player.x+session.player.y};
     for(const entry of queue){
       const o=entry.item,p=project(o.x,o.y??world.metro.y);
       const extraHeight=entry.kind==='building'?(o.w+o.h+22)*atlas.rect(o.type)[3]/atlas.rect(o.type)[2]*(o.heightScale??1):0;
       if(p.x<minX||p.x>maxX||p.y<minY||p.y>maxY+extraHeight)continue;
       if(entry.kind==='building'){
         const foot=project(o.x+o.w,o.y+o.h),buildingWidth=o.w+o.h+22,rect=atlas.rect(o.type),buildingHeight=buildingWidth*rect[3]/rect[2]*(o.heightScale??1);
-        const bounds={x:foot.x-buildingWidth/2-2,y:foot.y-buildingHeight-2,w:buildingWidth+4,h:buildingHeight+4};
-        const holes=map?[]:revealRegions(bounds,visiblePeople.filter(p=>p.depth<entry.depth));
+        const bounds={x:Math.round(foot.x)+Math.round(-buildingWidth/2),y:Math.round(foot.y)+Math.round(-buildingHeight),w:Math.ceil(buildingWidth),h:Math.ceil(buildingHeight)};
+        const fade=!map&&buildingOccludesZack(bounds,entry.depth,zackBounds,(u,v)=>opaqueBuildingPixel(o.type,u,v));
         const target=world.targets.find(t=>t.buildingId===o.id);
         const poster=POSTERS.find(p=>p.buildingId===o.id);
         let points=null;
         const paint=alpha=>{sprite(c,o.type,foot.x,foot.y,buildingWidth,buildingHeight,false,alpha);if(target)drawFacade(c,o,target,session,atlas,alpha);if(poster)points=drawPoster(c,o,poster,atlas,alpha);};
-        if(!holes.length)paint(o.backdrop?.78:1);
-        else{
-          c.save();c.beginPath();c.rect(bounds.x,bounds.y,bounds.w,bounds.h);
-          for(const p of holes)c.rect(p.x,p.y,p.w,p.h);c.clip('evenodd');paint(1);c.restore();
-          c.save();c.beginPath();for(const p of holes)c.rect(p.x,p.y,p.w,p.h);c.clip();paint(.06);c.restore();
-        }
+        paint(fade?.18:o.backdrop?.78:1);
         if(poster){
           if(!map&&points){
             const screen=points.map(p=>({x:(p.x-cam.x)*cam.zoom+width/2,y:(p.y-cam.y)*cam.zoom+height/2}));
