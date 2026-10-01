@@ -17,7 +17,7 @@
         <div class="edition">DISTRICT 01 <b>EAST BLOCK</b></div>
         <p class="title-copy">Твой район. Твои стены.<br>Оставь свой след и вернись домой.</p>
         <button id="start-button" class="primary large">ВОЙТИ В РАЙОН <span>↗</span></button>
-        <p id="load-status" role="status">TECH DEMO · 13 / RIVER CITY</p><progress id="load-progress" max="1" value="0" hidden></progress>
+        <p id="load-status" role="status">TECH DEMO · 15 / COAST CITY</p><progress id="load-progress" max="1" value="0" hidden></progress>
       </div><div class="title-footer">TAG. EXPLORE. SURVIVE.<span>ZACKMINIMONSTER © 2026</span></div>
     </div>
     <header id="hud" hidden>
@@ -68,6 +68,7 @@
     </section>
     <div id="district-ui" hidden>
       <div id="poster-links" aria-label="Постеры коллабораций"></div>
+      <div id="gang-callout" role="status" aria-live="polite" hidden><strong id="gang-name"></strong><p id="gang-line"></p><small id="gang-requirement"></small></div>
       <div class="district-title"><span class="eyebrow">DISTRICT 01</span><strong>EAST BLOCK</strong><span id="objective-label">Оставь первый тег</span></div>
       <div id="interaction" class="interaction" hidden><div><span id="interaction-type" class="micro">GRAFFITI SPOT</span><strong id="interaction-name"></strong><small id="interaction-detail"></small></div><button id="action-button" class="primary">ДЕЙСТВИЕ <kbd>E</kbd></button></div>
       <div id="joystick" role="group" aria-label="Экранный джойстик"><span class="stick-direction up">▲</span><span class="stick-direction down">▼</span><span class="stick-direction left">◀</span><span class="stick-direction right">▶</span><span class="stick-knob"></span></div>
@@ -75,11 +76,12 @@
       <span class="control-hint">WASD / стрелки · E действие · M карта · клик по дороге — маршрут</span>
     </div>
     <section id="map-screen" class="screen map-screen" hidden>
-      <div class="map-header"><div><span class="eyebrow">ЧЕТЫРЕ РАЙОНА / РЕКА / МОРЕ</span><h1>MINI MONSTER CITY</h1></div><button id="close-map" class="secondary">НАЗАД <kbd>M</kbd></button></div>
+      <div class="map-header"><div><span class="eyebrow">ЕДИНЫЙ ГОРОД / РЕКА / МЕТРО</span><h1>MINI MONSTER CITY</h1></div><button id="close-map" class="secondary">НАЗАД <kbd>M</kbd></button></div>
       <nav id="city-tabs" aria-label="Обзор районов"></nav><canvas id="map-canvas" aria-label="Карта района с реальной геометрией"></canvas>
       <div class="map-sidebar panel"><div id="city-status"></div><span class="eyebrow">ВЫБЕРИ МАРШРУТ</span><h2>Куда дальше?</h2><label for="route-select">Точка назначения</label><select id="route-select"></select><button id="route-button" class="primary">ПРОЛОЖИТЬ МАРШРУТ ↗</button><p>Маршрут проходит по улицам и переулкам. Управление прерывает автодвижение.</p><div class="map-legend"><span><i class="gold"></i> Убежище</span><span><i class="purple"></i> Граффити</span><span><i class="blue"></i> Полиция</span><span><i class="white"></i> Укрытие</span></div><div id="poster-gallery" aria-label="Все постеры"></div><strong id="map-progress">0 / 10 СТЕН</strong></div>
     </section>
     <section id="poster-screen" class="screen poster-screen" role="dialog" aria-modal="true" aria-labelledby="poster-title" hidden><div class="poster-card"><header><h2 id="poster-title"></h2><button id="close-poster" class="secondary">ЗАКРЫТЬ ×</button></header><canvas id="poster-canvas" width="512" height="768" aria-label="Плакат художника"></canvas><a id="poster-instagram" class="primary" target="_blank" rel="noopener noreferrer">INSTAGRAM ХУДОЖНИКА ↗</a></div></section>
+    <section id="poi-screen" class="screen poster-screen" role="dialog" aria-modal="true" aria-labelledby="poi-title" hidden><div class="poi-card"><header><div><span class="eyebrow">ГОРОД / ТОЧКА ИНТЕРЕСА</span><h2 id="poi-title"></h2></div><button id="close-poi" class="secondary">ЗАКРЫТЬ ×</button></header><canvas id="poi-canvas" width="600" height="450"></canvas><p id="poi-description"></p><p id="poi-quote" role="status"></p><footer><button id="poi-talk" class="secondary">ПОГОВОРИТЬ</button><button id="poi-wall" class="primary">К СТЕНЕ РЯДОМ →</button></footer></div></section>
     <section id="graffiti-screen" class="screen graffiti-screen" hidden>
       <div class="graffiti-card panel"><div class="graffiti-heading"><div><span id="wall-id" class="eyebrow"></span><h2 id="wall-name"></h2><div class="graffiti-art-label"><span id="graffiti-art-name"></span><span id="graffiti-palette" aria-label="Палитра рисунка"><i></i><i></i><i></i></span></div></div><button id="cancel-graffiti" class="secondary">НАЗАД <kbd>Esc</kbd></button></div>
         <div class="phase-track"><span data-phase="shake">01 / SHAKE</span><span data-phase="stencil">02 / STENCIL</span><span data-phase="spray">03 / SPRAY</span><span data-phase="result">04 / DONE</span></div>

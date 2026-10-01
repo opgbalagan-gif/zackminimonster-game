@@ -18,6 +18,7 @@ const ui=new GameUI({
     else if(id==='court')session.routeTo(session.court,'Баскетбол · Не просто мяч');
     else if(id.startsWith('poster_')){const p=POSTERS.find(p=>'poster_'+p.id===id);if(p)session.routeTo(posterApproach(session.world,p),'Плакат '+p.brand+' × ZAK MINI MONSTER');}
     else{
+      const poi=session.world.pointsOfInterest?.find(p=>p.id===id);if(poi){session.routeTo(poi,poi.name);ui.sync();return;}
       const bridge=session.world.bridges?.find(b=>b.id===id),home=session.world.hideouts?.find(h=>h.id===id);
       if(bridge){session.routeTo(bridge.approach,bridge.name);ui.sync();return;}
       if(home){session.routeTo(home,home.name);ui.sync();return;}
@@ -35,7 +36,7 @@ const ui=new GameUI({
 });
 const input=new InputController(canvas,{
   action,map:()=>ui.toggleMap(),back:()=>{
-    if(session?.mode==='poster')ui.closePoster();else if(ui.mapOpen)ui.toggleMap(false);else if(session?.mode==='graffiti')session.cancelGraffiti();
+    if(session?.mode==='poi')ui.closePoi();else if(session?.mode==='poster')ui.closePoster();else if(ui.mapOpen)ui.toggleMap(false);else if(session?.mode==='graffiti')session.cancelGraffiti();
     else if(['court-dialogue','ball-art','ball-result'].includes(session?.mode)){session.cancelCourt();ui.sync();}
     else if(session?.mode==='hideout')ui.hideoutUI.open('home');
   },

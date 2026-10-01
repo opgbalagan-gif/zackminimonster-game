@@ -10,12 +10,14 @@ import {COURT,COURT_LINES,BallArtGame} from './core__basketball.js';
 import {GRAFFITI_CONFIG} from './content__graffiti__config.js';
 import {cityProgress,canEnter,regionAt,gateMessage} from './core__city-progress.js';
 import {POSTERS,posterApproach} from './content__district_01__posters.js';
+import {BridgeGangs} from './core__bridge-gangs.js';
 
 export class GameSession{
   constructor(pack,store){
     this.world=pack.world;this.definitions=pack.graffiti;this.store=store;this.save=store.load();
     this.nav=new NavigationGrid(this.world);this.camera=new Camera();this.effects=new EffectPool();
     this.refreshCity();
+    this.gangs=new BridgeGangs(this.world);
     this.player={...this.world.spawn,facing:'down',moving:false,state:'IDLE',path:[]};
     this.companion={x:this.player.x-24,y:this.player.y+24,path:[],moving:false,alert:0,repathIn:0};
     this.police=new PoliceSystem(this.world.police,this.nav);
@@ -51,6 +53,7 @@ export class GameSession{
   }
   refreshCity(){this.city=cityProgress(this.world,this.save);this.nav.access=(x,y)=>canEnter(this.world,this.city,x,y);}
   enterDistrict(){
+    this.gangs.reset();
     this.room.action='idle';this.room.remaining=0;this.runStyles={};
     const home=this.world.hideouts?.find(h=>h.regionId===this.save.district_progress[this.world.id]?.home&&this.city.find(r=>r.id===h.regionId)?.open);
     Object.assign(this.player,home?{x:home.x+38,y:home.y}:this.world.spawn,{path:[],state:'IDLE',moving:false});
@@ -65,6 +68,7 @@ export class GameSession{
     this.notice(this.painted.has(this.world.targets[0].wall_id)?'Выбери следующую стену на карте. Возвращайся домой, чтобы сохранить вылазку.':'Найди фиолетовый баллон. Первая стена — рядом с гаражом.');
   }
   returnHideout(caught=false){
+    this.gangs.reset();
     const openBefore=new Set(this.city.filter(r=>r.open).map(r=>r.id));
     const region=regionAt(this.world,this.player);
     if(region)(this.save.district_progress[this.world.id]??={visits:0}).home=region.id;
@@ -112,7 +116,7 @@ export class GameSession{
     else if(action==='pet'){this.room.action='pet';this.room.remaining=2;this.room.reaction='♥';this.room.reactionFor=2;}
   }
   routeTo(point,label='Точка назначения'){
-    if(this.knockedFor>0)return;
+    if(this.knockedFor>0||this.gangs.push)return;
     if(!canEnter(this.world,this.city,point.x,point.y)){
       const region=regionAt(this.world,point),bridge=this.world.bridges?.find(b=>point.x>=b.x&&point.x<=b.x+b.w&&point.y>=b.y&&point.y<=b.y+b.h);
       this.notice(gateMessage(this.city,region?.id??bridge?.to));return;
@@ -126,17 +130,22 @@ export class GameSession{
     for(const home of this.world.hideouts??[this.world.hideout])add('hideout',home,home,62);
     for(const poster of POSTERS)add('poster',{...poster,name:'Плакат '+poster.brand},posterApproach(this.world,poster),65);
     for(const bridge of this.world.bridges??[])add('bridge',bridge,bridge.approach,100);
+    for(const poi of this.world.pointsOfInterest??[])add('poi',poi,poi,68);
     add('court',this.court,this.court,68);
     for(const t of this.world.targets)if(!this.painted.has(t.wall_id))add('target',t,t.approach,62);
     for(const s of this.world.safeSpots)add('safe',s,s,48);
     options.sort((a,b)=>a.d-b.d);return options[0]??null;
   }
   interact(){
-    if(this.mode!=='district'||this.hiddenFor>0||this.knockedFor>0||!this.near)return;
+    if(this.mode!=='district'||this.hiddenFor>0||this.knockedFor>0||this.gangs.push||!this.near)return;
     const {type,item}=this.near;this.player.path=[];this.waypoint=null;
     if(type==='hideout')return this.returnHideout();
     if(type==='poster'){this.emit('poster-open',{id:item.id});return;}
-    if(type==='bridge'){this.notice(gateMessage(this.city,item.to));return;}
+    if(type==='poi'){
+      const progress=this.save.district_progress.city??={visited:[]};progress.visited=[...new Set([...(progress.visited??[]),item.id])];this.persist();
+      this.emit('poi-open',{id:item.id});return;
+    }
+    if(type==='bridge'){this.gangs.confront(this,item,true);return;}
     if(type==='court'){
       this.courtLine=0;this.mode='court-dialogue';this.player.state='IDLE';this.player.moving=false;this.emit('mode');return;
     }
@@ -193,7 +202,7 @@ export class GameSession{
   }
   movePlayer(dt,movement){
     this.player.moving=false;
-    if(this.knockedFor>0){this.player.state='HIT';return;}
+    if(this.knockedFor>0||this.gangs.push){this.player.state='HIT';return;}
     if(this.hiddenFor>0)return;
     const length=Math.hypot(movement.x,movement.y);
     if(length>.05){
@@ -235,10 +244,10 @@ export class GameSession{
     }
     this.knockedFor=Math.max(0,this.knockedFor-dt);this.trafficGrace=Math.max(0,this.trafficGrace-dt);
     const previous={x:this.player.x,y:this.player.y};
-    this.movePlayer(dt,movement);this.traffic.update(dt);
+    this.movePlayer(dt,movement);this.gangs.update(dt,this);this.traffic.update(dt);
     const car=this.hiddenFor<=0&&this.trafficGrace<=0&&this.grace<=0&&this.traffic.collision(previous,this.player);
     if(car)this.hitByTraffic(car);
-    this.near=this.knockedFor>0?null:this.nearest();
+    this.near=this.knockedFor>0||this.gangs.push?null:this.nearest();
     for(const t of this.world.targets)if(t.state!=='PAINTED')t.state=this.near?.item===t?'AVAILABLE':'CLEAN';
     this.metrics.activePolice=this.police.update(dt,this.player,this.heat,this.world,this.hiddenFor>0,this.grace);
     if(this.police.caught){this.mode='caught';this.caughtFor=1.6;this.player.state='CAUGHT';this.player.path=[];this.notice('ПЕРЕХВАТ! Половина REP спасена.');return;}

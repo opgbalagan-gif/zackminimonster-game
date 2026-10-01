@@ -1,4 +1,5 @@
 import {inside,distance} from './core__geometry.js';
+import {onLand} from './core__land.js';
 export class NavigationGrid{
   constructor(world,cell=24){
     this.world=world;this.cell=cell;this.cols=Math.ceil(world.width/cell);this.rows=Math.ceil(world.height/cell);
@@ -9,13 +10,13 @@ export class NavigationGrid{
     this.obstacles=[...world.buildings,...world.obstacles,...this.propObstacles];
     for(let y=0;y<this.rows;y++)for(let x=0;x<this.cols;x++){
       const px=(x+.5)*cell,py=(y+.5)*cell,id=y*this.cols+x;
-      this.blocked[id]=px<30||py<30||px>world.width-30||py>world.height-30||(world.walkableAreas&&!world.walkableAreas.some(r=>inside(px,py,r,-10)))||this.obstacles.some(r=>inside(px,py,r,10))?1:0;
+      this.blocked[id]=px<30||py<30||px>world.width-30||py>world.height-30||!onLand(world,px,py,10)||this.obstacles.some(r=>inside(px,py,r,10))?1:0;
       this.road[id]=world.roads.some(r=>inside(px,py,r,-12))?1:0;
     }
   }
   point(id){return{x:(id%this.cols+.5)*this.cell,y:(Math.floor(id/this.cols)+.5)*this.cell};}
   valid(id,car=false){return id>=0&&id<this.blocked.length&&!this.blocked[id]&&(!car||this.road[id])&&(!this.access||this.access(this.point(id).x,this.point(id).y));}
-  canWalk(x,y,radius=9){return x>24&&y>24&&x<this.world.width-24&&y<this.world.height-24&&(!this.world.walkableAreas||this.world.walkableAreas.some(r=>inside(x,y,r,-radius)))&&(!this.access||this.access(x,y))&&!this.obstacles.some(r=>inside(x,y,r,radius));}
+  canWalk(x,y,radius=9){return x>24&&y>24&&x<this.world.width-24&&y<this.world.height-24&&onLand(this.world,x,y,radius)&&(!this.access||this.access(x,y))&&!this.obstacles.some(r=>inside(x,y,r,radius));}
   propSegmentClear(a,b,radius=9){
     return !this.propObstacles.some(r=>{
       let enter=0,exit=1;

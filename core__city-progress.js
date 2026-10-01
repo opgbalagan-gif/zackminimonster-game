@@ -11,6 +11,8 @@ export function cityProgress(world,save){
 export function regionAt(world,point){return world.regions?.find(r=>inside(point.x,point.y,r));}
 export function canEnter(world,progress,x,y){
   if(!world.regions)return true;
+  const passage=world.bridges.find(b=>inside(x,y,b));
+  if(passage)return !!progress.find(r=>r.id===passage.to)?.open;
   const region=regionAt(world,{x,y});
   if(region)return progress.find(r=>r.id===region.id)?.open??false;
   const bridge=world.bridges.find(b=>inside(x,y,b));

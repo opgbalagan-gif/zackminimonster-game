@@ -14,18 +14,28 @@ export function drawWater(c,cam,width,height,time){
   }
 }
 export function drawShore(c,world){
+  if(world.landPolygons){
+    for(const poly of world.landPolygons){
+      polygon(c,poly.map(p=>project(p.x,p.y,-28)),null,'#659a9966',16);
+      for(let i=0;i<poly.length;i++){const a=poly[i],b=poly[(i+1)%poly.length];polygon(c,[project(a.x,a.y),project(b.x,b.y),project(b.x,b.y,-28),project(a.x,a.y,-28)],'#52686b','#273d46',2);}
+    }return;
+  }
   for(const r of world.regions){
     box(c,r.x-8,r.y-8,r.w+16,r.h+16,-1,'#c4b79a','#435964','#5c737a',-35);
     const points=[project(r.x-22,r.y-22,-35),project(r.x+r.w+22,r.y-22,-35),project(r.x+r.w+22,r.y+r.h+22,-35),project(r.x-22,r.y+r.h+22,-35)];
     polygon(c,points,null,'#7abdb377',5);
   }
 }
-export function drawBridges(c,session){
+export function drawBridges(c,session,plate){
   for(const b of session.world.bridges??[]){
+    if(b.kind==='street')continue;
     box(c,b.x,b.y,b.w,b.h,0,'#777d79','#414d52','#4b5c61',-25);
+    // Reuse the actual road/sidewalk pixels instead of a separate flat bridge surface.
+    if(plate){c.save();c.transform(1,.5,-1,.5,0,0);c.drawImage(plate,420,1172,360,136,b.x,b.y-12,b.w,b.h+24);c.restore();}
     const vertical=b.h>b.w;
     const a=project(b.x+(vertical?b.w/2:0),b.y+(vertical?0:b.h/2)),z=project(b.x+(vertical?b.w/2:b.w),b.y+(vertical?b.h:b.h/2));
     c.strokeStyle='#d8c187';c.lineWidth=2;c.setLineDash([14,16]);c.beginPath();c.moveTo(a.x,a.y);c.lineTo(z.x,z.y);c.stroke();c.setLineDash([]);
+    for(const side of [0,1]){const p=project(b.x,b.y+b.h*side,20),q=project(b.x+b.w,b.y+b.h*side,20);c.strokeStyle='#252f32';c.lineWidth=4;c.beginPath();c.moveTo(p.x,p.y);c.lineTo(q.x,q.y);c.stroke();}
     const size=vertical?b.h:b.w;
     for(let n=30;n<size-30;n+=100){
       const x=b.x+(vertical?0:n),y=b.y+(vertical?n:0);

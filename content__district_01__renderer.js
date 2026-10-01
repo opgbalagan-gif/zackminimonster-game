@@ -1,7 +1,7 @@
 import {facadeGeometry,drawFacade} from './content__district_01__facades.js';
 import {perimeterPieces,drawPerimeter} from './content__district_01__perimeter.js';
 import {createGroundPlate} from './content__district_01__ground-plate.js';
-import {trainCars,drawTrain} from './content__district_01__metro.js';
+import {trainCars,drawTrain,loopRails,drawLoopRail} from './content__district_01__metro.js';
 import {project,distance} from './core__geometry.js';
 import {SpriteAtlas} from './core__sprites.js';
 import {polygon,box,ground} from './content__district_01__terrain.js';
@@ -45,7 +45,8 @@ export function createRenderer(pack){
     else entries.push(...fencePieces(o));
   }
   for(const h of world.hoops)entries.push({kind:'hoop',item:h,depth:h.x+h.y+8});
-  for(let x=world.metro.x;x<world.metro.end;x+=world.metro.segment)entries.push({kind:'rail',item:{x},depth:x+world.metro.segment+world.metro.y+world.metro.width});
+  if(world.metro.loop)for(const r of loopRails(world.metro))entries.push({kind:'loopRail',item:r,depth:r.x+r.y+r.w+r.h});
+  else for(let x=world.metro.x;x<world.metro.end;x+=world.metro.segment)entries.push({kind:'rail',item:{x},depth:x+world.metro.segment+world.metro.y+world.metro.width});
   for(const o of perimeterPieces(world))entries.push({kind:'perimeter',item:o,depth:o.x+o.y+o.w+o.h});
   entries.push({kind:'station',item:{x:world.metro.station.x},depth:world.metro.station.x+world.metro.station.w+world.metro.y+120});
 
@@ -100,7 +101,9 @@ export function createRenderer(pack){
     if(kind==='hero'){
       const id=heroSprite(session.save.player.skin,actor.state,actor.facing,step);
       c.save();
-      if(session.knockedFor>0){
+      if(session.gangs?.push){
+        c.translate(p.x,p.y);c.rotate(-.18*Math.sin(Math.min(1,session.gangs.push.age/.54)*Math.PI));sprite(c,id,0,0,null,66);c.restore();
+      }else if(session.knockedFor>0){
         c.translate(p.x-20,p.y-9);c.rotate(-Math.PI*.43);sprite(c,id,0,0,null,62);c.restore();
         c.fillStyle='#f6d56f';c.font='bold 18px monospace';c.textAlign='center';
         c.fillText('★  ★',p.x+Math.sin(session.time*8)*6,p.y-32);
@@ -125,7 +128,7 @@ export function createRenderer(pack){
     c.save();c.translate(width/2,height/2);c.scale(cam.zoom,cam.zoom);c.translate(-cam.x,-cam.y);
     if(world.regions){drawWater(c,cam,width,height,session.time);drawShore(c,world);}
     ground(c,world,plate,cam,width,height);
-    drawBridges(c,session);
+    drawBridges(c,session,plate);
     drawTrafficSignals(c,session.traffic);
     if(!map&&session.player.path.length){
       c.strokeStyle='#e9ce7f90';c.lineWidth=3/cam.zoom;c.setLineDash([4/cam.zoom,8/cam.zoom]);c.beginPath();
@@ -137,25 +140,33 @@ export function createRenderer(pack){
       {kind:'companion',item:session.companion,depth:session.companion.x+session.companion.y});
     for(const u of session.police.units)queue.push({kind:u.kind==='car'?'car':'officer',item:u,depth:u.x+u.y});
     for(const n of session.citizens.people)queue.push({kind:'npc',item:n,depth:n.x+n.y});
+    for(const n of session.gangs?.members(session.city)??[])queue.push({kind:'gang',item:n,depth:n.x+n.y});
+    for(const n of world.meetPeople??[])queue.push({kind:'gang',item:{...n,sprite:'citizen_'+n.look+'_0'},depth:n.x+n.y});
     for(const n of session.court.friends)queue.push({kind:'courtNpc',item:n,depth:n.x+n.y});
     for(const car of session.traffic.cars)if(car.x>=0&&car.x<=world.width&&car.y>=0&&car.y<=world.height)queue.push({kind:'traffic',item:car,depth:car.x+car.y+22});
     for(const car of trainCars(world.metro,session.time))queue.push({kind:'train',item:car,depth:car.x+car.y+210});
     queue.sort((a,b)=>a.depth-b.depth);
     const minX=cam.x-width/2/cam.zoom-340,maxX=cam.x+width/2/cam.zoom+340,minY=cam.y-height/2/cam.zoom-50,maxY=cam.y+height/2/cam.zoom+500;
     const playerP=project(session.player.x,session.player.y);
+    const visiblePeople=queue.filter(e=>['hero','npc','courtNpc','gang','companion','officer'].includes(e.kind)).map(e=>({...project(e.item.x,e.item.y),depth:e.depth})).filter(p=>p.x>minX&&p.x<maxX&&p.y>minY&&p.y<maxY);
     for(const entry of queue){
       const o=entry.item,p=project(o.x,o.y??world.metro.y);
       if(p.x<minX||p.x>maxX||p.y<minY||p.y>maxY)continue;
       if(entry.kind==='building'){
         const foot=project(o.x+o.w,o.y+o.h),buildingWidth=o.w+o.h+22,rect=atlas.rect(o.type),buildingHeight=buildingWidth*rect[3]/rect[2];
-        const occludes=!map&&session.player.x+session.player.y<entry.depth&&playerP.x>foot.x-buildingWidth/2&&playerP.x<foot.x+buildingWidth/2&&playerP.y<foot.y&&playerP.y>foot.y-buildingHeight;
-        const alpha=o.backdrop?.78:occludes?.4:1;
-        sprite(c,o.type,foot.x,foot.y,buildingWidth,null,false,alpha);
+        const occluded=map?[]:visiblePeople.filter(p=>p.depth<entry.depth&&p.x+15>foot.x-buildingWidth/2&&p.x-15<foot.x+buildingWidth/2&&p.y-52<foot.y&&p.y>foot.y-buildingHeight);
         const target=world.targets.find(t=>t.buildingId===o.id);
-        if(target)drawFacade(c,o,target,session,atlas,alpha);
         const poster=POSTERS.find(p=>p.buildingId===o.id);
+        let points=null;
+        const paint=alpha=>{sprite(c,o.type,foot.x,foot.y,buildingWidth,null,false,alpha);if(target)drawFacade(c,o,target,session,atlas,alpha);if(poster)points=drawPoster(c,o,poster,atlas,alpha);};
+        if(!occluded.length)paint(o.backdrop?.78:1);
+        else{
+          // Reveal only the character silhouette area, keeping the rest of the facade solid.
+          c.save();c.beginPath();c.rect(foot.x-buildingWidth/2-2,foot.y-buildingHeight-2,buildingWidth+4,buildingHeight+4);
+          for(const p of occluded)c.rect(p.x-19,p.y-65,38,70);c.clip('evenodd');paint(1);c.restore();
+          c.save();c.beginPath();for(const p of occluded)c.rect(p.x-19,p.y-65,38,70);c.clip();paint(.18);c.restore();
+        }
         if(poster){
-          const points=drawPoster(c,o,poster,atlas,alpha);
           if(!map&&points){
             const screen=points.map(p=>({x:(p.x-cam.x)*cam.zoom+width/2,y:(p.y-cam.y)*cam.zoom+height/2}));
             const x=Math.min(...screen.map(p=>p.x)),y=Math.min(...screen.map(p=>p.y));
@@ -164,7 +175,10 @@ export function createRenderer(pack){
         }
       }else if(entry.kind==='perimeter')drawPerimeter(c,o);
       else if(entry.kind==='traffic')drawTrafficCar(c,o);
-      else if(entry.kind==='prop')sprite(c,o.type,p.x,p.y,o.width);
+      else if(entry.kind==='prop'){
+        if(o.meet){c.save();c.globalAlpha=.28+Math.sin(session.time*2)*.08;c.fillStyle=o.color;c.beginPath();c.ellipse(p.x,p.y,44,17,0,0,Math.PI*2);c.fill();c.restore();}
+        sprite(c,o.type,p.x,p.y,o.width);
+      }
       else if(entry.kind==='wall'){
         const slope=o.axis==='y'?-.5:.5,height=o.graffiti_id==='panda_king'?94:56;
         const points=[entry.clip.from,entry.clip.to].flatMap(u=>[{x:p.x+u,y:p.y+slope*u},{x:p.x+u,y:p.y+slope*u-height}]);
@@ -179,13 +193,21 @@ export function createRenderer(pack){
         box(c,o.x,o.y,o.w,o.h,24,'#bbb09b','#596668','#758181');
         for(let n=0;n<Math.max(o.w,o.h);n+=14){const pp=project(o.x+(o.w>o.h?n:0),o.y+(o.h>o.w?n:0),30);c.strokeStyle='#28373c';c.lineWidth=2;c.beginPath();c.moveTo(pp.x,pp.y);c.lineTo(pp.x,pp.y+20);c.stroke();}
         c.restore();
-      }else if(entry.kind==='rail')rail(c,o.x,session,map);
+      }else if(entry.kind==='loopRail'){
+        c.save();if(!map&&distance(session.player,{x:o.x+o.w/2,y:o.y+o.h/2})<140)c.globalAlpha=.4;drawLoopRail(c,o,world.metro);c.restore();
+      }
+      else if(entry.kind==='rail')rail(c,o.x,session,map);
       else if(entry.kind==='station')station(c,session,map);
       else if(entry.kind==='train')drawTrain(c,o,world.metro,atlas);
       else if(entry.kind==='courtNpc'){
         c.fillStyle='#11172355';c.beginPath();c.ellipse(p.x,p.y,16,6,0,0,Math.PI*2);c.fill();
         sprite(c,o.sprite,p.x,p.y-Math.sin(session.time*2+o.x)*.7,null,70);
         if(session.save.basketball.completed&&o.sprite==='court_ti'){c.save();c.translate(p.x+5,p.y-33);drawBall(c,session.save.basketball,24,{atlas});c.restore();}
+      }
+      else if(entry.kind==='gang'){
+        c.fillStyle='#11172355';c.beginPath();c.ellipse(p.x,p.y,14,6,0,0,Math.PI*2);c.fill();
+        sprite(c,o.sprite,p.x,p.y,null,65);
+        if(o.leader&&!map){c.save();c.translate(p.x,p.y-78);c.scale(1/cam.zoom,1/cam.zoom);label(c,o.name,0,0,o.open?'#b9d2a1':'#f2b76a');c.restore();}
       }
       else if(entry.kind==='npc'){
         c.fillStyle='#11172338';c.beginPath();c.ellipse(p.x,p.y,11,4,0,0,Math.PI*2);c.fill();
@@ -201,6 +223,8 @@ export function createRenderer(pack){
     if(!map||!world.regions)for(const s of world.safeSpots){const p=project(s.x,s.y,16);c.globalAlpha=s.cooldown>0?.35:1;marker(c,p.x,p.y,'safe',(map?18:22)/cam.zoom);c.globalAlpha=1;}
     for(const h of world.hideouts??[world.hideout]){const home=project(h.x,h.y,34);marker(c,home.x,home.y,'home',(map?16:28)/cam.zoom,true);}
     const court=project(session.court.x,session.court.y-44,88);marker(c,court.x,court.y,'court',(map?23:26)/cam.zoom,session.near?.type==='court');
+    for(const station of world.metroStations??[]){const p=project(station.x,station.y,world.metro.height+35);c.save();c.translate(p.x,p.y);c.scale(1/cam.zoom,1/cam.zoom);label(c,'M'+(map?'':' / '+station.name),0,0,'#a7d6eb');c.restore();}
+    for(const poi of world.pointsOfInterest??[]){const p=project(poi.x,poi.y,70);c.save();c.translate(p.x,p.y);c.scale(1/cam.zoom,1/cam.zoom);label(c,map&&!region?(poi.kind==='meet'?'MEET':poi.kind==='mall'?'MALL':'CITY'):poi.name,0,0,poi.kind==='meet'?'#f59789':'#9ddbd4');c.restore();}
     if(map){
       if(!region)for(const r of session.city??[]){
         const p=project(r.x+r.w/2,r.y+r.h/2,100);
