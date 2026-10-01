@@ -2,6 +2,19 @@
   "version": 2,
   "assets": [
     {
+      "asset_id": "D01_BEACH-DETAILS",
+      "path": "./content__district_01__art__beach-details.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "file_size": 1397358,
+      "sha256": "67a55ac22aa67197afff69159e94096f637482e2e2c66cad2602b2fbdc5f7b7a",
+      "usage": "lazy district pack"
+    },
+    {
       "asset_id": "D01_BEACH-SAND",
       "path": "./content__district_01__art__beach-sand.png",
       "category": "sprite_atlas",
@@ -80,6 +93,19 @@
       "usage": "lazy district pack"
     },
     {
+      "asset_id": "D01_COURT-BACKBOARD",
+      "path": "./content__district_01__art__court-backboard.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "file_size": 2849586,
+      "sha256": "7d788566bc8f575db983a1ec025f1f08b3a8b50c98a785520d91dda7d5f6a439",
+      "usage": "lazy district pack"
+    },
+    {
       "asset_id": "D01_COURT-FRIENDS",
       "path": "./content__district_01__art__court-friends.png",
       "category": "sprite_atlas",
@@ -106,6 +132,19 @@
       "usage": "lazy district pack"
     },
     {
+      "asset_id": "D01_DISTRICT-CARS",
+      "path": "./content__district_01__art__district-cars.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "file_size": 1148965,
+      "sha256": "86f75c0b204c10268115450a626400d43c4b63927899ff8e42784a2df7cd9353",
+      "usage": "lazy district pack"
+    },
+    {
       "asset_id": "D01_EXPANDED-BUILDINGS",
       "path": "./content__district_01__art__expanded-buildings.png",
       "category": "sprite_atlas",
@@ -116,6 +155,58 @@
       ],
       "file_size": 2989649,
       "sha256": "5ab0eaf7d24dc6e1edfb270299df5f5d62cc85556d3ed847bd94925830f2d44a",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_GANG-BOULEVARD",
+      "path": "./content__district_01__art__gang-boulevard.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        2056,
+        765
+      ],
+      "file_size": 1484174,
+      "sha256": "1bcea4053a9db661eec7d0575da6ce6d2369979a65d804ce588e1df1154e0303",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_GANG-COLOUR",
+      "path": "./content__district_01__art__gang-colour.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1942,
+        809
+      ],
+      "file_size": 1090345,
+      "sha256": "52fc29ea7600601dc19bbcc63047e71fa32ca3f94b1555b65e8dd6506e3f67ac",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_GANG-OLD",
+      "path": "./content__district_01__art__gang-old.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1983,
+        793
+      ],
+      "file_size": 1675997,
+      "sha256": "7a33784ab8ab2dd870f79239e4ad52746782f5d4e2c0a24734aea32467ed3429",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_GANG-RIVER",
+      "path": "./content__district_01__art__gang-river.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1774,
+        887
+      ],
+      "file_size": 1043250,
+      "sha256": "4cc64132dddbaa0caccee9e0bc9582742eda16a009e5089c994dd9bc514226c7",
       "usage": "lazy district pack"
     },
     {
@@ -132,6 +223,19 @@
       "usage": "lazy district pack"
     },
     {
+      "asset_id": "D01_MALL-ISOMETRIC",
+      "path": "./content__district_01__art__mall-isometric.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "file_size": 1650053,
+      "sha256": "65cf311f46b2bcef121db755c5cdfa10fa1849f8fc6e8e8d45edef42633451c4",
+      "usage": "lazy district pack"
+    },
+    {
       "asset_id": "D01_METRO-MATERIALS",
       "path": "./content__district_01__art__metro-materials.png",
       "category": "sprite_atlas",
@@ -142,6 +246,19 @@
       ],
       "file_size": 3061339,
       "sha256": "bb15f96556f1b4dfffc14678b0c8f971ae0050ba672182f54f587e66bd00c1d4",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_METRO-ORIGINAL-FACES",
+      "path": "./content__district_01__art__metro-original-faces.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "file_size": 1903030,
+      "sha256": "74b4f935b63dfe40e5b05d9e29f6440b6661a66041426943875dc222213fc3f0",
       "usage": "lazy district pack"
     },
     {
@@ -233,6 +350,84 @@
       ],
       "file_size": 2231101,
       "sha256": "ed27e6e2bdfb38d1202faf4d46d223bda1949bae9d826418ae833eee3703b22b",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_SKYLINE-ISOMETRIC",
+      "path": "./content__district_01__art__skyline-isometric.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1225,
+        1284
+      ],
+      "file_size": 2356038,
+      "sha256": "3e68db648dd902b56dbd6a30c393b74634c9895a713f093db2b58594ba18992a",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_STREET-MATERIALS",
+      "path": "./content__district_01__art__street-materials.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "file_size": 3503967,
+      "sha256": "51fadaf471b0e58cb2b3cff6b074963c2d7c27578e403d754c69d8dcf433e857",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_TERRAIN-SOFT",
+      "path": "./content__district_01__art__terrain-soft.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "file_size": 2235450,
+      "sha256": "8d7e4b066d7a3b540bf508e99322945db1f08316274875282cf1df3083b4a39b",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_VEHICLE-MATERIALS",
+      "path": "./content__district_01__art__vehicle-materials.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "file_size": 1806042,
+      "sha256": "9dfe30ef24d3effc3bc9af02f540491083ec9bcc5d63dbc2d23b5bd57d539b1f",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_WATER-PIXEL",
+      "path": "./content__district_01__art__water-pixel.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "file_size": 2374053,
+      "sha256": "0f688ccf47b55cc617e67908a46ff6c0d84a292ef1e1b2c348808534669052fa",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_WILSON-BALL",
+      "path": "./content__district_01__art__wilson-ball.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "file_size": 2056289,
+      "sha256": "0c13ed483def68f948d80f09c11d3d7e9859801f04def35473894c45a2d5c091",
       "usage": "lazy district pack"
     },
     {

@@ -300,10 +300,14 @@
     "bench": {
       "sheet": "props",
       "rect": [
-        1187,
-        746,
-        291,
-        236
+        1180,
+        720,
+        302,
+        265
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9
       ]
     },
     "night_down": {
@@ -967,30 +971,42 @@
       ]
     },
     "skyline_glass": {
-      "sheet": "metropolis",
+      "sheet": "skyline_iso",
       "rect": [
-        176,
-        12,
-        506,
-        608
+        10,
+        10,
+        590,
+        1255
+      ],
+      "groundAnchor": [
+        0.516,
+        0.99
       ]
     },
     "skyline_deco": {
-      "sheet": "metropolis",
+      "sheet": "skyline_iso",
       "rect": [
-        944,
-        16,
-        452,
-        602
+        625,
+        40,
+        590,
+        1220
+      ],
+      "groundAnchor": [
+        0.506,
+        0.992
       ]
     },
     "flow_mall": {
-      "sheet": "metropolis",
+      "sheet": "mall_iso",
       "rect": [
-        46,
-        620,
-        776,
-        388
+        28,
+        270,
+        1200,
+        850
+      ],
+      "groundAnchor": [
+        0.627,
+        0.985
       ]
     },
     "customs": {
@@ -1013,6 +1029,10 @@
         8,
         1210,
         650
+      ],
+      "groundAnchor": [
+        0.84,
+        1
       ]
     },
     "skate_park": {
@@ -1022,6 +1042,116 @@
         662,
         1210,
         610
+      ]
+    },
+    "wilson_ball": {
+      "sheet": "wilson_ball",
+      "rect": [
+        10,
+        10,
+        1234,
+        1234
+      ]
+    },
+    "jdm_coupe": {
+      "sheet": "district_cars",
+      "rect": [
+        30,
+        158,
+        688,
+        392
+      ],
+      "groundAnchor": [
+        0.5,
+        0.78
+      ]
+    },
+    "lowrider": {
+      "sheet": "district_cars",
+      "rect": [
+        722,
+        174,
+        724,
+        352
+      ],
+      "groundAnchor": [
+        0.5,
+        0.78
+      ]
+    },
+    "executive": {
+      "sheet": "district_cars",
+      "rect": [
+        1458,
+        162,
+        684,
+        388
+      ],
+      "groundAnchor": [
+        0.5,
+        0.78
+      ]
+    },
+    "umbrella_coral": {
+      "sheet": "beach_details",
+      "rect": [
+        70,
+        24,
+        526,
+        640
+      ],
+      "groundAnchor": [
+        0.5,
+        0.97
+      ]
+    },
+    "umbrella_teal": {
+      "sheet": "beach_details",
+      "rect": [
+        680,
+        24,
+        526,
+        640
+      ],
+      "groundAnchor": [
+        0.5,
+        0.97
+      ]
+    },
+    "gang_river": {
+      "sheet": "gang_river",
+      "rect": [
+        0,
+        190,
+        1774,
+        520
+      ]
+    },
+    "gang_colour": {
+      "sheet": "gang_colour",
+      "rect": [
+        0,
+        120,
+        1942,
+        555
+      ]
+    },
+    "gang_old": {
+      "sheet": "gang_old",
+      "rect": [
+        0,
+        120,
+        1983,
+        560
+      ]
+    },
+    "gang_boulevard": {
+      "sheet": "gang_boulevard",
+      "rect": [
+        0,
+        45,
+        2056,
+        660
       ]
     }
   },
@@ -1122,6 +1252,66 @@
     {
       "id": "customs_iso",
       "file": "./content__district_01__art__customs-isometric.png"
+    },
+    {
+      "id": "water_pixel",
+      "file": "./content__district_01__art__water-pixel.png"
+    },
+    {
+      "id": "skyline_iso",
+      "file": "./content__district_01__art__skyline-isometric.png"
+    },
+    {
+      "id": "vehicle_materials",
+      "file": "./content__district_01__art__vehicle-materials.png"
+    },
+    {
+      "id": "mall_iso",
+      "file": "./content__district_01__art__mall-isometric.png"
+    },
+    {
+      "id": "street_materials",
+      "file": "./content__district_01__art__street-materials.png"
+    },
+    {
+      "id": "court_board",
+      "file": "./content__district_01__art__court-backboard.png"
+    },
+    {
+      "id": "wilson_ball",
+      "file": "./content__district_01__art__wilson-ball.png"
+    },
+    {
+      "id": "district_cars",
+      "file": "./content__district_01__art__district-cars.png"
+    },
+    {
+      "id": "metro_original",
+      "file": "./content__district_01__art__metro-original-faces.png"
+    },
+    {
+      "id": "beach_details",
+      "file": "./content__district_01__art__beach-details.png"
+    },
+    {
+      "id": "terrain_soft",
+      "file": "./content__district_01__art__terrain-soft.png"
+    },
+    {
+      "id": "gang_river",
+      "file": "./content__district_01__art__gang-river.png"
+    },
+    {
+      "id": "gang_colour",
+      "file": "./content__district_01__art__gang-colour.png"
+    },
+    {
+      "id": "gang_old",
+      "file": "./content__district_01__art__gang-old.png"
+    },
+    {
+      "id": "gang_boulevard",
+      "file": "./content__district_01__art__gang-boulevard.png"
     }
   ]
 }

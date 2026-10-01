@@ -20,14 +20,31 @@ export function ground(c,w,plate,cam,width,height,textures){
     for(let x=Math.floor((cx-extent)/1600)*1600;x<cx+extent;x+=1600)c.drawImage(plate,x,y);
   c.fillStyle='#171d2844';c.fillRect(0,w.metro.y+23,w.width,w.metro.width+28);
   if(textures){
-    drawRoadEnds(c,w,textures);
     // The narrow strip beside the river is a quay, not half of a cut road.
     if(w.regions){c.fillStyle=textures.paving;c.fillRect(2912,48,96,5500);}
   }
   for(const r of w.parkingLots??[]){
-    c.fillStyle='#525653';c.fillRect(r.x,r.y,r.w,r.h);c.strokeStyle='#d1cbb2';c.lineWidth=2;
-    for(let x=r.x+12;x<r.x+r.w-20;x+=44){c.strokeRect(x,r.y+9,39,55);}
+    // Repeated lots already have detailed parking paint baked into the ground art.
+    if(r.baked||r.id.startsWith('parking_'))continue;
+    c.fillStyle=textures?.asphalt??'#343735';c.fillRect(r.x,r.y,r.w,r.h);c.strokeStyle='#d1cbb2';c.lineWidth=2;
+    for(let x=r.x+12;x<r.x+r.w-44;x+=44){c.strokeRect(x,r.y+9,39,Math.min(55,r.h-18));}
     c.fillStyle='#e5dcc2';c.font='bold 28px monospace';c.fillText('P',r.x+r.w/2,r.y+r.h-12);
   }
+  for(const b of w.buildings.filter(b=>b.type.startsWith('skyline_'))){
+    c.fillStyle=textures?.paving??'#b1aa97';c.fillRect(b.x-5,b.y-5,b.w+10,b.h+10);
+    c.strokeStyle='#a49c84';c.lineWidth=2;c.strokeRect(b.x-5,b.y-5,b.w+10,b.h+10);
+  }
   c.restore();
+}
+
+// Road geometry also extends beyond the old rectangular city art footprint.
+// Restore its continuous surface above grass, dune blends and shore overlays.
+export function drawRoadSurfaces(c,w,plate,cam,width,height,textures){
+  c.save();c.transform(1,.5,-1,.5,0,0);
+  if(w.landPolygons){c.beginPath();for(const poly of w.landPolygons){poly.forEach((p,i)=>i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));c.closePath();}c.clip();}
+  c.save();c.beginPath();for(const r of w.roads)c.rect(r.x-10,r.y-10,r.w+20,r.h+20);c.clip();
+  const cx=cam.y+cam.x*.5,cy=cam.y-cam.x*.5,extent=(height*.5+width*.25)/cam.zoom+360;
+  for(let y=Math.floor((cy-extent)/1408)*1408;y<cy+extent;y+=1408)
+    for(let x=Math.floor((cx-extent)/1600)*1600;x<cx+extent;x+=1600)c.drawImage(plate,x,y);
+  c.restore();drawRoadEnds(c,w,textures);c.restore();
 }

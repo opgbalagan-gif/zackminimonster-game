@@ -5,6 +5,8 @@ import {metroRoute,loopPosition} from './content__district_01__metro.js';
 import {planRoadEnds} from './content__district_01__road-ends.js';
 import {planCityLots,placeMetroSupports} from './content__district_01__city-layout.js';
 import {courtHoops} from './content__district_01__court-props.js';
+import {quaySpans} from './content__district_01__quays.js';
+import {ROAD_CARS,districtCar} from './core__vehicle-styles.js';
 export function createDistrict(){
   const base=createBlock(),world={...base,width:6400,height:5632,name:'MINI MONSTER CITY',version:15};
   world.regions=[
@@ -79,7 +81,10 @@ export function createDistrict(){
   world.metroStations=metroRoute(world.metro).stops.map((s,i)=>({...loopPosition(world.metro,s),name:['EAST BLOCK','HARBOUR','COLOUR','DOWNTOWN'][i]}));
   world.metroPortals=[{x:6430,y:2380},{x:6430,y:3410}];
   expandCoast(world);
-  for(const [y,h] of [[1740,640],[3410,690]])world.obstacles.push({x:6394,y,w:72,h,tunnelCollider:true});
+  for(const [y,h] of [[1740,690],[3360,740]])world.obstacles.push({x:6374,y,w:112,h,tunnelCollider:true});
+  // Bridge parapets are solid while the roadway remains open to pedestrians and traffic.
+  for(const b of world.bridges.filter(b=>b.kind==='bridge'))for(const y of [b.y-14,b.y+b.h+6])world.obstacles.push({x:b.x,y,w:b.w,h:8,bridgeCollider:true});
+  for(const q of quaySpans(world))world.obstacles.push({x:q.x-4,y:q.y,w:8,h:q.h,quayCollider:true});
   // Keep traffic on real land, and outside the crew-controlled service barriers.
   world.roads=world.roads.flatMap(r=>{
     const vertical=r.h>r.w,axis=vertical?'y':'x',size=vertical?'h':'w',out=[];let start=null;
@@ -94,6 +99,16 @@ export function createDistrict(){
   world.obstacles=world.obstacles.filter(o=>!o.hoopBase);
   for(const h of world.hoops)world.obstacles.push({x:h.x-6,y:h.y-6,w:12,h:12,hoopBase:true});
   placeMetroSupports(world);
+  for(const p of world.props.filter(p=>p.type==='bench'&&!p.promenadeBench)){
+    const d=r=>Math.hypot(p.x-Math.max(r.x,Math.min(p.x,r.x+r.w)),p.y-Math.max(r.y,Math.min(p.y,r.y+r.h)));
+    const road=world.roads.reduce((a,b)=>d(a)<d(b)?a:b);p.flip=road.w>road.h;
+  }
+  for(const p of world.props)if(ROAD_CARS.includes(p.type)&&p.type!=='van')p.type=districtCar(world,p.x,p.y,p.type);
+  let nightCar=0;for(const p of world.props)if(p.meet&&p.y===5330){p.x=5294+nightCar++*82;p.y=5210;}
+  Object.assign(world.pointsOfInterest.find(p=>p.id==='poi_nightmeet'),{x:5410,y:5330});
+  Object.assign(world.meetPeople[2],{x:5330,y:5310});Object.assign(world.meetPeople[3],{x:5390,y:5310});
+  const garageParking=world.parkingLots.find(p=>p.id==='customs_parking');
+  for(let i=0;i<3;i++)world.props.push({type:'jdm_coupe',x:garageParking.x+40+i*78,y:garageParking.y+25,width:88,meet:true,color:['#70c6c3','#eab447','#cd557b'][i],collision:{x:-30,y:-14,w:60,h:28}});
   world.roadEnds=planRoadEnds(world);
   world.river={name:'РЕКА FLOW',x:3110,y:740};return world;
 }

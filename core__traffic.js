@@ -1,6 +1,7 @@
+import {districtCar} from './core__vehicle-styles.js';
 // Relative swept bounds catch crossings even when both car and player move in one frame.
 export function trafficContact(car,from,to){
-  const halfX=(car.axis==='x'?29:13)+8,halfY=(car.axis==='y'?29:13)+8;
+  const angle=car.heading??(car.axis==='x'?0:Math.PI/2),halfX=Math.abs(Math.cos(angle))*29+Math.abs(Math.sin(angle))*13+8,halfY=Math.abs(Math.sin(angle))*29+Math.abs(Math.cos(angle))*13+8;
   let enter=0,exit=1;
   for(const [axis,half] of [['x',halfX],['y',halfY]]){
     const a=from[axis]-car.previous[axis],b=to[axis]-car[axis],delta=b-a;
@@ -19,23 +20,26 @@ export class TrafficSystem{
     for(const v of vertical)for(const h of horizontal)if(v.x<h.x+h.w&&v.x+v.w>h.x&&h.y<v.y+v.h&&h.y+h.h>v.y)this.crossings.push({x:v.x,y:h.y,w:v.w,h:h.h});
     world.roads.forEach((road,index)=>{
       const axis=road.w>road.h?'x':'y',other=axis==='x'?'y':'x',length=axis==='x'?road.w:road.h;
+      const turnEnds=(world.roadEnds??[]).filter(e=>e.kind==='turn'&&e.axis===axis&&Math.abs(e[other]-(road[other]+(axis==='x'?road.h:road.w)/2))<1&&Math.min(Math.abs(e[axis]-road[axis]),Math.abs(e[axis]-road[axis]-length))<1);
       for(const direction of [-1,1])for(let n=0;n<2;n++){
-        const start=road[axis]+70,end=road[axis]+length-70,span=end-start;
+        const start=turnEnds.find(e=>e.sign<0)?.point[axis]??road[axis]+70,end=turnEnds.find(e=>e.sign>0)?.point[axis]??road[axis]+length-70,span=end-start;
         const breadth=axis==='x'?road.h:road.w,center=road[other]+breadth/2,side=direction*(axis==='x'?1:-1);
         let lane=center+side*(axis==='x'?24:16);
         // Some graffiti supports sit inside the asphalt: choose a clear lane within its half-road.
         for(let offset=axis==='x'?24:16;offset<=breadth/2-15;offset+=4){
           const candidate=center+side*offset;
-          if(![...world.buildings,...world.obstacles].some(b=>candidate+13>b[other]&&candidate-13<b[other]+(axis==='x'?b.h:b.w)&&b[axis]<end&&b[axis]+(axis==='x'?b.w:b.h)>start)){lane=candidate;break;}
+          // Both directions share the same lane offset so a U-turn rejoins an existing lane.
+          if(!(turnEnds.length?[-1,1]:[side]).some(side=>[...world.buildings,...world.obstacles].some(b=>center+side*offset+13>b[other]&&center+side*offset-13<b[other]+(axis==='x'?b.h:b.w)&&b[axis]<end&&b[axis]+(axis==='x'?b.w:b.h)>start))){lane=candidate;break;}
         }
         let position=start+((n*.5+.14+index*.057+(direction===1?.25:0))%1)*span;
         for(const crossing of this.crossings){
           const low=crossing[axis]-39,high=crossing[axis]+(axis==='x'?crossing.w:crossing.h)+39;
           if(position>low&&position<high)position=direction===1?low:high;
         }
-        const car={id:'traffic_'+index+'_'+direction+'_'+n,axis,direction,start,end,lane,
+        const car={id:'traffic_'+index+'_'+direction+'_'+n,axis,direction,start,end,lane,center,turnEnds,roadId:index,heading:axis==='x'?(direction>0?0:Math.PI):(direction>0?Math.PI/2:-Math.PI/2),
           speed:88+index%3*7,hold:0,travel:0,type:['taxi','blue_car','van'][(index+n+(direction===1?1:0))%3],
           x:axis==='x'?position:lane,y:axis==='y'?position:lane};
+        if(world.regions&&(index+n)%3!==0)car.type=districtCar(world,car.x,car.y,car.type);
         car.previous={x:car.x,y:car.y};this.cars.push(car);
       }
     });
@@ -51,6 +55,12 @@ export class TrafficSystem{
       for(const car of this.cars){
         car.hold=Math.max(0,car.hold-step);
         let move=car.hold>0?0:car.speed*step;
+        if(car.turn){
+          const t=car.turn,other=car.axis==='x'?'y':'x';t.angle=Math.min(Math.PI,t.angle+move/t.radius);
+          car[car.axis]=t.at+t.dir*t.radius*Math.sin(t.angle);car[other]=car.center+t.offset*Math.cos(t.angle);
+          const du=t.dir*Math.cos(t.angle),dv=-Math.sign(t.offset)*Math.sin(t.angle);car.heading=car.axis==='x'?Math.atan2(dv,du):Math.atan2(du,dv);car.travel+=move;
+          if(t.angle>=Math.PI){car.direction=-t.dir;car.lane=car.center-t.offset;car[other]=car.lane;car.turn=null;}continue;
+        }
         const pos=car[car.axis],dir=car.direction;
         if(!this.green(car.axis))for(const cross of this.crossings){
           const other=car.axis==='x'?'y':'x';
@@ -60,11 +70,21 @@ export class TrafficSystem{
           if(gap>=-.01)move=Math.min(move,Math.max(0,gap));
         }
         for(const ahead of this.cars){
-          if(ahead===car||ahead.axis!==car.axis||ahead.lane!==car.lane||ahead.direction!==dir)continue;
+          if(ahead===car||ahead.axis!==car.axis||Math.abs(ahead.lane-car.lane)>=28||ahead.direction!==dir)continue;
           const gap=(positions.get(ahead.id)-pos)*dir;
           if(gap>0)move=Math.min(move,Math.max(0,gap-76));
         }
+        const turnEnd=car.turnEnds?.find(e=>e.sign===dir),limit=dir>0?car.end:car.start;
+        if(turnEnd){
+          const gap=(limit-pos)*dir;
+          if(gap<=move){
+            const busy=this.cars.some(o=>o!==car&&o.roadId===car.roadId&&(o.turn&&o.turn.at===limit||o.direction===-dir&&Math.abs(o[car.axis]-limit)<76));
+            move=Math.min(move,Math.max(0,gap));
+            if(!busy&&gap<=move+.01)car.turn={at:limit,dir,offset:car.lane-car.center,radius:Math.abs(car.lane-car.center),angle:0};
+          }
+        }
         car[car.axis]+=dir*move;car.travel+=move;
+        if(car.turn)continue;
         if(car[car.axis]>car.end||car[car.axis]<car.start){
           const entry=dir===1?car.start:car.end;
           if(!this.cars.some(other=>other!==car&&other.axis===car.axis&&other.lane===car.lane&&Math.abs(other[car.axis]-entry)<90)){

@@ -1,7 +1,7 @@
 // Bitmap materials mapped to the same isometric geometry as the live track.
-export function createMetroArt(image){
+export function createMetroArt(image,regions={ballast:[6,6,612,612],concrete:[636,6,612,612],steel:[6,636,612,612],portal:[636,636,612,612]}){
   const parts={};
-  for(const [name,rect] of Object.entries({ballast:[6,6,612,612],concrete:[636,6,612,612],steel:[6,636,612,612],portal:[636,636,612,612]})){
+  for(const [name,rect] of Object.entries(regions)){
     const canvas=document.createElement('canvas');canvas.width=canvas.height=256;const c=canvas.getContext('2d');c.imageSmoothingEnabled=false;c.drawImage(image,...rect,0,0,256,256);parts[name]=canvas;
   }
   return {quad(c,material,p,shade=0){

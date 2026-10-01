@@ -15,6 +15,8 @@ export function drawBall(c,ball,size,{guide=false,atlas=null,selected=-1}={}){
   const g=c.createRadialGradient(.33,.27,.02,.58,.58,.65);g.addColorStop(0,'#f7b453');g.addColorStop(.6,'#e47d31');g.addColorStop(1,'#9e411f');c.fillStyle=g;c.fillRect(0,0,1,1);
   c.fillStyle='#49251a25';for(let y=0;y<52;y++)for(let x=0;x<52;x++){c.beginPath();c.arc((x+(y%2)*.5)/52,y/52,.0014,0,7);c.fill();}
   c.strokeStyle='#64351f';c.lineWidth=.01;c.beginPath();c.moveTo(.5,.02);c.bezierCurveTo(.41,.27,.65,.72,.5,.98);c.moveTo(.03,.44);c.bezierCurveTo(.34,.32,.67,.34,.97,.54);c.moveTo(.11,.16);c.bezierCurveTo(.61,.22,.81,.66,.75,.91);c.moveTo(.08,.75);c.bezierCurveTo(.2,.45,.41,.21,.72,.08);c.stroke();
+  const ballSprite=atlas?.metadata?.sprites.wilson_ball;
+  if(ballSprite){c.imageSmoothingEnabled=false;c.drawImage(atlas.images[ballSprite.sheet],...ballSprite.rect,.03,.03,.94,.94);}
   if(guide){c.fillStyle='#fff8dc26';for(const [x,y,rx,ry] of [[.43,.42,.28,.23],[.6,.64,.23,.21],[.22,.66,.13,.14]]){c.beginPath();c.ellipse(x,y,rx,ry,0,0,7);c.fill();}}
   if(pixels?.length===BALL_GRID**2)for(let i=0;i<pixels.length;i++)if(pixels[i]>=0&&MARKERS[pixels[i]]){
     c.fillStyle=MARKERS[pixels[i]].color;c.fillRect((i%BALL_GRID)/BALL_GRID,Math.floor(i/BALL_GRID)/BALL_GRID,1/BALL_GRID+.001,1/BALL_GRID+.001);

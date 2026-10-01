@@ -1,10 +1,10 @@
 import {facadeGeometry,drawFacade} from './content__district_01__facades.js';
 import {perimeterPieces,drawPerimeter} from './content__district_01__perimeter.js';
 import {createGroundPlate} from './content__district_01__ground-plate.js';
-import {trainCars,drawTrain,loopRails,drawLoopRail,drawTunnelPortal,drawLoopStation} from './content__district_01__metro.js';
+import {trainCars,drawTrain,loopRails,drawLoopRail,drawTunnelPortal,drawLoopStation,drawTunnelGround} from './content__district_01__metro.js';
 import {project,distance} from './core__geometry.js';
 import {SpriteAtlas} from './core__sprites.js';
-import {polygon,box,ground} from './content__district_01__terrain.js';
+import {polygon,box,ground,drawRoadSurfaces} from './content__district_01__terrain.js';
 import {drawGraffiti} from './content__district_01__graffiti-art.js';
 import {wallSurface} from './core__surfaces.js';
 import {heroSprite,ink} from './core__hideout.js';
@@ -14,10 +14,14 @@ import {drawBall} from './core__ball-art.js';
 import {POSTERS,drawPoster} from './content__district_01__posters.js';
 import {drawHoop} from './content__district_01__court-props.js';
 import {wallPieces,fencePieces,coversHero} from './content__district_01__depth-pieces.js';
-import {drawWater,drawShore,drawBridges,drawSandyCoast} from './content__district_01__waterfront.js';
+import {drawWater,drawShore,drawBridges,drawSandyCoast,bridgeRailPieces,drawBridgeRail} from './content__district_01__waterfront.js';
 import {drawCoastalGround,drawMountains,drawBeachUmbrella,createCoastalTextures} from './content__district_01__coastal-renderer.js';
 import {buildingOccludesZack} from './content__district_01__occlusion.js';
 import {createMetroArt} from './content__district_01__metro-art.js';
+import {quayPieces,drawQuay} from './content__district_01__quays.js';
+import {ROAD_CARS} from './core__vehicle-styles.js';
+import {tunnelFencePieces,drawTunnelFence} from './content__district_01__tunnel-fence.js';
+import {drawBench} from './content__district_01__benches.js';
 
 const INK='#111722';
 export function marker(c,x,y,type,size=28,active=false){
@@ -39,8 +43,14 @@ function label(c,text,x,y,color='#eee8d8'){
 export function createRenderer(pack){
   const atlas=new SpriteAtlas(pack.atlas,pack.images),world=pack.world;
   const plate=createGroundPlate(pack.images.city_ground,world);
-  const coastTextures=createCoastalTextures(plate,pack.images.beach_sand);
+  const coastTextures=createCoastalTextures(plate,pack.images.beach_sand,pack.images.water_pixel,pack.images.street_materials,pack.images.terrain_soft);
+  const streetArt=createMetroArt(pack.images.street_materials,{stone:[8,636,610,610]});
+  const courtArt=createMetroArt(pack.images.court_board,{board:[0,0,1536,1024]});
+  const benchArt=pack.images.terrain_soft?createMetroArt(pack.images.terrain_soft,{wood:[8,636,610,610]}):null;
+  const beachArt=createMetroArt(pack.images.beach_details,{foam0:[4,700,1244,200],foam1:[4,904,1244,171],foam2:[4,1084,1244,169]});
   const metroArt=createMetroArt(pack.images.metro_materials);
+  const trainArt=createMetroArt(pack.images.metro_original,{side:[16,135,880,306],front:[920,109,318,334],rear:[920,646,320,470],roof:[18,585,876,650]});
+  const vehicleArt=createMetroArt(pack.images.vehicle_materials,{blue_car:[8,8,610,552],taxi:[636,8,610,552],van:[8,580,610,664],glass:[636,580,610,664]});
   const entries=[],posterHits=[],wallTextures=new Map();
   const buildingMasks=new Map();
   function opaqueBuildingPixel(id,u,v){
@@ -58,16 +68,18 @@ export function createRenderer(pack){
   for(const p of world.props)entries.push({kind:'prop',item:p,depth:p.x+p.y});
   for(const p of world.beachProps??[])entries.push({kind:'umbrella',item:p,depth:p.x+p.y});
   for(const t of world.targets)if(!t.buildingId)entries.push(...wallPieces(t));
-  for(const o of world.obstacles)if(!o.wallCollider&&!o.boundary&&!o.hoopBase&&!o.tunnelCollider){
+  for(const o of world.obstacles)if(!o.wallCollider&&!o.boundary&&!o.hoopBase&&!o.tunnelCollider&&!o.bridgeCollider&&!o.quayCollider){
     if(o.pillar)entries.push({kind:'pillar',item:o,depth:o.x+o.y+o.w+o.h});
     else entries.push(...fencePieces(o));
   }
   for(const h of world.hoops)entries.push({kind:'hoop',item:h,depth:h.x+h.y+8});
+  entries.push(...bridgeRailPieces(world));
+  if(world.regions)entries.push(...quayPieces(world));
+  entries.push(...tunnelFencePieces(world));
   if(world.metro.loop)for(const r of loopRails(world.metro))entries.push({kind:'loopRail',item:r,depth:r.x+r.y+r.w+r.h});
   else for(let x=world.metro.x;x<world.metro.end;x+=world.metro.segment)entries.push({kind:'rail',item:{x},depth:x+world.metro.segment+world.metro.y+world.metro.width});
   for(const o of perimeterPieces(world))entries.push({kind:'perimeter',item:o,depth:o.x+o.y+o.w+o.h});
   if(!world.metro.loop)entries.push({kind:'station',item:{x:world.metro.station.x},depth:world.metro.station.x+world.metro.station.w+world.metro.y+120});
-  for(const p of world.metroPortals??[])entries.push({kind:'portal',item:p,depth:p.x+p.y+100});
   for(const p of world.metroStations??[])entries.push({kind:'loopStation',item:p,depth:p.x+p.y+120});
 
   function sprite(c,id,x,y,width,height=null,flip=false,alpha=1){atlas.draw(c,id,x,y,width,height,flip,alpha);}
@@ -146,12 +158,17 @@ export function createRenderer(pack){
     const region=map&&world.regions?.find(r=>r.id===session.mapRegion),bounds=region??world.mapBounds??{x:0,y:0,w:world.width,h:world.height};
     const cam=map?{x:bounds.x-bounds.y+(bounds.w-bounds.h)/2,y:(bounds.x+bounds.y)/2+(bounds.w+bounds.h)/4-70,zoom:Math.max(.001,Math.min((width-40)/(bounds.w+bounds.h+400),(height-80)/((bounds.w+bounds.h)/2+400)))}:session.camera;
     c.save();c.translate(width/2,height/2);c.scale(cam.zoom,cam.zoom);c.translate(-cam.x,-cam.y);
-    if(world.regions){drawWater(c,cam,width,height,session.time);drawShore(c,world);}
+    if(world.regions)drawWater(c,cam,width,height,session.time,coastTextures);
+    // The ridge is terrain beneath the city plate, never an overlay on streets.
+    drawMountains(c,world,atlas,coastTextures,cam,width,height);
+    if(world.regions)drawShore(c,world);
     drawCoastalGround(c,world,coastTextures);
     ground(c,world,plate,cam,width,height,coastTextures);
-    drawSandyCoast(c,world,coastTextures,session.time);
-    drawMountains(c,world,atlas);
-    drawBridges(c,session,plate);
+    drawSandyCoast(c,world,coastTextures,session.time,beachArt);
+    drawRoadSurfaces(c,world,plate,cam,width,height,coastTextures);
+    drawBridges(c,session,plate,metroArt);
+    drawTunnelGround(c,world.metro);
+    for(const p of world.metroPortals??[])drawTunnelPortal(c,p,world.metro,metroArt);
     drawTrafficSignals(c,session.traffic);
     if(!map&&session.player.path.length){
       c.strokeStyle='#e9ce7f90';c.lineWidth=3/cam.zoom;c.setLineDash([4/cam.zoom,8/cam.zoom]);c.beginPath();
@@ -167,10 +184,9 @@ export function createRenderer(pack){
     for(const n of world.meetPeople??[])queue.push({kind:'gang',item:{...n,sprite:'citizen_'+n.look+'_0'},depth:n.x+n.y});
     for(const n of session.court.friends)queue.push({kind:'courtNpc',item:n,depth:n.x+n.y});
     for(const car of session.traffic.cars)if(car.x>=0&&car.x<=world.width&&car.y>=0&&car.y<=world.height)queue.push({kind:'traffic',item:car,depth:car.x+car.y+22});
-    for(const car of trainCars(world.metro,session.time))queue.push({kind:'train',item:car,depth:car.x+car.y+210});
-    // Elevated infrastructure is a foreground layer; buildings cannot cut holes in the viaduct.
-    const metroLayer={loopRail:1,loopStation:2,train:3,portal:4};
-    queue.sort((a,b)=>(metroLayer[a.kind]??0)-(metroLayer[b.kind]??0)||a.depth-b.depth);
+    for(const car of trainCars(world.metro,session.time))queue.push({kind:'train',item:car,depth:car.x+car.y+120});
+    // A viaduct in front covers buildings; a building in front covers the viaduct.
+    queue.sort((a,b)=>a.depth-b.depth);
     const minX=cam.x-width/2/cam.zoom-340,maxX=cam.x+width/2/cam.zoom+340,minY=cam.y-height/2/cam.zoom-50,maxY=cam.y+height/2/cam.zoom+500;
     const playerP=project(session.player.x,session.player.y);
     const zackBounds={x:playerP.x-16,y:playerP.y-62,w:32,h:60,depth:session.player.x+session.player.y};
@@ -195,19 +211,24 @@ export function createRenderer(pack){
             posterHits.push({id:poster.id,x,y,w:Math.max(...screen.map(p=>p.x))-x,h:Math.max(...screen.map(p=>p.y))-y});
           }
         }
-      }else if(entry.kind==='umbrella')drawBeachUmbrella(c,o);
+      }else if(entry.kind==='umbrella')drawBeachUmbrella(c,o,atlas);
       else if(entry.kind==='perimeter')drawPerimeter(c,o);
-      else if(entry.kind==='traffic')drawTrafficCar(c,o);
+      else if(entry.kind==='traffic')drawTrafficCar(c,o,vehicleArt);
       else if(entry.kind==='prop'){
         if(o.meet){c.save();c.globalAlpha=.28+Math.sin(session.time*2)*.08;c.fillStyle=o.color;c.beginPath();c.ellipse(p.x,p.y,44,17,0,0,Math.PI*2);c.fill();c.restore();}
-        sprite(c,o.type,p.x,p.y,o.width);
+        if(o.type==='bench')drawBench(c,o,benchArt);
+        else if(ROAD_CARS.includes(o.type)&&o.collision){const r=o.collision,car={...o,x:o.x+r.x+r.w/2,y:o.y+r.y+r.h/2,axis:r.w>r.h?'x':'y',direction:1,hold:0};
+          if(['jdm_coupe','lowrider','executive'].includes(o.type)){const p=project(car.x,car.y);sprite(c,o.type,p.x,p.y,90,null,car.axis==='y');}
+          else drawTrafficCar(c,car,vehicleArt);
+        }
+        else sprite(c,o.type,p.x,p.y,o.width,null,o.flip??false);
       }
       else if(entry.kind==='wall'){
         const slope=o.axis==='y'?-.5:.5,height=o.graffiti_id==='panda_king'?94:56;
         const points=[entry.clip.from,entry.clip.to].flatMap(u=>[{x:p.x+u,y:p.y+slope*u},{x:p.x+u,y:p.y+slope*u-height}]);
         wall(c,o,session,entry.clip,!map&&coversHero(points,session.player,entry.depth)?.28:1);
       }
-      else if(entry.kind==='hoop')drawHoop(c,o);
+      else if(entry.kind==='hoop')drawHoop(c,o,courtArt);
       else if(entry.kind==='pillar'){
         const z=o.height??104;box(c,o.x,o.y,o.w,o.h,z,'#a5a799','#727b7e','#8c9492');
         metroArt.quad(c,'concrete',[project(o.x,o.y+o.h,z),project(o.x+o.w,o.y+o.h,z),project(o.x+o.w,o.y+o.h),project(o.x,o.y+o.h)],.22);
@@ -230,8 +251,10 @@ export function createRenderer(pack){
       }
       else if(entry.kind==='rail')rail(c,o.x,session,map);
       else if(entry.kind==='station')station(c,session,map);
-      else if(entry.kind==='train')drawTrain(c,o,world.metro,atlas,metroArt);
-      else if(entry.kind==='portal')drawTunnelPortal(c,o,world.metro,metroArt);
+      else if(entry.kind==='bridgeRail')drawBridgeRail(c,o,metroArt);
+      else if(entry.kind==='quay')drawQuay(c,o,streetArt,session.time);
+      else if(entry.kind==='tunnelFence')drawTunnelFence(c,o);
+      else if(entry.kind==='train')drawTrain(c,o,world.metro,atlas,trainArt);
       else if(entry.kind==='loopStation')drawLoopStation(c,o,world.metro,metroArt);
       else if(entry.kind==='courtNpc'){
         c.fillStyle='#11172355';c.beginPath();c.ellipse(p.x,p.y,16,6,0,0,Math.PI*2);c.fill();
@@ -241,7 +264,13 @@ export function createRenderer(pack){
       else if(entry.kind==='gang'){
         c.fillStyle='#11172355';c.beginPath();c.ellipse(p.x,p.y,14,6,0,0,Math.PI*2);c.fill();
         sprite(c,o.sprite,p.x,p.y,null,65);
-        if(o.leader&&!map){c.save();c.translate(p.x,p.y-78);c.scale(1/cam.zoom,1/cam.zoom);label(c,o.name,0,0,o.open?'#b9d2a1':'#f2b76a');c.restore();}
+        if(o.leader&&!map){
+          const tag={'RIVER CREW':'gang_river','COLOUR CREW':'gang_colour','OLD BLOCK CREW':'gang_old','BOULEVARD CREW':'gang_boulevard'}[o.name];
+          c.save();c.translate(p.x,p.y-76);c.scale(1/cam.zoom,1/cam.zoom);
+          if(tag)sprite(c,tag,0,0,o.name.length>12?140:120);
+          else label(c,o.name,0,0,o.open?'#b9d2a1':'#f2b76a');
+          c.restore();
+        }
       }
       else if(entry.kind==='npc'){
         c.fillStyle='#11172338';c.beginPath();c.ellipse(p.x,p.y,11,4,0,0,Math.PI*2);c.fill();

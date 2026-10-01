@@ -28,7 +28,7 @@ export class CourtView{
   }
   release(){this.pointer=null;this.session.ballGame?.end();}
   portrait(canvas,sprite){const c=canvas.getContext('2d');c.clearRect(0,0,canvas.width,canvas.height);c.imageSmoothingEnabled=false;
-    this.renderer.atlas.draw(c,sprite==='zack'?heroSprite(this.session.save.player.skin):sprite,canvas.width/2,canvas.height-8,null,canvas.height-22);}
+    this.renderer.atlas.draw(c,sprite==='zack'?heroSprite(this.session.save.player.skin):sprite,canvas.width/2,canvas.height-8,null,canvas.height-22,sprite==='zack');}
   sync(){
     const s=this.session,dialogue=s.mode==='court-dialogue',painting=s.mode==='ball-art',result=s.mode==='ball-result';
     $('court-screen').hidden=!dialogue;$('ball-screen').hidden=!painting&&!result;

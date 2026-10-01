@@ -5,9 +5,9 @@ export function courtHoops(court){
   // Match the two painted keys in the ground plate, facing into the court.
   return [{x:court.x+14,y:court.y+86,facing:1},{x:court.x+court.w+8,y:court.y+86,facing:-1}];
 }
-export function drawHoop(c,h){
+export function drawHoop(c,h,art){
   c.save();
-  const x=h.x+h.facing*18,y=h.y,rimX=x+h.facing*12;
+  const x=h.x+h.facing*18,y=h.y,rimX=x+h.facing*22;
   box(c,h.x-6,y-6,12,12,5,'#b3b3a4','#555f65','#778188');
   const base=project(h.x,y,5),top=project(h.x,y,107),arm=project(x,y,107);
   c.lineJoin='round';c.lineCap='square';
@@ -15,9 +15,14 @@ export function drawHoop(c,h){
     c.strokeStyle=color;c.lineWidth=width;c.beginPath();c.moveTo(base.x,base.y);c.lineTo(top.x,top.y);c.lineTo(arm.x,arm.y);c.stroke();
   }
   const board=(half,low,high)=>[project(x,y-half,high),project(x,y+half,high),project(x,y+half,low),project(x,y-half,low)];
-  polygon(c,board(27,88,125),'#deddd0','#233641',3);
-  polygon(c,board(23,92,121),'#c3d5d3','#718c92',1);
-  polygon(c,board(11,92,107),null,'#b94b36',2);
+  const paintBoard=()=>{
+    polygon(c,board(27,88,125),'#deddd0','#233641',3);
+    if(art)art.quad(c,'board',board(27,88,125));
+    else polygon(c,board(11,92,107),null,'#b94b36',2);
+    const a=project(x,y,92),b=project(x+h.facing*10,y,92);
+    c.strokeStyle='#a75030';c.lineWidth=4;c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();
+  };
+  if(h.facing>0)paintBoard();
   // Ring lies horizontally in world space; the net hangs vertically below it.
   const ring=project(rimX,y,91),net=project(rimX,y,76);
   c.strokeStyle='#f3ead2';c.lineWidth=1.5;
@@ -28,5 +33,6 @@ export function drawHoop(c,h){
   c.beginPath();c.ellipse(net.x,net.y,7,3.5,0,0,Math.PI*2);c.stroke();
   c.strokeStyle='#502b23';c.lineWidth=5;c.beginPath();c.ellipse(ring.x,ring.y,12,6,0,0,Math.PI*2);c.stroke();
   c.strokeStyle='#f07738';c.lineWidth=2.5;c.stroke();
+  if(h.facing<0)paintBoard();
   c.restore();
 }

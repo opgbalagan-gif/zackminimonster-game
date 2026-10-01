@@ -1,6 +1,6 @@
 {
   "id": "district_01",
-  "version": 22,
+  "version": 23,
   "scene": "./content__district_01__city.js",
   "renderer": "./content__district_01__renderer.js",
   "dependencies": [
@@ -35,7 +35,22 @@
     "./content__district_01__art__coastal-nature.png",
     "./content__district_01__art__beach-sand.png",
     "./content__district_01__art__metro-materials.png",
-    "./content__district_01__art__customs-isometric.png"
+    "./content__district_01__art__customs-isometric.png",
+    "./content__district_01__art__water-pixel.png",
+    "./content__district_01__art__skyline-isometric.png",
+    "./content__district_01__art__vehicle-materials.png",
+    "./content__district_01__art__mall-isometric.png",
+    "./content__district_01__art__street-materials.png",
+    "./content__district_01__art__court-backboard.png",
+    "./content__district_01__art__wilson-ball.png",
+    "./content__district_01__art__district-cars.png",
+    "./content__district_01__art__metro-original-faces.png",
+    "./content__district_01__art__beach-details.png",
+    "./content__district_01__art__terrain-soft.png",
+    "./content__district_01__art__gang-river.png",
+    "./content__district_01__art__gang-colour.png",
+    "./content__district_01__art__gang-old.png",
+    "./content__district_01__art__gang-boulevard.png"
   ],
   "audio": [],
   "graffiti": [
@@ -45,5 +60,5 @@
     "panda_king"
   ],
   "cutscenes": [],
-  "estimated_download_size": 53027656
+  "estimated_download_size": 81602253
 }

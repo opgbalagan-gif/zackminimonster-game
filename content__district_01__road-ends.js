@@ -21,11 +21,24 @@ export function drawRoadEnds(c,world,textures){
       const a=vertical?{x:e.x-e.width/2,y:boundary}:{x:boundary,y:e.y-e.width/2},b=vertical?{x:e.x+e.width/2,y:boundary}:{x:boundary,y:e.y+e.width/2};
       c.strokeStyle='#d5ccb4';c.lineWidth=4;c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();continue;
     }
-    // An actual turning bulb and pavement close a terminal street before the shore.
-    if(vertical)c.fillRect(e.x-e.width/2-26,Math.min(p.y,e.y+e.sign*110),e.width+52,195);
-    else c.fillRect(Math.min(p.x,e.x+e.sign*110),e.y-e.width/2-26,195,e.width+52);
-    c.beginPath();c.arc(p.x,p.y,e.width*.7+10,0,Math.PI*2);c.fill();
-    c.fillStyle=textures.asphalt;c.strokeStyle='#c7c0ad';c.lineWidth=5;c.beginPath();c.arc(p.x,p.y,e.width*.7,0,Math.PI*2);c.fill();c.stroke();
-    c.fillStyle=textures.asphalt;if(vertical)c.fillRect(e.x-e.width/2,p.y+(e.sign>0?-80:0),e.width,80);else c.fillRect(p.x+(e.sign>0?-80:0),e.y-e.width/2,80,e.width);
+    c.save();
+    // A terminal's pavement must never paint across an intersecting street.
+    c.beginPath();c.rect(-10000,-10000,30000,30000);
+    for(const r of world.roads)if((r.h>r.w)!==vertical&&r.x<p.x+240&&r.x+r.w>p.x-240&&r.y<p.y+240&&r.y+r.h>p.y-240)c.rect(r.x,r.y,r.w,r.h);
+    c.clip('evenodd');
+    c.translate(p.x,p.y);c.rotate((vertical?Math.PI/2:0)+(e.sign<0?Math.PI:0));
+    // One continuous outline joins the bulb to the street, with no rectangular asphalt corners beyond its curb.
+    const outer=e.width*.7,half=e.width/2,join=-Math.sqrt(outer*outer-half*half),angle=Math.atan2(half,join);
+    c.fillStyle=textures.paving;c.fillRect(-120,-outer-12,325,outer*2+24);
+    c.beginPath();c.moveTo(-120,-half);c.lineTo(join,-half);c.arc(0,0,outer,-angle,angle);c.lineTo(-120,half);c.closePath();
+    c.fillStyle=textures.asphalt;c.fill();
+    c.strokeStyle='#c7c0ad';c.lineWidth=5;c.beginPath();c.moveTo(-120,-half);c.lineTo(join,-half);c.arc(0,0,outer,-angle,angle);c.lineTo(-120,half);c.stroke();
+    const radius=e.width*.7-9;
+    c.strokeStyle='#d9d1b8';c.lineWidth=2;c.beginPath();c.arc(0,0,radius,-Math.PI*.7,Math.PI*.7);c.stroke();
+    c.strokeStyle='#d6b361';c.lineWidth=2;c.setLineDash([8,10]);c.beginPath();c.arc(0,0,36,-Math.PI/2,Math.PI/2);c.stroke();c.setLineDash([]);
+    // A short curved U-turn arrow follows the same semicircle as the cars.
+    c.strokeStyle='#dfd9c6';c.lineWidth=3;c.beginPath();c.arc(0,0,23,-Math.PI*.42,Math.PI*.42);c.stroke();
+    c.fillStyle='#dfd9c6';c.beginPath();c.moveTo(0,25);c.lineTo(13,15);c.lineTo(12,29);c.closePath();c.fill();
+    c.restore();
   }
 }

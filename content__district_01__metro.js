@@ -1,6 +1,6 @@
 import {project} from './core__geometry.js';
 import {box,polygon} from './content__district_01__terrain.js';
-const routes=new WeakMap();
+const routes=new WeakMap(),trenches=new WeakMap();
 export function metroRoute(m){
   if(routes.has(m))return routes.get(m);
   const points=[],stops=[],radius=m.cornerRadius??300;
@@ -34,16 +34,35 @@ export function loopPosition(m,travel){
 export function loopRails(m){
   const {points}=metroRoute(m);return points.slice(1).map((b,i)=>{const a=points[i],dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy);return{x:(a.x+b.x)/2,y:(a.y+b.y)/2,w:0,h:0,a,b,nx:-dy/len,ny:dx/len,axis:Math.abs(dx)>Math.abs(dy)?'x':'y',za:trackHeight(m,a),zb:trackHeight(m,b)};});
 }
+export function tunnelSpans(m){const u=m.underground;return u?[[u.entry,u.start-50],[u.end+50,u.exit]]:[];}
+function trenchOpenings(m){
+  if(trenches.has(m))return trenches.get(m);
+  const result=tunnelSpans(m).map(([a,b],i)=>{
+    let lo=a,hi=b;for(let n=0;n<24;n++){const mid=(lo+hi)/2;if((trackHeight(m,{x:m.loop[1].x,y:mid})>0)===(i===0))lo=mid;else hi=mid;}
+    return i===0?[(lo+hi)/2,b]:[a,(lo+hi)/2];
+  }).map(([a,b])=>[project(m.loop[1].x-38,a),project(m.loop[1].x+38,a),project(m.loop[1].x+38,b),project(m.loop[1].x-38,b)]);
+  trenches.set(m,result);return result;
+}
+function clipTrench(c,m){c.beginPath();for(const poly of trenchOpenings(m)){poly.forEach((p,i)=>i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));c.closePath();}c.clip();}
+export function trainVisibleRanges(m,car){
+  if(!m.underground||Math.abs(car.x-m.loop[1].x)>8||Math.abs(car.dy)<.99)return[[-65,65]];
+  const a=(m.underground.start-50-car.y)/car.dy,b=(m.underground.end+50-car.y)/car.dy,lo=Math.min(a,b),hi=Math.max(a,b);
+  return [[-65,Math.min(65,lo)],[Math.max(-65,hi),65]].filter(([a,b])=>b>a);
+}
+export function trainHeight(m,car,u){return trackHeight(m,{x:car.x+car.dx*u,y:car.y+car.dy*u})+5;}
+export function drawTunnelGround(c,m){
+  for(const poly of trenchOpenings(m))polygon(c,poly,'#172326');
+}
 export function drawLoopRail(c,r,m,art){
-  const u=m.underground;if(u&&Math.abs(r.x-m.loop[1].x)<8&&r.y>u.start&&r.y<u.end)return;
+  const u=m.underground;if(u&&Math.abs(r.x-m.loop[1].x)<8&&r.y>u.start-50&&r.y<u.end+50)return;
+  c.save();if(Math.max(r.za,r.zb)<0)clipTrench(c,m);
   const point=(p,n,z)=>project(p.x+r.nx*n,p.y+r.ny*n,z);
   const top=[point(r.a,-32,r.za),point(r.b,-32,r.zb),point(r.b,32,r.zb),point(r.a,32,r.za)];
   if(Math.min(r.za,r.zb)<0){
-    polygon(c,[point(r.a,-39,0),point(r.b,-39,0),point(r.b,39,0),point(r.a,39,0)],'#131c23');
     for(const n of [-36,36]){const wall=[point(r.a,n,0),point(r.b,n,0),point(r.b,n,r.zb-12),point(r.a,n,r.za-12)];polygon(c,wall,'#56636a','#26373e',2);art?.quad(c,'concrete',wall,n<0?.35:.15);}
   }
-  for(const n of [-32,32]){const side=[point(r.a,n,r.za),point(r.b,n,r.zb),point(r.b,n,r.zb-23),point(r.a,n,r.za-23)];polygon(c,side,'#37434a','#1d2930',2);art?.quad(c,'steel',side,n<0?.15:0);}
-  polygon(c,top,'#404747','#293a42',1);art?.quad(c,'ballast',top);
+  for(const n of [-32,32]){const side=[point(r.a,n,r.za),point(r.b,n,r.zb),point(r.b,n,r.zb-23),point(r.a,n,r.za-23)];polygon(c,side,'#37434a','#1d2930',2);art?.quad(c,'steel',side,n<0?.15:0);polygon(c,side,'#3c4b50bb');}
+  polygon(c,top,'#404747','#293a42',1);art?.quad(c,'ballast',top);polygon(c,top,'#41473cce');
   const len=r.b.s-r.a.s;
   const dx=(r.b.x-r.a.x)/len,dy=(r.b.y-r.a.y)/len;
   for(let n=(10-r.a.s%10)%10;n<len;n+=10){
@@ -59,6 +78,7 @@ export function drawLoopRail(c,r,m,art){
       for(let d=(40-r.a.s%40)%40;d<len;d+=40){const t=d/len,p={x:r.a.x+dx*d,y:r.a.y+dy*d},z=r.za+(r.zb-r.za)*t,a=point(p,n,z),b=point(p,n,z+20);c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();c.fillStyle='#bcb390';c.fillRect(Math.round(b.x)-1,Math.round(b.y)-1,2,2);}
     }
   }
+  c.restore();
 }
 export function trainCars(m,time){
   if(m.loop){
@@ -71,35 +91,49 @@ export function trainCars(m,time){
 }
 export function drawTrain(c,car,m,atlas,art){
   if(!m.loop){const id=car.front?'train_front':'train_car',rect=atlas.rect(id),width=180,height=width*rect[3]/rect[2],p=project(car.x,car.y,m.height+4);c.save();c.translate(p.x,p.y);atlas.draw(c,id,width*.015,height*.28,width);c.restore();return;}
-  if(car.underground)return;
-  const z=car.z+5,point=(u,v,h)=>project(car.x+car.dx*u-car.dy*v,car.y+car.dy*u+car.dx*v,z+h);
+  const ranges=trainVisibleRanges(m,car);if(!ranges.length)return;
+  const point=(u,v,h)=>({...project(car.x+car.dx*u-car.dy*v,car.y+car.dy*u+car.dx*v,trainHeight(m,car,u)+h),u,z:trainHeight(m,car,u)+h});
   c.save();
-  // Keep a descending car inside its open trench; the tunnel roof then hides it.
-  if(z<0){const a=project(car.x-car.dx*95-car.dy*36,car.y-car.dy*95+car.dx*36),b=project(car.x+car.dx*95-car.dy*36,car.y+car.dy*95+car.dx*36),d=project(car.x+car.dx*95+car.dy*36,car.y+car.dy*95-car.dx*36),e=project(car.x-car.dx*95+car.dy*36,car.y-car.dy*95-car.dx*36);c.beginPath();[a,b,d,e].forEach((p,i)=>i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));c.closePath();c.clip();}
+  // Clip each surface at the actual covered-track boundary, so a car enters progressively.
+  const paint=(ctx,vertices,fill,stroke=null,width=1,material=null)=>{
+    for(const [lo,hi]of ranges){let out=vertices;
+      for(const [edge,sign]of [[lo,1],[hi,-1]]){const input=out;out=[];
+        for(let i=0;i<input.length;i++){const a=input[i],b=input[(i+1)%input.length],ia=(a.u-edge)*sign>=0,ib=(b.u-edge)*sign>=0;
+          if(ia)out.push(a);if(ia!==ib){const t=(edge-a.u)/(b.u-a.u);out.push({x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t,z:a.z+(b.z-a.z)*t,u:edge});}}
+      }
+      // Below-ground body pixels are visible only inside the open excavation.
+      for(const sign of [1,-1]){const part=[];for(let i=0;i<out.length;i++){const a=out[i],b=out[(i+1)%out.length],ia=a.z*sign>=0,ib=b.z*sign>=0;if(ia)part.push(a);if(ia!==ib){const t=-a.z/(b.z-a.z);part.push({x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t,z:0});}}
+        if(part.length>=3){ctx.save();if(sign<0)clipTrench(ctx,m);polygon(ctx,part,fill,stroke,width);if(material&&art){polygon(ctx,part,null);ctx.clip();art.quad(ctx,material,vertices);}ctx.restore();}}
+    }
+  };
   const corners=[[-65,-23],[65,-23],[65,23],[-65,23]];
   const faces=corners.map((a,i)=>{const b=corners[(i+1)%4];return{a,b,depth:(car.dx+car.dy)*(a[0]+b[0])+(-car.dy+car.dx)*(a[1]+b[1])};}).sort((a,b)=>a.depth-b.depth);
   for(const {a,b} of faces){
     const quad=(t0,t1,h0,h1)=>{const p=t=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];const q=p(t0),r=p(t1);return[point(...q,h0),point(...r,h0),point(...r,h1),point(...q,h1)];};
-    polygon(c,quad(0,1,0,45),'#264c70','#14232e',2);art?.quad(c,'steel',quad(0,1,0,45));polygon(c,quad(0,1,0,45),'#244d789e');polygon(c,quad(0,1,8,12),'#d7b750');polygon(c,quad(0,1,38,44),'#b9c2bd');
+    paint(c,quad(0,1,0,45),'#264c70','#14232e',2);paint(c,quad(0,1,0,45),'#244d789e');paint(c,quad(0,1,8,12),'#d7b750');paint(c,quad(0,1,38,44),'#b9c2bd');
     const long=a[1]===b[1],count=long?5:2;
-    for(let i=0;i<count;i++){const t=(i+.14)/count;polygon(c,quad(t,t+.7/count,18,35),'#142c41','#78979e',1);polygon(c,quad(t+.05/count,t+.13/count,19,33),'#487990');}
-    if(long){polygon(c,quad(.43,.58,2,37),null,'#c0bcb2',1);polygon(c,quad(.50,.51,2,35),'#14232e');}
-    if(!long&&car.front)for(const t of [.10,.82])polygon(c,quad(t,t+.08,8,13),'#ffe3a1');
+    if(art){paint(c,[...quad(0,1,0,45)].reverse(),null,null,1,long?'side':car.front&&a[0]===65?'front':'rear');continue;}
+    for(let i=0;i<count;i++){const t=(i+.14)/count;paint(c,quad(t,t+.7/count,18,35),'#142c41','#78979e',1);paint(c,quad(t+.05/count,t+.13/count,19,33),'#487990');}
+    if(long){paint(c,quad(.43,.58,2,37),null,'#c0bcb2',1);paint(c,quad(.50,.51,2,35),'#14232e');}
+    if(!long&&car.front)for(const t of [.10,.82])paint(c,quad(t,t+.08,8,13),'#ffe3a1');
   }
-  const roof=corners.map(([u,v])=>point(u,v,45));polygon(c,roof,'#b7b9af','#2c3b43',2);art?.quad(c,'concrete',roof,.12);polygon(c,roof,'#b7b9afb8','#2c3b43',1);
-  for(const u of [-40,20])polygon(c,[point(u,-13,46),point(u+22,-13,46),point(u+22,13,46),point(u,13,46)],'#6d7e82','#3c4d55');
-  for(let u=-36;u<48;u+=6){const a=point(u,-8,47),b=point(u,8,47);c.strokeStyle='#89979a';c.lineWidth=1;c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();}c.restore();
+  const roof=corners.map(([u,v])=>point(u,v,45));paint(c,roof,'#b7b9af','#2c3b43',2);paint(c,roof,'#b7b9afb8','#2c3b43',1);
+  if(art){paint(c,roof,null,null,1,'roof');c.restore();return;}
+  for(const u of [-40,20])paint(c,[point(u,-13,46),point(u+22,-13,46),point(u+22,13,46),point(u,13,46)],'#6d7e82','#3c4d55');
+  for(let u=-36;u<48;u+=6){if(!ranges.some(([a,b])=>u>=a&&u+22<=b))continue;const a=point(u,-8,47),b=point(u,8,47);c.strokeStyle='#89979a';c.lineWidth=1;c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();}c.restore();
 }
 export function drawTunnelPortal(c,p,m,art){
+  // The outside is a sealed retaining wall. The train enters from the recessed track side.
   const x=p.x,y=p.y;
-  const roof=[project(x-54,y-30,18),project(x+54,y-30,18),project(x+54,y+30,18),project(x-54,y+30,18)];
-  const side=[roof[1],roof[2],project(x+54,y+30,-78),project(x+54,y-30,-78)];
-  polygon(c,side,'#555b54','#222f31',2);art?.quad(c,'concrete',side,.28);
-  polygon(c,roof,'#a9a58f','#293735',2);art?.quad(c,'concrete',roof);
-  const face=[project(x-54,y+30,18),project(x+54,y+30,18),project(x+54,y+30,-78),project(x-54,y+30,-78)];
-  polygon(c,face,'#151e21','#263336',2);art?.quad(c,'portal',face);
-  // Raised coping, maintenance lights and conduit sit on the textured arch.
-  for(const n of [-48,48]){const a=project(x+n,y+32,10),b=project(x+n,y+32,-16);c.strokeStyle='#252e2d';c.lineWidth=3;c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();c.fillStyle='#f6ca74';c.fillRect(Math.round(b.x)-2,Math.round(b.y),4,4);}
+  box(c,x-56,y-50,112,100,14,'#a8a38e','#686c62','#73776b',0);
+  const roof=[project(x-56,y-50,14),project(x+56,y-50,14),project(x+56,y+50,14),project(x-56,y+50,14)];
+  art?.quad(c,'concrete',roof);
+  for(const [a,b]of [[[x-56,y+50],[x+56,y+50]],[[x+56,y-50],[x+56,y+50]]]){
+    const face=[project(...a,14),project(...b,14),project(...b,0),project(...a,0)];art?.quad(c,'concrete',face,.25);
+  }
+  for(const xx of [-42,42])box(c,x+xx-3,y-38,6,76,22,'#aaa58d','#50574f','#73786c',14);
+  const vent=[project(x-20,y-24,15),project(x+20,y-24,15),project(x+20,y+24,15),project(x-20,y+24,15)];polygon(c,vent,'#333f3c','#878c79',2);
+  for(let yy=-20;yy<24;yy+=6){const a=project(x-17,y+yy,16),b=project(x+17,y+yy,16);c.strokeStyle='#7a8479';c.lineWidth=2;c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();}
 }
 export function drawLoopStation(c,p,m,art){
   const point=(u,v,z)=>project(p.x+p.dx*u-p.dy*v,p.y+p.dy*u+p.dx*v,z);
