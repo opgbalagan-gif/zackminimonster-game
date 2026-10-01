@@ -1,4 +1,5 @@
 import {expandDistrict} from './content__district_01__expansion.js';
+import {courtHoops} from './content__district_01__court-props.js';
 const building=(id,type,x,y,w,h)=>({id,type,x,y,w,h});
 const target=(n,type,x,y,name,art,rep,heat=1,axis='x')=>({
   wall_id:'D01_WALL_'+String(n).padStart(3,'0'),wall_type:type,x,y,name,graffiti_id:art,
@@ -70,6 +71,8 @@ export function createDistrict(){
     ],decorations:[]
   };
   expandDistrict(world);
+  world.hoops=courtHoops(world.court);
+  for(const h of world.hoops)world.obstacles.push({x:h.x-6,y:h.y-6,w:12,h:12,hoopBase:true});
   for(let x=90;x<world.width;x+=190)world.obstacles.push({x,y:668,w:16,h:22,pillar:true});
   for(const t of world.targets)if(!t.buildingId)world.obstacles.push({...(t.axis==='x'?{x:t.x-42,y:t.y,w:84,h:5}:{x:t.x,y:t.y-42,w:5,h:84}),wallCollider:true});
   const trees=[[62,298],[436,287],[781,281],[996,294],[1286,302],[62,740],[438,590],[788,594],[1290,725],[1480,745],[74,1160],[434,1158],[779,1150],[1284,1174],[1490,1158],[744,1348],[1285,1342],[85,890]];

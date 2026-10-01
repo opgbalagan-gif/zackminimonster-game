@@ -12,6 +12,8 @@ import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer
 import {drawTrafficCar,drawTrafficSignals} from './content__district_01__traffic-renderer.js';
 import {drawBall} from './core__ball-art.js';
 import {POSTERS,drawPoster} from './content__district_01__posters.js';
+import {drawHoop} from './content__district_01__court-props.js';
+import {wallPieces,fencePieces,coversHero} from './content__district_01__depth-pieces.js';
 
 const INK='#111722';
 export function marker(c,x,y,type,size=28,active=false){
@@ -33,18 +35,21 @@ function label(c,text,x,y,color='#eee8d8'){
 export function createRenderer(pack){
   const atlas=new SpriteAtlas(pack.atlas,pack.images),world=pack.world;
   const plate=createGroundPlate(pack.images.city_ground,world);
-  const entries=[],posterHits=[];
+  const entries=[],posterHits=[],wallTextures=new Map();
   for(const b of [...world.backdrop,...world.buildings])entries.push({kind:'building',item:b,depth:b.x+b.y+b.w+b.h});
   for(const p of world.props)entries.push({kind:'prop',item:p,depth:p.x+p.y});
-  for(const t of world.targets)if(!t.buildingId)entries.push({kind:'wall',item:t,depth:t.x+t.y+5});
-  for(const o of world.obstacles)if(!o.wallCollider&&!o.boundary)entries.push({kind:o.pillar?'pillar':'fence',item:o,depth:o.x+o.y+o.w+o.h});
+  for(const t of world.targets)if(!t.buildingId)entries.push(...wallPieces(t));
+  for(const o of world.obstacles)if(!o.wallCollider&&!o.boundary&&!o.hoopBase){
+    if(o.pillar)entries.push({kind:'pillar',item:o,depth:o.x+o.y+o.w+o.h});
+    else entries.push(...fencePieces(o));
+  }
+  for(const h of world.hoops)entries.push({kind:'hoop',item:h,depth:h.x+h.y+8});
   for(let x=world.metro.x;x<world.metro.end;x+=world.metro.segment)entries.push({kind:'rail',item:{x},depth:x+world.metro.segment+world.metro.y+world.metro.width});
   for(const o of perimeterPieces(world))entries.push({kind:'perimeter',item:o,depth:o.x+o.y+o.w+o.h});
   entries.push({kind:'station',item:{x:world.metro.station.x},depth:world.metro.station.x+world.metro.station.w+world.metro.y+120});
 
   function sprite(c,id,x,y,width,height=null,flip=false,alpha=1){atlas.draw(c,id,x,y,width,height,flip,alpha);}
-  function wall(c,t,session){
-    const p=project(t.x,t.y);c.save();c.translate(p.x,p.y);c.transform(1,t.axis==='y'?-.5:.5,0,1,0,0);
+  function paintWall(c,t,session){
     const wallHeight=t.graffiti_id==='panda_king'?94:56;
     c.fillStyle='#202730';c.fillRect(-43,-wallHeight,86,wallHeight+2);
     wallSurface(c,t.wall_type,-40,-wallHeight+3,80,wallHeight-3);
@@ -53,7 +58,15 @@ export function createRenderer(pack){
       drawGraffiti(c,t.graffiti_id,-39,-wallHeight+5,78,wallHeight-9,atlas,style?ink(style).color:null);
     }
     else{c.strokeStyle='#d7c9dc';c.setLineDash([4,4]);c.strokeRect(-30,-45,60,36);}
-    c.restore();
+  }
+  function wall(c,t,session,clip,alpha=1){
+    const style=session.runStyles[t.wall_id]??session.save.wall_styles[t.wall_id],key=t.wall_id+':'+session.painted.has(t.wall_id)+':'+style;
+    let texture=wallTextures.get(key);
+    if(!texture){texture=document.createElement('canvas');texture.width=86;texture.height=100;
+      const ctx=texture.getContext('2d');ctx.translate(43,98);paintWall(ctx,t,session);wallTextures.set(key,texture);}
+    const p=project(t.x,t.y);c.save();c.translate(p.x,p.y);c.transform(1,t.axis==='y'?-.5:.5,0,1,0,0);
+    c.globalAlpha*=alpha;c.beginPath();c.rect(clip.from,-100,clip.to-clip.from,104);c.clip();
+    c.drawImage(texture,-43,-98);c.restore();
   }
   function rail(c,x,session,map){
     const m=world.metro;const fade=!map&&Math.abs(session.player.x-x)<180&&Math.abs(session.player.y-m.y)<120;
@@ -148,18 +161,27 @@ export function createRenderer(pack){
       }else if(entry.kind==='perimeter')drawPerimeter(c,o);
       else if(entry.kind==='traffic')drawTrafficCar(c,o);
       else if(entry.kind==='prop')sprite(c,o.type,p.x,p.y,o.width);
-      else if(entry.kind==='wall')wall(c,o,session);
+      else if(entry.kind==='wall'){
+        const slope=o.axis==='y'?-.5:.5,height=o.graffiti_id==='panda_king'?94:56;
+        const points=[entry.clip.from,entry.clip.to].flatMap(u=>[{x:p.x+u,y:p.y+slope*u},{x:p.x+u,y:p.y+slope*u-height}]);
+        wall(c,o,session,entry.clip,!map&&coversHero(points,session.player,entry.depth)?.28:1);
+      }
+      else if(entry.kind==='hoop')drawHoop(c,o);
       else if(entry.kind==='pillar')box(c,o.x,o.y,o.w,o.h,104,'#a5a799','#727b7e','#8c9492');
       else if(entry.kind==='fence'){
+        c.save();
+        const points=[project(o.x,o.y,30),project(o.x+o.w,o.y,30),project(o.x,o.y+o.h),project(o.x+o.w,o.y+o.h)];
+        if(!map&&coversHero(points,session.player,entry.depth))c.globalAlpha*=.28;
         box(c,o.x,o.y,o.w,o.h,24,'#bbb09b','#596668','#758181');
         for(let n=0;n<Math.max(o.w,o.h);n+=14){const pp=project(o.x+(o.w>o.h?n:0),o.y+(o.h>o.w?n:0),30);c.strokeStyle='#28373c';c.lineWidth=2;c.beginPath();c.moveTo(pp.x,pp.y);c.lineTo(pp.x,pp.y+20);c.stroke();}
+        c.restore();
       }else if(entry.kind==='rail')rail(c,o.x,session,map);
       else if(entry.kind==='station')station(c,session,map);
       else if(entry.kind==='train')drawTrain(c,o,world.metro,atlas);
       else if(entry.kind==='courtNpc'){
         c.fillStyle='#11172355';c.beginPath();c.ellipse(p.x,p.y,16,6,0,0,Math.PI*2);c.fill();
         sprite(c,o.sprite,p.x,p.y-Math.sin(session.time*2+o.x)*.7,null,70);
-        if(session.save.basketball.completed&&o.sprite==='court_ti'){c.save();c.translate(p.x+5,p.y-33);drawBall(c,session.save.basketball,24,{atlas:this.atlas});c.restore();}
+        if(session.save.basketball.completed&&o.sprite==='court_ti'){c.save();c.translate(p.x+5,p.y-33);drawBall(c,session.save.basketball,24,{atlas});c.restore();}
       }
       else if(entry.kind==='npc'){
         c.fillStyle='#11172338';c.beginPath();c.ellipse(p.x,p.y,11,4,0,0,Math.PI*2);c.fill();
