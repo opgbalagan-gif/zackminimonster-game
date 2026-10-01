@@ -25,8 +25,8 @@ export function expandDistrict(world){
     wall.approach={x:wall.x+34,y:wall.y};
     wall.wall_type=building.type==='workshop'?'shutter':building.type==='warehouse'?'brick_wall':'concrete_wall';
   };
-  for(const [index,id,name] of [[0,1,'Фасад убежища / PANDA KING'],[2,4,'Торец RECORDS'],
-    [4,10,'Фасад в переулке'],[7,6,'Стена закусочной'],[8,3,'Торец жилого дома'],[9,8,'Склад / PANDA KING']]){
+  for(const [index,id,name] of [[0,1,'Фасад убежища / STREET FLOW'],[2,4,'Торец RECORDS'],
+    [4,10,'Фасад в переулке'],[7,6,'Стена закусочной'],[8,3,'Торец жилого дома'],[9,8,'Склад / STREET FLOW']]){
     attach(world.targets[index],world.buildings.find(building=>building.id==='D01_B'+String(id).padStart(2,'0')),name);
   }
   const places=[[15,'Красный склад'],[16,'Восточный DINER'],[17,'Прачечная на востоке'],[18,'Восточный жилой дом'],

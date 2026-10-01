@@ -17,7 +17,7 @@
         <div class="edition">DISTRICT 01 <b>EAST BLOCK</b></div>
         <p class="title-copy">Твой район. Твои стены.<br>Оставь свой след и вернись домой.</p>
         <button id="start-button" class="primary large">ВОЙТИ В РАЙОН <span>↗</span></button>
-        <p id="load-status" role="status">TECH DEMO · 08 / COURT STORY</p><progress id="load-progress" max="1" value="0" hidden></progress>
+        <p id="load-status" role="status">TECH DEMO · 09 / ARTIST SERIES</p><progress id="load-progress" max="1" value="0" hidden></progress>
       </div><div class="title-footer">TAG. EXPLORE. SURVIVE.<span>ZACKMINIMONSTER © 2026</span></div>
     </div>
     <header id="hud" hidden>
@@ -55,7 +55,7 @@
           <p class="save-note" id="save-note">Образ и снаряжение сохраняются сразу. Стены — после возвращения.</p>
         </div>
         <div data-home-pane="wardrobe" hidden><p class="pane-description">Один Зак. Три настроения улицы.</p><div id="outfit-list" class="outfit-list"></div><p class="pane-footnote">Образ виден дома, в районе и во время граффити.</p></div>
-        <div data-home-pane="sprays" hidden><p class="pane-description">Выбери акцент для следующей стены.</p><div id="ink-list" class="ink-list"></div><div class="spray-preview"><canvas id="home-tag-preview" width="260" height="135" aria-label="Предпросмотр выбранной краски"></canvas></div><button id="upgrade-button" class="upgrade-button"><span>SPRAY RACK <small>Радиус распыления +45%</small></span><b>500 REP</b></button><p class="pane-footnote">Баллоны в демо не заканчиваются. Выбранный цвет сохраняется на каждой новой стене.</p></div>
+        <div data-home-pane="sprays" hidden><p class="pane-description">Выбери акцент для следующей стены.</p><div id="ink-list" class="ink-list"></div><div class="spray-preview"><canvas id="home-tag-preview" width="260" height="135" aria-label="Предпросмотр выбранной краски"></canvas></div><button id="upgrade-button" class="upgrade-button"><span>SPRAY RACK <small>Радиус распыления +45%</small></span><b>500 REP</b></button><p class="pane-footnote">Баллоны в демо не заканчиваются. У каждого рисунка своя палитра. Цвет баллона добавляет брызги и акценты.</p></div>
         <div data-home-pane="collection" hidden><p class="pane-description">Каждый трофей — история твоего района.</p><div id="trophy-list" class="trophy-list"></div><p class="pane-footnote">Выбранный трофей появится на столике в комнате.</p></div>
       </aside>
       <nav class="home-dock" aria-label="Разделы убежища">
@@ -80,7 +80,7 @@
       <div class="map-sidebar panel"><span class="eyebrow">ВЫБЕРИ МАРШРУТ</span><h2>Куда дальше?</h2><label for="route-select">Точка назначения</label><select id="route-select"></select><button id="route-button" class="primary">ПРОЛОЖИТЬ МАРШРУТ ↗</button><p>Маршрут проходит по улицам и переулкам. Управление прерывает автодвижение.</p><div class="map-legend"><span><i class="gold"></i> Убежище</span><span><i class="purple"></i> Граффити</span><span><i class="blue"></i> Полиция</span><span><i class="white"></i> Укрытие</span></div><strong id="map-progress">0 / 10 СТЕН</strong></div>
     </section>
     <section id="graffiti-screen" class="screen graffiti-screen" hidden>
-      <div class="graffiti-card panel"><div class="graffiti-heading"><div><span id="wall-id" class="eyebrow"></span><h2 id="wall-name"></h2></div><button id="cancel-graffiti" class="secondary">НАЗАД <kbd>Esc</kbd></button></div>
+      <div class="graffiti-card panel"><div class="graffiti-heading"><div><span id="wall-id" class="eyebrow"></span><h2 id="wall-name"></h2><div class="graffiti-art-label"><span id="graffiti-art-name"></span><span id="graffiti-palette" aria-label="Палитра рисунка"><i></i><i></i><i></i></span></div></div><button id="cancel-graffiti" class="secondary">НАЗАД <kbd>Esc</kbd></button></div>
         <div class="phase-track"><span data-phase="shake">01 / SHAKE</span><span data-phase="stencil">02 / STENCIL</span><span data-phase="spray">03 / SPRAY</span><span data-phase="result">04 / DONE</span></div>
         <div class="graffiti-stage"><canvas id="graffiti-canvas" width="768" height="512" aria-label="Стена: встряхни баллон, размести трафарет и закрась рисунок"></canvas><span id="graffiti-wall-state" class="graffiti-state">CLEAN WALL</span><div id="graffiti-reward" class="graffiti-reward" role="status" hidden><strong id="graffiti-rep"></strong><span id="graffiti-heat"></span></div></div>
         <div class="graffiti-bottom"><div><strong id="phase-title"></strong><p id="phase-help"></p></div><strong id="coverage-label"></strong></div>

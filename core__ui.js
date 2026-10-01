@@ -2,6 +2,7 @@ import {GraffitiView} from './core__graffiti-view.js';
 import {HideoutUI} from './core__hideout-ui.js';
 import {CourtView} from './core__court-view.js';
 import {POSTERS,ARTIST_URL} from './content__district_01__posters.js';
+import {GRAFFITI_ART} from './content__district_01__graffiti-art.js';
 import {GRAFFITI_CONFIG} from './content__graffiti__config.js';
 import {URBAN_WALL} from './content__graffiti__walls__urban.js';
 const $=id=>document.getElementById(id);
@@ -101,6 +102,8 @@ export class GameUI{
     $('sound-button').textContent=s.save.settings.sound?'♪':'×';
     if(s.mode==='graffiti'){
       const g=s.graffiti;if(this.graffitiView.game!==g)this.graffitiView.bind(g);
+      const art=GRAFFITI_ART[g.definition.id];$('graffiti-art-name').textContent=art.name;
+      [...$('graffiti-palette').children].forEach((dot,i)=>{dot.style.background=art.palette[i];});
       $('graffiti-screen').dataset.phase=g.phase;
       $('graffiti-screen').classList.toggle('exiting',g.done&&g.resultTime>GRAFFITI_CONFIG.resultSeconds-.4);
       $('graffiti-wall-state').textContent=URBAN_WALL.states[g.phase==='shake'?'clean':g.phase];

@@ -19,3 +19,15 @@
 @media(max-height:530px) and (min-width:600px){.court-card{min-height:460px}.comic-cast{min-height:290px;padding-top:100px}.comic-cast canvas{max-height:210px}.speech-bubble{top:4px;width:58%;left:20%}.court-screen[data-speaker=right] .speech-bubble{left:24%}.speech-bubble p{font-size:16px}.ball-card{margin:auto}.ball-screen{align-items:flex-start}}
 .court-trophy{display:flex;align-items:center;gap:16px;border:1px solid #5fb6b1;background:#1e343b;padding:12px;margin-top:12px}.court-trophy canvas{width:90px;height:90px;image-rendering:auto}.court-trophy strong{font:700 13px monospace;color:#85dbce}.court-trophy p{font-size:11px;line-height:1.5;color:#b8cdce;margin-top:8px}
 .world-poster-link{position:absolute;z-index:1;cursor:pointer;background:transparent;border:1px solid transparent;min-width:24px;min-height:36px}.world-poster-link span{position:absolute;right:-6px;top:-6px;width:18px;height:18px;display:grid;place-items:center;border-radius:3px;background:#17212bd9;color:#fff0d0;border:1px solid #cedfd4;font:12px monospace}.world-poster-link:hover,.world-poster-link:focus-visible{outline:2px solid #ffe36b;outline-offset:2px;background:#fff0d015}
+/* Comic portraits live directly over the city, without a panel or backdrop. */
+.court-screen{background:transparent;backdrop-filter:none;padding:16px;overflow:hidden}
+.court-screen .court-card{width:min(100%,1080px);height:calc(100dvh - 32px);min-height:0;background:none;border:0;box-shadow:none;padding:0;overflow:visible}
+.court-screen .court-heading{padding:10px 8px 0}
+.court-screen .court-heading h2,.court-screen .court-heading .eyebrow{filter:drop-shadow(0 2px 2px #07111d);text-shadow:2px 2px 0 #07111d,-1px -1px 0 #07111d}
+.court-screen .comic-cast{background:none;min-height:0;padding-top:170px}
+.court-screen .comic-cast canvas{width:32%;max-height:min(43dvh,370px);filter:brightness(.78) drop-shadow(0 7px 3px #0008)}
+.court-screen[data-speaker=left] #court-left,.court-screen[data-speaker=right] #court-right{filter:drop-shadow(0 7px 3px #0008)}
+.court-screen .court-footer{border:0;padding:14px 8px 5px}.court-screen .court-footer span{text-shadow:1px 2px 2px #000;color:#fff0d0}
+#app[data-mode="court-dialogue"] #hud{visibility:hidden}
+@media(max-width:600px){.court-screen{padding:12px}.court-screen .court-card{height:calc(100dvh - 24px);min-height:0}.court-screen .court-heading{padding:8px 0}.court-screen .comic-cast{padding-top:170px;min-height:0}.court-screen .comic-cast canvas{width:48%;max-height:36dvh}.court-screen .speech-bubble{top:18px}.court-screen .court-footer{padding:15px 0 max(10px,env(safe-area-inset-bottom))}}
+@media(max-height:530px) and (min-width:600px){.court-screen .court-card{min-height:0}.court-screen .comic-cast{min-height:0;padding-top:100px}.court-screen .comic-cast canvas{max-height:50dvh}.court-screen .speech-bubble{top:0;left:25%;width:50%}.court-screen[data-speaker=right] .speech-bubble{left:25%}}

@@ -171,29 +171,68 @@
       "usage": "lazy district pack"
     },
     {
-      "asset_id": "D01_PANDA-KING",
-      "path": "./content__graffiti__assets__panda-king.png",
+      "asset_id": "D01_ARTIST-CAN",
+      "path": "./content__graffiti__assets__artist-can.png",
       "category": "sprite_atlas",
       "district": "district_01",
       "dimensions": [
-        1225,
-        1284
+        1024,
+        1536
       ],
-      "file_size": 1085067,
-      "sha256": "c660c1e3d66db5ed6ce2d5801a695a4a5255e2fd571172a019fd1474162ae50f",
+      "file_size": 1029136,
+      "sha256": "841da98d3bb908b7ed4636650ac2826a7d8f60a89cebf0bde39ee176e544e8ca",
       "usage": "lazy district pack"
     },
     {
-      "asset_id": "D01_SPRAY-CAN-ATLAS",
-      "path": "./content__graffiti__assets__spray-can-atlas.png",
+      "asset_id": "D01_COLOR-CREW",
+      "path": "./content__graffiti__assets__color-crew.png",
       "category": "sprite_atlas",
       "district": "district_01",
       "dimensions": [
         1536,
         1024
       ],
-      "file_size": 1906956,
-      "sha256": "626ad23fd48f93ddc5d7bb622a1f26d0c15c00702b3ccd44d38033541799302b",
+      "file_size": 1570634,
+      "sha256": "3ade8ecdda242f4725d85d15b48d52cade6419600a72ad9b4471eb121d2d4135",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_PAPER-GHOST",
+      "path": "./content__graffiti__assets__paper-ghost.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "file_size": 1487581,
+      "sha256": "30972f23079fcb614ab0600a5b3d7f0487e17dd7eef0b3346517e719b4fcb9a2",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_STREET-FLOW",
+      "path": "./content__graffiti__assets__street-flow.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "file_size": 1643864,
+      "sha256": "5054b52d70418e1714689850070ff3b1b484c929d5efb2a153da744fbbdf0288",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_SUNSET-BLOCK",
+      "path": "./content__graffiti__assets__sunset-block.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "file_size": 1559279,
+      "sha256": "868ad3887291676e404966d31e15f4441fcb0f8ffb700f1fead21389ac97b78c",
       "usage": "lazy district pack"
     },
     {

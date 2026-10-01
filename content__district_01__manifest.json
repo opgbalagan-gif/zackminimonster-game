@@ -1,6 +1,6 @@
 {
   "id": "district_01",
-  "version": 8,
+  "version": 9,
   "scene": "./content__district_01__district.js",
   "renderer": "./content__district_01__renderer.js",
   "dependencies": [
@@ -17,9 +17,7 @@
     "./content__district_01__art__props.png",
     "./content__district_01__art__outfits.png",
     "./content__district_01__art__hideout-room.png",
-    "./content__graffiti__assets__spray-can-atlas.png",
     "./content__graffiti__assets__urban-wall.png",
-    "./content__graffiti__assets__panda-king.png",
     "./content__district_01__art__citizens.png",
     "./content__district_01__art__city-ground.png",
     "./content__district_01__art__expanded-buildings.png",
@@ -27,7 +25,12 @@
     "./content__district_01__art__poster-reebok.png",
     "./content__district_01__art__poster-wilson.png",
     "./content__district_01__art__poster-posca.png",
-    "./content__district_01__art__poster-converse.png"
+    "./content__district_01__art__poster-converse.png",
+    "./content__graffiti__assets__street-flow.png",
+    "./content__graffiti__assets__color-crew.png",
+    "./content__graffiti__assets__paper-ghost.png",
+    "./content__graffiti__assets__sunset-block.png",
+    "./content__graffiti__assets__artist-can.png"
   ],
   "audio": [],
   "graffiti": [
@@ -37,5 +40,5 @@
     "panda_king"
   ],
   "cutscenes": [],
-  "estimated_download_size": 35613641
+  "estimated_download_size": 39912112
 }

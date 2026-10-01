@@ -54,7 +54,8 @@ export class GraffitiView{
       c.fillStyle='#101821d9';c.fillRect(0,0,768,512);
       c.strokeStyle='#d4b86033';c.lineWidth=2;c.beginPath();c.arc(384,251,170,0,Math.PI*2);c.stroke();
       const active=this.activePointer!==null||this.time<this.motionUntil,frame=Math.floor(this.time*(active?12:3))%4;
-      atlas.draw(c,active?CONFIG.shakeFrames[frame]:'can_front',384+g.canOffset*.65,413,null,322);
+      c.save();c.translate(384+g.canOffset*.65,413);c.rotate(active?Math.sin(this.time*27)*.16:Math.sin(this.time*2)*.025);
+      atlas.draw(c,active?CONFIG.shakeFrames[frame]:'can_front',0,0,null,322);c.restore();
       atlas.draw(c,'can_side',146,361,null,126,false,.68);atlas.draw(c,'can_threequarter',622,361,null,126,false,.68);
       c.fillStyle='#ead293';c.font='bold 35px monospace';c.textAlign='center';c.fillText('‹',220,265);c.fillText('›',548,265);
       c.fillStyle='#b7b3ad';c.font='12px monospace';c.fillText('ZACK ORIGINAL / 400 ML',384,466);
@@ -79,6 +80,8 @@ export class GraffitiView{
           if(this.cursor){
             const frame=Math.floor(this.time*14)%3;
             c.strokeStyle='#f3e9ca77';c.lineWidth=2;c.beginPath();c.arc(this.cursor.x,this.cursor.y,g.sprayRack?33:23,0,Math.PI*2);c.stroke();
+            c.fillStyle=ink(g.ink).color;
+            for(let i=0;i<10;i++){const angle=i*2.4+this.time*4,radius=7+(i*7+frame*3)%25;c.globalAlpha=.3;c.fillRect(this.cursor.x+Math.cos(angle)*radius,this.cursor.y+Math.sin(angle)*radius,3,3);}c.globalAlpha=1;
             atlas.draw(c,CONFIG.sprayFrames[frame],this.cursor.x-42,this.cursor.y+104,null,142);
           }else atlas.draw(c,'can_threequarter',702,465,null,122);
         }

@@ -35,7 +35,7 @@ export function createDistrict(){
       {x:995,y:947,w:8,h:180},{x:1255,y:947,w:8,h:180},{x:1004,y:940,w:252,h:8}
     ],
     targets:[
-      target(1,'brick_wall',235,1144,'Первая стена / PANDA KING','panda_king',250),
+      target(1,'brick_wall',235,1144,'Первая стена / STREET FLOW','panda_king',250),
       target(2,'metro_pillar',366,692,'Западная опора','monster',280,1,'y'),
       target(3,'shutter',615,620,'Роллета ZACK STORE','crown',280),
       target(4,'construction_wall',1168,300,'Стройка','monster',450,2),
@@ -44,7 +44,7 @@ export function createDistrict(){
       target(7,'concrete_wall',730,900,'Парковка','crown',300),
       target(8,'station_wall',756,724,'Под станцией','zack_tag',420,2),
       target(9,'fence',704,282,'Северный двор','crown',360),
-      target(10,'brick_wall',1010,616,'Стена у спортзала / PANDA KING','panda_king',380,2,'y')
+      target(10,'brick_wall',1010,616,'Стена у спортзала / STREET FLOW','panda_king',380,2,'y')
     ],
     safeSpots:[
       {id:'D01_SAFE_001',x:258,y:939,name:'Гаражный проход',cooldown:0},

@@ -1,9 +1,9 @@
 [
   {
     "id": "panda_king",
-    "name": "PANDA KING / ZACK",
-    "texture": "atlas:graffiti_panda",
-    "stencil_texture": "alpha:graffiti_panda",
+    "name": "STREET FLOW",
+    "texture": "atlas:mural_street_flow",
+    "stencil_texture": "alpha:mural_street_flow",
     "wall_asset": "urban_blocks",
     "rarity": "signature",
     "size": "L",
@@ -11,45 +11,65 @@
     "spray_time": 5,
     "rep_reward": 250,
     "heat": 1,
-    "unlock_condition": "default"
+    "unlock_condition": "default",
+    "palette": [
+      "#31c9cd",
+      "#f9df48",
+      "#182e46"
+    ]
   },
   {
     "id": "zack_tag",
-    "name": "ZACK / ORIGINAL",
-    "texture": "procedural:zack-tag",
-    "stencil_texture": "alpha:zack-tag",
+    "name": "COLOR CREW",
+    "texture": "atlas:mural_color_crew",
+    "stencil_texture": "alpha:mural_color_crew",
     "rarity": "common",
     "size": "M",
     "required_progress": 0.88,
     "spray_time": 4,
     "rep_reward": 250,
     "heat": 1,
-    "unlock_condition": "default"
+    "unlock_condition": "default",
+    "palette": [
+      "#ef69ac",
+      "#70dab9",
+      "#386bd8"
+    ]
   },
   {
     "id": "monster",
-    "name": "MINI MONSTER",
-    "texture": "atlas:companion",
-    "stencil_texture": "alpha:monster",
+    "name": "PAPER GHOST",
+    "texture": "atlas:mural_paper_ghost",
+    "stencil_texture": "alpha:mural_paper_ghost",
     "rarity": "rare",
     "size": "L",
     "required_progress": 0.88,
     "spray_time": 5,
     "rep_reward": 400,
     "heat": 2,
-    "unlock_condition": "default"
+    "unlock_condition": "default",
+    "palette": [
+      "#f3e7c8",
+      "#e04d3e",
+      "#9acbdf"
+    ]
   },
   {
     "id": "crown",
-    "name": "EAST BLOCK CROWN",
-    "texture": "procedural:crown",
-    "stencil_texture": "alpha:crown",
+    "name": "SUNSET BLOCK",
+    "texture": "atlas:mural_sunset_block",
+    "stencil_texture": "alpha:mural_sunset_block",
     "rarity": "common",
     "size": "M",
     "required_progress": 0.88,
     "spray_time": 4,
     "rep_reward": 300,
     "heat": 1,
-    "unlock_condition": "default"
+    "unlock_condition": "default",
+    "palette": [
+      "#f29943",
+      "#69c4e7",
+      "#b99ae2"
+    ]
   }
 ]

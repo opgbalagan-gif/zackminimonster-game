@@ -469,120 +469,120 @@
       ]
     },
     "graffiti_panda": {
-      "sheet": "graffiti_decal",
+      "sheet": "mural_street_flow",
       "rect": [
-        0,
-        0,
-        1225,
-        1284
+        25,
+        7,
+        1481,
+        1011
       ]
     },
     "can_front": {
-      "sheet": "graffiti_can",
+      "sheet": "artist_can",
       "rect": [
-        132,
-        8,
-        190,
-        348
+        237,
+        69,
+        533,
+        1389
       ]
     },
     "can_side": {
-      "sheet": "graffiti_can",
+      "sheet": "artist_can",
       "rect": [
-        480,
-        8,
-        178,
-        350
+        237,
+        69,
+        533,
+        1389
       ]
     },
     "can_threequarter": {
-      "sheet": "graffiti_can",
+      "sheet": "artist_can",
       "rect": [
-        840,
-        8,
-        195,
-        350
+        237,
+        69,
+        533,
+        1389
       ]
     },
     "can_puff": {
-      "sheet": "graffiti_can",
+      "sheet": "artist_can",
       "rect": [
-        1165,
-        90,
-        350,
-        235
+        237,
+        69,
+        533,
+        1389
       ]
     },
     "can_shake_0": {
-      "sheet": "graffiti_can",
+      "sheet": "artist_can",
       "rect": [
-        70,
-        365,
-        270,
-        338
+        237,
+        69,
+        533,
+        1389
       ]
     },
     "can_shake_1": {
-      "sheet": "graffiti_can",
+      "sheet": "artist_can",
       "rect": [
-        450,
-        365,
-        270,
-        338
+        237,
+        69,
+        533,
+        1389
       ]
     },
     "can_shake_2": {
-      "sheet": "graffiti_can",
+      "sheet": "artist_can",
       "rect": [
-        827,
-        365,
-        270,
-        338
+        237,
+        69,
+        533,
+        1389
       ]
     },
     "can_shake_3": {
-      "sheet": "graffiti_can",
+      "sheet": "artist_can",
       "rect": [
-        1215,
-        365,
-        270,
-        338
+        237,
+        69,
+        533,
+        1389
       ]
     },
     "can_spray_0": {
-      "sheet": "graffiti_can",
+      "sheet": "artist_can",
       "rect": [
-        48,
-        704,
-        300,
-        320
+        237,
+        69,
+        533,
+        1389
       ]
     },
     "can_spray_1": {
-      "sheet": "graffiti_can",
+      "sheet": "artist_can",
       "rect": [
-        425,
-        704,
-        335,
-        320
+        237,
+        69,
+        533,
+        1389
       ]
     },
     "can_spray_2": {
-      "sheet": "graffiti_can",
+      "sheet": "artist_can",
       "rect": [
-        785,
-        696,
-        364,
-        328
+        237,
+        69,
+        533,
+        1389
       ]
     },
     "can_success": {
-      "sheet": "graffiti_can",
+      "sheet": "artist_can",
       "rect": [
-        1200,
-        718,
-        300,
-        303
+        237,
+        69,
+        533,
+        1389
       ]
     },
     "citizen_2_0": {
@@ -929,6 +929,42 @@
         1024,
         1536
       ]
+    },
+    "mural_street_flow": {
+      "sheet": "mural_street_flow",
+      "rect": [
+        25,
+        7,
+        1481,
+        1011
+      ]
+    },
+    "mural_color_crew": {
+      "sheet": "mural_color_crew",
+      "rect": [
+        9,
+        17,
+        1523,
+        991
+      ]
+    },
+    "mural_paper_ghost": {
+      "sheet": "mural_paper_ghost",
+      "rect": [
+        35,
+        23,
+        1465,
+        957
+      ]
+    },
+    "mural_sunset_block": {
+      "sheet": "mural_sunset_block",
+      "rect": [
+        31,
+        19,
+        1471,
+        981
+      ]
     }
   },
   "version": 1,
@@ -954,16 +990,8 @@
       "file": "./content__district_01__art__hideout-room.png"
     },
     {
-      "id": "graffiti_can",
-      "file": "./content__graffiti__assets__spray-can-atlas.png"
-    },
-    {
       "id": "graffiti_wall",
       "file": "./content__graffiti__assets__urban-wall.png"
-    },
-    {
-      "id": "graffiti_decal",
-      "file": "./content__graffiti__assets__panda-king.png"
     },
     {
       "id": "citizens",
@@ -996,6 +1024,26 @@
     {
       "id": "poster_converse",
       "file": "./content__district_01__art__poster-converse.png"
+    },
+    {
+      "id": "mural_street_flow",
+      "file": "./content__graffiti__assets__street-flow.png"
+    },
+    {
+      "id": "mural_color_crew",
+      "file": "./content__graffiti__assets__color-crew.png"
+    },
+    {
+      "id": "mural_paper_ghost",
+      "file": "./content__graffiti__assets__paper-ghost.png"
+    },
+    {
+      "id": "mural_sunset_block",
+      "file": "./content__graffiti__assets__sunset-block.png"
+    },
+    {
+      "id": "artist_can",
+      "file": "./content__graffiti__assets__artist-can.png"
     }
   ]
 }
