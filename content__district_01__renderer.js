@@ -16,7 +16,7 @@ import {drawHoop} from './content__district_01__court-props.js';
 import {wallPieces,fencePieces,coversHero} from './content__district_01__depth-pieces.js';
 import {drawWater,drawShore,drawBridges} from './content__district_01__waterfront.js';
 import {drawCoastalGround,drawMountains,drawBeachUmbrella,createCoastalTextures} from './content__district_01__coastal-renderer.js';
-import {revealRegions} from './content__district_01__occlusion.js';
+import {revealRegions,withinRevealRange} from './content__district_01__occlusion.js';
 
 const INK='#111722';
 export function marker(c,x,y,type,size=28,active=false){
@@ -156,7 +156,7 @@ export function createRenderer(pack){
     queue.sort((a,b)=>a.depth-b.depth);
     const minX=cam.x-width/2/cam.zoom-340,maxX=cam.x+width/2/cam.zoom+340,minY=cam.y-height/2/cam.zoom-50,maxY=cam.y+height/2/cam.zoom+500;
     const playerP=project(session.player.x,session.player.y);
-    const visiblePeople=queue.filter(e=>['hero','npc','courtNpc','gang','companion','officer'].includes(e.kind)).map(e=>{
+    const visiblePeople=queue.filter(e=>['hero','npc','courtNpc','gang','companion','officer'].includes(e.kind)&&withinRevealRange(e.item,session.player)).map(e=>{
       const o=e.item,p=project(o.x,o.y),height={hero:66,npc:55,courtNpc:70,gang:65,companion:38,officer:60}[e.kind];
       const id=e.kind==='hero'?heroSprite(session.save.player.skin,o.state,o.facing,false):e.kind==='npc'?'citizen_'+o.look+'_'+(o.back?2:0):e.kind==='companion'?'companion':e.kind==='officer'?'officer':o.sprite;
       const rect=atlas.rect(id),width=rect?height*rect[2]/rect[3]:height;

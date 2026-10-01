@@ -1,6 +1,6 @@
 {
   "id": "district_01",
-  "version": 18,
+  "version": 19,
   "scene": "./content__district_01__city.js",
   "renderer": "./content__district_01__renderer.js",
   "dependencies": [

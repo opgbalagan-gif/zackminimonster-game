@@ -1,3 +1,8 @@
+// Only Zack's immediate surroundings reveal people through a facade.
+export function withinRevealRange(person,player){
+  return Math.hypot(person.x-player.x,person.y-player.y)<=180;
+}
+
 // Disjoint rectangles describing a union. Overlapping even-odd holes cancel each
 // other out, so a crowd must be merged before using it to cut a building mask.
 export function revealRegions(bounds,people){
