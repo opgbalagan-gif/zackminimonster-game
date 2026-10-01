@@ -1,6 +1,6 @@
 {
   "id": "district_01",
-  "version": 21,
+  "version": 22,
   "scene": "./content__district_01__city.js",
   "renderer": "./content__district_01__renderer.js",
   "dependencies": [
@@ -33,7 +33,9 @@
     "./content__graffiti__assets__artist-can.png",
     "./content__district_01__art__metropolis-landmarks.png",
     "./content__district_01__art__coastal-nature.png",
-    "./content__district_01__art__beach-sand.png"
+    "./content__district_01__art__beach-sand.png",
+    "./content__district_01__art__metro-materials.png",
+    "./content__district_01__art__customs-isometric.png"
   ],
   "audio": [],
   "graffiti": [
@@ -43,5 +45,5 @@
     "panda_king"
   ],
   "cutscenes": [],
-  "estimated_download_size": 39912112
+  "estimated_download_size": 53027656
 }

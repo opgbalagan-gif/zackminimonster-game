@@ -17,6 +17,7 @@ import {wallPieces,fencePieces,coversHero} from './content__district_01__depth-p
 import {drawWater,drawShore,drawBridges,drawSandyCoast} from './content__district_01__waterfront.js';
 import {drawCoastalGround,drawMountains,drawBeachUmbrella,createCoastalTextures} from './content__district_01__coastal-renderer.js';
 import {buildingOccludesZack} from './content__district_01__occlusion.js';
+import {createMetroArt} from './content__district_01__metro-art.js';
 
 const INK='#111722';
 export function marker(c,x,y,type,size=28,active=false){
@@ -39,6 +40,7 @@ export function createRenderer(pack){
   const atlas=new SpriteAtlas(pack.atlas,pack.images),world=pack.world;
   const plate=createGroundPlate(pack.images.city_ground,world);
   const coastTextures=createCoastalTextures(plate,pack.images.beach_sand);
+  const metroArt=createMetroArt(pack.images.metro_materials);
   const entries=[],posterHits=[],wallTextures=new Map();
   const buildingMasks=new Map();
   function opaqueBuildingPixel(id,u,v){
@@ -178,7 +180,8 @@ export function createRenderer(pack){
       if(p.x<minX||p.x>maxX||p.y<minY||p.y>maxY+extraHeight)continue;
       if(entry.kind==='building'){
         const foot=project(o.x+o.w,o.y+o.h),buildingWidth=o.w+o.h+22,rect=atlas.rect(o.type),buildingHeight=buildingWidth*rect[3]/rect[2]*(o.heightScale??1);
-        const bounds={x:Math.round(foot.x)+Math.round(-buildingWidth/2),y:Math.round(foot.y)+Math.round(-buildingHeight),w:Math.ceil(buildingWidth),h:Math.ceil(buildingHeight)};
+        const anchor=pack.atlas.sprites[o.type].groundAnchor??[.5,1];
+        const bounds={x:Math.round(foot.x)+Math.round(-buildingWidth*anchor[0]),y:Math.round(foot.y)+Math.round(-buildingHeight*anchor[1]),w:Math.ceil(buildingWidth),h:Math.ceil(buildingHeight)};
         const fade=!map&&buildingOccludesZack(bounds,entry.depth,zackBounds,(u,v)=>opaqueBuildingPixel(o.type,u,v));
         const target=world.targets.find(t=>t.buildingId===o.id);
         const poster=POSTERS.find(p=>p.buildingId===o.id);
@@ -207,6 +210,9 @@ export function createRenderer(pack){
       else if(entry.kind==='hoop')drawHoop(c,o);
       else if(entry.kind==='pillar'){
         const z=o.height??104;box(c,o.x,o.y,o.w,o.h,z,'#a5a799','#727b7e','#8c9492');
+        metroArt.quad(c,'concrete',[project(o.x,o.y+o.h,z),project(o.x+o.w,o.y+o.h,z),project(o.x+o.w,o.y+o.h),project(o.x,o.y+o.h)],.22);
+        metroArt.quad(c,'concrete',[project(o.x+o.w,o.y,z),project(o.x+o.w,o.y+o.h,z),project(o.x+o.w,o.y+o.h),project(o.x+o.w,o.y)],.10);
+        box(c,o.x-3,o.y-3,o.w+6,o.h+6,5,'#a4a38e','#535d58','#778078');
         if(o.beamTo){const a={x:o.x+o.w/2,y:o.y+o.h/2},b=o.beamTo;
           polygon(c,[project(a.x-5,a.y-5,z),project(b.x-5,b.y-5,z),project(b.x+5,b.y+5,z),project(a.x+5,a.y+5,z)],'#919d98','#36464d',2);
           polygon(c,[project(a.x+5,a.y+5,z),project(b.x+5,b.y+5,z),project(b.x+5,b.y+5,z-9),project(a.x+5,a.y+5,z-9)],'#64767a');
@@ -220,13 +226,13 @@ export function createRenderer(pack){
         for(let n=0;n<Math.max(o.w,o.h);n+=14){const pp=project(o.x+(o.w>o.h?n:0),o.y+(o.h>o.w?n:0),30);c.strokeStyle='#28373c';c.lineWidth=2;c.beginPath();c.moveTo(pp.x,pp.y);c.lineTo(pp.x,pp.y+20);c.stroke();}
         c.restore();
       }else if(entry.kind==='loopRail'){
-        c.save();if(!map&&distance(session.player,{x:o.x+o.w/2,y:o.y+o.h/2})<140)c.globalAlpha=.4;drawLoopRail(c,o,world.metro);c.restore();
+        c.save();if(!map&&distance(session.player,{x:o.x+o.w/2,y:o.y+o.h/2})<140)c.globalAlpha=.4;drawLoopRail(c,o,world.metro,metroArt);c.restore();
       }
       else if(entry.kind==='rail')rail(c,o.x,session,map);
       else if(entry.kind==='station')station(c,session,map);
-      else if(entry.kind==='train')drawTrain(c,o,world.metro,atlas);
-      else if(entry.kind==='portal')drawTunnelPortal(c,o,world.metro);
-      else if(entry.kind==='loopStation')drawLoopStation(c,o,world.metro);
+      else if(entry.kind==='train')drawTrain(c,o,world.metro,atlas,metroArt);
+      else if(entry.kind==='portal')drawTunnelPortal(c,o,world.metro,metroArt);
+      else if(entry.kind==='loopStation')drawLoopStation(c,o,world.metro,metroArt);
       else if(entry.kind==='courtNpc'){
         c.fillStyle='#11172355';c.beginPath();c.ellipse(p.x,p.y,16,6,0,0,Math.PI*2);c.fill();
         sprite(c,o.sprite,p.x,p.y-Math.sin(session.time*2+o.x)*.7,null,70);

@@ -93,6 +93,19 @@
       "usage": "lazy district pack"
     },
     {
+      "asset_id": "D01_CUSTOMS-ISOMETRIC",
+      "path": "./content__district_01__art__customs-isometric.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "file_size": 1943755,
+      "sha256": "3dc3ecb3801395fd3e8f691ab2e6cc2a3b8d42fe85e39ccde9b16e5709d5f020",
+      "usage": "lazy district pack"
+    },
+    {
       "asset_id": "D01_EXPANDED-BUILDINGS",
       "path": "./content__district_01__art__expanded-buildings.png",
       "category": "sprite_atlas",
@@ -116,6 +129,19 @@
       ],
       "file_size": 3262711,
       "sha256": "0e4f6d326b483374ac070fa83c7445e1c6abf07a65b4465f431fb2b668489ada",
+      "usage": "lazy district pack"
+    },
+    {
+      "asset_id": "D01_METRO-MATERIALS",
+      "path": "./content__district_01__art__metro-materials.png",
+      "category": "sprite_atlas",
+      "district": "district_01",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "file_size": 3061339,
+      "sha256": "bb15f96556f1b4dfffc14678b0c8f971ae0050ba672182f54f587e66bd00c1d4",
       "usage": "lazy district pack"
     },
     {

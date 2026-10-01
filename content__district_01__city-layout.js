@@ -14,6 +14,7 @@ export function planCityLots(w){
     return [[b.x,b.y],[b.x+b.w,b.y],[b.x,b.y+b.h],[b.x+b.w,b.y+b.h]].every(([x,y])=>onLand(w,x,y,18))&&!forbidden.some(o=>overlaps(b,o,8))&&!placed.some(o=>overlaps(b,o,16))&&!protectedPoints.some(p=>overlaps(b,{...p,w:1,h:1},24))&&(!wallBuildings.has(b.id)||onLand(w,approach.x,approach.y,12)&&![...placed,...w.obstacles].some(o=>overlaps(approach,o,14)));
   };
   for(const b of w.buildings){
+    if(b.type==='customs'){b.w=240;b.h=120;if(b.id==='LANDMARK_CUSTOMS'){b.x=2600;b.y=100;}}
     if(b.type.startsWith('skyline_')){b.w=b.id.startsWith('LANDMARK_')?300:220;b.h=b.id.startsWith('LANDMARK_')?220:170;b.heightScale=1;}
     pending.push(b);
   }
@@ -29,6 +30,8 @@ export function planCityLots(w){
     for(const t of w.targets.filter(t=>t.buildingId===b.id)){t.x=b.x+b.w;t.y=b.y+b.h*.58;t.approach={x:t.x+34,y:t.y};protectedPoints.push(t.approach);}
   }
   w.layoutRules={buildingsAvoid:['roads','courts','metro','other buildings'],towerAspectRatio:'original',pillarsAvoid:['roads','courts','buildings']};
+  const customs=w.buildings.find(b=>b.id==='LANDMARK_CUSTOMS'),parking=w.parkingLots.find(p=>p.id==='customs_parking');
+  if(customs&&parking){parking.x=customs.x;parking.y=customs.y+customs.h+24;parking.w=240;parking.h=50;}
   // Street furniture from old building positions must not remain in the newly cleared courts.
   for(const prop of w.props){
     if(['van','taxi','blue_car'].includes(prop.type))continue;

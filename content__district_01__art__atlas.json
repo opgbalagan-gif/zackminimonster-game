@@ -994,12 +994,16 @@
       ]
     },
     "customs": {
-      "sheet": "metropolis",
+      "sheet": "customs_iso",
       "rect": [
-        854,
-        664,
-        658,
-        338
+        68,
+        70,
+        1176,
+        1130
+      ],
+      "groundAnchor": [
+        0.67,
+        0.997
       ]
     },
     "mountain_ridge": {
@@ -1110,6 +1114,14 @@
     {
       "id": "beach_sand",
       "file": "./content__district_01__art__beach-sand.png"
+    },
+    {
+      "id": "metro_materials",
+      "file": "./content__district_01__art__metro-materials.png"
+    },
+    {
+      "id": "customs_iso",
+      "file": "./content__district_01__art__customs-isometric.png"
     }
   ]
 }
