@@ -1001,6 +1001,24 @@
         658,
         338
       ]
+    },
+    "mountain_ridge": {
+      "sheet": "coastal_nature",
+      "rect": [
+        8,
+        8,
+        1210,
+        650
+      ]
+    },
+    "skate_park": {
+      "sheet": "coastal_nature",
+      "rect": [
+        8,
+        662,
+        1210,
+        610
+      ]
     }
   },
   "version": 1,
@@ -1084,6 +1102,10 @@
     {
       "id": "metropolis",
       "file": "./content__district_01__art__metropolis-landmarks.png"
+    },
+    {
+      "id": "coastal_nature",
+      "file": "./content__district_01__art__coastal-nature.png"
     }
   ]
 }

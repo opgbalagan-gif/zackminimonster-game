@@ -15,6 +15,7 @@ import {POSTERS,drawPoster} from './content__district_01__posters.js';
 import {drawHoop} from './content__district_01__court-props.js';
 import {wallPieces,fencePieces,coversHero} from './content__district_01__depth-pieces.js';
 import {drawWater,drawShore,drawBridges} from './content__district_01__waterfront.js';
+import {drawCoastalGround,drawMountains,drawBeachUmbrella} from './content__district_01__coastal-renderer.js';
 
 const INK='#111722';
 export function marker(c,x,y,type,size=28,active=false){
@@ -39,6 +40,7 @@ export function createRenderer(pack){
   const entries=[],posterHits=[],wallTextures=new Map();
   for(const b of [...world.backdrop,...world.buildings])entries.push({kind:'building',item:b,depth:b.x+b.y+b.w+b.h});
   for(const p of world.props)entries.push({kind:'prop',item:p,depth:p.x+p.y});
+  for(const p of world.beachProps??[])entries.push({kind:'umbrella',item:p,depth:p.x+p.y});
   for(const t of world.targets)if(!t.buildingId)entries.push(...wallPieces(t));
   for(const o of world.obstacles)if(!o.wallCollider&&!o.boundary&&!o.hoopBase){
     if(o.pillar)entries.push({kind:'pillar',item:o,depth:o.x+o.y+o.w+o.h});
@@ -123,11 +125,13 @@ export function createRenderer(pack){
     c.imageSmoothingEnabled=false;atlas.drawCalls=0;c.clearRect(0,0,width,height);
     if(!map)posterHits.length=0;
     c.fillStyle='#1b2531';c.fillRect(0,0,width,height);
-    const region=map&&world.regions?.find(r=>r.id===session.mapRegion),bounds=region??{x:0,y:0,w:world.width,h:world.height};
+    const region=map&&world.regions?.find(r=>r.id===session.mapRegion),bounds=region??world.mapBounds??{x:0,y:0,w:world.width,h:world.height};
     const cam=map?{x:bounds.x-bounds.y+(bounds.w-bounds.h)/2,y:(bounds.x+bounds.y)/2+(bounds.w+bounds.h)/4-70,zoom:Math.max(.001,Math.min((width-40)/(bounds.w+bounds.h+400),(height-80)/((bounds.w+bounds.h)/2+400)))}:session.camera;
     c.save();c.translate(width/2,height/2);c.scale(cam.zoom,cam.zoom);c.translate(-cam.x,-cam.y);
     if(world.regions){drawWater(c,cam,width,height,session.time);drawShore(c,world);}
+    drawCoastalGround(c,world);
     ground(c,world,plate,cam,width,height);
+    drawMountains(c,world,atlas);
     drawBridges(c,session,plate);
     drawTrafficSignals(c,session.traffic);
     if(!map&&session.player.path.length){
@@ -153,12 +157,12 @@ export function createRenderer(pack){
       const o=entry.item,p=project(o.x,o.y??world.metro.y);
       if(p.x<minX||p.x>maxX||p.y<minY||p.y>maxY)continue;
       if(entry.kind==='building'){
-        const foot=project(o.x+o.w,o.y+o.h),buildingWidth=o.w+o.h+22,rect=atlas.rect(o.type),buildingHeight=buildingWidth*rect[3]/rect[2];
+        const foot=project(o.x+o.w,o.y+o.h),buildingWidth=o.w+o.h+22,rect=atlas.rect(o.type),buildingHeight=buildingWidth*rect[3]/rect[2]*(o.heightScale??1);
         const occluded=map?[]:visiblePeople.filter(p=>p.depth<entry.depth&&p.x+15>foot.x-buildingWidth/2&&p.x-15<foot.x+buildingWidth/2&&p.y-52<foot.y&&p.y>foot.y-buildingHeight);
         const target=world.targets.find(t=>t.buildingId===o.id);
         const poster=POSTERS.find(p=>p.buildingId===o.id);
         let points=null;
-        const paint=alpha=>{sprite(c,o.type,foot.x,foot.y,buildingWidth,null,false,alpha);if(target)drawFacade(c,o,target,session,atlas,alpha);if(poster)points=drawPoster(c,o,poster,atlas,alpha);};
+        const paint=alpha=>{sprite(c,o.type,foot.x,foot.y,buildingWidth,buildingHeight,false,alpha);if(target)drawFacade(c,o,target,session,atlas,alpha);if(poster)points=drawPoster(c,o,poster,atlas,alpha);};
         if(!occluded.length)paint(o.backdrop?.78:1);
         else{
           // Reveal only the character silhouette area, keeping the rest of the facade solid.
@@ -173,7 +177,8 @@ export function createRenderer(pack){
             posterHits.push({id:poster.id,x,y,w:Math.max(...screen.map(p=>p.x))-x,h:Math.max(...screen.map(p=>p.y))-y});
           }
         }
-      }else if(entry.kind==='perimeter')drawPerimeter(c,o);
+      }else if(entry.kind==='umbrella')drawBeachUmbrella(c,o);
+      else if(entry.kind==='perimeter')drawPerimeter(c,o);
       else if(entry.kind==='traffic')drawTrafficCar(c,o);
       else if(entry.kind==='prop'){
         if(o.meet){c.save();c.globalAlpha=.28+Math.sin(session.time*2)*.08;c.fillStyle=o.color;c.beginPath();c.ellipse(p.x,p.y,44,17,0,0,Math.PI*2);c.fill();c.restore();}
@@ -224,8 +229,9 @@ export function createRenderer(pack){
     for(const h of world.hideouts??[world.hideout]){const home=project(h.x,h.y,34);marker(c,home.x,home.y,'home',(map?16:28)/cam.zoom,true);}
     const court=project(session.court.x,session.court.y-44,88);marker(c,court.x,court.y,'court',(map?23:26)/cam.zoom,session.near?.type==='court');
     for(const station of world.metroStations??[]){const p=project(station.x,station.y,world.metro.height+35);c.save();c.translate(p.x,p.y);c.scale(1/cam.zoom,1/cam.zoom);label(c,'M'+(map?'':' / '+station.name),0,0,'#a7d6eb');c.restore();}
-    for(const poi of world.pointsOfInterest??[]){const p=project(poi.x,poi.y,70);c.save();c.translate(p.x,p.y);c.scale(1/cam.zoom,1/cam.zoom);label(c,map&&!region?(poi.kind==='meet'?'MEET':poi.kind==='mall'?'MALL':'CITY'):poi.name,0,0,poi.kind==='meet'?'#f59789':'#9ddbd4');c.restore();}
+    for(const poi of world.pointsOfInterest??[]){const p=project(poi.x,poi.y,70);c.save();c.translate(p.x,p.y);c.scale(1/cam.zoom,1/cam.zoom);label(c,map&&!region?({meet:'MEET',mall:'MALL',skate:'SKATE',beach:'BEACH'}[poi.kind]??'CITY'):poi.name,0,0,poi.kind==='meet'?'#f59789':'#9ddbd4');c.restore();}
     if(map){
+      if(!region)for(const n of world.naturalLabels??[]){const p=project(n.x,n.y);c.save();c.translate(p.x,p.y);c.scale(1/cam.zoom,1/cam.zoom);label(c,n.name,0,0,'#c7d7b9');c.restore();}
       if(!region)for(const r of session.city??[]){
         const p=project(r.x+r.w/2,r.y+r.h/2,100);
         c.save();c.translate(p.x,p.y);c.scale(1/cam.zoom,1/cam.zoom);label(c,r.name,0,0,r.color);

@@ -12,7 +12,7 @@ export function box(c,x,y,w,h,z,top='#88877e',left='#5e6365',right='#74797a',bas
 }
 export function ground(c,w,plate,cam,width,height){
   c.save();c.transform(1,.5,-1,.5,0,0);
-  if(w.landPolygons){c.beginPath();for(const p of w.landPolygons){p.forEach((a,i)=>i?c.lineTo(a.x,a.y):c.moveTo(a.x,a.y));c.closePath();}c.clip();}
+  if(w.landPolygons){c.beginPath();for(const p of w.urbanPolygons??w.landPolygons){p.forEach((a,i)=>i?c.lineTo(a.x,a.y):c.moveTo(a.x,a.y));c.closePath();}c.clip();}
   else if(w.regions){c.beginPath();for(const r of w.regions)c.rect(r.x,r.y,r.w,r.h);c.clip();}
   const cx=cam.y+cam.x*.5,cy=cam.y-cam.x*.5,extent=(height*.5+width*.25)/cam.zoom+360;
   for(let y=Math.floor((cy-extent)/1408)*1408;y<cy+extent;y+=1408)

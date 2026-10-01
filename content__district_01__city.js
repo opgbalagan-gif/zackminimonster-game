@@ -1,5 +1,6 @@
 import {createDistrict as createBlock} from './content__district_01__district.js';
 import {onLand} from './core__land.js';
+import {expandCoast} from './content__district_01__coastal-expansion.js';
 export function createDistrict(){
   const base=createBlock(),world={...base,width:6400,height:5632,name:'MINI MONSTER CITY',version:15};
   world.regions=[
@@ -71,6 +72,7 @@ export function createDistrict(){
   world.meetPeople=[{x:708,y:1048,look:2},{x:684,y:1080,look:1},{x:5800,y:5360,look:0},{x:5900,y:5270,look:3}];
   world.metro={...base.metro,x:60,end:2950,loop:[{x:884,y:674},{x:5696,y:674},{x:5696,y:4600},{x:884,y:4600}]};
   world.metroStations=world.metro.loop.map((p,i)=>({...p,name:['EAST BLOCK','HARBOUR','COLOUR','DOWNTOWN'][i]}));
+  expandCoast(world);
   for(let i=0;i<4;i++){
     const a=world.metro.loop[i],b=world.metro.loop[(i+1)%4],vertical=a.x===b.x,len=Math.hypot(b.x-a.x,b.y-a.y);
     for(let n=140;n<len;n+=320){const x=vertical?a.x+24:Math.min(a.x,b.x)+n,y=vertical?Math.min(a.y,b.y)+n:a.y+24;

@@ -1,6 +1,6 @@
 {
   "id": "district_01",
-  "version": 15,
+  "version": 16,
   "scene": "./content__district_01__city.js",
   "renderer": "./content__district_01__renderer.js",
   "dependencies": [
@@ -31,7 +31,8 @@
     "./content__graffiti__assets__paper-ghost.png",
     "./content__graffiti__assets__sunset-block.png",
     "./content__graffiti__assets__artist-can.png",
-    "./content__district_01__art__metropolis-landmarks.png"
+    "./content__district_01__art__metropolis-landmarks.png",
+    "./content__district_01__art__coastal-nature.png"
   ],
   "audio": [],
   "graffiti": [

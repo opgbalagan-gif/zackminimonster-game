@@ -16,8 +16,11 @@ export function drawWater(c,cam,width,height,time){
 export function drawShore(c,world){
   if(world.landPolygons){
     for(const poly of world.landPolygons){
-      polygon(c,poly.map(p=>project(p.x,p.y,-28)),null,'#659a9966',16);
-      for(let i=0;i<poly.length;i++){const a=poly[i],b=poly[(i+1)%poly.length];polygon(c,[project(a.x,a.y),project(b.x,b.y),project(b.x,b.y,-28),project(a.x,a.y,-28)],'#52686b','#273d46',2);}
+      polygon(c,poly.map(p=>project(p.x,p.y,-12)),null,world.beaches?'#68b5aa77':'#659a9966',world.beaches?38:16);
+      for(let i=0;i<poly.length;i++){
+        const a=poly[i],b=poly[(i+1)%poly.length],beach=world.beaches&&a.y>5700&&b.y>5700,z=beach?-5:-28;
+        polygon(c,[project(a.x,a.y),project(b.x,b.y),project(b.x,b.y,z),project(a.x,a.y,z)],beach?'#ead7aa':'#52686b',beach?'#f2e4c7':'#273d46',beach?4:2);
+      }
     }return;
   }
   for(const r of world.regions){
