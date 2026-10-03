@@ -1,24 +1,24 @@
-import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=cfa54f753bac';
-import {vehicleProjection} from './core__vehicle-projection.js?v=cfa54f753bac';
-import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=cfa54f753bac';
-import {surfaceTrain} from './core__sandbox-metro.js?v=cfa54f753bac';
-import {drawWaterfront,drawNeighbourhoodMap} from './content__levels__sandbox__waterfront-art.js?v=cfa54f753bac';
-import {districtSurroundings,boundaryRailing,cloudShadows} from './content__levels__sandbox__atmosphere.js?v=cfa54f753bac';
-import {districtContinuation,roadToBoundary} from './core__district-continuation.js?v=cfa54f753bac';
-import {dryingOpacity} from './core__wall-rivals.js?v=cfa54f753bac';
-import {routeFade} from './core__route-fade.js?v=cfa54f753bac';
-import {groundLighting} from './content__levels__sandbox__lighting-art.js?v=cfa54f753bac';
-import {lampBrightness} from './core__lighting.js?v=cfa54f753bac';
-import {NpcAnimation} from './core__npc-animation.js?v=cfa54f753bac';
-import {SpriteAtlas} from './core__sprites.js?v=cfa54f753bac';
-import {project} from './core__geometry.js?v=cfa54f753bac';
-import {heroSprite} from './core__hideout.js?v=cfa54f753bac';
-import {polygon,box} from './content__district_01__terrain.js?v=cfa54f753bac';
-import {drawGraffiti} from './content__district_01__graffiti-art.js?v=cfa54f753bac';
-import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=cfa54f753bac';
-import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=cfa54f753bac';
-import {OccluderFade} from './core__occluder-fade.js?v=cfa54f753bac';
-import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=cfa54f753bac';
+import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=4c32f2c839ac';
+import {vehicleProjection} from './core__vehicle-projection.js?v=4c32f2c839ac';
+import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=4c32f2c839ac';
+import {surfaceTrain} from './core__sandbox-metro.js?v=4c32f2c839ac';
+import {drawWaterfront,drawNeighbourhoodMap} from './content__levels__sandbox__waterfront-art.js?v=4c32f2c839ac';
+import {districtSurroundings,boundaryRailing,cloudShadows} from './content__levels__sandbox__atmosphere.js?v=4c32f2c839ac';
+import {districtContinuation,roadToBoundary} from './core__district-continuation.js?v=4c32f2c839ac';
+import {dryingOpacity} from './core__wall-rivals.js?v=4c32f2c839ac';
+import {routeFade} from './core__route-fade.js?v=4c32f2c839ac';
+import {groundLighting} from './content__levels__sandbox__lighting-art.js?v=4c32f2c839ac';
+import {lampBrightness} from './core__lighting.js?v=4c32f2c839ac';
+import {NpcAnimation} from './core__npc-animation.js?v=4c32f2c839ac';
+import {SpriteAtlas} from './core__sprites.js?v=4c32f2c839ac';
+import {project} from './core__geometry.js?v=4c32f2c839ac';
+import {heroSprite} from './core__hideout.js?v=4c32f2c839ac';
+import {polygon,box} from './content__district_01__terrain.js?v=4c32f2c839ac';
+import {drawGraffiti} from './content__district_01__graffiti-art.js?v=4c32f2c839ac';
+import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=4c32f2c839ac';
+import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=4c32f2c839ac';
+import {OccluderFade} from './core__occluder-fade.js?v=4c32f2c839ac';
+import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=4c32f2c839ac';
 
 function fightCloud(c,s){
   const t=s.tutorial.fightBurst,p=project(s.tutorial.actor.x-11,s.tutorial.actor.y+10),pulse=Math.sin(t*27);
@@ -128,7 +128,7 @@ export function createTutorialRenderer(pack){
     const dt=lastTime===undefined?1/60:Math.max(1/60,s.time-lastTime);if(!photo)lastTime=s.time;
     const heroPoint=project(s.player.x,s.player.y),hero=photo||s.tutorial.bin?null:{x:heroPoint.x-13,y:heroPoint.y-61,w:26,h:57,depth:s.player.x+s.player.y};
     function faded(id,bounds,depth,draw,mask){c.save();if(!photo)c.globalAlpha*=fades.alpha(id,bounds,depth,hero,dt,mask);draw();c.restore();}
-    function spriteObject(id,x,y,width,depth,draw){const p=project(x,y),rect=atlas.rect(id),height=width*rect[3]/rect[2];faded(id+':'+x+':'+y,{x:p.x-width/2,y:p.y-height,w:width,h:height},depth,draw??(()=>atlas.draw(c,id,p.x,p.y,width)),spriteMask(id));}
+    function spriteObject(id,x,y,width,depth,draw){const p=project(x,y),rect=atlas.rect(id),height=width*rect[3]/rect[2],anchor=pack.atlas.sprites[id].groundAnchor??[.5,1];faded(id+':'+x+':'+y,{x:p.x-width*anchor[0],y:p.y-height*anchor[1],w:width,h:height},depth,draw??(()=>atlas.draw(c,id,p.x,p.y,width)),spriteMask(id));}
     c.save();c.translate(originX,originY);c.scale(cam.zoom,cam.zoom);c.translate(-cam.x,-cam.y);
     if(sandbox){
       const quad=(x,y,ww,hh)=>[project(x,y),project(x+ww,y),project(x+ww,y+hh),project(x,y+hh)];

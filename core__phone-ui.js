@@ -1,9 +1,9 @@
-import {AimController,MotionAim} from './core__motion-aim.js?v=cfa54f753bac';
-import {setUIButton,uiIcon} from './core__ui-kit.js?v=cfa54f753bac';
-import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=cfa54f753bac';
-import {nearbyPhotoSpot} from './core__photo-spots.js?v=cfa54f753bac';
-import {bindCanvasGesture} from './core__canvas-gesture.js?v=cfa54f753bac';
-import {appIcon,foldPhoneIcon} from './core__phone-icons.js?v=cfa54f753bac';
+import {AimController,MotionAim} from './core__motion-aim.js?v=4c32f2c839ac';
+import {setUIButton,uiIcon} from './core__ui-kit.js?v=4c32f2c839ac';
+import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=4c32f2c839ac';
+import {nearbyPhotoSpot} from './core__photo-spots.js?v=4c32f2c839ac';
+import {bindCanvasGesture} from './core__canvas-gesture.js?v=4c32f2c839ac';
+import {appIcon,foldPhoneIcon} from './core__phone-icons.js?v=4c32f2c839ac';
 export class PhoneUI{
   constructor(s,renderer,audio){
     this.s=s;this.renderer=renderer;this.audio=audio;this.aim=new AimController();this.motion=new MotionAim(this.aim);this.steady=0;this.screen='messages';this.previous={x:0,y:0};

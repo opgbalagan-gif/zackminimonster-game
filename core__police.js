@@ -1,4 +1,4 @@
-import {distance,moveAlongPath} from './core__geometry.js?v=cfa54f753bac';
+import {distance,moveAlongPath} from './core__geometry.js?v=4c32f2c839ac';
 export class PoliceSystem{
   constructor(data,nav){
     this.nav=nav;this.caught=false;

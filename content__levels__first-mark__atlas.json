@@ -1494,6 +1494,10 @@
     },
     "comic_tank": {
       "sheet": "comic_props",
+      "groundAnchor": [
+        0.52,
+        0.84
+      ],
       "rect": [
         0,
         627,

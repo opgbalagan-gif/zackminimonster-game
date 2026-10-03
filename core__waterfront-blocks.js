@@ -38,7 +38,7 @@ export function densifyWaterfront(w){
   for(const r of w.parks)for(let x=r.x+38;x<r.x+r.w-30;x+=90)for(let y=r.y+38;y<r.y+r.h-25;y+=98){const xx=x+Math.sin(x*.1+y)*17,yy=y+Math.cos(y*.07+x)*17;if(clear(xx,yy,65))w.nature.push({id:'comic_tree',x:xx,y:yy,w:132+Math.abs(Math.sin(x+y))*28});}
   for(const y of [1705,2265,2825])for(const x of [1415,1625,1810])if(clear(x,y,15))w.nature.push({id:'comic_tree',x,y,w:92});
   for(let y=1610;y<4020;y+=170)for(const x of [812,1050,2500])if(clear(x,y,22))w.nature.push({id:'comic_tree',x,y,w:98});
-  for(const [x,y] of [[2860,3300],[3430,3300],[2860,3740],[3480,3840]]){w.nature.push({id:'comic_tank',x,y,w:200});w.obstacles.push({x:x-70,y:y-70,w:140,h:135});}
+  for(const [x,y] of [[2860,3300],[3430,3300],[2860,3740],[3480,3840]]){w.nature.push({id:'comic_tank',x,y,w:140});w.obstacles.push({x:x-36,y:y-36,w:72,h:72});}
   for(const y of [1750,2130,2500])w.nature.push({id:'comic_pier',x:333,y,w:120});
   for(const p of w.nature.filter(p=>p.id==='comic_tree'))w.obstacles.push({x:p.x-7,y:p.y-7,w:14,h:14});
   for(const [x,y] of [[1080,1900],[1850,2090],[2500,2520],[3000,2160],[430,3020],[1930,3570]])w.blockProps.push({id:'bench',x,y,w:82},{id:'lamp',x:x+65,y,w:44},{id:'litter',x:x-35,y,w:27});

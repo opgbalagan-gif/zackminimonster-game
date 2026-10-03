@@ -1,13 +1,18 @@
-import {project} from './core__geometry.js?v=cfa54f753bac';
-import {sceneLight,shadowFootprint} from './core__lighting.js?v=cfa54f753bac';
-import {polygon} from './content__district_01__terrain.js?v=cfa54f753bac';
-import {STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=cfa54f753bac';
+import {project} from './core__geometry.js?v=4c32f2c839ac';
+import {sceneLight,shadowFootprint} from './core__lighting.js?v=4c32f2c839ac';
+import {polygon} from './content__district_01__terrain.js?v=4c32f2c839ac';
+import {STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=4c32f2c839ac';
 export function groundLighting(c,s,w,h,continuation={}){
   const light=sceneLight(s.life.night),cam=s.camera;
   const visible=(x,y,margin=500)=>{const p=project(x,y);return Math.abs(p.x-cam.x)<w/cam.zoom/2+margin&&Math.abs(p.y-cam.y)<h/cam.zoom/2+margin;};
   c.save();c.fillStyle=light.color;c.globalAlpha=light.alpha;
   for(const b of [...s.world.buildings,...continuation.buildings??[]])if(visible(b.x,b.y))polygon(c,shadowFootprint(b,b.nanoVariant===1?140:b.nanoVariant===3?130:245,light).map(p=>project(...p)),light.color);
   for(const p of [...s.world.nature??[],...continuation.nature??[]])if(visible(p.x,p.y,200)){
+    if(p.id==='comic_tank'){
+      // The sprite is anchored at the centre of its base, including its rear half.
+      const a=project(p.x,p.y),b=project(p.x+p.w*.43*light.dx,p.y+p.w*.43*light.dy);
+      c.beginPath();c.ellipse((a.x+b.x)/2,(a.y+b.y)/2,p.w*.35+Math.abs(b.x-a.x)/2,p.w*.145+Math.abs(b.y-a.y)/2,0,0,Math.PI*2);c.fill();continue;
+    }
     const ground=project(p.x,p.y),tip=project(p.x+80*light.dx,p.y+80*light.dy);
     c.beginPath();c.ellipse((ground.x+tip.x)/2,(ground.y+tip.y)/2,Math.max(17,p.w*.31),p.w*.13,.4,0,Math.PI*2);c.fill();
   }
