@@ -1,6 +1,6 @@
-import {AimController,MotionAim} from './core__motion-aim.js';
-import {setUIButton,uiIcon} from './core__ui-kit.js';
-import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js';
+import {AimController,MotionAim} from './core__motion-aim.js?v=b5bc09075cbf';
+import {setUIButton,uiIcon} from './core__ui-kit.js?v=b5bc09075cbf';
+import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=b5bc09075cbf';
 export class PhoneUI{
   constructor(s,renderer,audio){
     this.s=s;this.renderer=renderer;this.audio=audio;this.aim=new AimController();this.motion=new MotionAim(this.aim);this.steady=0;this.screen='messages';this.previous={x:0,y:0};
@@ -14,7 +14,10 @@ export class PhoneUI{
     const bind=(q,f)=>this.el.querySelector(q).onclick=f;
     bind('.phone-close',()=>this.close());bind('.phone-camera',()=>this.camera());bind('.phone-sms',()=>this.messages());bind('.phone-album',()=>this.gallery());bind('.camera-back',()=>this.messages());bind('.camera-album',()=>this.gallery());bind('.camera-centre',()=>{this.aim.centre();this.steady=0;});bind('.camera-shutter',()=>this.shoot());bind('.camera-gyro',()=>this.motion.enable());
     bind('.phone-radio-app',()=>this.radio());bind('.phone-radio-play',()=>this.audio.radio.toggle());
+    this.el.querySelector('.phone-levels span:last-child').textContent='Путь';
+    this.el.querySelector('nav').insertAdjacentHTML('beforeend','<button class="phone-app phone-training">'+uiIcon('spray')+'<span>Обучение</span></button>');
     bind('.phone-levels',()=>{this.close();document.getElementById('chapter-button').click();});
+    bind('.phone-training',()=>{this.close();const b=document.getElementById('chapter-button');b.dataset.tab='training';b.click();});
     const volume=this.el.querySelector('.phone-radio-volume');volume.value=Math.round(audio.radio.media.volume*100);
     volume.oninput=()=>audio.radio.setVolume(Number(volume.value)/100);volume.onchange=()=>{s.save.settings.radioVolume=audio.radio.media.volume;s.persist();};
     this.canvas.onpointerdown=e=>{this.motion.stop();this.motion.status='Наведение пальцем / мышью';this.drag={x:e.clientX,y:e.clientY};this.canvas.setPointerCapture(e.pointerId);};

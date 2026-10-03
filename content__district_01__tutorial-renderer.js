@@ -1,11 +1,12 @@
-import {SpriteAtlas} from './core__sprites.js';
-import {project} from './core__geometry.js';
-import {heroSprite} from './core__hideout.js';
-import {polygon,box} from './content__district_01__terrain.js';
-import {drawGraffiti} from './content__district_01__graffiti-art.js';
-import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js';
-import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js';
-import {OccluderFade} from './core__occluder-fade.js';
+import {SpriteAtlas} from './core__sprites.js?v=b5bc09075cbf';
+import {project} from './core__geometry.js?v=b5bc09075cbf';
+import {heroSprite} from './core__hideout.js?v=b5bc09075cbf';
+import {polygon,box} from './content__district_01__terrain.js?v=b5bc09075cbf';
+import {drawGraffiti} from './content__district_01__graffiti-art.js?v=b5bc09075cbf';
+import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=b5bc09075cbf';
+import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=b5bc09075cbf';
+import {OccluderFade} from './core__occluder-fade.js?v=b5bc09075cbf';
+import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=b5bc09075cbf';
 
 function fightCloud(c,s){
   const t=s.tutorial.fightBurst,p=project(s.tutorial.actor.x-11,s.tutorial.actor.y+10),pulse=Math.sin(t*27);
@@ -43,7 +44,7 @@ export function createTutorialRenderer(pack){
     }return masks.get(id);
   }
   function house(c,s){
-    const p=project(278,288,-36);atlas.draw(c,'apartment',p.x,p.y,335);
+    const p=project(278,288,-36);atlas.draw(c,s.life&&!s.life.night?'apartment_day':'apartment',p.x,p.y,335);
     if(!s.save.campaign.tutorialFacadePainted)return;
     // Coordinates on the source facade: between the pipes, clear of doors and plants.
     const scale=335/950;
@@ -67,10 +68,9 @@ export function createTutorialRenderer(pack){
   }
   function world(c,s,w,h){
     c.imageSmoothingEnabled=false;atlas.drawCalls=0;const day=s.life&&!s.life.night;c.fillStyle=day?'#708b98':'#071018';c.fillRect(0,0,w,h);
-    if(day)c.filter='brightness(1.65) saturate(.65)';
-    const sky=pack.images.reference_background;
+    const sky=day?pack.images.reference_background_day:pack.images.reference_background;
     c.drawImage(sky,0,0,w,h);
-    c.filter='none';if(day){c.fillStyle='#bcd4de33';c.fillRect(0,0,w,h);}
+    c.filter='none';
     // Keep the complete first block visible; the street is deliberately small.
     const cam=s.camera,mobile=w<=700,originX=mobile?w/2:(w-420)/2,originY=h*(mobile?.30:.46);
     cam.zoom=Math.max(.12,Math.min(.85,(mobile?w:w-450)/(s.world.id==='sneak'?1260:940),(mobile?h*.53:h-100)/730));cam.x=s.world.id==='sneak'?130:45;cam.y=210;cam.ready=true;
@@ -79,8 +79,7 @@ export function createTutorialRenderer(pack){
     function faded(id,bounds,depth,draw,mask){c.save();c.globalAlpha*=fades.alpha(id,bounds,depth,hero,dt,mask);draw();c.restore();}
     function spriteObject(id,x,y,width,depth,draw){const p=project(x,y),rect=atlas.rect(id),height=width*rect[3]/rect[2];faded(id+':'+x+':'+y,{x:p.x-width/2,y:p.y-height,w:width,h:height},depth,draw??(()=>atlas.draw(c,id,p.x,p.y,width)),spriteMask(id));}
     c.save();c.translate(originX,originY);c.scale(cam.zoom,cam.zoom);c.translate(-cam.x,-cam.y);
-    if(day)c.filter='brightness(1.35) saturate(.83)';
-    kit.floor(c);
+    kit.floor(c,{night:!day});
     if(s.world.id==='sneak'){
       box(c,632,92,250,460,0,'#504d43','#1c2a32','#29323a',-22);
       const quad=(x,y,ww,hh)=>[project(x,y),project(x+ww,y),project(x+ww,y+hh),project(x,y+hh)];
@@ -98,11 +97,11 @@ export function createTutorialRenderer(pack){
     for(const v of s.life?.visitors??[])queue.push({kind:'visitor',actor:v,depth:v.x+v.y});
     if(s.player.path.length){c.strokeStyle='#f1ce7888';c.lineWidth=3;c.setLineDash([6,7]);c.beginPath();const start=project(s.player.x,s.player.y);c.moveTo(start.x,start.y);for(const n of s.player.path){const p=project(n.x,n.y);c.lineTo(p.x,p.y);}c.stroke();c.setLineDash([]);}
     for(const o of queue.sort((a,b)=>a.depth-b.depth)){
-      if(o.kind==='prop'){spriteObject(o.id,o.x,o.y,o.w,o.depth);continue;}
+      if(o.kind==='prop'){spriteObject(day?o.id+'_day':o.id,o.x,o.y,o.w,o.depth);continue;}
       if(o.kind==='fence'){const x=o.x??380,length=o.x?210:226,p=project(x,155);faded('fence:'+x,{x:p.x,y:p.y-65,w:length,h:length*.5+65},o.depth,()=>kit.fence(c,x,155,length),(u,v)=>{const localY=v*(length*.5+65)-65;return localY<u*length*.5&&localY>u*length*.5-65;});continue;}
       if(o.kind==='bollard'){kit.bollard(c,o.x,o.y);continue;}
       if(o.kind==='house'){const p=project(278,288,-36),hh=335*1284/950;faded('house',{x:p.x-167.5,y:p.y-hh,w:335,h:hh},o.depth,()=>house(c,s),spriteMask('apartment'));continue;}
-      if(o.kind==='bin'){const p=project(o.x,o.y);spriteObject('dumpster',o.x,o.y,90,o.depth);if(s.tutorial.bin?.id===o.id){c.fillStyle='#f3d283';c.font='bold 13px monospace';c.textAlign='center';c.fillText('ТИШЕ…',p.x,p.y-58);}continue;}
+      if(o.kind==='bin'){const p=project(o.x,o.y);spriteObject(day?'dumpster_day':'dumpster',o.x,o.y,90,o.depth);if(s.tutorial.bin?.id===o.id){c.fillStyle='#f3d283';c.font='bold 13px monospace';c.textAlign='center';c.fillText('ТИШЕ…',p.x,p.y-58);}continue;}
       if(o.kind==='wall'){const p=project(392,266);faded('wall',{x:p.x,y:p.y-94,w:202,h:195},o.depth,()=>wall(c,s),(u,v)=>{const yy=v*195-94;return yy<=u*101&&yy>=u*101-94;});continue;}
       if(o.kind==='fight'){fightCloud(c,s);continue;}
       if(fighting&&(o.kind==='zack'||o.kind==='guest'))continue;
@@ -128,12 +127,7 @@ export function createTutorialRenderer(pack){
     const target=['escape','complete'].includes(s.tutorial.stage)?s.world.hideout:s.world.targets[0].approach,q=project(target.x,target.y);
     if(['walk','paint','return_wall','repaint','escape'].includes(s.tutorial.stage)){c.strokeStyle='#efcc79';c.lineWidth=3;c.beginPath();c.ellipse(q.x,q.y+3,24+Math.sin(s.time*3)*2,10,0,0,Math.PI*2);c.stroke();}
     c.restore();s.metrics.drawCalls=atlas.drawCalls;
-    const speaker=s.life?.visitors.find(v=>v.phase==='photo'&&v.line);
-    if(speaker){
-      const p=project(speaker.x,speaker.y,77);c.save();c.font='bold 12px "Roboto Condensed",sans-serif';
-      const bw=Math.min(w-24,c.measureText(speaker.line).width+22),bx=Math.max(12,Math.min(w-bw-12,originX+(p.x-cam.x)*cam.zoom-bw/2)),by=Math.max(144,originY+(p.y-cam.y)*cam.zoom-26);
-      c.fillStyle='#071018ed';c.strokeStyle='#e8c16a';c.lineWidth=1;c.fillRect(bx,by,bw,26);c.strokeRect(bx,by,bw,26);c.fillStyle='#ffe5a5';c.textAlign='center';c.fillText(speaker.line,bx+bw/2,by+17,bw-12);c.restore();
-    }
+    drawCitizenSpeech(c,citizenSpeakers(s),actor=>{const p=project(actor.x,actor.y,70);return {x:originX+(p.x-cam.x)*cam.zoom,y:originY+(p.y-cam.y)*cam.zoom};},w,h);
     markerHits.length=0;
     for(const [id,x,y,z] of [['home',278,288,425],['wall',494,266,106]]){const p=project(x,y,z);markerHits.push({id,x:originX+(p.x-cam.x)*cam.zoom,y:originY+(p.y-cam.y)*cam.zoom});}
     if(s.tutorial.allowedTarget(s.world.targets[1]))markerHits.push({id:'facade',x:originX+(24-cam.x)*cam.zoom,y:originY+(173-cam.y)*cam.zoom});

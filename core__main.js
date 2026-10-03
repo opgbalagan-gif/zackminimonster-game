@@ -1,13 +1,13 @@
-import {ContentLoader} from './core__content-loader.js';
-import {SaveStore} from './core__save-store.js';
-import {AudioManager} from './core__audio.js';
-import {GameSession} from './core__session.js';
-import {InputController} from './core__input.js';
-import {GameUI} from './core__ui.js';
-import {POSTERS,posterApproach} from './content__district_01__posters.js';
-import {TutorialUI} from './core__tutorial-ui.js';
-import {showChapters} from './core__chapters.js';
-import {setUIButton} from './core__ui-kit.js';
+import {ContentLoader} from './core__content-loader.js?v=b5bc09075cbf';
+import {SaveStore} from './core__save-store.js?v=b5bc09075cbf';
+import {AudioManager} from './core__audio.js?v=b5bc09075cbf';
+import {GameSession} from './core__session.js?v=b5bc09075cbf';
+import {InputController} from './core__input.js?v=b5bc09075cbf';
+import {GameUI} from './core__ui.js?v=b5bc09075cbf';
+import {POSTERS,posterApproach} from './content__district_01__posters.js?v=b5bc09075cbf';
+import {TutorialUI} from './core__tutorial-ui.js?v=b5bc09075cbf';
+import {showChapters} from './core__chapters.js?v=b5bc09075cbf';
+import {setUIButton} from './core__ui-kit.js?v=b5bc09075cbf';
 
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d',{alpha:false});
 const loader=new ContentLoader(),store=new SaveStore(),audio=new AudioManager();
@@ -118,10 +118,11 @@ function frame(now){
 async function openChapters(){
   if(starting)return;
   try{
+    const tab=document.getElementById('chapter-button').dataset.tab??'path';delete document.getElementById('chapter-button').dataset.tab;
     showChapters(session?.save??store.load(),id=>{
       if(session){sessionStorage.setItem('zack.chapter',id);location.reload();}
       else start(id);
-    });
+    },tab);
   }catch(error){ui.showToast('Не удалось загрузить уровни: '+error.message);}
 }
 document.getElementById('title-chapters').onclick=openChapters;

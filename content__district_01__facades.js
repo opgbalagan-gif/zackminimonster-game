@@ -1,6 +1,6 @@
-import {project} from './core__geometry.js';
-import {drawGraffiti} from './content__district_01__graffiti-art.js';
-import {ink} from './core__hideout.js';
+import {project} from './core__geometry.js?v=b5bc09075cbf';
+import {drawGraffiti} from './content__district_01__graffiti-art.js?v=b5bc09075cbf';
+import {ink} from './core__hideout.js?v=b5bc09075cbf';
 
 export function facadeGeometry(building,atlas){
   const sprite=atlas.metadata.sprites[building.type];if(!sprite?.facade)return null;

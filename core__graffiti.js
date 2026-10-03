@@ -1,5 +1,5 @@
-import {clamp} from './core__geometry.js';
-import {GRAFFITI_CONFIG as CONFIG} from './content__graffiti__config.js';
+import {clamp} from './core__geometry.js?v=b5bc09075cbf';
+import {GRAFFITI_CONFIG as CONFIG} from './content__graffiti__config.js?v=b5bc09075cbf';
 export class GraffitiGame{
   constructor(target,definition,sprayRack=false){
     this.target=target;this.definition=definition;this.phase='shake';this.shakeProgress=0;

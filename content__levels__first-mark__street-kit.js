@@ -1,6 +1,6 @@
-import {project} from './core__geometry.js';
-import {polygon,box} from './content__district_01__terrain.js';
-import {createMetroArt} from './content__district_01__metro-art.js';
+import {project} from './core__geometry.js?v=b5bc09075cbf';
+import {polygon,box} from './content__district_01__terrain.js?v=b5bc09075cbf';
+import {createMetroArt} from './content__district_01__metro-art.js?v=b5bc09075cbf';
 
 // Art dimensions are in world units. Anchors sit on the ground, never on a walk lane.
 export const STREET_PROPS=[
@@ -12,7 +12,7 @@ export const STREET_PROPS=[
 const quad=(x,y,w,h,z=0)=>[project(x,y,z),project(x+w,y,z),project(x+w,y+h,z),project(x,y+h,z)];
 export function createStreetKit(images){
   const material=createMetroArt(images.materials,{asphalt:[8,8,610,610],paving:[636,8,610,610],wall:[8,636,610,610],metal:[636,636,610,610]});
-  function floor(c){
+  function floor(c,{night=true}={}){
     box(c,72,92,560,460,0,'#504d43','#1c2a32','#29323a',-22);
     // One continuous sidewalk material, clipped to the level platform.
     c.save();polygon(c,quad(72,92,560,460),'#625d51');c.clip();
@@ -27,14 +27,14 @@ export function createStreetKit(images){
     c.strokeStyle='#444848';c.lineWidth=1;
     for(let x=80;x<626;x+=28){c.beginPath();c.moveTo(x,405);c.lineTo(x,414);c.moveTo(x,522);c.lineTo(x,530);c.stroke();}
     for(const [x,y,ww,hh] of [[191,436,74,12],[444,493,93,11],[560,443,48,9]]){
-      c.fillStyle='#0b1921';c.fillRect(x,y,ww,hh);c.fillStyle='#a9803a55';c.fillRect(x+8,y+2,ww*.6,2);c.fillStyle='#dfb76788';c.fillRect(x+19,y+5,ww*.3,1);
+      c.fillStyle='#0b1921';c.fillRect(x,y,ww,hh);c.fillStyle=night?'#a9803a55':'#88a6b655';c.fillRect(x+8,y+2,ww*.6,2);c.fillStyle=night?'#dfb76788':'#aec9d588';c.fillRect(x+19,y+5,ww*.3,1);
     }
     for(const x of [82,609]){c.fillStyle='#c2b99e';for(let y=423;y<516;y+=15)c.fillRect(x,y,12,7);}
     for(const x of [243,549]){c.fillStyle='#192730';c.fillRect(x,414,22,8);c.fillStyle='#566063';for(let i=2;i<21;i+=4)c.fillRect(x+i,415,1,6);}
     c.fillStyle='#2c3639';c.strokeStyle='#727970';c.beginPath();c.ellipse(377,495,15,13,0,0,Math.PI*2);c.fill();c.stroke();
     for(let i=-8;i<10;i+=5){c.beginPath();c.moveTo(367,495+i);c.lineTo(387,495+i);c.stroke();}
     c.restore();
-    for(const p of STREET_PROPS.filter(p=>p.id==='lamp')){
+    for(const p of STREET_PROPS.filter(p=>night&&p.id==='lamp')){
       const q=project(p.x,p.y);c.save();c.translate(q.x,q.y);c.scale(1,.5);
       const glow=c.createRadialGradient(0,0,2,0,0,85);glow.addColorStop(0,'#e2a94344');glow.addColorStop(1,'#d49a3800');c.fillStyle=glow;c.fillRect(-85,-85,170,170);c.restore();
     }

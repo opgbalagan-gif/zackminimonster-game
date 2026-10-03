@@ -1,5 +1,5 @@
 try{
-  await import('./core__main.js');
+  await import('./core__main.js?v=b5bc09075cbf');
 }catch(error){
   console.error('Boot failure',error);
   const status=document.getElementById('load-status');

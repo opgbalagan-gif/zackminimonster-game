@@ -1,17 +1,18 @@
-import {GraffitiView} from './core__graffiti-view.js';
-import {HideoutUI} from './core__hideout-ui.js';
-import {CourtView} from './core__court-view.js';
-import {PhoneUI} from './core__phone-ui.js';
-import {POSTERS,ARTIST_URL} from './content__district_01__posters.js';
-import {GRAFFITI_ART} from './content__district_01__graffiti-art.js';
-import {GRAFFITI_CONFIG} from './content__graffiti__config.js';
-import {URBAN_WALL} from './content__graffiti__walls__urban.js';
-import {regionAt,gateMessage} from './core__city-progress.js';
-import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js';
+import {GraffitiView} from './core__graffiti-view.js?v=b5bc09075cbf';
+import {HideoutUI} from './core__hideout-ui.js?v=b5bc09075cbf';
+import {CourtView} from './core__court-view.js?v=b5bc09075cbf';
+import {PhoneUI} from './core__phone-ui.js?v=b5bc09075cbf';
+import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=b5bc09075cbf';
+import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=b5bc09075cbf';
+import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=b5bc09075cbf';
+import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=b5bc09075cbf';
+import {regionAt,gateMessage} from './core__city-progress.js?v=b5bc09075cbf';
+import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=b5bc09075cbf';
 const $=id=>document.getElementById(id);
 export class GameUI{
   constructor(callbacks){
     initUITheme();
+    document.querySelector('.player-card').append($('toast'));
     this.callbacks=callbacks;this.mapOpen=false;this.debug=false;this.toastUntil=0;this.lastMode='';
     $('start-button').onclick=callbacks.start;$('leave-button').onclick=callbacks.leave;
     $('upgrade-button').onclick=callbacks.upgrade;$('action-button').onclick=callbacks.action;

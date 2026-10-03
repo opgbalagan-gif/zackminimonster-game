@@ -1,10 +1,10 @@
 [
   {
     "id": "tutorial",
-    "manifest": "./content__levels__first-mark__manifest.json"
+    "manifest": "./content__levels__first-mark__manifest.json?v=b5bc09075cbf"
   },
   {
     "id": "sneak",
-    "manifest": "./content__levels__second-mark__manifest.json"
+    "manifest": "./content__levels__second-mark__manifest.json?v=b5bc09075cbf"
   }
 ]

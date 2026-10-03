@@ -1,4 +1,4 @@
-import {uiIcon,setUIButton,UIPanel,applyUIComponents} from './core__ui-kit.js';
+import {uiIcon,setUIButton,UIPanel,applyUIComponents} from './core__ui-kit.js?v=b5bc09075cbf';
 export class TutorialUI{
   constructor(session,onComplete){
     this.s=session;this.signature='';this.panel=document.createElement('section');this.panel.id='tutorial-panel';this.panel.className='ui-panel';this.panel.setAttribute('aria-label','Обучение');
@@ -18,7 +18,7 @@ export class TutorialUI{
     for(const b of this.markers.children){const p=renderer.markerHits?.find(p=>p.id===b.dataset.marker);b.hidden=!p;if(!p)continue;b.style.left=p.x*rect.width/canvas.width+'px';b.style.top=p.y*rect.height/canvas.height+'px';b.dataset.active=String(b.dataset.marker==='home'?s.tutorial.stage==='escape':['walk','paint','return_wall','repaint'].includes(s.tutorial.stage));}
   }
   sync(){
-    const s=this.s,t=s.tutorial,l=t.lesson;this.panel.hidden=['graffiti','phone'].includes(s.mode);
+    const s=this.s,t=s.tutorial,l=t.lesson;this.panel.hidden=['graffiti','phone'].includes(s.mode)||(s.mode==='hideout'&&document.getElementById('hideout-ui').dataset.tab!=='home');
     const app=document.getElementById('app');app.dataset.homeIntro=String(!!s.life?.tour);app.dataset.period=s.life?.state.period??'night';
     app.dataset.phone=String(s.mode==='phone');
     this.status.hidden=!!s.life?.tour;this.status.textContent=(s.life?.night?'☾ НОЧЬ':'☀ ДЕНЬ')+' '+(s.life?.state.day??1)+' · '+s.save.money+' ₽ · '+s.life.fame.name;
@@ -45,6 +45,7 @@ export class TutorialUI{
     this.panel.querySelector('.lesson-progress').innerHTML=Array.from({length:count},(_,i)=>'<i class="'+(i<step?'active':'')+'"></i>').join('');
     this.panel.querySelector('.lesson-kicker').textContent=s.life?.tour?'ДОМА · '+step+' / 7 · ЗАК':l.step+' / 6 · '+l.who;
     this.panel.querySelector('h2').textContent=l.title;this.panel.querySelector('.lesson-line').textContent='«'+l.line+'»';
+    this.panel.querySelector('.lesson-line').hidden=!l.who.startsWith('ЗАК')&&!!t.actor;
     this.panel.querySelector('.lesson-help').textContent=l.help;
     const button=this.panel.querySelector('button');button.hidden=!l.button;setUIButton(button,l.button??'',t.stage==='paint'?'spray':['home','recovery','escape'].includes(t.stage)?'home':'');
     button.disabled=!!s.life?.sleeping;

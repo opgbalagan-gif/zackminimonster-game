@@ -1,19 +1,19 @@
-import {NavigationGrid} from './core__navigation.js';
-import {PoliceSystem} from './core__police.js';
-import {GraffitiGame} from './core__graffiti.js';
-import {Camera,clamp,distance,moveAlongPath,project} from './core__geometry.js';
-import {EffectPool} from './core__effects.js';
-import {OUTFITS,INKS,TROPHIES} from './core__hideout.js';
-import {TrafficSystem} from './core__traffic.js';
-import {CitizenSystem} from './core__citizens.js';
-import {COURT,COURT_LINES,BallArtGame} from './core__basketball.js';
-import {GRAFFITI_CONFIG} from './content__graffiti__config.js';
-import {cityProgress,canEnter,regionAt,gateMessage} from './core__city-progress.js';
-import {POSTERS,posterApproach} from './content__district_01__posters.js';
-import {BridgeGangs} from './core__bridge-gangs.js';
-import {TutorialFlow} from './core__tutorial.js';
-import {StreetLife} from './core__street-life.js';
-import {SneakFlow} from './core__sneak.js';
+import {NavigationGrid} from './core__navigation.js?v=b5bc09075cbf';
+import {PoliceSystem} from './core__police.js?v=b5bc09075cbf';
+import {GraffitiGame} from './core__graffiti.js?v=b5bc09075cbf';
+import {Camera,clamp,distance,moveAlongPath,project} from './core__geometry.js?v=b5bc09075cbf';
+import {EffectPool} from './core__effects.js?v=b5bc09075cbf';
+import {OUTFITS,INKS,TROPHIES} from './core__hideout.js?v=b5bc09075cbf';
+import {TrafficSystem} from './core__traffic.js?v=b5bc09075cbf';
+import {CitizenSystem} from './core__citizens.js?v=b5bc09075cbf';
+import {COURT,COURT_LINES,BallArtGame} from './core__basketball.js?v=b5bc09075cbf';
+import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=b5bc09075cbf';
+import {cityProgress,canEnter,regionAt,gateMessage} from './core__city-progress.js?v=b5bc09075cbf';
+import {POSTERS,posterApproach} from './content__district_01__posters.js?v=b5bc09075cbf';
+import {BridgeGangs} from './core__bridge-gangs.js?v=b5bc09075cbf';
+import {TutorialFlow} from './core__tutorial.js?v=b5bc09075cbf';
+import {StreetLife} from './core__street-life.js?v=b5bc09075cbf';
+import {SneakFlow} from './core__sneak.js?v=b5bc09075cbf';
 
 export class GameSession{
   constructor(pack,store){
@@ -112,12 +112,13 @@ export class GameSession{
     else if(kind==='display')this.save.hideout.display=id;
     else return false;
     this.room.action=kind==='ink'?'spray':'victory';this.room.remaining=1.4;
-    this.persist();this.notice(kind==='outfit'?'Образ надет: '+item.name:kind==='ink'?'В рюкзаке: '+item.name:'На витрине: '+item.name);
+    const line=kind==='outfit'?'Надену '+item.name+'. Пусть район привыкает.':kind==='ink'?'Беру '+item.name+'. Стенам пойдёт.':'Поставлю '+item.name+' на видное место.';
+    this.persist();this.notice(line);
     return true;
   }
   roomAction(action){
     if(this.mode!=='hideout')return;
-    if(action==='save'){const ok=this.persist();if(ok)this.notice('Дома. Прогресс сохранён.');}
+    if(action==='save'){const ok=this.persist();if(ok)this.notice('Всё сохранил. Теперь можно выдохнуть.');}
     else if(action==='rest'){if(this.life)return this.life.sleep();this.room.action='rest';this.room.remaining=5;this.room.reaction='Тихо. Мы дома.';this.room.reactionFor=4;}
     else if(action==='pet'){this.room.action='pet';this.room.remaining=2;this.room.reaction='♥';this.room.reactionFor=2;}
   }

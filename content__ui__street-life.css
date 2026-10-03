@@ -103,3 +103,23 @@ button.secondary,.room-hotspot,#radio-toggle,#chapter-button,#phone-toggle,.phas
 .phone-volume-label{display:block;font:11px var(--ui-body);margin-top:14px;color:#b4cfca}.phone-radio-volume{display:block;width:100%;margin-top:10px;accent-color:#7aceb0}
 @media(max-width:700px){#hud{left:10px;right:62px;gap:8px}.player-card{gap:5px}.player-card #portrait{flex-basis:58px;width:58px;height:66px}.player-card strong{font-size:26px}.player-card strong small{font-size:9px}.player-card #run-rep{font-size:10px;margin-top:4px}.heat-card{padding-top:12px!important}#heat-stars{gap:1px}.heat-star .graffiti-star{width:20px;height:24px}.heat-card #heat-note{font-size:9px}#phone-toggle{right:9px;width:39px;height:56px}.camera-back{top:16px}.phone-camera-view h2{top:62px}}
 @media(max-width:360px){.player-card #portrait{flex-basis:48px;width:48px;height:60px}.player-card strong{font-size:23px}.heat-star .graffiti-star{width:17px;height:22px}#hud{gap:4px}}
+
+/* Only short Zack comments replace REP; lesson windows stay separate. */
+.player-card #portrait{transform:scaleX(-1)}
+.player-card:has(#toast:not([hidden])){align-items:flex-start;position:relative}
+.player-card:has(#toast:not([hidden]))>div:not(#toast){display:none}
+#hud .player-card #toast{position:relative;inset:auto;transform:none;width:min(360px,calc(100vw - 210px));max-width:none;margin:3px 0 0 8px;padding:12px 16px!important;border:2px solid #101a23!important;border-image:none!important;border-radius:19px 22px 18px 5px!important;background:#f5eedb!important;color:#15202a;box-shadow:3px 4px 0 #0008!important;clip-path:none!important;text-shadow:none;text-align:left;font:700 15px/1.35 var(--ui-body);pointer-events:none;min-height:54px;display:flex;align-items:center}
+#hud .player-card #toast:before{content:'';position:absolute;left:-12px;top:22px;width:18px;height:15px;background:#f5eedb;border-left:2px solid #101a23;border-bottom:2px solid #101a23;transform:skewY(-32deg);clip-path:polygon(0 100%,100% 0,100% 100%)}
+#hud .player-card #toast[hidden]{display:none}
+#app[data-home-intro=true] .player-card:has(#toast:not([hidden])){display:flex!important}
+#app[data-home-intro=true] #hud:has(#toast:not([hidden])){justify-content:flex-start}
+#app:has(.player-card #toast:not([hidden])) .district-title,#app:has(.player-card #toast:not([hidden])) #street-status{visibility:hidden}
+@media(max-width:700px){#hud:has(#toast:not([hidden])){flex-wrap:wrap;gap:6px;right:60px}#hud .player-card:has(#toast:not([hidden])){width:100%;gap:0}#hud .player-card #toast{width:calc(100% - 66px);padding:10px 12px!important;margin-left:8px;font-size:13px}#hud:has(#toast:not([hidden])) .heat-card{padding-top:0!important}}
+@media(max-width:360px){#hud .player-card #toast{width:calc(100% - 56px)}}
+#app[data-period=day]{background-image:url('./content__levels__first-mark__art__background-day.png')}
+.chapter-tabs{display:flex;gap:10px;width:min(540px,100%)}.chapter-tabs button{flex:1}
+.chapter-tabs [aria-selected=true]{color:#fff;background:#544431!important}
+.chapter-body{display:flex;flex-direction:column;gap:12px;width:min(540px,100%)}.chapter-body>p{font:14px/1.45 var(--ui-body);color:#ced5d7;margin:0}
+.chapter-body .campaign-status{padding:20px;border:1px dashed #857450;border-radius:8px;color:#e5d6ae}
+.phone-training .ui-icon{filter:hue-rotate(140deg)}
+#hud:has(#toast:not([hidden])){z-index:24}

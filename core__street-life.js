@@ -1,5 +1,5 @@
-import {moveAlongPath,distance} from './core__geometry.js';
-import {recognition,rememberWorks,RECOGNITION_TIERS} from './core__recognition.js';
+import {moveAlongPath,distance} from './core__geometry.js?v=b5bc09075cbf';
+import {recognition,rememberWorks,RECOGNITION_TIERS} from './core__recognition.js?v=b5bc09075cbf';
 
 export const HOME_TOUR=[
   ['Знакомый потолок','Кровать — мой первый спонсор. Пока платит только сном.','Это дом Зака. Радио — в телефоне справа. Остальные значки появятся по ходу знакомства.','О КРОВАТИ'],
@@ -16,7 +16,7 @@ export class StreetLife{
   syncRecognition(){
     const changed=rememberWorks(this.s),fame=this.fame,promoted=fame.level>this.knownLevel;this.knownLevel=fame.level;
     if(changed)this.s.persist();
-    if(promoted)this.s.notice('УЗНАВАЕМОСТЬ · '+fame.name+'. Район всё чаще говорит о Заке.');
+    if(promoted)this.s.notice('Теперь я здесь «'+fame.name+'». Кажется, меня начинают узнавать.');
     return promoted;
   }
   get state(){return this.s.save.streetLife;}
@@ -62,7 +62,7 @@ export class StreetLife{
     for(const v of this.visitors){
       if(v.phase==='walk'||v.phase==='leave'){moveAlongPath(v,v.path,70,dt);if(!v.path.length){if(v.phase==='leave')v.done=true;else{v.phase='photo';v.age=0;const fame=this.fame;v.line=fame.level>=2&&distance(v,this.s.player)<150?(fame.level===3?'Зак! Можно фото с тобой?':'Зак, крутая работа!'):fame.lines[v.n%fame.lines.length];}}}
       else{v.age+=dt;if(v.phase==='photo'&&v.age>=2.8){v.phase='tip';v.age=0;
-          if(!this.state.donations.includes(v.key)){this.state.donations.push(v.key);v.tip=10+(v.n%2)*5+v.bonus;this.s.save.money+=v.tip;this.s.save.recognition.encounters=Math.min(60,this.s.save.recognition.encounters+1);const promoted=this.syncRecognition();this.s.persist();if(!promoted)this.s.notice('«'+v.line+'» · +'+v.tip+' ₽');}}
+          if(!this.state.donations.includes(v.key)){this.state.donations.push(v.key);v.tip=10+(v.n%2)*5+v.bonus;this.s.save.money+=v.tip;this.s.save.recognition.encounters=Math.min(60,this.s.save.recognition.encounters+1);const promoted=this.syncRecognition();this.s.persist();if(!promoted)this.s.notice('Спасибо! +'+v.tip+' ₽ на следующую краску.');}}
         else if(v.phase==='tip'&&v.age>=2){v.phase='leave';v.path=this.s.nav.path(v,this.s.world.tutorialEntry);}}
     }
     this.visitors=this.visitors.filter(v=>!v.done);

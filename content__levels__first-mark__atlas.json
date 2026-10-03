@@ -710,6 +710,105 @@
         1465,
         957
       ]
+    },
+    "apartment_day": {
+      "sheet": "building_day",
+      "rect": [
+        100,
+        20,
+        950,
+        1284
+      ]
+    },
+    "lamp_day": {
+      "sheet": "street_props_day",
+      "rect": [
+        188,
+        42,
+        170,
+        524
+      ]
+    },
+    "bench_day": {
+      "sheet": "street_props_day",
+      "rect": [
+        544,
+        198,
+        412,
+        350
+      ]
+    },
+    "dumpster_day": {
+      "sheet": "street_props_day",
+      "rect": [
+        1056,
+        142,
+        408,
+        422
+      ]
+    },
+    "hydrant_day": {
+      "sheet": "street_props_day",
+      "rect": [
+        148,
+        602,
+        206,
+        344
+      ]
+    },
+    "crates_day": {
+      "sheet": "street_props_day",
+      "rect": [
+        564,
+        630,
+        396,
+        328
+      ]
+    },
+    "planter_day": {
+      "sheet": "street_props_day",
+      "rect": [
+        1058,
+        614,
+        412,
+        362
+      ]
+    },
+    "building_window_day": {
+      "sheet": "building_day",
+      "rect": [
+        791,
+        398,
+        95,
+        151
+      ]
+    },
+    "building_door_day": {
+      "sheet": "building_day",
+      "rect": [
+        406,
+        930,
+        100,
+        255
+      ]
+    },
+    "building_roof_tank_day": {
+      "sheet": "building_day",
+      "rect": [
+        619,
+        25,
+        155,
+        182
+      ]
+    },
+    "building_ac_day": {
+      "sheet": "building_day",
+      "rect": [
+        450,
+        560,
+        95,
+        99
+      ]
     }
   },
   "version": 2,
@@ -773,6 +872,18 @@
     {
       "id": "roller_patch",
       "file": "./content__levels__first-mark__art__roller-patch.png"
+    },
+    {
+      "id": "reference_background_day",
+      "file": "./content__levels__first-mark__art__background-day.png"
+    },
+    {
+      "id": "building_day",
+      "file": "./content__levels__first-mark__art__house-day.png"
+    },
+    {
+      "id": "street_props_day",
+      "file": "./content__levels__first-mark__art__street-props-day.png"
     }
   ]
 }
