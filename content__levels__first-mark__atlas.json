@@ -1245,6 +1245,42 @@
         1024,
         1536
       ]
+    },
+    "wilson_ball": {
+      "sheet": "wilson_ball",
+      "rect": [
+        10,
+        10,
+        1234,
+        1234
+      ]
+    },
+    "roby_portrait": {
+      "sheet": "roby_npc",
+      "rect": [
+        170,
+        640,
+        405,
+        595
+      ]
+    },
+    "mural_street_flow": {
+      "sheet": "mural_street_flow",
+      "rect": [
+        25,
+        7,
+        1481,
+        1011
+      ]
+    },
+    "mural_sunset_block": {
+      "sheet": "mural_sunset_block",
+      "rect": [
+        31,
+        19,
+        1471,
+        981
+      ]
     }
   },
   "version": 2,
@@ -1383,7 +1419,7 @@
     },
     {
       "id": "court_friends",
-      "file": "./content__district_01__art__court-friends.png"
+      "file": "./content__levels__first-mark__art__court-friends-alpha-v2.png"
     },
     {
       "id": "poster_reebok",
@@ -1404,6 +1440,18 @@
     {
       "id": "basketball_court",
       "file": "./content__levels__first-mark__art__court-painted-v2.png"
+    },
+    {
+      "id": "wilson_ball",
+      "file": "./content__district_01__art__wilson-ball.png"
+    },
+    {
+      "id": "mural_street_flow",
+      "file": "./content__graffiti__assets__street-flow.png"
+    },
+    {
+      "id": "mural_sunset_block",
+      "file": "./content__graffiti__assets__sunset-block.png"
     }
   ]
 }

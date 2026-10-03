@@ -1,4 +1,4 @@
-import {facadeGeometry} from './content__district_01__facades.js?v=14892ebffd3d';
+import {facadeGeometry} from './content__district_01__facades.js?v=083bd6171324';
 export const ARTIST_URL='https://www.instagram.com/zakminimonster?stkn=NnA2cG13MXFsemU0';
 export const POSTERS=[
   {id:'reebok',brand:'Reebok',buildingId:'D01_B02'},
@@ -6,7 +6,7 @@ export const POSTERS=[
   {id:'posca',brand:'POSCA',buildingId:'D01_B05'},
   {id:'converse',brand:'Converse',buildingId:'D01_B12'}
 ];
-export function posterApproach(world,poster){const b=world.buildings.find(b=>b.id===poster.buildingId);return {x:b.x+b.w+34,y:b.y+b.h*.58};}
+export function posterApproach(world,poster){const b=world.buildings.find(b=>world.sandbox?b.poster===poster.id:b.id===poster.buildingId);return b?{x:b.x+b.w+34,y:b.y+b.h*.58}:world.spawn;}
 export function posterGeometry(building,atlas){
   const facade=facadeGeometry(building,atlas);if(!facade)return null;
   const [a,b,d]=facade.points;

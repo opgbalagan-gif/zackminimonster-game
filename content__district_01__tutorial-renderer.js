@@ -1,16 +1,16 @@
-import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=14892ebffd3d';
-import {vehicleProjection} from './core__vehicle-projection.js?v=14892ebffd3d';
-import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=14892ebffd3d';
-import {surfaceTrain} from './core__sandbox-metro.js?v=14892ebffd3d';
-import {SpriteAtlas} from './core__sprites.js?v=14892ebffd3d';
-import {project} from './core__geometry.js?v=14892ebffd3d';
-import {heroSprite} from './core__hideout.js?v=14892ebffd3d';
-import {polygon,box} from './content__district_01__terrain.js?v=14892ebffd3d';
-import {drawGraffiti} from './content__district_01__graffiti-art.js?v=14892ebffd3d';
-import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=14892ebffd3d';
-import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=14892ebffd3d';
-import {OccluderFade} from './core__occluder-fade.js?v=14892ebffd3d';
-import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=14892ebffd3d';
+import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=083bd6171324';
+import {vehicleProjection} from './core__vehicle-projection.js?v=083bd6171324';
+import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=083bd6171324';
+import {surfaceTrain} from './core__sandbox-metro.js?v=083bd6171324';
+import {SpriteAtlas} from './core__sprites.js?v=083bd6171324';
+import {project} from './core__geometry.js?v=083bd6171324';
+import {heroSprite} from './core__hideout.js?v=083bd6171324';
+import {polygon,box} from './content__district_01__terrain.js?v=083bd6171324';
+import {drawGraffiti} from './content__district_01__graffiti-art.js?v=083bd6171324';
+import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=083bd6171324';
+import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=083bd6171324';
+import {OccluderFade} from './core__occluder-fade.js?v=083bd6171324';
+import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=083bd6171324';
 
 function fightCloud(c,s){
   const t=s.tutorial.fightBurst,p=project(s.tutorial.actor.x-11,s.tutorial.actor.y+10),pulse=Math.sin(t*27);
@@ -35,7 +35,7 @@ function fightCloud(c,s){
 }
 
 export function createTutorialRenderer(pack){
-  const markerHits=[];
+  const markerHits=[],posterHits=[];
   const atlas=new SpriteAtlas(pack.atlas,pack.images),kit=createStreetKit(pack.images);
   const neighbourhood=neighbourhoodArt(pack.images,atlas);
   const fades=new OccluderFade(),masks=new Map();let lastTime,followPoint;
@@ -194,6 +194,13 @@ export function createTutorialRenderer(pack){
     c.restore();s.metrics.drawCalls=atlas.drawCalls;
     drawCitizenSpeech(c,citizenSpeakers(s),actor=>{const p=project(actor.x,actor.y,70);return {x:originX+(p.x-cam.x)*cam.zoom,y:originY+(p.y-cam.y)*cam.zoom};},w,h);
     markerHits.length=0;
+    posterHits.length=0;
+    for(const b of s.world.buildings.filter(b=>b.poster)){
+      const art=houseArt(b,day),rect=atlas.rect(art.id),scale=art.width/rect[2],p=project(b.x+b.w,b.y+b.h,-36);
+      const x=Math.round(p.x)-art.width/2+(art.mural[0]+275)*scale;
+      const y=Math.round(p.y)-rect[3]*scale+(art.mural[1]-45-115*.36)*scale;
+      posterHits.push({id:b.poster,x:originX+(x-cam.x)*cam.zoom,y:originY+(y-cam.y)*cam.zoom,w:115*scale*cam.zoom,h:(175+115*.36)*scale*cam.zoom});
+    }
     for(const [id,x,y,z] of [['home',278,288,425],['wall',494,266,106]]){const p=project(x,y,z);markerHits.push({id,x:originX+(p.x-cam.x)*cam.zoom,y:originY+(p.y-cam.y)*cam.zoom});}
     if(s.tutorial.allowedTarget(s.world.targets[1]))markerHits.push({id:'facade',x:originX+(24-cam.x)*cam.zoom,y:originY+(173-cam.y)*cam.zoom});
     for(const bin of s.world.bins??[]){const p=project(bin.x,bin.y,62);markerHits.push({id:bin.id,x:originX+(p.x-cam.x)*cam.zoom,y:originY+(p.y-cam.y)*cam.zoom});}
@@ -205,5 +212,5 @@ export function createTutorialRenderer(pack){
     cam.x+=(w/2-originX)/cam.zoom;cam.y+=(h/2-originY)/cam.zoom;
     return cam;
   }
-  return {atlas,posterHits:[],markerHits,world,hideout:(c,s,w,h)=>renderHideout(c,s,w,h,atlas),drawTrophy:(c,id,x,y,size)=>drawTrophy(c,id,atlas,x,y,size),drawGraffiti:(c,id,x,y,w,h,color)=>drawGraffiti(c,id,x,y,w,h,atlas,color)};
+  return {atlas,posterHits,markerHits,world,hideout:(c,s,w,h)=>renderHideout(c,s,w,h,atlas),drawTrophy:(c,id,x,y,size)=>drawTrophy(c,id,atlas,x,y,size),drawGraffiti:(c,id,x,y,w,h,color)=>drawGraffiti(c,id,x,y,w,h,atlas,color)};
 }

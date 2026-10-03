@@ -1,4 +1,4 @@
-import {clamp} from './core__geometry.js?v=14892ebffd3d';
+import {clamp} from './core__geometry.js?v=083bd6171324';
 export class AimController{
   constructor(){this.x=.38;this.y=-.24;this.base=null;}
   centre(){this.x=0;this.y=0;this.base=null;}

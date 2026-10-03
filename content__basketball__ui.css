@@ -29,6 +29,11 @@
 .court-screen[data-speaker=left] #court-left,.court-screen[data-speaker=right] #court-right{filter:drop-shadow(0 7px 3px #0008)}
 .court-screen .court-footer{border:0;padding:14px 8px 5px}.court-screen .court-footer span{text-shadow:1px 2px 2px #000;color:#fff0d0}
 #app[data-mode="court-dialogue"] #hud{visibility:hidden}
+#app[data-mode="court-dialogue"] .player-card{visibility:hidden}
+.court-screen .speech-bubble{top:auto;bottom:calc(min(43dvh,370px) + 16px);width:58%;left:2%;transform:none}
+.court-screen[data-speaker=right] .speech-bubble{left:auto;right:2%;transform:none}
+.court-screen .speech-bubble:after{left:20%}
+.court-screen[data-speaker=right] .speech-bubble:after{right:20%;left:auto}
 @media(max-width:600px){.court-screen{padding:12px}.court-screen .court-card{height:calc(100dvh - 24px);min-height:0}.court-screen .court-heading{padding:8px 0}.court-screen .comic-cast{padding-top:170px;min-height:0}.court-screen .comic-cast canvas{width:48%;max-height:36dvh}.court-screen .speech-bubble{top:18px}.court-screen .court-footer{padding:15px 0 max(10px,env(safe-area-inset-bottom))}}
 @media(max-height:530px) and (min-width:600px){.court-screen .court-card{min-height:0}.court-screen .comic-cast{min-height:0;padding-top:100px}.court-screen .comic-cast canvas{max-height:50dvh}.court-screen .speech-bubble{top:0;left:25%;width:50%}.court-screen[data-speaker=right] .speech-bubble{left:25%}}
 #sticker-tray{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}
@@ -42,3 +47,6 @@
 .ball-screen #ball-canvas{width:min(100%,35dvh);cursor:grab;margin:9px auto}
 .ball-screen #ball-canvas:active{cursor:grabbing}.ball-meter{margin:10px 0}
 @media(max-width:600px){.ball-card{padding:13px}.ball-screen #ball-canvas{width:min(100%,32dvh)}#sticker-tray canvas{height:45px}#sticker-tray span{font-size:8px}#sticker-tools button{min-height:40px}.ball-meter strong{font-size:11px}.ball-heading h2{font-size:18px}}
+@media(max-width:600px){.court-screen .speech-bubble{top:auto;bottom:calc(36dvh + 16px);width:92%;left:0}.court-screen[data-speaker=right] .speech-bubble{left:auto;right:0}.court-screen .speech-bubble:after{left:20%}.court-screen[data-speaker=right] .speech-bubble:after{left:auto;right:20%}}
+@media(max-height:530px) and (min-width:600px){.court-screen .speech-bubble{top:0;bottom:auto;width:58%;left:0}.court-screen[data-speaker=right] .speech-bubble{left:auto;right:0}.court-screen .comic-cast canvas{max-height:42dvh;width:22%}.court-screen .speech-bubble p{font-size:14px}}
+@media(max-width:600px){#court-screen .speech-bubble{bottom:calc(min(36dvh,62.4vw - 20px) + 16px)}}

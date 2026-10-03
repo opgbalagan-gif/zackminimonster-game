@@ -181,3 +181,12 @@ progress::-moz-progress-bar{background:var(--ui-metal)}
 @media(max-height:720px) and (max-width:700px){#tutorial-panel{padding:13px 16px;bottom:calc(var(--ui-safe-bottom) + 100px)}#tutorial-panel h2{font-size:23px;margin:6px 0;padding-bottom:7px}.lesson-progress{margin-bottom:8px}.lesson-line{font-size:13px;margin:8px 0}.lesson-help{font-size:11px;margin:8px 0 12px}#tutorial-panel button{min-height:42px;font-size:17px}.district-title strong{font-size:26px}}
 @media(max-height:600px) and (min-width:701px){#tutorial-panel{padding:14px;width:355px}.lesson-line{font-size:14px}.lesson-help{font-size:12px}#tutorial-panel h2{font-size:25px}#tutorial-panel button{min-height:42px}.graffiti-card{max-width:530px}.district-title strong{font-size:30px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+/* Conversations belong to the characters standing over the live district. */
+#court-screen{background:#07101845;backdrop-filter:none}
+#court-screen .court-card{background:none;border:0;box-shadow:none;padding:0;overflow:visible}
+#court-screen .speech-bubble{background:#fff1d3;border:3px solid #17212b;border-radius:18px;box-shadow:4px 5px 0 #0005;padding:16px 20px;color:#17212b}
+#court-screen .speech-bubble:before{display:none}
+#court-screen .speech-bubble:after{display:block;background:#fff1d3;border-color:#17212b;border-width:3px}
+#court-screen .speech-bubble strong{color:#17626b;font-weight:900}
+#court-screen .speech-bubble p{color:#17212b;font-weight:700}
+#app[data-mode="court-dialogue"] #street-status{visibility:hidden}

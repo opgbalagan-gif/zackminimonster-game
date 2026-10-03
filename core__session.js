@@ -1,21 +1,21 @@
-import {NavigationGrid} from './core__navigation.js?v=14892ebffd3d';
-import {PoliceSystem} from './core__police.js?v=14892ebffd3d';
-import {GraffitiGame} from './core__graffiti.js?v=14892ebffd3d';
-import {Camera,clamp,distance,moveAlongPath,project} from './core__geometry.js?v=14892ebffd3d';
-import {EffectPool} from './core__effects.js?v=14892ebffd3d';
-import {OUTFITS,INKS,TROPHIES} from './core__hideout.js?v=14892ebffd3d';
-import {TrafficSystem} from './core__traffic.js?v=14892ebffd3d';
-import {CitizenSystem} from './core__citizens.js?v=14892ebffd3d';
-import {COURT,COURT_LINES,BallArtGame} from './core__basketball.js?v=14892ebffd3d';
-import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=14892ebffd3d';
-import {cityProgress,canEnter,regionAt,gateMessage} from './core__city-progress.js?v=14892ebffd3d';
-import {POSTERS,posterApproach} from './content__district_01__posters.js?v=14892ebffd3d';
-import {BridgeGangs} from './core__bridge-gangs.js?v=14892ebffd3d';
-import {TutorialFlow} from './core__tutorial.js?v=14892ebffd3d';
-import {StreetLife} from './core__street-life.js?v=14892ebffd3d';
-import {SneakFlow} from './core__sneak.js?v=14892ebffd3d';
-import {SandboxFlow} from './core__sandbox.js?v=14892ebffd3d';
-import {talkToStreetNpc} from './core__street-npcs.js?v=14892ebffd3d';
+import {NavigationGrid} from './core__navigation.js?v=083bd6171324';
+import {PoliceSystem} from './core__police.js?v=083bd6171324';
+import {GraffitiGame} from './core__graffiti.js?v=083bd6171324';
+import {Camera,clamp,distance,moveAlongPath,project} from './core__geometry.js?v=083bd6171324';
+import {EffectPool} from './core__effects.js?v=083bd6171324';
+import {OUTFITS,INKS,TROPHIES} from './core__hideout.js?v=083bd6171324';
+import {TrafficSystem} from './core__traffic.js?v=083bd6171324';
+import {CitizenSystem} from './core__citizens.js?v=083bd6171324';
+import {COURT,COURT_LINES,BallArtGame} from './core__basketball.js?v=083bd6171324';
+import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=083bd6171324';
+import {cityProgress,canEnter,regionAt,gateMessage} from './core__city-progress.js?v=083bd6171324';
+import {POSTERS,posterApproach} from './content__district_01__posters.js?v=083bd6171324';
+import {BridgeGangs} from './core__bridge-gangs.js?v=083bd6171324';
+import {TutorialFlow} from './core__tutorial.js?v=083bd6171324';
+import {StreetLife} from './core__street-life.js?v=083bd6171324';
+import {SneakFlow} from './core__sneak.js?v=083bd6171324';
+import {SandboxFlow} from './core__sandbox.js?v=083bd6171324';
+import {talkToStreetNpc} from './core__street-npcs.js?v=083bd6171324';
 
 export class GameSession{
   constructor(pack,store){
@@ -161,7 +161,7 @@ export class GameSession{
     }
     if(type==='bridge'){this.gangs.confront(this,item,true);return;}
     if(type==='court'){
-      this.courtLine=0;this.mode='court-dialogue';this.player.state='IDLE';this.player.moving=false;this.emit('mode');return;
+      this.streetDialogue=null;this.courtLine=0;this.mode='court-dialogue';this.player.state='IDLE';this.player.moving=false;this.emit('mode');return;
     }
     if(type==='safe'){
       if(item.cooldown>0)return this.notice('Укрытие восстановится через '+Math.ceil(item.cooldown)+' сек.');
@@ -175,13 +175,15 @@ export class GameSession{
   }
   advanceCourt(){
     if(this.mode!=='court-dialogue')return;
-    if(this.courtLine<COURT_LINES.length-1)this.courtLine++;
+    const lines=this.streetDialogue?.lines??COURT_LINES;
+    if(this.courtLine<lines.length-1)this.courtLine++;
+    else if(this.streetDialogue){this.cancelCourt();return;}
     else{this.ballGame=new BallArtGame();this.mode='ball-art';this.ballReward=false;}
     this.emit('mode');
   }
   cancelCourt(){
     if(!['court-dialogue','ball-art','ball-result'].includes(this.mode))return;
-    this.ballGame?.end();this.ballGame=null;this.mode='district';this.grace=2;this.player.state='IDLE';this.emit('mode');
+    this.ballGame?.end();this.ballGame=null;this.streetDialogue=null;this.mode='district';this.grace=2;this.player.state='IDLE';this.emit('mode');
   }
   finishBall(){
     if(this.mode==='ball-result')return this.cancelCourt();
