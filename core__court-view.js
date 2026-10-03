@@ -1,6 +1,6 @@
-import {COURT_LINES,STICKERS,MAX_STICKERS,COURT} from './core__basketball.js?v=083bd6171324';
-import {drawBall,drawSticker} from './core__ball-art.js?v=083bd6171324';
-import {heroSprite} from './core__hideout.js?v=083bd6171324';
+import {COURT_LINES,STICKERS,MAX_STICKERS,COURT} from './core__basketball.js?v=c531a45172ca';
+import {drawBall,drawSticker} from './core__ball-art.js?v=c531a45172ca';
+import {heroSprite} from './core__hideout.js?v=c531a45172ca';
 const $=id=>document.getElementById(id);
 export class CourtView{
   constructor(session,renderer){
@@ -28,6 +28,10 @@ export class CourtView{
   }
   release(){this.pointer=null;this.session.ballGame?.end();}
   portrait(canvas,sprite){const c=canvas.getContext('2d');c.clearRect(0,0,canvas.width,canvas.height);c.imageSmoothingEnabled=false;
+    if(sprite==='roby_portrait'){
+      const rect=this.renderer.atlas.rect(sprite),width=canvas.width-16,height=width*rect[3]/rect[2];
+      c.imageSmoothingEnabled=true;this.renderer.atlas.draw(c,sprite,canvas.width/2,22+height,width,height);return;
+    }
     this.renderer.atlas.draw(c,sprite==='zack'?heroSprite(this.session.save.player.skin):sprite,canvas.width/2,canvas.height-8,null,canvas.height-22,sprite==='zack');}
   sync(){
     const s=this.session,dialogue=s.mode==='court-dialogue',painting=s.mode==='ball-art',result=s.mode==='ball-result';

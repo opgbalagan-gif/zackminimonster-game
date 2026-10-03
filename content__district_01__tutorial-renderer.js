@@ -1,16 +1,16 @@
-import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=083bd6171324';
-import {vehicleProjection} from './core__vehicle-projection.js?v=083bd6171324';
-import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=083bd6171324';
-import {surfaceTrain} from './core__sandbox-metro.js?v=083bd6171324';
-import {SpriteAtlas} from './core__sprites.js?v=083bd6171324';
-import {project} from './core__geometry.js?v=083bd6171324';
-import {heroSprite} from './core__hideout.js?v=083bd6171324';
-import {polygon,box} from './content__district_01__terrain.js?v=083bd6171324';
-import {drawGraffiti} from './content__district_01__graffiti-art.js?v=083bd6171324';
-import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=083bd6171324';
-import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=083bd6171324';
-import {OccluderFade} from './core__occluder-fade.js?v=083bd6171324';
-import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=083bd6171324';
+import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=c531a45172ca';
+import {vehicleProjection} from './core__vehicle-projection.js?v=c531a45172ca';
+import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=c531a45172ca';
+import {surfaceTrain} from './core__sandbox-metro.js?v=c531a45172ca';
+import {SpriteAtlas} from './core__sprites.js?v=c531a45172ca';
+import {project} from './core__geometry.js?v=c531a45172ca';
+import {heroSprite} from './core__hideout.js?v=c531a45172ca';
+import {polygon,box} from './content__district_01__terrain.js?v=c531a45172ca';
+import {drawGraffiti} from './content__district_01__graffiti-art.js?v=c531a45172ca';
+import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=c531a45172ca';
+import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=c531a45172ca';
+import {OccluderFade} from './core__occluder-fade.js?v=c531a45172ca';
+import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=c531a45172ca';
 
 function fightCloud(c,s){
   const t=s.tutorial.fightBurst,p=project(s.tutorial.actor.x-11,s.tutorial.actor.y+10),pulse=Math.sin(t*27);

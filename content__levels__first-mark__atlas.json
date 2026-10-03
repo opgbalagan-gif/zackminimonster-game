@@ -1256,12 +1256,12 @@
       ]
     },
     "roby_portrait": {
-      "sheet": "roby_npc",
+      "sheet": "roby_head_avatar",
       "rect": [
-        170,
-        640,
-        405,
-        595
+        70,
+        125,
+        1130,
+        1050
       ]
     },
     "mural_street_flow": {
@@ -1452,6 +1452,10 @@
     {
       "id": "mural_sunset_block",
       "file": "./content__graffiti__assets__sunset-block.png"
+    },
+    {
+      "id": "roby_head_avatar",
+      "file": "./content__levels__first-mark__art__roby-head-avatar.png"
     }
   ]
 }

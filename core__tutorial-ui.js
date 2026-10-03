@@ -1,4 +1,4 @@
-import {uiIcon,setUIButton,UIPanel,applyUIComponents} from './core__ui-kit.js?v=083bd6171324';
+import {uiIcon,setUIButton,UIPanel,applyUIComponents} from './core__ui-kit.js?v=c531a45172ca';
 export class TutorialUI{
   constructor(session,onComplete){
     this.s=session;this.signature='';this.panel=document.createElement('section');this.panel.id='tutorial-panel';this.panel.className='ui-panel';this.panel.setAttribute('aria-label','Обучение');
