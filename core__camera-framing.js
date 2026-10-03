@@ -1,4 +1,4 @@
-import {clamp} from './core__geometry.js?v=14cc148264ab';
+import {clamp} from './core__geometry.js?v=09df463d6cde';
 
 // Measured on camera-alley-wide.png (1536 × 1024): bare plaster below
 // the fire escape, clear of the pipe, dumpster, crates and foreground bollard.

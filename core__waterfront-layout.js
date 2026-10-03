@@ -28,14 +28,15 @@ export function addWaterfront(w){
   const infill=[...([132,650].flatMap(y=>[2650,2880,3110,3340].map(x=>[x,y]))),...[1670,1880,2080].map(x=>[x,2370]),...[1100,1750,2010].map(x=>[x,3020]),...[110,330,550,770,1070].map(x=>[x,3880])];
   for(const [i,[x,y]] of infill.entries())w.buildings.push({id:'courtyard_'+i,type:'apartment',artType:'apartment',comicVariant:i%4,x,y,w:166,h:156});
   w.nature=[];
+  for(const [x,y] of [[1500,865],[2100,1060],[2180,1880],[3000,2320]])w.blockProps.push({id:'litter',x,y,w:27});
   // Long residential blocks use their own footprint and artwork, not stretched square houses.
   for(const [i,x,y] of [[0,1100,1550],[1,3300,2280],[2,650,3290]]){
     const b={id:'long_house_'+i,type:'apartment',artType:'apartment',longHouse:true,x,y,w:170,h:480};w.buildings.push(b);
     w.targets.push({...w.targets[1],wall_id:'SANDBOX_LONG_HOUSE_'+i,buildingId:b.id,name:'Фасад · '+['Длинный дом у причала','Парковый корпус','Южный жилой корпус'][i],x:x+b.w,y:y+b.h,approach:{x:x+b.w+37,y:y+b.h+17},graffiti_id:'zack_tag'});
   }
-  for(const r of w.parks)for(let x=r.x+60;x<r.x+r.w-30;x+=150)for(let y=r.y+60;y<r.y+r.h-30;y+=165){
-    if(w.paths.some(p=>x>p.x-75&&x<p.x+p.w+75&&y>p.y-75&&y<p.y+p.h+75)||w.buildings.some(b=>x>b.x-70&&x<b.x+b.w+90&&y>b.y-70&&y<b.y+b.h+90))continue;
-    w.nature.push({id:'comic_tree',x:x+Math.sin(y)*18,y,w:120});
+  for(const r of w.parks)for(let x=r.x+45;x<r.x+r.w-30;x+=94)for(let y=r.y+45;y<r.y+r.h-30;y+=102){
+    if(w.paths.some(p=>x>p.x-45&&x<p.x+p.w+45&&y>p.y-45&&y<p.y+p.h+45)||w.buildings.some(b=>x>b.x-70&&x<b.x+b.w+90&&y>b.y-70&&y<b.y+b.h+90)||w.targets.some(t=>Math.hypot(x-t.approach.x,y-t.approach.y)<80))continue;
+    w.nature.push({id:'comic_tree',x:x+Math.sin(y)*12,y,w:130+Math.abs(Math.sin(x+y))*38});
   }
   for(const y of [270,690,1170,1570,2340,2760,3490,3850])w.nature.push({id:'comic_palm',x:2160,y,w:106});
   for(const [x,y] of [[1130,3440],[1510,3600],[1890,3440]]){

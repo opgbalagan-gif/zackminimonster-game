@@ -1,5 +1,5 @@
-import {project} from './core__geometry.js?v=14cc148264ab';
-import {polygon} from './content__district_01__terrain.js?v=14cc148264ab';
+import {project} from './core__geometry.js?v=09df463d6cde';
+import {polygon} from './content__district_01__terrain.js?v=09df463d6cde';
 const quad=r=>[[r.x,r.y],[r.x+r.w,r.y],[r.x+r.w,r.y+r.h],[r.x,r.y+r.h]].map(p=>project(...p));
 export function drawWaterfront(c,world,kit,night=false){
   c.save();c.imageSmoothingEnabled=true;
@@ -10,7 +10,12 @@ export function drawWaterfront(c,world,kit,night=false){
     for(let y=r.y+40;y<r.y+r.h;y+=95){const x=r.x+35+(Math.floor(y/95)%3)*48;c.beginPath();c.moveTo(x,y);c.lineTo(x+38,y-8);c.stroke();}c.restore();
   }
   for(const r of world.parks??[]){polygon(c,quad(r),'#9fad73','#747c5c',2);kit.material.quad(c,'grass',quad(r),night?.28:0);}
-  for(const r of world.paths??[])polygon(c,quad(r),night?'#777969':'#dcd5b7','#a4a089',1.5);
+  for(const r of world.paths??[]){
+    polygon(c,quad(r),night?'#777969':'#ead9ae','#b6b28a',2);
+    c.save();polygon(c,quad(r));c.clip();
+    for(let x=r.x;x<r.x+r.w;x+=240)for(let y=r.y;y<r.y+r.h;y+=240)kit.parkMaterial.quad(c,'sand',quad({x,y,w:240,h:240}),night?.35:0);
+    c.restore();
+  }
   for(const r of world.bridges??[]){
     polygon(c,quad(r),night?'#737b78':'#d6d3bf','#646e6b',3);
     for(const side of [0,1]){

@@ -1,1 +1,1 @@
-export {createSandboxWorld as createDistrict} from './core__sandbox.js?v=14cc148264ab';
+export {createSandboxWorld as createDistrict} from './core__sandbox.js?v=09df463d6cde';

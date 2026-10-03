@@ -1,11 +1,12 @@
-import {project} from './core__geometry.js?v=14cc148264ab';
-import {polygon,box} from './content__district_01__terrain.js?v=14cc148264ab';
-import {createMetroArt} from './content__district_01__metro-art.js?v=14cc148264ab';
+import {project} from './core__geometry.js?v=09df463d6cde';
+import {polygon,box} from './content__district_01__terrain.js?v=09df463d6cde';
+import {createMetroArt} from './content__district_01__metro-art.js?v=09df463d6cde';
 
 // Art dimensions are in world units. Anchors sit on the ground, never on a walk lane.
 export const STREET_PROPS=[
   {id:'lamp',x:98,y:374,w:44},{id:'lamp',x:607,y:379,w:44},
   {id:'bench',x:154,y:362,w:91},{id:'hydrant',x:346,y:397,w:29},
+  {id:'litter',x:211,y:369,w:27},
   {id:'dumpster',x:356,y:223,w:96},{id:'crates',x:384,y:245,w:46},
   {id:'planter',x:585,y:282,w:62},{id:'planter',x:100,y:285,w:55},
 ];
@@ -13,6 +14,7 @@ const quad=(x,y,w,h,z=0)=>[project(x,y,z),project(x+w,y,z),project(x+w,y+h,z),pr
 export function createStreetKit(images){
   const material=createMetroArt(images.comic_terrain,{asphalt:[2,2,623,623],paving:[629,2,623,623],wall:[2,629,623,623],grass:[629,629,623,623],metal:[2,629,623,623]});
   const roadMaterial=material;
+  const parkMaterial=createMetroArt(images.comic_park_materials,{sand:[2,2,623,623]});
   function road(c,x,y,w,h){
     c.save();polygon(c,quad(x,y,w,h),'#353a3d');c.clip();
     c.imageSmoothingEnabled=true;
@@ -48,13 +50,12 @@ export function createStreetKit(images){
     }
   }
   function fence(c,x,y,length){
-    const a=project(x,y),b=project(x+length,y),ta=project(x,y,58),tb=project(x+length,y,58);
-    polygon(c,[a,b,tb,ta],'#233b3b22','#59685d',2);
-    c.save();c.beginPath();[a,b,tb,ta].forEach((p,i)=>i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));c.closePath();c.clip();
-    c.strokeStyle='#53605788';c.lineWidth=1;
-    for(let i=-80;i<length+80;i+=12){c.beginPath();c.moveTo(a.x+i,a.y+i*.5);c.lineTo(a.x+i+48,a.y+i*.5-60);c.moveTo(a.x+i,a.y+i*.5);c.lineTo(a.x+i-48,a.y+i*.5-60);c.stroke();}c.restore();
-    for(let dx=0;dx<=length;dx+=length/3){const p=project(x+dx,y);c.fillStyle='#273b40';c.fillRect(p.x-2,p.y-64,4,64);c.fillStyle='#9a9574';c.fillRect(p.x-2,p.y-65,4,3);}
+    // Simple painted steel pickets share the illustrated street furniture palette.
+    c.save();c.lineCap='round';
+    for(const z of [15,48]){const a=project(x,y,z),b=project(x+length,y,z);c.strokeStyle='#294e52';c.lineWidth=4;c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();}
+    for(let dx=0;dx<=length;dx+=24){const a=project(x+dx,y,0),b=project(x+dx,y,56);c.strokeStyle='#294e52';c.lineWidth=5;c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();c.strokeStyle='#84a4a0';c.lineWidth=1;c.stroke();}
+    c.restore();
   }
   function bollard(c,x,y){const p=project(x,y);c.fillStyle='#15222a';c.fillRect(p.x-4,p.y-30,8,30);c.fillStyle='#878877';c.fillRect(p.x-5,p.y-30,10,4);c.fillStyle='#40515a';c.fillRect(p.x-3,p.y-24,2,22);}
-  return {material,road,floor,fence,bollard};
+  return {material,parkMaterial,road,floor,fence,bollard};
 }

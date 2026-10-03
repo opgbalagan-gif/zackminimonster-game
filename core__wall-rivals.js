@@ -1,4 +1,4 @@
-import {distance,moveAlongPath} from './core__geometry.js?v=14cc148264ab';
+import {distance,moveAlongPath} from './core__geometry.js?v=09df463d6cde';
 
 // Keep earned reputation and work history; damage is a separate, repairable layer.
 export class WallRivals{

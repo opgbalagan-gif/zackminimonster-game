@@ -838,7 +838,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.66
       ]
     },
     "traffic_coupe_sw": {
@@ -851,7 +851,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.66
       ]
     },
     "traffic_coupe_nw": {
@@ -864,7 +864,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.59
       ]
     },
     "traffic_coupe_ne": {
@@ -877,7 +877,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.59
       ]
     },
     "traffic_hatch_se": {
@@ -890,7 +890,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.66
       ]
     },
     "traffic_hatch_sw": {
@@ -903,7 +903,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.66
       ]
     },
     "traffic_hatch_nw": {
@@ -916,7 +916,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.59
       ]
     },
     "traffic_hatch_ne": {
@@ -929,7 +929,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.59
       ]
     },
     "traffic_minivan_se": {
@@ -942,7 +942,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.66
       ]
     },
     "traffic_minivan_sw": {
@@ -955,7 +955,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.66
       ]
     },
     "traffic_minivan_nw": {
@@ -968,7 +968,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.59
       ]
     },
     "traffic_minivan_ne": {
@@ -981,7 +981,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.59
       ]
     },
     "traffic_police_se": {
@@ -994,7 +994,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.66
       ]
     },
     "traffic_police_sw": {
@@ -1007,7 +1007,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.66
       ]
     },
     "traffic_police_nw": {
@@ -1020,7 +1020,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.59
       ]
     },
     "traffic_police_ne": {
@@ -1033,7 +1033,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.59
       ]
     },
     "traffic_lowrider_se": {
@@ -1046,7 +1046,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.66
       ]
     },
     "traffic_lowrider_sw": {
@@ -1059,7 +1059,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.66
       ]
     },
     "traffic_lowrider_nw": {
@@ -1072,7 +1072,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.59
       ]
     },
     "traffic_lowrider_ne": {
@@ -1085,7 +1085,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.59
       ]
     },
     "traffic_executive_se": {
@@ -1098,7 +1098,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.66
       ]
     },
     "traffic_executive_sw": {
@@ -1111,7 +1111,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.66
       ]
     },
     "traffic_executive_nw": {
@@ -1124,7 +1124,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.59
       ]
     },
     "traffic_executive_ne": {
@@ -1137,7 +1137,7 @@
       ],
       "groundAnchor": [
         0.5,
-        0.76
+        0.59
       ]
     },
     "roby_front": {
@@ -1522,6 +1522,301 @@
         0.266,
         0.9790209790209791
       ]
+    },
+    "comic_lamp": {
+      "sheet": "comic_street_props",
+      "rect": [
+        100,
+        65,
+        230,
+        575
+      ],
+      "groundAnchor": [
+        0.2391304347826087,
+        0.9739130434782609
+      ]
+    },
+    "comic_bench": {
+      "sheet": "comic_street_props",
+      "rect": [
+        405,
+        230,
+        430,
+        415
+      ],
+      "groundAnchor": [
+        0.5,
+        0.85
+      ]
+    },
+    "comic_litter": {
+      "sheet": "comic_street_props",
+      "rect": [
+        930,
+        280,
+        240,
+        350
+      ],
+      "groundAnchor": [
+        0.5,
+        0.91
+      ]
+    },
+    "comic_hydrant": {
+      "sheet": "comic_street_props",
+      "rect": [
+        60,
+        750,
+        270,
+        400
+      ],
+      "groundAnchor": [
+        0.5,
+        0.96
+      ]
+    },
+    "comic_dumpster": {
+      "sheet": "comic_street_props",
+      "rect": [
+        390,
+        705,
+        450,
+        490
+      ],
+      "groundAnchor": [
+        0.5,
+        0.88
+      ]
+    },
+    "comic_planter": {
+      "sheet": "comic_street_props",
+      "rect": [
+        855,
+        700,
+        370,
+        495
+      ],
+      "groundAnchor": [
+        0.5,
+        0.97
+      ]
+    },
+    "zack_bust": {
+      "sheet": "zack_bust",
+      "rect": [
+        0,
+        0,
+        1254,
+        1254
+      ]
+    },
+    "roby_hf_front_0": {
+      "sheet": "roby_walk_higgsfield",
+      "rect": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.83
+      ]
+    },
+    "roby_hf_front_1": {
+      "sheet": "roby_walk_higgsfield",
+      "rect": [
+        256,
+        0,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.83
+      ]
+    },
+    "roby_hf_front_2": {
+      "sheet": "roby_walk_higgsfield",
+      "rect": [
+        512,
+        0,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.83
+      ]
+    },
+    "roby_hf_front_3": {
+      "sheet": "roby_walk_higgsfield",
+      "rect": [
+        768,
+        0,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.83
+      ]
+    },
+    "roby_hf_front_4": {
+      "sheet": "roby_walk_higgsfield",
+      "rect": [
+        0,
+        256,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.83
+      ]
+    },
+    "roby_hf_front_5": {
+      "sheet": "roby_walk_higgsfield",
+      "rect": [
+        256,
+        256,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.83
+      ]
+    },
+    "roby_hf_front_6": {
+      "sheet": "roby_walk_higgsfield",
+      "rect": [
+        512,
+        256,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.83
+      ]
+    },
+    "roby_hf_front_7": {
+      "sheet": "roby_walk_higgsfield",
+      "rect": [
+        768,
+        256,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.83
+      ]
+    },
+    "roby_hf_back_0": {
+      "sheet": "roby_walk_higgsfield",
+      "rect": [
+        0,
+        512,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.83
+      ]
+    },
+    "roby_hf_back_1": {
+      "sheet": "roby_walk_higgsfield",
+      "rect": [
+        256,
+        512,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.83
+      ]
+    },
+    "roby_hf_back_2": {
+      "sheet": "roby_walk_higgsfield",
+      "rect": [
+        512,
+        512,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.83
+      ]
+    },
+    "roby_hf_back_3": {
+      "sheet": "roby_walk_higgsfield",
+      "rect": [
+        768,
+        512,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.83
+      ]
+    },
+    "roby_hf_back_4": {
+      "sheet": "roby_walk_higgsfield",
+      "rect": [
+        0,
+        768,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.83
+      ]
+    },
+    "roby_hf_back_5": {
+      "sheet": "roby_walk_higgsfield",
+      "rect": [
+        256,
+        768,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.83
+      ]
+    },
+    "roby_hf_back_6": {
+      "sheet": "roby_walk_higgsfield",
+      "rect": [
+        512,
+        768,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.83
+      ]
+    },
+    "roby_hf_back_7": {
+      "sheet": "roby_walk_higgsfield",
+      "rect": [
+        768,
+        768,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.83
+      ]
     }
   },
   "version": 2,
@@ -1716,7 +2011,7 @@
     },
     {
       "id": "comic_sky",
-      "file": "./content__levels__first-mark__art__comic-sky.png"
+      "file": "./content__levels__first-mark__art__comic-sky-clouds.png"
     },
     {
       "id": "comic_props",
@@ -1729,6 +2024,22 @@
     {
       "id": "comic_long_house",
       "file": "./content__levels__first-mark__art__comic-long-house.png"
+    },
+    {
+      "id": "comic_street_props",
+      "file": "./content__levels__first-mark__art__comic-street-props.png"
+    },
+    {
+      "id": "comic_park_materials",
+      "file": "./content__levels__first-mark__art__comic-park-materials.png"
+    },
+    {
+      "id": "zack_bust",
+      "file": "./content__ui__art__zack-hud-bust.png"
+    },
+    {
+      "id": "roby_walk_higgsfield",
+      "file": "./content__levels__first-mark__art__roby-walk-higgsfield.png"
     }
   ]
 }

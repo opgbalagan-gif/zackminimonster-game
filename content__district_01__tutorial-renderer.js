@@ -1,17 +1,18 @@
-import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=14cc148264ab';
-import {vehicleProjection} from './core__vehicle-projection.js?v=14cc148264ab';
-import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=14cc148264ab';
-import {surfaceTrain} from './core__sandbox-metro.js?v=14cc148264ab';
-import {drawWaterfront,drawNeighbourhoodMap} from './content__levels__sandbox__waterfront-art.js?v=14cc148264ab';
-import {SpriteAtlas} from './core__sprites.js?v=14cc148264ab';
-import {project} from './core__geometry.js?v=14cc148264ab';
-import {heroSprite} from './core__hideout.js?v=14cc148264ab';
-import {polygon,box} from './content__district_01__terrain.js?v=14cc148264ab';
-import {drawGraffiti} from './content__district_01__graffiti-art.js?v=14cc148264ab';
-import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=14cc148264ab';
-import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=14cc148264ab';
-import {OccluderFade} from './core__occluder-fade.js?v=14cc148264ab';
-import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=14cc148264ab';
+import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=09df463d6cde';
+import {vehicleProjection} from './core__vehicle-projection.js?v=09df463d6cde';
+import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=09df463d6cde';
+import {surfaceTrain} from './core__sandbox-metro.js?v=09df463d6cde';
+import {drawWaterfront,drawNeighbourhoodMap} from './content__levels__sandbox__waterfront-art.js?v=09df463d6cde';
+import {districtSurroundings,softenGroundEdge,cloudShadows} from './content__levels__sandbox__atmosphere.js?v=09df463d6cde';
+import {SpriteAtlas} from './core__sprites.js?v=09df463d6cde';
+import {project} from './core__geometry.js?v=09df463d6cde';
+import {heroSprite} from './core__hideout.js?v=09df463d6cde';
+import {polygon,box} from './content__district_01__terrain.js?v=09df463d6cde';
+import {drawGraffiti} from './content__district_01__graffiti-art.js?v=09df463d6cde';
+import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=09df463d6cde';
+import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=09df463d6cde';
+import {OccluderFade} from './core__occluder-fade.js?v=09df463d6cde';
+import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=09df463d6cde';
 
 function fightCloud(c,s){
   const t=s.tutorial.fightBurst,p=project(s.tutorial.actor.x-11,s.tutorial.actor.y+10),pulse=Math.sin(t*27);
@@ -114,12 +115,13 @@ export function createTutorialRenderer(pack){
     if(sandbox){
       const quad=(x,y,ww,hh)=>[project(x,y),project(x+ww,y),project(x+ww,y+hh),project(x,y+hh)];
       const bounds=s.world.mapBounds;
-      box(c,bounds.x,bounds.y,bounds.w,bounds.h,0,'#504d43','#1c2a32','#29323a',-22);
+      districtSurroundings(c,bounds,!day);
       c.save();polygon(c,quad(bounds.x,bounds.y,bounds.w,bounds.h),'#625d51');c.clip();
       c.imageSmoothingEnabled=true;
       for(let x=bounds.x;x<bounds.x+bounds.w;x+=240)for(let y=bounds.y;y<bounds.y+bounds.h;y+=240){const p=project(x+120,y+120);if(Math.abs(p.x-cam.x)>w/cam.zoom/2+280||Math.abs(p.y-cam.y)>h/cam.zoom/2+240)continue;kit.material.quad(c,'paving',quad(x,y,240,240),day?.02:.2);}
       c.restore();
       drawWaterfront(c,s.world,kit,!day);
+      softenGroundEdge(c,bounds,!day);
       for(const r of s.world.roads)kit.road(c,r.x,r.y,r.w,r.h);
       for(const r of s.world.roads){
         // Leave junctions open: neither curbs nor centre lines cross the other street.
@@ -135,6 +137,7 @@ export function createTutorialRenderer(pack){
       // Crossings connect both sides of the block without crossing building footprints.
       c.save();c.transform(1,.5,-1,.5,0,0);c.fillStyle='#c2b99e';for(const x of [100,900,1080,1450])for(const y of [424,928])for(let k=0;k<6;k++)c.fillRect(x,y+k*15,16,7);c.restore();
       neighbourhood.court(c,s.world.court);neighbourhood.rails(c,s.world.surfaceMetro);
+      cloudShadows(c,s,w,h);
     }else kit.floor(c,{night:!day});
     if(s.world.id==='sneak'){
       box(c,632,92,250,460,0,'#504d43','#1c2a32','#29323a',-22);
@@ -175,16 +178,20 @@ export function createTutorialRenderer(pack){
       if(o.kind==='rail-fence'){if(o.x<1600||o.x>1840)kit.fence(c,o.x,1298,Math.min(160,2210-o.x));continue;}
       if(o.kind==='car'){
         const car=o.car,p=project(car.x,car.y),direction=car.axis==='x'?(car.direction>0?'se':'nw'):(car.direction>0?'sw':'ne');
-        c.fillStyle='#09121955';c.beginPath();c.ellipse(p.x,p.y,37,15,0,0,Math.PI*2);c.fill();
+        c.save();c.translate(p.x,p.y);c.rotate(car.axis==='x'?.46:-.46);c.scale(1,.55);const shadow=c.createRadialGradient(0,0,12,0,0,49);shadow.addColorStop(0,'#09121970');shadow.addColorStop(1,'#09121900');c.fillStyle=shadow;c.fillRect(-50,-50,100,100);c.restore();
         const projection=vehicleProjection(car.type,direction);
         c.save();c.translate(p.x,p.y);c.transform(1,projection.shear,0,projection.scaleY,0,0);
         if(!day)c.filter='brightness(.85)';atlas.draw(c,car.type+'_'+direction,0,0,car.type==='traffic_minivan'?132:car.type==='traffic_lowrider'?138:car.type==='traffic_executive'?130:122);c.restore();continue;
       }
-      if(o.kind==='prop'){spriteObject(day?o.id+'_day':o.id,o.x,o.y,o.w,o.depth);continue;}
+      if(o.kind==='prop'){
+        const id=pack.atlas.sprites['comic_'+o.id]?'comic_'+o.id:day?o.id+'_day':o.id;
+        c.save();c.imageSmoothingEnabled=true;if(!day)c.filter='brightness(.66)';spriteObject(id,o.x,o.y,o.w,o.depth);c.restore();
+        if(o.id==='lamp'&&!day){const p=project(o.x,o.y);c.save();const g=c.createRadialGradient(p.x+21,p.y-77,1,p.x+21,p.y-77,33);g.addColorStop(0,'#ffedaaad');g.addColorStop(1,'#ffd77a00');c.fillStyle=g;c.fillRect(p.x-12,p.y-110,66,66);c.restore();}continue;
+      }
       if(o.kind==='fence'){const x=o.x??380,length=o.x?210:226,p=project(x,155);faded('fence:'+x,{x:p.x,y:p.y-65,w:length,h:length*.5+65},o.depth,()=>kit.fence(c,x,155,length),(u,v)=>{const localY=v*(length*.5+65)-65;return localY<u*length*.5&&localY>u*length*.5-65;});continue;}
       if(o.kind==='bollard'){kit.bollard(c,o.x,o.y);continue;}
       if(o.kind==='house'||o.kind==='block-house'){const b=o.building??s.world.buildings[0],art=houseArt(b,day),r=atlas.rect(art.id),p=project(b.x+b.w,b.y+b.h),hh=art.width*r[3]/r[2];if(Math.abs(p.x-cam.x)<w/cam.zoom/2+440&&Math.abs(p.y-cam.y)<h/cam.zoom/2+600)faded(b.id,{x:p.x-art.width*art.anchor[0],y:p.y-hh*art.anchor[1],w:art.width,h:hh},o.depth,()=>house(c,s,b),spriteMask(art.id));continue;}
-      if(o.kind==='bin'){const p=project(o.x,o.y);spriteObject(day?'dumpster_day':'dumpster',o.x,o.y,90,o.depth);if(s.tutorial.bin?.id===o.id){c.fillStyle='#f3d283';c.font='bold 13px monospace';c.textAlign='center';c.fillText('ТИШЕ…',p.x,p.y-58);}continue;}
+      if(o.kind==='bin'){const p=project(o.x,o.y);c.save();c.imageSmoothingEnabled=true;if(!day)c.filter='brightness(.66)';spriteObject('comic_dumpster',o.x,o.y,90,o.depth);c.restore();if(s.tutorial.bin?.id===o.id){c.fillStyle='#f3d283';c.font='bold 13px monospace';c.textAlign='center';c.fillText('ТИШЕ…',p.x,p.y-58);}continue;}
       if(o.kind==='wall'){const p=project(392,266);faded('wall',{x:p.x,y:p.y-94,w:202,h:195},o.depth,()=>wall(c,s),(u,v)=>{const yy=v*195-94;return yy<=u*101&&yy>=u*101-94;});continue;}
       if(o.kind==='extra-wall'){const p=project(o.placement.x,o.placement.y+14),width=o.placement.w;faded(o.target.wall_id,{x:p.x,y:p.y-94,w:width,h:94+width/2},o.depth,()=>wall(c,s,o.target,o.placement));continue;}
       if(o.kind==='fight'){fightCloud(c,s);continue;}
@@ -193,7 +200,10 @@ export function createTutorialRenderer(pack){
       const actor=o.kind==='visitor'||o.kind==='npc'?o.actor:o.kind==='zack'?s.player:s.tutorial.actor,p=project(actor.x,actor.y);
       c.fillStyle='#15202055';c.beginPath();c.ellipse(p.x,p.y,15,6,0,0,Math.PI*2);c.fill();
       const frame=actor.moving&&Math.floor(s.time*7)%2;
-      if(o.kind==='npc'){atlas.draw(c,'roby_dog_'+(actor.direction??'se')+'_'+(actor.moving?Math.floor(s.time*7)%2:0),p.x,p.y,82);continue;}
+      if(o.kind==='npc'){
+        const direction=actor.direction??'se',frame=Math.floor((actor.walkDistance??0)/6.5)%8,back=direction==='ne'||direction==='nw';
+        c.save();c.imageSmoothingEnabled=true;c.translate(p.x,p.y);atlas.draw(c,'roby_hf_'+(back?'back':'front')+'_'+frame,0,0,92,null,direction==='sw'||direction==='nw');c.restore();continue;
+      }
       const sprite=o.kind==='zack'?heroSprite(s.save.player.skin,s.player.state,s.player.facing,frame):actor.sprite==='officer'&&frame?'officer_walk':actor.sprite;
       atlas.draw(c,sprite,p.x,p.y,null,66);
       if(o.kind==='visitor'&&['photo','tip'].includes(actor.phase)){

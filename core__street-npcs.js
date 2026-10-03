@@ -1,4 +1,4 @@
-import {distance,moveAlongPath} from './core__geometry.js?v=14cc148264ab';
+import {distance,moveAlongPath} from './core__geometry.js?v=09df463d6cde';
 
 // Both speakers use the comic conversation view, never the HUD notice channel.
 export function talkToStreetNpc(s,npc){
@@ -21,7 +21,9 @@ export function talkToStreetNpc(s,npc){
 export function updateStreetNpcs(s,dt){
   for(const npc of s.world.streetNpcs??[]){
     npc.moving=false;
-    if(npc.roaming&&s.mode==='district'&&distance(s.player,npc)>100){
+    const playerDistance=distance(s.player,npc);
+    if(playerDistance<95)npc.waitForPlayer=true;else if(playerDistance>145)npc.waitForPlayer=false;
+    if(npc.roaming&&s.mode==='district'&&!npc.waitForPlayer){
       npc.pauseFor=Math.max(0,(npc.pauseFor??0)-dt);
       if(!npc.pauseFor){
         npc.path??=[];
@@ -31,7 +33,14 @@ export function updateStreetNpcs(s,dt){
           npc.path=s.nav.path(npc,point);if(!npc.path.length)npc.pauseFor=2;
         }
         const old={x:npc.x,y:npc.y};moveAlongPath(npc,npc.path,52,dt);
-        if(npc.moving){const dx=npc.x-old.x,dy=npc.y-old.y;npc.direction=Math.abs(dx)>Math.abs(dy)?(dx>0?'se':'nw'):(dy>0?'sw':'ne');}
+        if(npc.moving){
+          const dx=npc.x-old.x,dy=npc.y-old.y;npc.walkDistance=(npc.walkDistance??0)+Math.hypot(dx,dy);
+          const look=npc.path.find(p=>Math.hypot(p.x-npc.x,p.y-npc.y)>32)??npc.path[0];
+          const vx=look?look.x-npc.x:dx,vy=look?look.y-npc.y:dy;
+          const direction=Math.abs(vx)>Math.abs(vy)?(vx>0?'se':'nw'):(vy>0?'sw':'ne');
+          if(direction===npc.turnCandidate)npc.turnFor=(npc.turnFor??0)+dt;else{npc.turnCandidate=direction;npc.turnFor=0;}
+          if(npc.turnFor>=.16)npc.direction=direction;
+        }
         if(!npc.path.length)npc.pauseFor=3;
       }
     }
