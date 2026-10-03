@@ -1,5 +1,5 @@
-import {createTutorialWorld,TutorialFlow} from './core__tutorial.js?v=f05a335c569a';
-import {distance,moveAlongPath} from './core__geometry.js?v=f05a335c569a';
+import {createTutorialWorld,TutorialFlow} from './core__tutorial.js?v=0eb11640c641';
+import {distance,moveAlongPath} from './core__geometry.js?v=0eb11640c641';
 export function createSneakWorld(){
   const w=createTutorialWorld();w.id='sneak';w.levelNumber=2;w.name='ТИШЕ УЛИЦЫ';w.width=980;w.height=700;
   w.walkableAreas=[{x:72,y:92,w:810,h:460}];w.mapBounds={x:70,y:70,w:820,h:510};w.tutorialEntry={x:838,y:470};

@@ -559,7 +559,7 @@
       ]
     },
     "apartment": {
-      "sheet": "building",
+      "sheet": "building_clean",
       "rect": [
         100,
         20,
@@ -712,7 +712,7 @@
       ]
     },
     "apartment_day": {
-      "sheet": "building_day",
+      "sheet": "building_clean_day",
       "rect": [
         100,
         20,
@@ -809,6 +809,24 @@
         95,
         99
       ]
+    },
+    "brick_house": {
+      "sheet": "brick_house",
+      "rect": [
+        100,
+        60,
+        980,
+        1230
+      ]
+    },
+    "blue_house": {
+      "sheet": "blue_house",
+      "rect": [
+        100,
+        60,
+        980,
+        1230
+      ]
     }
   },
   "version": 2,
@@ -884,6 +902,22 @@
     {
       "id": "street_props_day",
       "file": "./content__levels__first-mark__art__street-props-day.png"
+    },
+    {
+      "id": "building_clean",
+      "file": "./content__levels__first-mark__art__house-clean-night.png"
+    },
+    {
+      "id": "building_clean_day",
+      "file": "./content__levels__first-mark__art__house-clean-day.png"
+    },
+    {
+      "id": "brick_house",
+      "file": "./content__levels__first-mark__art__brick-mural-house.png"
+    },
+    {
+      "id": "blue_house",
+      "file": "./content__levels__first-mark__art__blue-mural-house.png"
     }
   ]
 }

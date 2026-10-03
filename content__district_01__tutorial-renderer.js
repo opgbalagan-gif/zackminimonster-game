@@ -1,12 +1,12 @@
-import {SpriteAtlas} from './core__sprites.js?v=f05a335c569a';
-import {project} from './core__geometry.js?v=f05a335c569a';
-import {heroSprite} from './core__hideout.js?v=f05a335c569a';
-import {polygon,box} from './content__district_01__terrain.js?v=f05a335c569a';
-import {drawGraffiti} from './content__district_01__graffiti-art.js?v=f05a335c569a';
-import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=f05a335c569a';
-import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=f05a335c569a';
-import {OccluderFade} from './core__occluder-fade.js?v=f05a335c569a';
-import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=f05a335c569a';
+import {SpriteAtlas} from './core__sprites.js?v=0eb11640c641';
+import {project} from './core__geometry.js?v=0eb11640c641';
+import {heroSprite} from './core__hideout.js?v=0eb11640c641';
+import {polygon,box} from './content__district_01__terrain.js?v=0eb11640c641';
+import {drawGraffiti} from './content__district_01__graffiti-art.js?v=0eb11640c641';
+import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=0eb11640c641';
+import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=0eb11640c641';
+import {OccluderFade} from './core__occluder-fade.js?v=0eb11640c641';
+import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=0eb11640c641';
 
 function fightCloud(c,s){
   const t=s.tutorial.fightBurst,p=project(s.tutorial.actor.x-11,s.tutorial.actor.y+10),pulse=Math.sin(t*27);
@@ -43,16 +43,19 @@ export function createTutorialRenderer(pack){
       masks.set(id,(u,v)=>pixels[(Math.min(surface.height-1,Math.floor(v*surface.height))*128+Math.min(127,Math.floor(u*128)))*4+3]>100);
     }return masks.get(id);
   }
+  function houseArt(building,day){
+    const type=building.artType??'apartment';
+    return type==='brick'?{id:'brick_house',width:320,mural:[540,620,360,400]}:type==='blue'?{id:'blue_house',width:320,mural:[510,620,370,400]}:{id:day?'apartment_day':'apartment',width:335,mural:[505,765,350,420]};
+  }
   function house(c,s,building=s.world.buildings[0]){
-    const target=s.world.targets.find(t=>t.buildingId===building.id),p=project(building.x+building.w,building.y+building.h,-36);atlas.draw(c,s.life&&!s.life.night?'apartment_day':'apartment',p.x,p.y,335);
+    const day=s.life&&!s.life.night,art=houseArt(building,day),rect=atlas.rect(art.id),target=s.world.targets.find(t=>t.buildingId===building.id),p=project(building.x+building.w,building.y+building.h,-36);
+    c.save();if(!day&&building.artType&&building.artType!=='apartment')c.filter='brightness(.78) saturate(.9)';atlas.draw(c,art.id,p.x,p.y,art.width);c.restore();
     if(s.world.sandbox?!target||!s.painted.has(target.wall_id):!s.save.campaign.tutorialFacadePainted)return;
-    // A large mural on the lower side facade, with its drainpipe restored in front.
-    const scale=335/950;
-    c.save();c.translate(Math.round(p.x)+Math.round(-335/2),Math.round(p.y)+Math.round(-335*1284/950));c.scale(scale,scale);
-    c.save();c.translate(500,795);c.transform(1,-.36,0,1,0,0);c.beginPath();c.rect(0,0,240,360);c.clip();
-    drawGraffiti(c,target?.graffiti_id??'zack_tag',0,0,240,360,atlas);c.restore();
-    const sprite=pack.atlas.sprites[s.life&&!s.life.night?'apartment_day':'apartment'],[sx,sy,sw,sh]=sprite.rect;
-    c.beginPath();c.rect(620,700,32,480);c.rect(710,840,140,180);c.clip();c.drawImage(pack.images[sprite.sheet],sx,sy,sw,sh,0,0,950,1284);c.restore();
+    // The drawn side facades are blank: no windows or pipes cut through the artwork.
+    const scale=art.width/rect[2],[mx,my,mw,mh]=art.mural;
+    c.save();c.translate(Math.round(p.x)+Math.round(-art.width/2),Math.round(p.y)+Math.round(-rect[3]*scale));c.scale(scale,scale);
+    c.translate(mx,my);c.transform(1,-.36,0,1,0,0);c.beginPath();c.rect(0,0,mw,mh);c.clip();
+    drawGraffiti(c,target?.graffiti_id??'zack_tag',0,0,mw,mh,atlas);c.restore();
   }
   function wall(c,s,target=s.world.targets[0],placement){
     if(placement){c.save();const anchor=project(placement.x,placement.y+14),base=project(392,266);c.translate(anchor.x,anchor.y);c.scale(placement.w/202,placement.w/202);c.translate(-base.x,-base.y);}
@@ -119,8 +122,7 @@ export function createTutorialRenderer(pack){
       if(o.kind==='prop'){spriteObject(day?o.id+'_day':o.id,o.x,o.y,o.w,o.depth);continue;}
       if(o.kind==='fence'){const x=o.x??380,length=o.x?210:226,p=project(x,155);faded('fence:'+x,{x:p.x,y:p.y-65,w:length,h:length*.5+65},o.depth,()=>kit.fence(c,x,155,length),(u,v)=>{const localY=v*(length*.5+65)-65;return localY<u*length*.5&&localY>u*length*.5-65;});continue;}
       if(o.kind==='bollard'){kit.bollard(c,o.x,o.y);continue;}
-      if(o.kind==='house'){const p=project(278,288,-36),hh=335*1284/950;faded('house',{x:p.x-167.5,y:p.y-hh,w:335,h:hh},o.depth,()=>house(c,s),spriteMask('apartment'));continue;}
-      if(o.kind==='block-house'){const b=o.building,p=project(b.x+b.w,b.y+b.h,-36),hh=335*1284/950;faded(b.id,{x:p.x-167.5,y:p.y-hh,w:335,h:hh},o.depth,()=>house(c,s,b),spriteMask('apartment'));continue;}
+      if(o.kind==='house'||o.kind==='block-house'){const b=o.building??s.world.buildings[0],art=houseArt(b,day),r=atlas.rect(art.id),p=project(b.x+b.w,b.y+b.h,-36),hh=art.width*r[3]/r[2];faded(b.id,{x:p.x-art.width/2,y:p.y-hh,w:art.width,h:hh},o.depth,()=>house(c,s,b),spriteMask(art.id));continue;}
       if(o.kind==='bin'){const p=project(o.x,o.y);spriteObject(day?'dumpster_day':'dumpster',o.x,o.y,90,o.depth);if(s.tutorial.bin?.id===o.id){c.fillStyle='#f3d283';c.font='bold 13px monospace';c.textAlign='center';c.fillText('ТИШЕ…',p.x,p.y-58);}continue;}
       if(o.kind==='wall'){const p=project(392,266);faded('wall',{x:p.x,y:p.y-94,w:202,h:195},o.depth,()=>wall(c,s),(u,v)=>{const yy=v*195-94;return yy<=u*101&&yy>=u*101-94;});continue;}
       if(o.kind==='extra-wall'){const p=project(o.placement.x,o.placement.y+14),width=o.placement.w;faded(o.target.wall_id,{x:p.x,y:p.y-94,w:width,h:94+width/2},o.depth,()=>wall(c,s,o.target,o.placement));continue;}
