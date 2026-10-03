@@ -1,14 +1,14 @@
-import {GraffitiView} from './core__graffiti-view.js?v=858a2abe0ff4';
-import {HideoutUI} from './core__hideout-ui.js?v=858a2abe0ff4';
-import {CourtView} from './core__court-view.js?v=858a2abe0ff4';
-import {PhoneUI} from './core__phone-ui.js?v=858a2abe0ff4';
-import {PeriodTransition} from './core__period-transition.js?v=858a2abe0ff4';
-import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=858a2abe0ff4';
-import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=858a2abe0ff4';
-import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=858a2abe0ff4';
-import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=858a2abe0ff4';
-import {regionAt,gateMessage} from './core__city-progress.js?v=858a2abe0ff4';
-import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=858a2abe0ff4';
+import {GraffitiView} from './core__graffiti-view.js?v=4c2aa9d50742';
+import {HideoutUI} from './core__hideout-ui.js?v=4c2aa9d50742';
+import {CourtView} from './core__court-view.js?v=4c2aa9d50742';
+import {PhoneUI} from './core__phone-ui.js?v=4c2aa9d50742';
+import {PeriodTransition} from './core__period-transition.js?v=4c2aa9d50742';
+import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=4c2aa9d50742';
+import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=4c2aa9d50742';
+import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=4c2aa9d50742';
+import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=4c2aa9d50742';
+import {regionAt,gateMessage} from './core__city-progress.js?v=4c2aa9d50742';
+import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=4c2aa9d50742';
 const $=id=>document.getElementById(id);
 export class GameUI{
   constructor(callbacks){
@@ -140,13 +140,14 @@ export class GameUI{
     $('objective-label').textContent=s.knockedFor>0?'СБИЛИ · Зак поднимается…':s.waypoint?'↗ '+s.waypoint.label:s.runRep?'Вернись в убежище, чтобы сохранить':s.painted.size===s.world.targets.length?'Район полностью твой':'Найди свободную стену · берегись машин';
     const near=s.near;$('interaction').hidden=!near||s.hiddenFor>0||s.mode!=='district';
     $('action-button').hidden=$('interaction').hidden||!!s.tutorial?.scripted;
-    if(near){const [label,icon]=near.type==='target'?['Рисовать','spray']:near.type==='hideout'?['Войти','home']:['Спрятаться','bin'];$('action-button').setAttribute('aria-label',label);$('action-button').title=label+' · нажми; тяни, чтобы идти';setUIButton($('action-button'),label,icon);}
+    if(near){const [label,icon]=near.type==='target'?['Рисовать','spray']:near.type==='hideout'?['Войти','home']:near.type==='npc'?['Поговорить с '+near.item.name,'talk']:near.type==='court'?['Баскетбол','ball']:['Спрятаться','bin'];$('action-button').setAttribute('aria-label',label);$('action-button').title=label+' · нажми; тяни, чтобы идти';setUIButton($('action-button'),label,icon);}
     if(near){
       $('interaction-type').textContent=near.type==='court'?'COURT STORY':near.type==='target'?'GRAFFITI SPOT':near.type==='safe'?'SAFE SPOT':'HIDEOUT / SAVE';
       $('interaction-name').textContent=near.item.name;
       $('interaction-detail').textContent=near.type==='court'?(s.save.basketball.completed?'Поговорить и украсить новый мяч':'Два друга спорят о мяче · +300 REP'):near.type==='target'?'+'+near.item.rep_reward+' REP · HEAT +'+near.item.heat_reward:near.type==='safe'?(near.item.cooldown>0?'Повторно через '+Math.ceil(near.item.cooldown)+' сек.':'Спрятаться и снизить розыск'):'Сохранить вылазку и сбросить HEAT';
       $('action-button').disabled=near.type==='safe'&&near.item.cooldown>0;
       if(near.type==='bin'){$('interaction-type').textContent='УКРЫТИЕ';$('interaction-detail').textContent='Спрятаться и переждать патруль';}
+      if(near.type==='npc'){$('interaction-type').textContent='РАЗГОВОР';$('interaction-detail').textContent='Нажми, чтобы обменяться репликами';}
       if(near.type==='poster'){$('interaction-type').textContent='ART COLLAB';$('interaction-detail').textContent='Открыть плакат · Instagram художника';}
       if(near.type==='poi'){$('interaction-type').textContent='МЕСТО В ГОРОДЕ';$('interaction-detail').textContent=near.item.kind==='meet'?'Сходка стритрейсеров · поговорить':'Заглянуть и узнать, что рядом';}
       if(near.type==='bridge'){$('interaction-type').textContent='БАНДА / ПРОХОД В РАЙОН';$('interaction-detail').textContent=gateMessage(s.city,near.item.to);}

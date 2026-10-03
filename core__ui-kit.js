@@ -1,4 +1,7 @@
 const paths={
+  talk:'<path d="M3 4h20v14H12l-6 5v-5H3Z"/><path d="M7 9h12M7 13h8"/>',
+  ball:'<circle cx="13" cy="13" r="10"/><path d="M3 13h20M13 3v20M6 6c9 2 9 12 0 14M20 6c-9 2-9 12 0 14"/>',
+  metro:'<rect x="5" y="3" width="16" height="17" rx="3"/><path d="M8 7h10v6H8zM8 20l-3 4m13-4 3 4M8 17h2m6 0h2"/>',
   camera:'<path d="M3 8h5l2-4h6l2 4h5v14H3z"/><circle cx="13" cy="15" r="5"/>',
   bin:'<path d="M5 7h16l-2 16H7ZM3 6h20M9 3h8M10 10v9m6-9v9"/>',
   spray:'<path d="M8 8h10v14H8zM10 5h6v3h-6zM12 2h5v3h-5z"/><path d="M10 11v7M19 3h3"/>',

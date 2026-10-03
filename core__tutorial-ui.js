@@ -1,4 +1,4 @@
-import {uiIcon,setUIButton,UIPanel,applyUIComponents} from './core__ui-kit.js?v=858a2abe0ff4';
+import {uiIcon,setUIButton,UIPanel,applyUIComponents} from './core__ui-kit.js?v=4c2aa9d50742';
 export class TutorialUI{
   constructor(session,onComplete){
     this.s=session;this.signature='';this.panel=document.createElement('section');this.panel.id='tutorial-panel';this.panel.className='ui-panel';this.panel.setAttribute('aria-label','Обучение');
@@ -12,11 +12,13 @@ export class TutorialUI{
       b.onclick=()=>{if(session.tutorial.scripted)return;if(id==='facade')session.routeTo(session.world.targets[1].approach,label);else if(id==='wall')session.routeTo(session.world.targets[0].approach,label);else session.routeTo(session.world.hideout,label);};this.markers.append(b);
     }
     for(const bin of session.world.bins??[]){const b=document.createElement('button');b.className='world-marker';b.dataset.marker=bin.id;b.setAttribute('aria-label',bin.name+' · укрытие');b.innerHTML=uiIcon('bin');b.onclick=()=>session.routeTo(bin.approach,'Бак / спрятаться');this.markers.append(b);}
+    for(const npc of session.world.streetNpcs??[]){const b=document.createElement('button');b.className='world-marker';b.dataset.marker=npc.id;b.setAttribute('aria-label',npc.name+' · подойти поговорить');b.innerHTML=uiIcon('talk');b.onclick=()=>session.routeTo(npc.approach,npc.name);this.markers.append(b);}
+    if(session.world.sandbox)for(const [id,label,icon,point] of [['court','Баскетбольная площадка','ball',session.court],['station','Станция наземного метро','metro',session.world.surfaceMetro.approach]]){const b=document.createElement('button');b.className='world-marker';b.dataset.marker=id;b.setAttribute('aria-label',label);b.innerHTML=uiIcon(icon);b.onclick=()=>session.routeTo(point,label);this.markers.append(b);}
     for(const target of session.world.targets.slice(2)){const b=document.createElement('button');b.className='world-marker';b.dataset.marker=target.wall_id;b.setAttribute('aria-label',target.name);b.innerHTML=uiIcon('spray');b.onclick=()=>session.routeTo(target.approach,target.name);this.markers.append(b);}
   }
   updateWorldMarkers(renderer){
     const s=this.s,canvas=document.getElementById('game'),rect=canvas.getBoundingClientRect();this.markers.hidden=s.mode!=='district';
-    for(const b of this.markers.children){const p=renderer.markerHits?.find(p=>p.id===b.dataset.marker);b.hidden=!p;if(!p)continue;b.style.left=p.x*rect.width/canvas.width+'px';b.style.top=p.y*rect.height/canvas.height+'px';b.dataset.active=String(b.dataset.marker==='home'?s.tutorial.stage==='escape':['walk','paint','return_wall','repaint'].includes(s.tutorial.stage));}
+    for(const b of this.markers.children){const p=renderer.markerHits?.find(p=>p.id===b.dataset.marker);b.hidden=!p||p.x<0||p.x>canvas.width||p.y<0||p.y>canvas.height;if(b.hidden)continue;b.style.left=p.x*rect.width/canvas.width+'px';b.style.top=p.y*rect.height/canvas.height+'px';b.dataset.active=String(b.dataset.marker==='home'?s.tutorial.stage==='escape':['walk','paint','return_wall','repaint'].includes(s.tutorial.stage));}
   }
   sync(){
     const s=this.s,t=s.tutorial,l=t.lesson;this.panel.hidden=s.world.sandbox||['graffiti','phone'].includes(s.mode)||(s.mode==='hideout'&&document.getElementById('hideout-ui').dataset.tab!=='home');
@@ -41,6 +43,8 @@ export class TutorialUI{
     if(s.near?.type==='target')setUIButton(document.getElementById('action-button'),'РИСОВАТЬ','spray');
     else if(s.near?.type==='hideout')setUIButton(document.getElementById('action-button'),'ВОЙТИ','home');
     else if(s.near?.type==='bin')setUIButton(document.getElementById('action-button'),'СПРЯТАТЬСЯ','bin');
+    else if(s.near?.type==='npc')setUIButton(document.getElementById('action-button'),'ПОГОВОРИТЬ','talk');
+    else if(s.near?.type==='court')setUIButton(document.getElementById('action-button'),'БАСКЕТБОЛ','ball');
     const signature=JSON.stringify([t.stage,l,s.mode,s.life?.sleeping>0]);if(this.signature===signature)return;this.signature=signature;
     const count=s.life?.tour?7:6,step=s.life?.tour?s.life.introStep+1:l.step;
     this.panel.querySelector('.lesson-progress').style.gridTemplateColumns='repeat('+count+',1fr)';

@@ -1,4 +1,4 @@
-import {cleanBallSave} from './core__basketball.js?v=858a2abe0ff4';
+import {cleanBallSave} from './core__basketball.js?v=4c2aa9d50742';
 export const SAVE_KEY='zackminimonster.save';
 export const SAVE_VERSION=3;
 export function freshSave(){
@@ -6,7 +6,7 @@ export function freshSave(){
     campaign:{tutorialComplete:false,tutorialCheckpoint:'home',companionUnlocked:false,tutorialFacadePainted:false,homeIntroStep:0,tutorialAtHome:false,sneakComplete:false,sneakCheckpoint:'gift',giftUnlocked:false},
     money:0,recognition:{works:[],photos:[],encounters:0},streetLife:{period:'day',day:1,elapsed:0,donations:[],audienceTier:null},phone:{unlocked:false,read:false,photos:[]},
     district_progress:{district_01:{visits:0}},painted_walls:[],graffiti_by_wall:{},basketball:{completed:false,pixels:[],stickers:[]},
-    wall_styles:{},active_run:null,graffiti_unlocks:['zack_tag','monster','crown','panda_king'],hideout:{upgrades:[],collectibles:[],display:'mini'},settings:{sound:true,radioVolume:.22}};
+    wall_styles:{},active_run:null,resume:null,graffiti_unlocks:['zack_tag','monster','crown','panda_king'],hideout:{upgrades:[],collectibles:[],display:'mini'},settings:{sound:true,radioVolume:.22}};
 }
 export function migrateSave(raw){
   const base=freshSave();
@@ -26,6 +26,7 @@ export function migrateSave(raw){
       homeIntroStep:Number.isInteger(raw.campaign?.homeIntroStep)?Math.max(0,Math.min(7,raw.campaign.homeIntroStep)):0,
       tutorialAtHome:raw.campaign?.tutorialAtHome===true,
       activeLevel:['sandbox','sneak','tutorial'].includes(raw.campaign?.activeLevel)?raw.campaign.activeLevel:'tutorial',
+      started:raw.campaign?.started===true,
       sandboxStarted:raw.campaign?.sandboxStarted===true,sandboxAtHome:raw.campaign?.sandboxAtHome===true,sandboxComplete:raw.campaign?.sandboxComplete===true,
       sneakComplete:raw.campaign?.sneakComplete===true,giftUnlocked:raw.campaign?.giftUnlocked===true,
       sneakCheckpoint:['gift','paint','hide','photo','complete'].includes(raw.campaign?.sneakCheckpoint)?raw.campaign.sneakCheckpoint:'gift',
@@ -35,6 +36,7 @@ export function migrateSave(raw){
     district_progress:{...base.district_progress,...raw.district_progress},
     painted_walls:strings(raw.painted_walls),graffiti_by_wall:raw.graffiti_by_wall??{},
     wall_styles:raw.wall_styles&&typeof raw.wall_styles==='object'?raw.wall_styles:{},
+    resume:raw.resume?.level==='sandbox'&&['district','hideout'].includes(raw.resume.mode)&&Number.isFinite(raw.resume.x)&&Number.isFinite(raw.resume.y)?{level:'sandbox',mode:raw.resume.mode,x:raw.resume.x,y:raw.resume.y,facing:['up','down','left','right'].includes(raw.resume.facing)?raw.resume.facing:'down',heat:Math.max(0,Math.min(5,Number(raw.resume.heat)||0))}:null,
     active_run:raw.active_run?.district==='district_01'?{
       district:'district_01',walls:strings(raw.active_run.walls),
       styles:raw.active_run.styles&&typeof raw.active_run.styles==='object'?raw.active_run.styles:{},
@@ -47,6 +49,7 @@ export function migrateSave(raw){
 }
 export class SaveStore{
   constructor(storage=globalThis.localStorage){this.storage=storage;this.warning='';}
+  hasSave(){try{const raw=JSON.parse(this.storage.getItem(SAVE_KEY));return !!raw&&[1,2,3].includes(raw.save_version);}catch{return false;}}
   load(){
     try{return migrateSave(JSON.parse(this.storage.getItem(SAVE_KEY)));}
     catch(error){this.warning='Не удалось прочитать сохранение: '+error.message;return freshSave();}

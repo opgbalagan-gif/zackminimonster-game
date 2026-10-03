@@ -1035,6 +1035,216 @@
         0.5,
         0.76
       ]
+    },
+    "traffic_lowrider_se": {
+      "sheet": "traffic_lowrider",
+      "rect": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_lowrider_sw": {
+      "sheet": "traffic_lowrider",
+      "rect": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_lowrider_nw": {
+      "sheet": "traffic_lowrider",
+      "rect": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_lowrider_ne": {
+      "sheet": "traffic_lowrider",
+      "rect": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_executive_se": {
+      "sheet": "traffic_executive",
+      "rect": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_executive_sw": {
+      "sheet": "traffic_executive",
+      "rect": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_executive_nw": {
+      "sheet": "traffic_executive",
+      "rect": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_executive_ne": {
+      "sheet": "traffic_executive",
+      "rect": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "roby_front": {
+      "sheet": "roby_npc",
+      "rect": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.59,
+        0.985
+      ]
+    },
+    "roby_left": {
+      "sheet": "roby_npc",
+      "rect": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.43,
+        0.985
+      ]
+    },
+    "roby_talk": {
+      "sheet": "roby_npc",
+      "rect": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.59,
+        0.985
+      ]
+    },
+    "roby_back": {
+      "sheet": "roby_npc",
+      "rect": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.43,
+        0.985
+      ]
+    },
+    "court_dan": {
+      "sheet": "court_friends",
+      "rect": [
+        61,
+        57,
+        654,
+        929
+      ]
+    },
+    "court_ti": {
+      "sheet": "court_friends",
+      "rect": [
+        919,
+        68,
+        552,
+        917
+      ]
+    },
+    "poster_reebok": {
+      "sheet": "poster_reebok",
+      "rect": [
+        0,
+        0,
+        1024,
+        1536
+      ]
+    },
+    "poster_wilson": {
+      "sheet": "poster_wilson",
+      "rect": [
+        0,
+        0,
+        1024,
+        1536
+      ]
+    },
+    "poster_posca": {
+      "sheet": "poster_posca",
+      "rect": [
+        0,
+        0,
+        1024,
+        1536
+      ]
+    },
+    "poster_converse": {
+      "sheet": "poster_converse",
+      "rect": [
+        0,
+        0,
+        1024,
+        1536
+      ]
     }
   },
   "version": 2,
@@ -1146,6 +1356,50 @@
     {
       "id": "asphalt_dry",
       "file": "./content__levels__first-mark__art__asphalt-dry.png"
+    },
+    {
+      "id": "traffic_lowrider",
+      "file": "./content__levels__first-mark__art__traffic-lowrider.png"
+    },
+    {
+      "id": "traffic_executive",
+      "file": "./content__levels__first-mark__art__traffic-executive.png"
+    },
+    {
+      "id": "roby_npc",
+      "file": "./content__levels__first-mark__art__roby-npc.png"
+    },
+    {
+      "id": "metro_materials",
+      "file": "./content__district_01__art__metro-materials.png"
+    },
+    {
+      "id": "metro_original",
+      "file": "./content__district_01__art__metro-original-faces.png"
+    },
+    {
+      "id": "court_board",
+      "file": "./content__district_01__art__court-backboard.png"
+    },
+    {
+      "id": "court_friends",
+      "file": "./content__district_01__art__court-friends.png"
+    },
+    {
+      "id": "poster_reebok",
+      "file": "./content__district_01__art__poster-reebok.png"
+    },
+    {
+      "id": "poster_wilson",
+      "file": "./content__district_01__art__poster-wilson.png"
+    },
+    {
+      "id": "poster_posca",
+      "file": "./content__district_01__art__poster-posca.png"
+    },
+    {
+      "id": "poster_converse",
+      "file": "./content__district_01__art__poster-converse.png"
     }
   ]
 }

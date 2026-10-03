@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="./content__basketball__ui.css?v=1034b8708df3">
 <link rel="stylesheet" href="./content__tutorial.css?v=dc14eb7ece07">
 <link rel="stylesheet" href="./content__ui__theme.css?v=773fec3ed2e2">
-<link rel="stylesheet" href="./content__ui__street-life.css?v=87aa17f0af85">
+<link rel="stylesheet" href="./content__ui__street-life.css?v=dfe6b516419a">
 </head>
 <body>
   <main id="app">
@@ -17,13 +17,17 @@
       <div class="title-art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
       <div class="title-content">
         <div class="brand">ZACK<span>MINIMONSTER</span></div>
-        <div class="edition">ГЛАВА 01 <b>ПЕРВЫЙ СЛЕД</b></div>
-        <p class="title-copy">Дом, первая стена и первый выход на улицу.<br>История Зака начинается здесь.</p>
-        <button id="start-button" class="primary large">НАЧАТЬ ПУТЬ <span>↗</span></button>
+        <div class="edition">ГЛАВА 01 <b>СВОЙ РАЙОН</b></div>
+        <p class="title-copy">Твой дом. Твои улицы. Твой след.<br>Рисуй, знакомься и меняй район.</p>
+        <button id="start-button" class="primary large">ПРОДОЛЖИТЬ <span>↗</span></button>
+        <button id="new-game-button" class="secondary large">НОВАЯ ИГРА</button>
         <button id="title-chapters" class="secondary">ВЫБОР УРОВНЯ</button>
         <p id="load-status" role="status">УРОВЕНЬ 01 / ОБУЧЕНИЕ</p><progress id="load-progress" max="1" value="0" hidden></progress>
       </div><div class="title-footer"><span>ZACKMINIMONSTER © 2026</span></div>
     </div>
+    <section id="new-game-dialog" class="screen" role="dialog" aria-modal="true" aria-labelledby="new-game-title" hidden>
+      <div class="ui-panel new-game-card"><span class="eyebrow">НОВЫЙ ПУТЬ</span><h2 id="new-game-title">Сначала освоимся?</h2><p>Обучение познакомит с домом, рисованием и прятками. Можно сразу выйти в район и вернуться к урокам во вкладке «Обучение».</p><p id="new-game-warning" hidden>Текущий прогресс будет заменён новым.</p><button id="new-game-training" class="primary">ПРОЙТИ ОБУЧЕНИЕ</button><button id="new-game-sandbox" class="secondary">СРАЗУ В РАЙОН</button><button id="new-game-cancel" class="secondary">НАЗАД</button></div>
+    </section>
     <button id="chapter-button" class="secondary" aria-label="Выбор уровня" hidden><small>LVL</small><strong>01</strong></button>
     <header id="hud" hidden>
       <div class="player-card"><span id="portrait" role="img" aria-label="Зак по грудь"></span><div><span class="micro">ZACK / ПЕРВЫЙ СЛЕД</span><strong id="rep-label">0 <small>REP</small></strong><span id="run-rep">Вылазка +0</span></div></div>
@@ -114,7 +118,7 @@
     <div id="toast" role="status" aria-live="polite" hidden></div><pre id="debug-overlay" hidden></pre>
     <div id="transition" aria-hidden="true"></div>
   </main>
-  <script type="module" src="./core__boot.js?v=858a2abe0ff4"></script>
+  <script type="module" src="./core__boot.js?v=4c2aa9d50742"></script>
 </body>
 </html>
 

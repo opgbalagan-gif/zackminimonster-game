@@ -1,13 +1,13 @@
-import {ContentLoader} from './core__content-loader.js?v=858a2abe0ff4';
-import {SaveStore} from './core__save-store.js?v=858a2abe0ff4';
-import {AudioManager} from './core__audio.js?v=858a2abe0ff4';
-import {GameSession} from './core__session.js?v=858a2abe0ff4';
-import {InputController} from './core__input.js?v=858a2abe0ff4';
-import {GameUI} from './core__ui.js?v=858a2abe0ff4';
-import {POSTERS,posterApproach} from './content__district_01__posters.js?v=858a2abe0ff4';
-import {TutorialUI} from './core__tutorial-ui.js?v=858a2abe0ff4';
-import {showChapters} from './core__chapters.js?v=858a2abe0ff4';
-import {setUIButton} from './core__ui-kit.js?v=858a2abe0ff4';
+import {ContentLoader} from './core__content-loader.js?v=4c2aa9d50742';
+import {SaveStore,freshSave} from './core__save-store.js?v=4c2aa9d50742';
+import {AudioManager} from './core__audio.js?v=4c2aa9d50742';
+import {GameSession} from './core__session.js?v=4c2aa9d50742';
+import {InputController} from './core__input.js?v=4c2aa9d50742';
+import {GameUI} from './core__ui.js?v=4c2aa9d50742';
+import {POSTERS,posterApproach} from './content__district_01__posters.js?v=4c2aa9d50742';
+import {TutorialUI} from './core__tutorial-ui.js?v=4c2aa9d50742';
+import {showChapters} from './core__chapters.js?v=4c2aa9d50742';
+import {setUIButton} from './core__ui-kit.js?v=4c2aa9d50742';
 
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d',{alpha:false});
 const loader=new ContentLoader(),store=new SaveStore(),audio=new AudioManager();
@@ -49,15 +49,16 @@ const input=new InputController(canvas,{
     session.routeTo(session.camera.screenToWorld(x,y,canvas.width,canvas.height),'Точка на улице');
   }
 });
-async function start(choice){
+async function start(choice,newRun=false){
   if(starting)return;starting=true;ui.loading(0);
+  document.getElementById('new-game-button').disabled=true;
   try{
-    const saved=store.load();
+    const previousSave=store.load(),saved=newRun?freshSave():previousSave;if(newRun)saved.settings=previousSave.settings;
     const wanted=['tutorial','sneak','sandbox'].includes(choice)?choice:saved.campaign.activeLevel;
     const level=wanted==='sandbox'?'sandbox':wanted==='sneak'&&saved.campaign.tutorialComplete?'sneak':'tutorial';
     loadedPack=await loader.loadLevel(level,p=>ui.loading(p));
     if(choice==='tutorial'){saved.campaign.tutorialCheckpoint='home';saved.campaign.tutorialAtHome=false;store.write(saved);}
-    saved.campaign.activeLevel=level;store.write(saved);
+    saved.campaign.activeLevel=level;saved.campaign.started=true;if(newRun&&level==='sandbox')saved.campaign.homeIntroStep=7;store.write(saved);
     const pack=loadedPack;
     session=new GameSession(pack,store);renderer=pack.createRenderer(pack);
     audio.enabled=session.save.settings.sound;audio.radio.setVolume(session.save.settings.radioVolume);ui.bind(session,renderer,audio);
@@ -66,14 +67,19 @@ async function start(choice){
     tutorialUI?.sync();
     if(store.warning)ui.showToast(store.warning);
   }catch(error){console.error(error);ui.loading(0,'Ошибка загрузки: '+error.message);}
-  finally{starting=false;}
+  finally{starting=false;document.getElementById('new-game-button').disabled=false;}
+}
+function newGameMenu(){
+  if(starting)return;document.getElementById('new-game-warning').hidden=!store.hasSave();
+  document.getElementById('new-game-dialog').hidden=false;document.getElementById('new-game-training').focus({preventScroll:true});
 }
 function leave(){if(!session)return;input.reset();session.enterDistrict();ui.sync();}
 function action(){
+  if(!document.getElementById('new-game-dialog').hidden)return;
   if(session?.cinematic)return;
   if(document.getElementById('chapter-select'))return;
   if(session?.mode==='phone')return;
-  if(!session){start();return;}
+  if(!session){if(store.hasSave())start();else newGameMenu();return;}
   if(ui.mapOpen)return;
   if(session.tutorial?.stage==='home'){session.tutorial.act();ui.sync();tutorialUI.sync();return;}
   if(session.mode==='hideout')leave();
@@ -127,8 +133,15 @@ async function openChapters(){
   }catch(error){ui.showToast('Не удалось загрузить уровни: '+error.message);}
 }
 document.getElementById('title-chapters').onclick=openChapters;
+document.getElementById('new-game-button').onclick=newGameMenu;
+document.getElementById('new-game-cancel').onclick=()=>{document.getElementById('new-game-dialog').hidden=true;document.getElementById('new-game-button').focus({preventScroll:true});};
+for(const [id,level] of [['new-game-training','tutorial'],['new-game-sandbox','sandbox']])document.getElementById(id).onclick=()=>{document.getElementById('new-game-dialog').hidden=true;start(level,true);};
+document.getElementById('start-button').disabled=!store.hasSave();
+document.getElementById('load-status').textContent=store.hasSave()?'Последнее сохранение готово к продолжению':'Выбери «Новая игра», чтобы начать';
+window.addEventListener('pagehide',()=>session?.persist());
+document.addEventListener('visibilitychange',()=>{if(document.hidden)session?.persist();});
 document.getElementById('chapter-button').onclick=openChapters;
 const pickedChapter=sessionStorage.getItem('zack.chapter');
 if(pickedChapter){sessionStorage.removeItem('zack.chapter');start(pickedChapter);}
-else if(store.load().campaign.tutorialComplete)setUIButton(document.getElementById('start-button'),'ПРОДОЛЖИТЬ ИСТОРИЮ');
+else setUIButton(document.getElementById('start-button'),'ПРОДОЛЖИТЬ');
 requestAnimationFrame(frame);

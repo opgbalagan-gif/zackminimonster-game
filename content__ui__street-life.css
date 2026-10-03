@@ -146,3 +146,12 @@ button.secondary,.room-hotspot,#radio-toggle,#chapter-button,#phone-toggle,.phas
 #app #joystick #action-button:focus-visible{outline:3px solid #fff;outline-offset:4px}
 
 #app[data-sandbox=true] .home-dock{display:none}
+#app{overflow:clip}
+#new-game-button{display:block;margin-top:12px;width:100%}
+#new-game-dialog{z-index:100;display:grid;place-items:center;background:#050d14e8;padding:20px}
+.new-game-card{width:min(480px,100%);padding:30px;max-height:90dvh;overflow:auto;background:#0b1721;border:7px solid transparent;border-image:var(--painted-panel) 96 fill / 14px / 0 stretch}
+.new-game-card h2{font:800 30px var(--ui-heading);color:#f4ebd5;margin:12px 0}
+.new-game-card p{font:16px/1.5 var(--ui-body);color:#bdc8cd;margin:12px 0 20px}
+.new-game-card button{display:block;width:100%;margin-top:12px;min-height:48px}
+.new-game-card #new-game-warning{color:#eac879;font-size:13px}
+@media(max-height:650px){.title-screen{overflow-y:auto;align-items:flex-start}.title-content{padding-bottom:50px}.brand{margin-top:15px}.title-copy{margin:14px 0}.title-footer{display:none}}

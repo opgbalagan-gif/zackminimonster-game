@@ -1,5 +1,5 @@
-import {project} from './core__geometry.js';
-import {box,polygon} from './content__district_01__terrain.js';
+import {project} from './core__geometry.js?v=4c2aa9d50742';
+import {box,polygon} from './content__district_01__terrain.js?v=4c2aa9d50742';
 const routes=new WeakMap(),trenches=new WeakMap();
 export function metroRoute(m){
   if(routes.has(m))return routes.get(m);
