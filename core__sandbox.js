@@ -1,6 +1,8 @@
-import {createSneakWorld} from './core__sneak.js?v=1604a53b1e7b';
-import {distance,moveAlongPath} from './core__geometry.js?v=1604a53b1e7b';
-import {updateStreetNpcs} from './core__street-npcs.js?v=1604a53b1e7b';
+import {createSneakWorld} from './core__sneak.js?v=14cc148264ab';
+import {distance,moveAlongPath} from './core__geometry.js?v=14cc148264ab';
+import {updateStreetNpcs} from './core__street-npcs.js?v=14cc148264ab';
+import {addWaterfront} from './core__waterfront-layout.js?v=14cc148264ab';
+import {WallRivals} from './core__wall-rivals.js?v=14cc148264ab';
 
 export function createSandboxWorld(){
   const w=createSneakWorld();w.id='sandbox';w.sandbox=true;w.levelNumber=1;w.name='СВОЙ РАЙОН';
@@ -27,12 +29,13 @@ export function createSandboxWorld(){
   for(const h of w.hoops)w.obstacles.push({x:h.x-8,y:h.y-8,w:16,h:16});
   w.surfaceMetro={start:80,end:2210,y:1350,height:12,loop:true,station:{x:1770,y:1350,dx:-1,dy:0},approach:{x:1770,y:1220}};
   w.obstacles.push({x:72,y:1302,w:2150,h:100,railway:true});
-  return w;
+  return addWaterfront(w);
 }
 
 // Uses the small level infrastructure, with no scripted tutorial checkpoints.
 export class SandboxFlow{
   constructor(s){
+    this.rivals=new WallRivals(s);
     this.s=s;this.stage='free';this.age=0;this.actor=null;this.tag=0;this.coating=0;this.bin=null;this.saveIn=3;
     s.mode=s.save.campaign.sandboxAtHome?'hideout':'district';s.save.phone.unlocked=true;
     const resume=s.save.resume;if(resume?.level==='sandbox'){
@@ -51,6 +54,7 @@ export class SandboxFlow{
   painted(){
     const s=this.s,g=s.graffiti,target=g.target,first=!s.painted.has(target.wall_id);
     s.painted.add(target.wall_id);target.state='PAINTED';s.save.painted_walls=[...s.painted];s.save.graffiti_by_wall[target.wall_id]=target.graffiti_id;s.save.wall_styles[target.wall_id]=g.ink??'purple';
+    this.rivals.repaired(target.wall_id);
     if(first)s.save.rep+=target.rep_reward;
     this.wall=s.painted.has(s.world.targets[0].wall_id)?'own':'blank';s.graffiti=null;s.mode='district';s.player.state='IDLE';s.near=null;
     s.heat=Math.min(5,s.heat+1);this.age=0;
@@ -60,7 +64,7 @@ export class SandboxFlow{
   }
   hideIn(bin){this.bin=bin;this.age=0;this.s.hiddenFor=600;Object.assign(this.s.player,bin.approach,{path:[],state:'HIDE'});this.s.notice('У этого укрытия сложный аромат.');}
   update(dt){
-    const s=this.s;updateStreetNpcs(s,dt);if(s.mode!=='district')return;this.age+=dt;
+    const s=this.s;updateStreetNpcs(s,dt);this.rivals.update(dt);if(s.mode!=='district')return;this.age+=dt;
     this.saveIn-=dt;if(this.saveIn<=0){this.saveIn=3;s.persist();}
     if(this.bin){
       if(this.actor){if(!this.actor.path.length)this.actor.path=s.nav.path(this.actor,s.world.tutorialEntry);moveAlongPath(this.actor,this.actor.path,85,dt);}

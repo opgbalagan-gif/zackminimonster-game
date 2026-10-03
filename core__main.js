@@ -1,13 +1,13 @@
-import {ContentLoader} from './core__content-loader.js?v=1604a53b1e7b';
-import {SaveStore,freshSave} from './core__save-store.js?v=1604a53b1e7b';
-import {AudioManager} from './core__audio.js?v=1604a53b1e7b';
-import {GameSession} from './core__session.js?v=1604a53b1e7b';
-import {InputController} from './core__input.js?v=1604a53b1e7b';
-import {GameUI} from './core__ui.js?v=1604a53b1e7b';
-import {POSTERS,posterApproach} from './content__district_01__posters.js?v=1604a53b1e7b';
-import {TutorialUI} from './core__tutorial-ui.js?v=1604a53b1e7b';
-import {showChapters} from './core__chapters.js?v=1604a53b1e7b';
-import {setUIButton} from './core__ui-kit.js?v=1604a53b1e7b';
+import {ContentLoader} from './core__content-loader.js?v=14cc148264ab';
+import {SaveStore,freshSave} from './core__save-store.js?v=14cc148264ab';
+import {AudioManager} from './core__audio.js?v=14cc148264ab';
+import {GameSession} from './core__session.js?v=14cc148264ab';
+import {InputController} from './core__input.js?v=14cc148264ab';
+import {GameUI} from './core__ui.js?v=14cc148264ab';
+import {POSTERS,posterApproach} from './content__district_01__posters.js?v=14cc148264ab';
+import {TutorialUI} from './core__tutorial-ui.js?v=14cc148264ab';
+import {showChapters} from './core__chapters.js?v=14cc148264ab';
+import {setUIButton} from './core__ui-kit.js?v=14cc148264ab';
 
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d',{alpha:false});
 const loader=new ContentLoader(),store=new SaveStore(),audio=new AudioManager();
@@ -21,6 +21,7 @@ const ui=new GameUI({
     else if(id==='court')session.routeTo(session.court,'Баскетбол · Не просто мяч');
     else if(id.startsWith('poster_')){const p=POSTERS.find(p=>'poster_'+p.id===id);if(p)session.routeTo(posterApproach(session.world,p),'Плакат '+p.brand+' × ZAK MINI MONSTER');}
     else{
+      const destination=session.world.mapRoutes?.find(p=>p.id===id);if(destination){session.routeTo(destination,destination.name);ui.sync();return;}
       const poi=session.world.pointsOfInterest?.find(p=>p.id===id);if(poi){session.routeTo(poi,poi.name);ui.sync();return;}
       const bridge=session.world.bridges?.find(b=>b.id===id),home=session.world.hideouts?.find(h=>h.id===id);
       if(bridge){session.routeTo(bridge.approach,bridge.name);ui.sync();return;}

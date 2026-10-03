@@ -1,16 +1,17 @@
-import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=1604a53b1e7b';
-import {vehicleProjection} from './core__vehicle-projection.js?v=1604a53b1e7b';
-import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=1604a53b1e7b';
-import {surfaceTrain} from './core__sandbox-metro.js?v=1604a53b1e7b';
-import {SpriteAtlas} from './core__sprites.js?v=1604a53b1e7b';
-import {project} from './core__geometry.js?v=1604a53b1e7b';
-import {heroSprite} from './core__hideout.js?v=1604a53b1e7b';
-import {polygon,box} from './content__district_01__terrain.js?v=1604a53b1e7b';
-import {drawGraffiti} from './content__district_01__graffiti-art.js?v=1604a53b1e7b';
-import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=1604a53b1e7b';
-import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=1604a53b1e7b';
-import {OccluderFade} from './core__occluder-fade.js?v=1604a53b1e7b';
-import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=1604a53b1e7b';
+import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=14cc148264ab';
+import {vehicleProjection} from './core__vehicle-projection.js?v=14cc148264ab';
+import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=14cc148264ab';
+import {surfaceTrain} from './core__sandbox-metro.js?v=14cc148264ab';
+import {drawWaterfront,drawNeighbourhoodMap} from './content__levels__sandbox__waterfront-art.js?v=14cc148264ab';
+import {SpriteAtlas} from './core__sprites.js?v=14cc148264ab';
+import {project} from './core__geometry.js?v=14cc148264ab';
+import {heroSprite} from './core__hideout.js?v=14cc148264ab';
+import {polygon,box} from './content__district_01__terrain.js?v=14cc148264ab';
+import {drawGraffiti} from './content__district_01__graffiti-art.js?v=14cc148264ab';
+import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=14cc148264ab';
+import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=14cc148264ab';
+import {OccluderFade} from './core__occluder-fade.js?v=14cc148264ab';
+import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=14cc148264ab';
 
 function fightCloud(c,s){
   const t=s.tutorial.fightBurst,p=project(s.tutorial.actor.x-11,s.tutorial.actor.y+10),pulse=Math.sin(t*27);
@@ -49,23 +50,36 @@ export function createTutorialRenderer(pack){
     }return masks.get(id);
   }
   function houseArt(building,day){
+    if(building.longHouse)return {id:'comic_long_house',width:700,mural:[290,515,630,160],poster:[850,310,46,69],slope:-.34,anchor:pack.atlas.sprites.comic_long_house.groundAnchor};
     const type=building.artType??'apartment';
-    return type==='brick'?{id:'brick_house',width:320,mural:[540,930,360,270]}:type==='blue'?{id:'blue_house',width:320,mural:[510,930,370,270]}:{id:day?'apartment_day':'apartment',width:335,mural:[505,960,350,280]};
+    const variant=building.comicVariant??(type==='brick'?3:type==='blue'?1:0);
+    const mx=[345,292,350,330][variant];
+    const id='comic_house_'+variant;
+    return {id,width:440,mural:[mx,435,180,150],poster:[mx+135,430,46,69],slope:-.5,anchor:pack.atlas.sprites[id].groundAnchor};
   }
   function house(c,s,building=s.world.buildings[0]){
-    const day=s.life&&!s.life.night,art=houseArt(building,day),rect=atlas.rect(art.id),target=s.world.targets.find(t=>t.buildingId===building.id),p=project(building.x+building.w,building.y+building.h,-36);
-    c.save();if(!day&&building.artType&&building.artType!=='apartment')c.filter='brightness(.78) saturate(.9)';atlas.draw(c,art.id,p.x,p.y,art.width);c.restore();
+    const day=s.life&&!s.life.night,art=houseArt(building,day),rect=atlas.rect(art.id),target=s.world.targets.find(t=>t.buildingId===building.id),p=project(building.x+building.w,building.y+building.h);
+    c.save();c.imageSmoothingEnabled=true;if(!day)c.filter='brightness(.58) saturate(.8)';atlas.draw(c,art.id,p.x,p.y,art.width);c.restore();
     if(building.poster){
-      const scale=art.width/rect[2];c.save();c.translate(Math.round(p.x)-art.width/2,Math.round(p.y)-rect[3]*scale);c.scale(scale,scale);
-      c.translate(art.mural[0]+275,art.mural[1]-45);c.transform(1,-.36,0,1,0,0);
-      c.fillStyle='#d7cab0';c.fillRect(-2,-2,119,179);atlas.draw(c,'poster_'+building.poster,57.5,175,115,175);c.restore();
+      const scale=art.width/rect[2];c.save();c.translate(Math.round(p.x)-art.width*art.anchor[0],Math.round(p.y)-rect[3]*scale*art.anchor[1]);c.scale(scale,scale);
+      const [px,py,pw,ph]=art.poster;c.translate(px,py);c.transform(1,art.slope,0,1,0,0);
+      c.fillStyle='#eee2bc';c.fillRect(-2,-2,pw+4,ph+4);atlas.draw(c,'poster_'+building.poster,pw/2,ph,pw,ph);c.restore();
     }
     if(s.world.sandbox?!target||!s.painted.has(target.wall_id):!s.save.campaign.tutorialFacadePainted)return;
     // The drawn side facades are blank: no windows or pipes cut through the artwork.
-    const scale=art.width/rect[2],[mx,my,fullWidth,mh]=art.mural,mw=building.poster?255:fullWidth;
-    c.save();c.translate(Math.round(p.x)+Math.round(-art.width/2),Math.round(p.y)+Math.round(-rect[3]*scale));c.scale(scale,scale);
-    c.translate(mx,my);c.transform(1,-.36,0,1,0,0);c.beginPath();c.rect(0,0,mw,mh);c.clip();
-    drawGraffiti(c,target?.graffiti_id??'zack_tag',0,0,mw,mh,atlas);c.restore();
+    const scale=art.width/rect[2],[mx,my,fullWidth,mh]=art.mural,mw=building.poster?128:fullWidth;
+    c.save();c.translate(Math.round(p.x)-art.width*art.anchor[0],Math.round(p.y)-rect[3]*scale*art.anchor[1]);c.scale(scale,scale);
+    c.translate(mx,my);c.transform(1,art.slope,0,1,0,0);c.beginPath();c.rect(0,0,mw,mh);c.clip();
+    drawGraffiti(c,target?.graffiti_id??'zack_tag',0,0,mw,mh,atlas);damage(c,s,target,0,0,mw,mh);c.restore();
+  }
+  function damage(c,s,target,x,y,w,h){
+    if(!target||!s.world.sandbox)return;
+    const a=s.tutorial.rivals?.actor,working=a?.target.wall_id===target.wall_id&&a.phase==='paint';
+    const kind=working?a.kind:s.save.wall_damage[target.wall_id];if(!kind)return;
+    c.save();c.beginPath();c.rect(x,y,w*(working?a.progress:1),h);c.clip();
+    if(kind==='cleaner')c.drawImage(pack.images.roller_patch,0,100,1536,824,x+w*.06,y+h*.05,w*.88,h*.9);
+    else atlas.draw(c,'gang_colour',x+w*.5,y+h*.85,w*.92,h*.74);
+    c.restore();
   }
   function wall(c,s,target=s.world.targets[0],placement){
     if(placement){c.save();const anchor=project(placement.x,placement.y+14),base=project(392,266);c.translate(anchor.x,anchor.y);c.scale(placement.w/202,placement.w/202);c.translate(-base.x,-base.y);}
@@ -74,6 +88,7 @@ export function createTutorialRenderer(pack){
     const face=[project(392,266,90),project(594,266,90),b,a];polygon(c,face,'#727766');kit.material.quad(c,'wall',face,.2);
     c.save();c.transform(1,.5,0,1,a.x,a.y-90);c.beginPath();c.rect(0,0,202,90);c.clip();
     if(s.world.sandbox?s.painted.has(target.wall_id):s.tutorial.wall==='own'||s.tutorial.coating>0)drawGraffiti(c,target.graffiti_id,12,4,176,82,atlas);
+    damage(c,s,target,12,4,176,82);
     if(s.tutorial.tag>0){c.save();c.beginPath();c.rect(0,0,202*s.tutorial.tag,90);c.clip();atlas.draw(c,'gang_colour',106,72,186,56);c.restore();}
     if(s.tutorial.coating>0){
       c.save();c.beginPath();c.rect(14,0,174*s.tutorial.coating,90);c.clip();
@@ -84,14 +99,14 @@ export function createTutorialRenderer(pack){
   }
   function world(c,s,w,h){
     c.imageSmoothingEnabled=false;atlas.drawCalls=0;const day=s.life&&!s.life.night;c.fillStyle=day?'#708b98':'#071018';c.fillRect(0,0,w,h);
-    const sky=day?pack.images.reference_background_day:pack.images.reference_background;
-    c.drawImage(sky,0,0,w,h);
+    const sky=pack.images.comic_sky,skyH=sky.height/2,scale=Math.max(w/sky.width,h/skyH),sw=w/scale;
+    c.save();c.imageSmoothingEnabled=true;c.drawImage(sky,(sky.width-sw)/2,day?0:skyH,sw,skyH,0,0,w,h);c.restore();
     c.filter='none';
     // Keep the complete first block visible; the street is deliberately small.
     const cam=s.camera,mobile=w<=700,sandbox=s.world.sandbox,originX=sandbox?w/2:mobile?w/2:(w-420)/2,originY=h*(sandbox?.50:mobile?.30:.46);
     cam.zoom=1.18*Math.max(.12,Math.min(.85,(mobile?w:w-450)/(s.world.id==='sneak'?1260:940),(mobile?h*.53:h-100)/730));cam.x=s.world.id==='sneak'?130:45;cam.y=230;cam.ready=true;
     const dt=lastTime===undefined?1/60:Math.max(1/60,s.time-lastTime);lastTime=s.time;
-    if(sandbox){const p=project(s.player.x,s.player.y);followPoint??={x:p.x,y:p.y-70};const f=1-Math.exp(-dt*6);followPoint.x+=(p.x-followPoint.x)*f;followPoint.y+=(p.y-70-followPoint.y)*f;cam.x=followPoint.x;cam.y=followPoint.y;cam.zoom=Math.min(.95,Math.max(.52,w/720));}
+    if(sandbox){const p=project(s.player.x,s.player.y);followPoint??={x:p.x,y:p.y-70};const f=1-Math.exp(-dt*6);followPoint.x+=(p.x-followPoint.x)*f;followPoint.y+=(p.y-70-followPoint.y)*f;cam.x=followPoint.x;cam.y=followPoint.y;cam.zoom=Math.min(1.18,Math.max(.78,w/470));}
     const heroPoint=project(s.player.x,s.player.y),hero=s.tutorial.bin?null:{x:heroPoint.x-13,y:heroPoint.y-61,w:26,h:57,depth:s.player.x+s.player.y};
     function faded(id,bounds,depth,draw,mask){c.save();c.globalAlpha*=fades.alpha(id,bounds,depth,hero,dt,mask);draw();c.restore();}
     function spriteObject(id,x,y,width,depth,draw){const p=project(x,y),rect=atlas.rect(id),height=width*rect[3]/rect[2];faded(id+':'+x+':'+y,{x:p.x-width/2,y:p.y-height,w:width,h:height},depth,draw??(()=>atlas.draw(c,id,p.x,p.y,width)),spriteMask(id));}
@@ -101,8 +116,10 @@ export function createTutorialRenderer(pack){
       const bounds=s.world.mapBounds;
       box(c,bounds.x,bounds.y,bounds.w,bounds.h,0,'#504d43','#1c2a32','#29323a',-22);
       c.save();polygon(c,quad(bounds.x,bounds.y,bounds.w,bounds.h),'#625d51');c.clip();
-      for(let x=bounds.x;x<bounds.x+bounds.w;x+=180)for(let y=bounds.y;y<bounds.y+bounds.h;y+=180)kit.material.quad(c,'paving',quad(x,y,180,180),.24);
+      c.imageSmoothingEnabled=true;
+      for(let x=bounds.x;x<bounds.x+bounds.w;x+=240)for(let y=bounds.y;y<bounds.y+bounds.h;y+=240){const p=project(x+120,y+120);if(Math.abs(p.x-cam.x)>w/cam.zoom/2+280||Math.abs(p.y-cam.y)>h/cam.zoom/2+240)continue;kit.material.quad(c,'paving',quad(x,y,240,240),day?.02:.2);}
       c.restore();
+      drawWaterfront(c,s.world,kit,!day);
       for(const r of s.world.roads)kit.road(c,r.x,r.y,r.w,r.h);
       for(const r of s.world.roads){
         // Leave junctions open: neither curbs nor centre lines cross the other street.
@@ -122,7 +139,7 @@ export function createTutorialRenderer(pack){
     if(s.world.id==='sneak'){
       box(c,632,92,250,460,0,'#504d43','#1c2a32','#29323a',-22);
       const quad=(x,y,ww,hh)=>[project(x,y),project(x+ww,y),project(x+ww,y+hh),project(x,y+hh)];
-      kit.material.quad(c,'paving',quad(632,92,250,460),.24);kit.road(c,632,412,250,112);
+      kit.material.quad(c,'paving',quad(632,92,250,460),.02);kit.road(c,632,412,250,112);
     }
     if(sandbox)drawTrafficSignals(c,s.traffic);
     const queue=[{kind:'house',depth:566},{kind:'wall',depth:760},{kind:'zack',depth:s.player.x+s.player.y}];
@@ -131,7 +148,8 @@ export function createTutorialRenderer(pack){
       const station=s.world.surfaceMetro.station;queue.push({kind:'station',depth:station.x+station.y-50});
       for(const hoop of s.world.hoops)queue.push({kind:'hoop',hoop,depth:hoop.x+hoop.y});
       for(const actor of s.court.friends)queue.push({kind:'visitor',actor,depth:actor.x+actor.y});
-      for(let x=80;x<2200;x+=160)queue.push({kind:'rail-fence',x,depth:x+80+1298});
+      for(let x=80;x<2200;x+=160)if(x<1360||x>1570)queue.push({kind:'rail-fence',x,depth:x+80+1298});
+      for(const item of s.world.nature??[])queue.push({kind:'nature',...item,depth:item.x+item.y});
     }
     for(const car of s.traffic.cars)queue.push({kind:'car',car,depth:car.x+car.y});
     for(const building of s.world.buildings.slice(1))queue.push({kind:'block-house',building,depth:building.x+building.w+building.y+building.h});
@@ -146,9 +164,11 @@ export function createTutorialRenderer(pack){
     if(s.tutorial.actor)queue.push({kind:'guest',depth:s.tutorial.actor.x+s.tutorial.actor.y});
     for(const b of s.world.bins??[])queue.push({kind:'bin',...b,depth:b.x+b.y});
     for(const v of s.life?.visitors??[])queue.push({kind:'visitor',actor:v,depth:v.x+v.y});
+    const rival=s.tutorial.rivals?.actor;if(rival)queue.push({kind:'visitor',actor:rival,depth:rival.x+rival.y});
     for(const npc of s.world.streetNpcs??[])queue.push({kind:'npc',actor:npc,depth:npc.x+npc.y});
     if(s.player.path.length){c.strokeStyle='#f1ce7888';c.lineWidth=3;c.setLineDash([6,7]);c.beginPath();const start=project(s.player.x,s.player.y);c.moveTo(start.x,start.y);for(const n of s.player.path){const p=project(n.x,n.y);c.lineTo(p.x,p.y);}c.stroke();c.setLineDash([]);}
     for(const o of queue.sort((a,b)=>a.depth-b.depth)){
+      if(o.kind==='nature'){const p=project(o.x,o.y);if(Math.abs(p.x-cam.x)<w/cam.zoom/2+200&&Math.abs(p.y-cam.y)<h/cam.zoom/2+240){c.save();c.imageSmoothingEnabled=true;if(!day)c.filter='brightness(.62) saturate(.8)';spriteObject(o.id,o.x,o.y,o.w,o.depth);c.restore();}continue;}
       if(o.kind==='metro'){neighbourhood.train(c,o.car,s.world.surfaceMetro);continue;}
       if(o.kind==='station'){neighbourhood.station(c,s.world.surfaceMetro);continue;}
       if(o.kind==='hoop'){neighbourhood.hoop(c,o.hoop);continue;}
@@ -163,7 +183,7 @@ export function createTutorialRenderer(pack){
       if(o.kind==='prop'){spriteObject(day?o.id+'_day':o.id,o.x,o.y,o.w,o.depth);continue;}
       if(o.kind==='fence'){const x=o.x??380,length=o.x?210:226,p=project(x,155);faded('fence:'+x,{x:p.x,y:p.y-65,w:length,h:length*.5+65},o.depth,()=>kit.fence(c,x,155,length),(u,v)=>{const localY=v*(length*.5+65)-65;return localY<u*length*.5&&localY>u*length*.5-65;});continue;}
       if(o.kind==='bollard'){kit.bollard(c,o.x,o.y);continue;}
-      if(o.kind==='house'||o.kind==='block-house'){const b=o.building??s.world.buildings[0],art=houseArt(b,day),r=atlas.rect(art.id),p=project(b.x+b.w,b.y+b.h,-36),hh=art.width*r[3]/r[2];faded(b.id,{x:p.x-art.width/2,y:p.y-hh,w:art.width,h:hh},o.depth,()=>house(c,s,b),spriteMask(art.id));continue;}
+      if(o.kind==='house'||o.kind==='block-house'){const b=o.building??s.world.buildings[0],art=houseArt(b,day),r=atlas.rect(art.id),p=project(b.x+b.w,b.y+b.h),hh=art.width*r[3]/r[2];if(Math.abs(p.x-cam.x)<w/cam.zoom/2+440&&Math.abs(p.y-cam.y)<h/cam.zoom/2+600)faded(b.id,{x:p.x-art.width*art.anchor[0],y:p.y-hh*art.anchor[1],w:art.width,h:hh},o.depth,()=>house(c,s,b),spriteMask(art.id));continue;}
       if(o.kind==='bin'){const p=project(o.x,o.y);spriteObject(day?'dumpster_day':'dumpster',o.x,o.y,90,o.depth);if(s.tutorial.bin?.id===o.id){c.fillStyle='#f3d283';c.font='bold 13px monospace';c.textAlign='center';c.fillText('ТИШЕ…',p.x,p.y-58);}continue;}
       if(o.kind==='wall'){const p=project(392,266);faded('wall',{x:p.x,y:p.y-94,w:202,h:195},o.depth,()=>wall(c,s),(u,v)=>{const yy=v*195-94;return yy<=u*101&&yy>=u*101-94;});continue;}
       if(o.kind==='extra-wall'){const p=project(o.placement.x,o.placement.y+14),width=o.placement.w;faded(o.target.wall_id,{x:p.x,y:p.y-94,w:width,h:94+width/2},o.depth,()=>wall(c,s,o.target,o.placement));continue;}
@@ -179,6 +199,10 @@ export function createTutorialRenderer(pack){
       if(o.kind==='visitor'&&['photo','tip'].includes(actor.phase)){
         if(actor.phase==='photo'){c.fillStyle='#151e2b';c.fillRect(p.x-15,p.y-43,17,11);c.fillStyle='#c6e1e8';c.fillRect(p.x-11,p.y-40,6,5);if(actor.age>1.1&&actor.age<1.35){c.fillStyle='#fff8c0';c.beginPath();c.arc(p.x-7,p.y-40,11,0,Math.PI*2);c.fill();}}
         else{c.fillStyle='#ffe39b';c.font='bold 15px monospace';c.textAlign='center';c.fillText('+'+(actor.tip??10)+' ₽',p.x,p.y-74);}
+      }
+      if(o.kind==='visitor'&&actor.phase==='paint'){
+        const dy=Math.sin(s.time*8)*12;c.strokeStyle='#d5c3a0';c.lineWidth=3;c.beginPath();c.moveTo(p.x-7,p.y-34);c.lineTo(p.x-20,p.y-61+dy);c.stroke();
+        c.fillStyle=actor.kind==='cleaner'?'#fffef5':'#df6ab2';c.fillRect(p.x-29,p.y-67+dy,actor.kind==='cleaner'?20:9,9);
       }
       if(o.kind==='guest'&&['rival','cleaner'].includes(s.tutorial.stage)&&!actor.path.length){
         const dy=Math.sin(s.time*8)*15;c.strokeStyle='#d5c3a0';c.lineWidth=3;c.beginPath();c.moveTo(p.x-7,p.y-34);c.lineTo(p.x-20,p.y-61+dy);c.stroke();
@@ -196,10 +220,10 @@ export function createTutorialRenderer(pack){
     markerHits.length=0;
     posterHits.length=0;
     for(const b of s.world.buildings.filter(b=>b.poster)){
-      const art=houseArt(b,day),rect=atlas.rect(art.id),scale=art.width/rect[2],p=project(b.x+b.w,b.y+b.h,-36);
-      const x=Math.round(p.x)-art.width/2+(art.mural[0]+275)*scale;
-      const y=Math.round(p.y)-rect[3]*scale+(art.mural[1]-45-115*.36)*scale;
-      posterHits.push({id:b.poster,x:originX+(x-cam.x)*cam.zoom,y:originY+(y-cam.y)*cam.zoom,w:115*scale*cam.zoom,h:(175+115*.36)*scale*cam.zoom});
+      const art=houseArt(b,day),rect=atlas.rect(art.id),scale=art.width/rect[2],p=project(b.x+b.w,b.y+b.h),[px,py,pw,ph]=art.poster;
+      const x=Math.round(p.x)-art.width*art.anchor[0]+px*scale;
+      const y=Math.round(p.y)-rect[3]*scale*art.anchor[1]+(py+pw*art.slope)*scale;
+      posterHits.push({id:b.poster,x:originX+(x-cam.x)*cam.zoom,y:originY+(y-cam.y)*cam.zoom,w:pw*scale*cam.zoom,h:(ph-pw*art.slope)*scale*cam.zoom});
     }
     for(const [id,x,y,z] of [['home',278,288,425],['wall',494,266,106]]){const p=project(x,y,z);markerHits.push({id,x:originX+(p.x-cam.x)*cam.zoom,y:originY+(p.y-cam.y)*cam.zoom});}
     if(s.tutorial.allowedTarget(s.world.targets[1]))markerHits.push({id:'facade',x:originX+(24-cam.x)*cam.zoom,y:originY+(173-cam.y)*cam.zoom});
@@ -212,5 +236,5 @@ export function createTutorialRenderer(pack){
     cam.x+=(w/2-originX)/cam.zoom;cam.y+=(h/2-originY)/cam.zoom;
     return cam;
   }
-  return {atlas,posterHits,markerHits,world,hideout:(c,s,w,h)=>renderHideout(c,s,w,h,atlas),drawTrophy:(c,id,x,y,size)=>drawTrophy(c,id,atlas,x,y,size),drawGraffiti:(c,id,x,y,w,h,color)=>drawGraffiti(c,id,x,y,w,h,atlas,color)};
+  return {atlas,posterHits,markerHits,world,map:(c,s,w,h)=>drawNeighbourhoodMap(c,s,w,h,atlas,kit),hideout:(c,s,w,h)=>renderHideout(c,s,w,h,atlas),drawTrophy:(c,id,x,y,size)=>drawTrophy(c,id,atlas,x,y,size),drawGraffiti:(c,id,x,y,w,h,color)=>drawGraffiti(c,id,x,y,w,h,atlas,color)};
 }

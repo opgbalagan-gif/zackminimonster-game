@@ -1,14 +1,14 @@
-import {GraffitiView} from './core__graffiti-view.js?v=1604a53b1e7b';
-import {HideoutUI} from './core__hideout-ui.js?v=1604a53b1e7b';
-import {CourtView} from './core__court-view.js?v=1604a53b1e7b';
-import {PhoneUI} from './core__phone-ui.js?v=1604a53b1e7b';
-import {PeriodTransition} from './core__period-transition.js?v=1604a53b1e7b';
-import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=1604a53b1e7b';
-import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=1604a53b1e7b';
-import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=1604a53b1e7b';
-import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=1604a53b1e7b';
-import {regionAt,gateMessage} from './core__city-progress.js?v=1604a53b1e7b';
-import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=1604a53b1e7b';
+import {GraffitiView} from './core__graffiti-view.js?v=14cc148264ab';
+import {HideoutUI} from './core__hideout-ui.js?v=14cc148264ab';
+import {CourtView} from './core__court-view.js?v=14cc148264ab';
+import {PhoneUI} from './core__phone-ui.js?v=14cc148264ab';
+import {PeriodTransition} from './core__period-transition.js?v=14cc148264ab';
+import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=14cc148264ab';
+import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=14cc148264ab';
+import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=14cc148264ab';
+import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=14cc148264ab';
+import {regionAt,gateMessage} from './core__city-progress.js?v=14cc148264ab';
+import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=14cc148264ab';
 const $=id=>document.getElementById(id);
 export class GameUI{
   constructor(callbacks){
@@ -32,6 +32,7 @@ export class GameUI{
   }
   bind(session,renderer,audio){
     this.session=session;this.renderer=renderer;this.audio=audio;
+    if(session.world.sandbox){document.querySelector('.map-legend').innerHTML='<span><i class="gold"></i> Дом</span><span><i class="purple"></i> Граффити</span><span><i class="blue"></i> Канал</span><span>● Зак — розовая точка</span>';}
     this.graffitiView=new GraffitiView($('graffiti-canvas'),session,renderer,audio);
     this.courtView=new CourtView(session,renderer);
     this.posterLinks=new Map();
@@ -46,7 +47,7 @@ export class GameUI{
     $('poi-wall').onclick=()=>{const target=session.world.targets.find(t=>t.wall_id===this.currentPoi.wall);this.closePoi();if(target)session.routeTo(target.approach,target.name);};
     $('poster-instagram').href=ARTIST_URL;
     for(const poster of POSTERS){const button=document.createElement('button');button.textContent=poster.brand;button.onclick=()=>this.openPoster(poster.id);$('poster-gallery').append(button);}
-    for(const region of [{id:'all',name:'ВЕСЬ ГОРОД'},...session.city]){
+    for(const region of session.world.sandbox?[{id:'all',name:'ВСЁ'},{id:'home',name:'КВАРТАЛ'},{id:'canal',name:'КАНАЛ'},{id:'park',name:'ПАРК'},{id:'marina',name:'ПРИЧАЛ'}]:[{id:'all',name:'ВЕСЬ ГОРОД'},...session.city]){
       const button=document.createElement('button');button.dataset.region=region.id;button.textContent=region.name;
       button.onclick=()=>{session.mapRegion=region.id==='all'?null:region.id;this.drawMap();};$('city-tabs').append(button);
     }
@@ -89,16 +90,19 @@ export class GameUI{
   updateRoutes(){
     const s=this.session,select=$('route-select'),old=select.value;select.replaceChildren();
     const options=[{id:'home',name:'⌂ Убежище'},{id:'court',name:'◉ Баскетбол · Не просто мяч'},...s.world.targets.map(t=>({id:t.wall_id,name:(s.painted.has(t.wall_id)?'✓ ':'▣ ')+t.name+' · '+t.rep_reward+' REP'})),...s.world.safeSpots.map(t=>({id:t.id,name:'? '+t.name}))];
-    options.splice(2,0,...POSTERS.map(p=>({id:'poster_'+p.id,name:'↗ Плакат '+p.brand+' × ZAK MINI MONSTER'})));
+    if(s.world.sandbox)options.splice(2,0,...s.world.mapRoutes);
+    else options.splice(2,0,...POSTERS.map(p=>({id:'poster_'+p.id,name:'↗ Плакат '+p.brand+' × ZAK MINI MONSTER'})));
     options.splice(2,0,...(s.world.bridges??[]).map(b=>({id:b.id,name:'⇄ '+b.name})),...(s.world.hideouts??[]).slice(1).map(h=>({id:h.id,name:'⌂ '+h.name})));
     options.splice(2,0,...(s.world.pointsOfInterest??[]).map(p=>({id:p.id,name:'! '+p.name})));
     for(const opt of options){const el=document.createElement('option');el.value=opt.id;el.textContent=opt.name;select.append(el);}
     if(old)select.value=old;
   }
   toggleMap(force){
-    if(this.session?.tutorial)return;
+    if(this.session?.tutorial&&!this.session.world.sandbox)return;
     if(!this.session||!['hideout','district'].includes(this.session.mode))return;
     this.mapOpen=force??!this.mapOpen;$('map-screen').hidden=!this.mapOpen;
+    $('app').dataset.map=String(this.mapOpen);
+    if(this.session.world.sandbox){document.querySelector('.map-header h1').textContent='КАРТА РАЙОНА';document.querySelector('.map-header .eyebrow').textContent='КВАРТАЛЫ · КАНАЛ · ПАРК';$('poster-gallery').hidden=true;}
     if(this.mapOpen){this.updateRoutes();this.drawMap();}
   }
   drawMap(){
@@ -106,11 +110,12 @@ export class GameUI{
     if(rect.width<50||rect.height<100)return;
     const padding=parseFloat(getComputedStyle(canvas).paddingTop)||0;
     canvas.width=Math.round(rect.width);canvas.height=Math.max(1,Math.round(rect.height-padding));
-    this.renderer.world(canvas.getContext('2d'),this.session,canvas.width,canvas.height,true);
+    if(this.session.world.sandbox)this.renderer.map(canvas.getContext('2d'),this.session,canvas.width,canvas.height);
+    else this.renderer.world(canvas.getContext('2d'),this.session,canvas.width,canvas.height,true);
     $('map-progress').textContent=this.session.painted.size+' / '+this.session.world.targets.length+' СТЕН';
     for(const button of $('city-tabs').children)button.classList.toggle('active',button.dataset.region===(this.session.mapRegion??'all'));
     const selected=this.session.city.find(r=>r.id===this.session.mapRegion);
-    $('city-status').textContent=selected?selected.open?selected.subtitle+' · Сохранено '+selected.rep+' REP':gateMessage(this.session.city,selected.id):'Единый город · река · кольцо метро. Проходы: 800 → 1200 → 1600 REP в предыдущем районе.';
+    $('city-status').textContent=this.session.world.sandbox?'Ты — розовая точка. Выбери место, чтобы проложить пеший маршрут.':selected?selected.open?selected.subtitle+' · Сохранено '+selected.rep+' REP':gateMessage(this.session.city,selected.id):'Единый город · река · кольцо метро. Проходы: 800 → 1200 → 1600 REP в предыдущем районе.';
   }
   showToast(text){if(this.periodTransition?.active){this.pendingComment=text;return;}$('toast').textContent=text;$('toast').hidden=false;this.toastUntil=performance.now()+4500;}
   sync(){

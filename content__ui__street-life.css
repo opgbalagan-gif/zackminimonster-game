@@ -144,6 +144,12 @@ button.secondary,.room-hotspot,#radio-toggle,#chapter-button,#phone-toggle,.phas
 #app #joystick #action-button{pointer-events:auto}
 #app #interaction{display:none!important}
 #app #joystick #action-button:focus-visible{outline:3px solid #fff;outline-offset:4px}
+#app #joystick,#app #joystick .stick-knob,#app #joystick #action-button{background:transparent!important;background-image:none!important;box-shadow:none!important;backdrop-filter:none;border:1px solid #f6ebcba6}
+#app #joystick .stick-direction{color:#fff6d9b8;text-shadow:0 1px 2px #22333b}
+#app #joystick .stick-knob{border-color:#eff6f6a6}
+#app #joystick #action-button{border-color:#ffdf88c9;color:#ffe7a6}
+#app #joystick #action-button .ui-icon{filter:drop-shadow(0 1px 2px #17252d)}
+#app #joystick:active,#app #joystick #action-button:active{border-color:#fff9df;box-shadow:0 0 0 2px #fff4ce25!important}
 
 #app[data-sandbox=true] .home-dock{display:none}
 #room-overview{position:absolute;right:16px;bottom:18px;z-index:22;min-height:42px;font-size:12px}
@@ -156,6 +162,19 @@ button.secondary,.room-hotspot,#radio-toggle,#chapter-button,#phone-toggle,.phas
 .room-hotspot{border:0!important;border-image:none!important;background:none!important;box-shadow:none!important}
 .world-marker .ui-icon,.room-hotspot .ui-icon{filter:drop-shadow(0 1px 2px #050a10) drop-shadow(0 0 1px #fff1cd)}
 .phone-app[hidden]{display:none!important}
+.app-map{background:linear-gradient(135deg,#8aa764,#c9dca4 44%,#67b8d3 46%,#67b8d3 58%,#e1d5ad 60%);border-radius:4px;color:#304653;font:bold 35px/36px sans-serif;transform:rotate(-8deg)}
+.flip-phone nav:has(.phone-map){grid-template-columns:repeat(4,1fr)}
+#app[data-map=true] #hud,#app[data-map=true] #phone-toggle,#app[data-map=true] #tutorial-markers,#app[data-map=true] #street-status,#app[data-map=true] #poster-links{display:none!important}
+#map-screen{z-index:80;background:#d8e4da;color:#243d43}
+#map-screen .map-header h1{color:#243d43;text-shadow:none}
+#map-screen .map-header .eyebrow{color:#49656a}
+#map-screen #city-tabs .active{background:#a9c48c;color:#223c34;border-color:#526e4d}
+#map-screen #map-canvas{image-rendering:auto;padding-top:125px}
+#map-screen .map-sidebar{background:#f4efdd;border:1px solid #879989;color:#263f43;box-shadow:none}
+#map-screen #city-status,#map-screen #map-progress{color:#263f43}
+#map-screen .map-sidebar h2,#map-screen .map-sidebar label,#map-screen .map-sidebar p{color:#3b5559}
+#map-screen #route-select{background:#fff9e6;color:#263f43;border:1px solid #869c90}
+@media(max-width:700px){#map-screen #map-canvas{height:calc(100% - 175px);padding-top:115px}#map-screen .map-sidebar{max-height:165px}#map-screen #poster-gallery{display:none}#map-screen #city-status{margin-bottom:5px}}
 #app{overflow:clip}
 #new-game-button{display:block;margin-top:12px;width:100%}
 #new-game-dialog{z-index:100;display:grid;place-items:center;background:#050d14e8;padding:20px}

@@ -1,5 +1,5 @@
-import {moveAlongPath,distance} from './core__geometry.js?v=1604a53b1e7b';
-import {recognition,rememberWorks,RECOGNITION_TIERS} from './core__recognition.js?v=1604a53b1e7b';
+import {moveAlongPath,distance} from './core__geometry.js?v=14cc148264ab';
+import {recognition,rememberWorks,RECOGNITION_TIERS} from './core__recognition.js?v=14cc148264ab';
 
 export const HOME_TOUR=[
   ['Знакомый потолок','Кровать — мой первый спонсор. Пока платит только сном.','Это дом Зака. Радио — в телефоне справа. Остальные значки появятся по ходу знакомства.','О КРОВАТИ'],
@@ -42,7 +42,7 @@ export class StreetLife{
     this.s.emit('period-change',{from,to:state.period});
     this.s.notice(this.night?'Наступила ночь. Пора рисовать.':'Доброе утро. Посмотрим, кому понравились работы.');
   }
-  works(){return this.s.world.targets.filter(t=>this.s.painted.has(t.wall_id)&&(this.s.world.sandbox||t.buildingId||this.s.tutorial.wall==='own'&&this.s.tutorial.tag===0&&this.s.tutorial.coating===0));}
+  works(){return this.s.world.targets.filter(t=>this.s.painted.has(t.wall_id)&&!this.s.save.wall_damage?.[t.wall_id]&&(this.s.world.sandbox||t.buildingId||this.s.tutorial.wall==='own'&&this.s.tutorial.tag===0&&this.s.tutorial.coating===0));}
   update(dt){
     this.syncRecognition();
     if(this.sleeping){this.sleeping=Math.max(0,this.sleeping-dt);if(!this.sleeping){if(!(this.tour&&this.introStep===1&&this.night))this.changePeriod();if(this.tour&&this.introStep===1){this.s.save.campaign.homeIntroStep=2;this.s.persist();}}return;}
@@ -61,6 +61,7 @@ export class StreetLife{
         const path=this.s.nav.path(start,goal);if(path.length)this.visitors.push({...slot,...start,path,phase:'walk',age:0,moving:false,sprite:'citizen_'+(slot.n%3+1)+'_0'});}
     }
     for(const v of this.visitors){
+      if(this.s.save.wall_damage?.[v.target.wall_id]&&v.phase!=='leave'){v.phase='leave';v.path=this.s.nav.path(v,this.s.world.tutorialEntry);}
       if(v.phase==='walk'||v.phase==='leave'){moveAlongPath(v,v.path,70,dt);if(!v.path.length){if(v.phase==='leave')v.done=true;else{v.phase='photo';v.age=0;const fame=this.fame;v.line=fame.level>=2&&distance(v,this.s.player)<150?(fame.level===3?'Зак! Можно фото с тобой?':'Зак, крутая работа!'):fame.lines[v.n%fame.lines.length];}}}
       else{v.age+=dt;if(v.phase==='photo'&&v.age>=2.8){v.phase='tip';v.age=0;
           if(!this.state.donations.includes(v.key)){this.state.donations.push(v.key);v.tip=10+(v.n%2)*5+v.bonus;this.s.save.money+=v.tip;this.s.save.recognition.encounters=Math.min(60,this.s.save.recognition.encounters+1);const promoted=this.syncRecognition();this.s.persist();if(!promoted)this.s.notice('Спасибо! +'+v.tip+' ₽ на следующую краску.');}}

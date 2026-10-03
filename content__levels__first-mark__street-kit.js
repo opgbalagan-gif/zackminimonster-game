@@ -1,6 +1,6 @@
-import {project} from './core__geometry.js?v=1604a53b1e7b';
-import {polygon,box} from './content__district_01__terrain.js?v=1604a53b1e7b';
-import {createMetroArt} from './content__district_01__metro-art.js?v=1604a53b1e7b';
+import {project} from './core__geometry.js?v=14cc148264ab';
+import {polygon,box} from './content__district_01__terrain.js?v=14cc148264ab';
+import {createMetroArt} from './content__district_01__metro-art.js?v=14cc148264ab';
 
 // Art dimensions are in world units. Anchors sit on the ground, never on a walk lane.
 export const STREET_PROPS=[
@@ -11,18 +11,20 @@ export const STREET_PROPS=[
 ];
 const quad=(x,y,w,h,z=0)=>[project(x,y,z),project(x+w,y,z),project(x+w,y+h,z),project(x,y+h,z)];
 export function createStreetKit(images){
-  const material=createMetroArt(images.materials,{asphalt:[8,8,610,610],paving:[636,8,610,610],wall:[8,636,610,610],metal:[636,636,610,610]});
-  const roadMaterial=images.asphalt_dry?createMetroArt(images.asphalt_dry,{asphalt:[0,0,images.asphalt_dry.width,images.asphalt_dry.height]}):material;
+  const material=createMetroArt(images.comic_terrain,{asphalt:[2,2,623,623],paving:[629,2,623,623],wall:[2,629,623,623],grass:[629,629,623,623],metal:[2,629,623,623]});
+  const roadMaterial=material;
   function road(c,x,y,w,h){
     c.save();polygon(c,quad(x,y,w,h),'#353a3d');c.clip();
-    for(let tx=Math.floor(x/160)*160;tx<x+w;tx+=160)for(let ty=Math.floor(y/160)*160;ty<y+h;ty+=160)roadMaterial.quad(c,'asphalt',quad(tx,ty,160,160),.12);
+    c.imageSmoothingEnabled=true;
+    for(let tx=Math.floor(x/320)*320;tx<x+w;tx+=320)for(let ty=Math.floor(y/320)*320;ty<y+h;ty+=320)roadMaterial.quad(c,'asphalt',quad(tx,ty,320,320),.02);
     c.restore();
   }
   function floor(c,{night=true}={}){
     box(c,72,92,560,460,0,'#504d43','#1c2a32','#29323a',-22);
     // One continuous sidewalk material, clipped to the level platform.
     c.save();polygon(c,quad(72,92,560,460),'#625d51');c.clip();
-    for(let x=72;x<632;x+=180)for(let y=92;y<552;y+=180)material.quad(c,'paving',quad(x,y,180,180),.24);
+    c.imageSmoothingEnabled=true;
+    for(let x=72;x<632;x+=240)for(let y=92;y<552;y+=240)material.quad(c,'paving',quad(x,y,240,240),.02);
     c.restore();
     road(c,76,412,552,112);
     c.save();c.transform(1,.5,-1,.5,0,0);

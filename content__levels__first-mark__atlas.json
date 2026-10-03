@@ -1421,6 +1421,107 @@
         0.5,
         0.92
       ]
+    },
+    "comic_house_0": {
+      "sheet": "comic_buildings",
+      "rect": [
+        0,
+        0,
+        627,
+        615
+      ],
+      "groundAnchor": [
+        0.5406698564593302,
+        0.9902439024390244
+      ]
+    },
+    "comic_house_1": {
+      "sheet": "comic_buildings",
+      "rect": [
+        627,
+        0,
+        627,
+        615
+      ],
+      "groundAnchor": [
+        0.45614035087719296,
+        0.9934959349593496
+      ]
+    },
+    "comic_house_2": {
+      "sheet": "comic_buildings",
+      "rect": [
+        0,
+        627,
+        627,
+        615
+      ],
+      "groundAnchor": [
+        0.5518341307814992,
+        0.9658536585365853
+      ]
+    },
+    "comic_house_3": {
+      "sheet": "comic_buildings",
+      "rect": [
+        627,
+        627,
+        627,
+        615
+      ],
+      "groundAnchor": [
+        0.5167464114832536,
+        0.9642276422764228
+      ]
+    },
+    "comic_tree": {
+      "sheet": "comic_props",
+      "rect": [
+        0,
+        0,
+        627,
+        617
+      ]
+    },
+    "comic_palm": {
+      "sheet": "comic_props",
+      "rect": [
+        627,
+        0,
+        627,
+        617
+      ]
+    },
+    "comic_tank": {
+      "sheet": "comic_props",
+      "rect": [
+        0,
+        627,
+        627,
+        515
+      ]
+    },
+    "comic_pier": {
+      "sheet": "comic_props",
+      "rect": [
+        627,
+        627,
+        627,
+        515
+      ]
+    },
+    "comic_long_house": {
+      "sheet": "comic_long_house",
+      "rect": [
+        620,
+        0,
+        1000,
+        715
+      ],
+      "groundAnchor": [
+        0.266,
+        0.9790209790209791
+      ]
     }
   },
   "version": 2,
@@ -1604,6 +1705,30 @@
     {
       "id": "roby_dog",
       "file": "./content__levels__first-mark__art__roby-dog-walk.png"
+    },
+    {
+      "id": "comic_buildings",
+      "file": "./content__levels__first-mark__art__comic-buildings.png"
+    },
+    {
+      "id": "comic_terrain",
+      "file": "./content__levels__first-mark__art__comic-terrain.png"
+    },
+    {
+      "id": "comic_sky",
+      "file": "./content__levels__first-mark__art__comic-sky.png"
+    },
+    {
+      "id": "comic_props",
+      "file": "./content__levels__first-mark__art__comic-props.png"
+    },
+    {
+      "id": "comic_court",
+      "file": "./content__levels__first-mark__art__comic-court.png"
+    },
+    {
+      "id": "comic_long_house",
+      "file": "./content__levels__first-mark__art__comic-long-house.png"
     }
   ]
 }

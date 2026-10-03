@@ -1,7 +1,7 @@
-import {AimController,MotionAim} from './core__motion-aim.js?v=1604a53b1e7b';
-import {setUIButton,uiIcon} from './core__ui-kit.js?v=1604a53b1e7b';
-import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=1604a53b1e7b';
-import {nearbyPhotoSpot} from './core__photo-spots.js?v=1604a53b1e7b';
+import {AimController,MotionAim} from './core__motion-aim.js?v=14cc148264ab';
+import {setUIButton,uiIcon} from './core__ui-kit.js?v=14cc148264ab';
+import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=14cc148264ab';
+import {nearbyPhotoSpot} from './core__photo-spots.js?v=14cc148264ab';
 export class PhoneUI{
   constructor(s,renderer,audio){
     this.s=s;this.renderer=renderer;this.audio=audio;this.aim=new AimController();this.motion=new MotionAim(this.aim);this.steady=0;this.screen='messages';this.previous={x:0,y:0};
@@ -19,6 +19,7 @@ export class PhoneUI{
     this.el.querySelector('nav').insertAdjacentHTML('beforeend','<button class="phone-app phone-training">'+uiIcon('spray')+'<span>Обучение</span></button>');
     bind('.phone-levels',()=>{this.close();document.getElementById('chapter-button').click();});
     bind('.phone-training',()=>{this.close();const b=document.getElementById('chapter-button');b.dataset.tab='training';b.click();});
+    if(s.world.sandbox){this.el.querySelector('nav').insertAdjacentHTML('beforeend','<button class="phone-app phone-map"><span class="phone-app-icon app-map" aria-hidden="true">⌁</span><span>Карта</span></button>');bind('.phone-map',()=>{this.close();document.getElementById('map-button').click();});}
     const volume=this.el.querySelector('.phone-radio-volume');volume.value=Math.round(audio.radio.media.volume*100);
     volume.oninput=()=>audio.radio.setVolume(Number(volume.value)/100);volume.onchange=()=>{s.save.settings.radioVolume=audio.radio.media.volume;s.persist();};
     this.canvas.onpointerdown=e=>{this.motion.stop();this.motion.status='Наведение пальцем / мышью';this.drag={x:e.clientX,y:e.clientY};this.canvas.setPointerCapture(e.pointerId);};

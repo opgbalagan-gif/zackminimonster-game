@@ -1,4 +1,4 @@
-import {cleanBallSave} from './core__basketball.js?v=1604a53b1e7b';
+import {cleanBallSave} from './core__basketball.js?v=14cc148264ab';
 export const SAVE_KEY='zackminimonster.save';
 export const SAVE_VERSION=3;
 export function freshSave(){
@@ -6,7 +6,7 @@ export function freshSave(){
     campaign:{tutorialComplete:false,tutorialCheckpoint:'home',companionUnlocked:false,tutorialFacadePainted:false,homeIntroStep:0,tutorialAtHome:false,sneakComplete:false,sneakCheckpoint:'gift',giftUnlocked:false},
     money:0,recognition:{works:[],photos:[],encounters:0},streetLife:{period:'day',day:1,elapsed:0,donations:[],audienceTier:null},phone:{unlocked:false,read:false,photos:[]},
     district_progress:{district_01:{visits:0}},painted_walls:[],graffiti_by_wall:{},basketball:{completed:false,pixels:[],stickers:[]},
-    wall_styles:{},active_run:null,resume:null,graffiti_unlocks:['zack_tag','monster','crown','panda_king'],hideout:{upgrades:[],collectibles:[],display:'mini'},settings:{sound:true,radioVolume:.22}};
+    wall_styles:{},wall_damage:{},active_run:null,resume:null,graffiti_unlocks:['zack_tag','monster','crown','panda_king'],hideout:{upgrades:[],collectibles:[],display:'mini'},settings:{sound:true,radioVolume:.22}};
 }
 export function migrateSave(raw){
   const base=freshSave();
@@ -36,6 +36,7 @@ export function migrateSave(raw){
     district_progress:{...base.district_progress,...raw.district_progress},
     painted_walls:strings(raw.painted_walls),graffiti_by_wall:raw.graffiti_by_wall??{},
     wall_styles:raw.wall_styles&&typeof raw.wall_styles==='object'?raw.wall_styles:{},
+    wall_damage:Object.fromEntries(Object.entries(raw.wall_damage??{}).filter(([key,value])=>key.startsWith('SANDBOX_')&&['rival','cleaner'].includes(value)).slice(0,200)),
     resume:raw.resume?.level==='sandbox'&&['district','hideout'].includes(raw.resume.mode)&&Number.isFinite(raw.resume.x)&&Number.isFinite(raw.resume.y)?{level:'sandbox',mode:raw.resume.mode,x:raw.resume.x,y:raw.resume.y,facing:['up','down','left','right'].includes(raw.resume.facing)?raw.resume.facing:'down',heat:Math.max(0,Math.min(5,Number(raw.resume.heat)||0))}:null,
     active_run:raw.active_run?.district==='district_01'?{
       district:'district_01',walls:strings(raw.active_run.walls),
