@@ -1283,7 +1283,7 @@
     },
     {
       "id": "room",
-      "file": "./content__levels__first-mark__art__room-artist.png"
+      "file": "./content__levels__first-mark__art__room-complete-v2.png"
     },
     {
       "id": "materials",
@@ -1400,6 +1400,10 @@
     {
       "id": "poster_converse",
       "file": "./content__district_01__art__poster-converse.png"
+    },
+    {
+      "id": "basketball_court",
+      "file": "./content__levels__first-mark__art__court-painted-v2.png"
     }
   ]
 }

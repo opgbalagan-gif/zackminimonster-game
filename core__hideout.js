@@ -26,10 +26,11 @@ export function roomLayout(w,h,tutorial=false){
   const narrow=w<760,availableW=narrow?w:w-350,top=narrow?94:78,bottom=narrow?108:95;
   const height=Math.max(90,h-top-bottom-(tutorial&&narrow?150:0));
   // Contain the complete 2:3 room, including its entrance and stairs.
-  const width=Math.min(availableW,height/1.5),drawH=width*1.5;
+  const width=Math.min(availableW-16,height/1.5),drawH=width*1.5;
   return {x:(availableW-width)/2+(narrow?0:10),y:top-12,w:width,h:drawH,clipBottom:h-bottom};
 }
-export const ROOM_POINTS={
+export const roomPoint=(x,y)=>({x:.08+.86*x,y:.075+.86*y});
+export const ROOM_POINTS=Object.fromEntries(Object.entries({
   wardrobe:{x:.86,y:.39},sprays:{x:.27,y:.32},collection:{x:.62,y:.16},
   rest:{x:.57,y:.30},save:{x:.17,y:.43},music:{x:.78,y:.57},pet:{x:.54,y:.60},exit:{x:.695,y:.79}
-};
+}).map(([key,p])=>[key,roomPoint(p.x,p.y)]));

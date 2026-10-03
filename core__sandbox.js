@@ -1,6 +1,6 @@
-import {createSneakWorld} from './core__sneak.js?v=4c2aa9d50742';
-import {distance,moveAlongPath} from './core__geometry.js?v=4c2aa9d50742';
-import {updateStreetNpcs} from './core__street-npcs.js?v=4c2aa9d50742';
+import {createSneakWorld} from './core__sneak.js?v=14892ebffd3d';
+import {distance,moveAlongPath} from './core__geometry.js?v=14892ebffd3d';
+import {updateStreetNpcs} from './core__street-npcs.js?v=14892ebffd3d';
 
 export function createSandboxWorld(){
   const w=createSneakWorld();w.id='sandbox';w.sandbox=true;w.levelNumber=1;w.name='СВОЙ РАЙОН';

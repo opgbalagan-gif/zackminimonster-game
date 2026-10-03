@@ -1,2 +1,2 @@
-import {uiIcon} from './core__ui-kit.js?v=4c2aa9d50742';
+import {uiIcon} from './core__ui-kit.js?v=14892ebffd3d';
 export function homeIcon(name){return uiIcon(name==='exit'?'arrow':name);}

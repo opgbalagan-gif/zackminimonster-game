@@ -1,4 +1,4 @@
-import {roomLayout,heroSprite,ink} from './core__hideout.js?v=4c2aa9d50742';
+import {roomLayout,roomPoint,heroSprite,ink} from './core__hideout.js?v=14892ebffd3d';
 export function drawTrophy(c,id,atlas,x,y,size){
   if(id==='mini')atlas.draw(c,'companion',x,y,null,size);
   else if(id==='metro'){
@@ -25,7 +25,7 @@ export function renderHideout(c,s,w,h,atlas){
   const r=roomLayout(w,h,s.world.tutorial&&!s.world.sandbox);c.save();c.beginPath();c.rect(0,0,w,r.clipBottom);c.clip();
   if(s.life&&!s.life.night)c.filter='brightness(1.16) saturate(.86)';
   c.drawImage(atlas.images.room,r.x,r.y,r.w,r.h);c.filter='none';
-  const local=(x,y)=>({x:r.x+x*r.w,y:r.y+y*r.h});
+  const local=(x,y)=>{const p=roomPoint(x,y);return {x:r.x+p.x*r.w,y:r.y+p.y*r.h};};
   const t=s.time,rest=s.room.action==='rest'||s.life?.tour&&s.life.introStep<=1,celebrate=s.room.action==='victory';
   const walking=!rest&&s.room.action==='idle'&&Math.floor(t/5)%3===1;
   const hx=rest?.57:.43+(walking?Math.sin(t*.9)*.028:0),hy=rest?.347:.60;
@@ -33,7 +33,7 @@ export function renderHideout(c,s,w,h,atlas){
   const state=rest?'HIDE':celebrate?'VICTORY':s.room.action==='spray'?'SHAKE_CAN':'IDLE';
   const step=walking&&Math.floor(t*7)%2;
   c.fillStyle='#070c164f';c.beginPath();c.ellipse(hero.x,hero.y+2,r.w*.044,r.w*.012,0,0,Math.PI*2);c.fill();
-  atlas.draw(c,heroSprite(s.save.player.skin,state,walking?(Math.cos(t*.9)>0?'right':'left'):'down',step),hero.x,hero.y-(celebrate?Math.abs(Math.sin(t*5))*5:step?2:0),null,r.w*(rest?.13:.18));
+  atlas.draw(c,heroSprite(s.save.player.skin,state,walking?(Math.cos(t*.9)>0?'right':'left'):'down',step),hero.x,hero.y-(celebrate?Math.abs(Math.sin(t*5))*5:step?2:0),null,r.w*.86*(rest?.13:.18));
   const bounce=s.room.beat||s.room.action==='pet'?Math.abs(Math.sin(t*7))*7:Math.sin(t*2)*1.3;
   const hasPet=!s.world.tutorial&&s.save.campaign?.companionUnlocked!==false;
   if(hasPet)atlas.draw(c,'companion',pet.x,pet.y-bounce,null,r.w*.108);
