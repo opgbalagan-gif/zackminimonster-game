@@ -1,7 +1,7 @@
-import {AimController,MotionAim} from './core__motion-aim.js?v=0b8195c8da56';
-import {setUIButton,uiIcon} from './core__ui-kit.js?v=0b8195c8da56';
-import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=0b8195c8da56';
-import {nearbyPhotoSpot} from './core__photo-spots.js?v=0b8195c8da56';
+import {AimController,MotionAim} from './core__motion-aim.js?v=391ab0f86039';
+import {setUIButton,uiIcon} from './core__ui-kit.js?v=391ab0f86039';
+import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=391ab0f86039';
+import {nearbyPhotoSpot} from './core__photo-spots.js?v=391ab0f86039';
 export class PhoneUI{
   constructor(s,renderer,audio){
     this.s=s;this.renderer=renderer;this.audio=audio;this.aim=new AimController();this.motion=new MotionAim(this.aim);this.steady=0;this.screen='messages';this.previous={x:0,y:0};

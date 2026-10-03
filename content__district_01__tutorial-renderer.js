@@ -1,21 +1,23 @@
-import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=0b8195c8da56';
-import {vehicleProjection} from './core__vehicle-projection.js?v=0b8195c8da56';
-import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=0b8195c8da56';
-import {surfaceTrain} from './core__sandbox-metro.js?v=0b8195c8da56';
-import {drawWaterfront,drawNeighbourhoodMap} from './content__levels__sandbox__waterfront-art.js?v=0b8195c8da56';
-import {districtSurroundings,softenGroundEdge,cloudShadows} from './content__levels__sandbox__atmosphere.js?v=0b8195c8da56';
-import {groundLighting} from './content__levels__sandbox__lighting-art.js?v=0b8195c8da56';
-import {lampBrightness} from './core__lighting.js?v=0b8195c8da56';
-import {NpcAnimation} from './core__npc-animation.js?v=0b8195c8da56';
-import {SpriteAtlas} from './core__sprites.js?v=0b8195c8da56';
-import {project} from './core__geometry.js?v=0b8195c8da56';
-import {heroSprite} from './core__hideout.js?v=0b8195c8da56';
-import {polygon,box} from './content__district_01__terrain.js?v=0b8195c8da56';
-import {drawGraffiti} from './content__district_01__graffiti-art.js?v=0b8195c8da56';
-import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=0b8195c8da56';
-import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=0b8195c8da56';
-import {OccluderFade} from './core__occluder-fade.js?v=0b8195c8da56';
-import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=0b8195c8da56';
+import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=391ab0f86039';
+import {vehicleProjection} from './core__vehicle-projection.js?v=391ab0f86039';
+import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=391ab0f86039';
+import {surfaceTrain} from './core__sandbox-metro.js?v=391ab0f86039';
+import {drawWaterfront,drawNeighbourhoodMap} from './content__levels__sandbox__waterfront-art.js?v=391ab0f86039';
+import {districtSurroundings,boundaryRailing,cloudShadows} from './content__levels__sandbox__atmosphere.js?v=391ab0f86039';
+import {districtContinuation} from './core__district-continuation.js?v=391ab0f86039';
+import {dryingOpacity} from './core__wall-rivals.js?v=391ab0f86039';
+import {groundLighting} from './content__levels__sandbox__lighting-art.js?v=391ab0f86039';
+import {lampBrightness} from './core__lighting.js?v=391ab0f86039';
+import {NpcAnimation} from './core__npc-animation.js?v=391ab0f86039';
+import {SpriteAtlas} from './core__sprites.js?v=391ab0f86039';
+import {project} from './core__geometry.js?v=391ab0f86039';
+import {heroSprite} from './core__hideout.js?v=391ab0f86039';
+import {polygon,box} from './content__district_01__terrain.js?v=391ab0f86039';
+import {drawGraffiti} from './content__district_01__graffiti-art.js?v=391ab0f86039';
+import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=391ab0f86039';
+import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=391ab0f86039';
+import {OccluderFade} from './core__occluder-fade.js?v=391ab0f86039';
+import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=391ab0f86039';
 
 function fightCloud(c,s){
   const t=s.tutorial.fightBurst,p=project(s.tutorial.actor.x-11,s.tutorial.actor.y+10),pulse=Math.sin(t*27);
@@ -43,6 +45,7 @@ export function createTutorialRenderer(pack){
   const markerHits=[],posterHits=[];
   const atlas=new SpriteAtlas(pack.atlas,pack.images),kit=createStreetKit(pack.images);
   const neighbourhood=neighbourhoodArt(pack.images,atlas);
+  let continuation;
   const fades=new OccluderFade(),masks=new Map(),npcAnimation=new NpcAnimation();let lastTime,followPoint;
   function spriteMask(id){
     if(!masks.has(id)){
@@ -77,6 +80,7 @@ export function createTutorialRenderer(pack){
     // Normalize the sloping wall axis: shear alone lengthened every horizontal stroke.
     const axisScale=1/Math.hypot(1,art.slope);
     c.translate(mx,my);c.transform(axisScale,art.slope*axisScale,0,1,0,0);c.beginPath();c.rect(0,0,mw,mh);c.clip();
+    if(s.world.sandbox)c.globalAlpha*=dryingOpacity(s.save,target.wall_id);
     drawGraffiti(c,target?.graffiti_id??'zack_tag',0,0,mw,mh,atlas);damage(c,s,target,0,0,mw,mh);c.restore();
   }
   function damage(c,s,target,x,y,w,h){
@@ -94,8 +98,9 @@ export function createTutorialRenderer(pack){
     polygon(c,top,'#9e957c','#27323a',2);
     const face=[project(392,266,90),project(594,266,90),b,a];polygon(c,face,'#727766');kit.material.quad(c,'wall',face,.2);
     c.save();c.transform(1,.5,0,1,a.x,a.y-90);c.beginPath();c.rect(0,0,202,90);c.clip();
+    c.save();if(s.world.sandbox)c.globalAlpha*=dryingOpacity(s.save,target.wall_id);
     if(s.world.sandbox?s.painted.has(target.wall_id):s.tutorial.wall==='own'||s.tutorial.coating>0)drawGraffiti(c,target.graffiti_id,12,4,176,82,atlas);
-    damage(c,s,target,12,4,176,82);
+    damage(c,s,target,12,4,176,82);c.restore();
     if(s.tutorial.tag>0){c.save();c.beginPath();c.rect(0,0,202*s.tutorial.tag,90);c.clip();atlas.draw(c,'gang_colour',106,72,186,56);c.restore();}
     if(s.tutorial.coating>0){
       c.save();c.beginPath();c.rect(14,0,174*s.tutorial.coating,90);c.clip();
@@ -107,7 +112,9 @@ export function createTutorialRenderer(pack){
   function world(c,s,w,h){
     c.imageSmoothingEnabled=false;atlas.drawCalls=0;const day=s.life&&!s.life.night;c.fillStyle=day?'#708b98':'#071018';c.fillRect(0,0,w,h);
     const sky=pack.images.comic_sky,skyH=sky.height/2,scale=Math.max(w/sky.width,h/skyH),sw=w/scale;
+    if(!s.world.sandbox){
     c.save();c.imageSmoothingEnabled=true;c.drawImage(sky,(sky.width-sw)/2,day?0:skyH,sw,skyH,0,0,w,h);c.restore();
+    }
     c.filter='none';
     // Keep the complete first block visible; the street is deliberately small.
     const cam=s.camera,mobile=w<=700,sandbox=s.world.sandbox,originX=sandbox?w/2:mobile?w/2:(w-420)/2,originY=h*(sandbox?.50:mobile?.30:.46);
@@ -121,13 +128,17 @@ export function createTutorialRenderer(pack){
     if(sandbox){
       const quad=(x,y,ww,hh)=>[project(x,y),project(x+ww,y),project(x+ww,y+hh),project(x,y+hh)];
       const bounds=s.world.mapBounds;
-      districtSurroundings(c,bounds,!day);
-      c.save();polygon(c,quad(bounds.x,bounds.y,bounds.w,bounds.h),'#625d51');c.clip();
-      c.imageSmoothingEnabled=true;
-      for(let x=bounds.x;x<bounds.x+bounds.w;x+=240)for(let y=bounds.y;y<bounds.y+bounds.h;y+=240){const p=project(x+120,y+120);if(Math.abs(p.x-cam.x)>w/cam.zoom/2+280||Math.abs(p.y-cam.y)>h/cam.zoom/2+240)continue;kit.material.quad(c,'paving',quad(x,y,240,240),day?.02:.2);}
+      continuation??=districtContinuation(s.world);
+      const view=districtSurroundings(c,cam,w,h,kit,!day,bounds);
+      const visibleRects=items=>items.map(r=>({x:Math.max(r.x,view.x),y:Math.max(r.y,view.y),w:Math.min(r.x+r.w,view.x+view.w)-Math.max(r.x,view.x),h:Math.min(r.y+r.h,view.y+view.h)-Math.max(r.y,view.y)})).filter(r=>r.w>0&&r.h>0);
+      // The scenic ring uses the same ground and building art as the playable streets.
+      c.save();c.beginPath();for(const r of [continuation.bounds,bounds]){const q=quad(r.x,r.y,r.w,r.h);c.moveTo(q[0].x,q[0].y);for(const p of q.slice(1))c.lineTo(p.x,p.y);c.closePath();}c.clip('evenodd');
+      drawWaterfront(c,{water:visibleRects(continuation.water),parks:visibleRects(continuation.parks),paths:visibleRects(continuation.paths)},kit,!day);
+      for(const r of visibleRects(continuation.roads)){
+        kit.road(c,r.x,r.y,r.w,r.h);
+      }
       c.restore();
       drawWaterfront(c,s.world,kit,!day);
-      softenGroundEdge(c,bounds,!day);
       for(const r of s.world.roads)kit.road(c,r.x,r.y,r.w,r.h);
       for(const r of s.world.roads){
         // Leave junctions open: neither curbs nor centre lines cross the other street.
@@ -143,7 +154,7 @@ export function createTutorialRenderer(pack){
       // Crossings connect both sides of the block without crossing building footprints.
       c.save();c.transform(1,.5,-1,.5,0,0);c.fillStyle='#c2b99e';for(const x of [100,900,1080,1450])for(const y of [424,928])for(let k=0;k<6;k++)c.fillRect(x,y+k*15,16,7);c.restore();
       neighbourhood.court(c,s.world.court);
-      groundLighting(c,s,w,h);
+      groundLighting(c,s,w,h,continuation);
       cloudShadows(c,s,w,h);
     }else kit.floor(c,{night:!day});
     if(s.world.id==='sneak'){
@@ -154,6 +165,9 @@ export function createTutorialRenderer(pack){
     if(sandbox)drawTrafficSignals(c,s.traffic);
     const queue=[{kind:'house',depth:566},{kind:'wall',depth:760},{kind:'zack',depth:s.player.x+s.player.y}];
     if(sandbox){
+      for(const building of continuation.buildings)queue.push({kind:'block-house',building,depth:building.x+building.w+building.y+building.h});
+      for(const item of continuation.nature)queue.push({kind:'nature',...item,depth:item.x+item.y});
+      for(const rail of continuation.barriers)queue.push({kind:'boundary',...rail,depth:rail.x+rail.y+(rail.dx+rail.dy)/2});
       const metro=s.world.surfaceMetro;
       for(let x=metro.start;x<metro.end;x+=80)queue.push({kind:'viaduct',x,depth:Math.min(x+80,metro.end)+metro.y+34});
       for(const pier of s.world.metroPiers??[])queue.push({kind:'metro-pier',...pier,depth:pier.x+pier.y});
@@ -180,6 +194,7 @@ export function createTutorialRenderer(pack){
     for(const npc of s.world.streetNpcs??[])queue.push({kind:'npc',actor:npc,depth:npc.x+npc.y});
     if(s.player.path.length){c.strokeStyle='#f1ce7888';c.lineWidth=3;c.setLineDash([6,7]);c.beginPath();const start=project(s.player.x,s.player.y);c.moveTo(start.x,start.y);for(const n of s.player.path){const p=project(n.x,n.y);c.lineTo(p.x,p.y);}c.stroke();c.setLineDash([]);}
     for(const o of queue.sort((a,b)=>a.depth-b.depth)){
+      if(o.kind==='boundary'){const p=project(o.x,o.y);if(Math.abs(p.x-cam.x)<w/cam.zoom/2+150&&Math.abs(p.y-cam.y)<h/cam.zoom/2+150)boundaryRailing(c,o,!day);continue;}
       if(o.kind==='nature'){const p=project(o.x,o.y);if(Math.abs(p.x-cam.x)<w/cam.zoom/2+200&&Math.abs(p.y-cam.y)<h/cam.zoom/2+240){c.save();c.imageSmoothingEnabled=true;if(!day)c.filter='brightness(.62) saturate(.8)';spriteObject(o.id,o.x,o.y,o.w,o.depth);c.restore();}continue;}
       if(o.kind==='viaduct'){neighbourhood.rails(c,s.world.surfaceMetro,o.x);continue;}
       if(o.kind==='metro-pier'){neighbourhood.pier(c,o,s.world.surfaceMetro);continue;}

@@ -1,8 +1,8 @@
-import {createSneakWorld} from './core__sneak.js?v=0b8195c8da56';
-import {distance,moveAlongPath} from './core__geometry.js?v=0b8195c8da56';
-import {updateStreetNpcs} from './core__street-npcs.js?v=0b8195c8da56';
-import {addWaterfront} from './core__waterfront-layout.js?v=0b8195c8da56';
-import {WallRivals} from './core__wall-rivals.js?v=0b8195c8da56';
+import {createSneakWorld} from './core__sneak.js?v=391ab0f86039';
+import {distance,moveAlongPath} from './core__geometry.js?v=391ab0f86039';
+import {updateStreetNpcs} from './core__street-npcs.js?v=391ab0f86039';
+import {addWaterfront} from './core__waterfront-layout.js?v=391ab0f86039';
+import {WallRivals} from './core__wall-rivals.js?v=391ab0f86039';
 
 export function createSandboxWorld(){
   const w=createSneakWorld();w.id='sandbox';w.sandbox=true;w.levelNumber=1;w.name='СВОЙ РАЙОН';

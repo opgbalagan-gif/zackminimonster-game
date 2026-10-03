@@ -1,21 +1,24 @@
-import {project} from './core__geometry.js?v=0b8195c8da56';
-import {polygon} from './content__district_01__terrain.js?v=0b8195c8da56';
+import {project,unproject} from './core__geometry.js?v=391ab0f86039';
+import {polygon} from './content__district_01__terrain.js?v=391ab0f86039';
 const corners=r=>[project(r.x,r.y),project(r.x+r.w,r.y),project(r.x+r.w,r.y+r.h),project(r.x,r.y+r.h)];
 
-export function districtSurroundings(c,bounds,night){
-  // Feathered land continues beyond the playable boundary into the painted horizon.
-  c.save();c.transform(1,.5,-1,.5,0,0);
-  const color=night?'#566b70':'#aeba91';
-  c.fillStyle=color;
-  for(let i=20;i>=0;i--){const d=80+i*22;c.globalAlpha=.055;c.beginPath();c.roundRect(bounds.x-d,bounds.y-d,bounds.w+d*2,bounds.h+d*2,100+i*8);c.fill();}
+export function districtSurroundings(c,cam,w,h,kit,night,bounds){
+  const points=[[-1,-1],[1,-1],[1,1],[-1,1]].map(([x,y])=>unproject(cam.x+x*(w/2/cam.zoom+300),cam.y+y*(h/2/cam.zoom+300)));
+  const minX=Math.min(...points.map(p=>p.x)),maxX=Math.max(...points.map(p=>p.x));
+  const minY=Math.min(...points.map(p=>p.y)),maxY=Math.max(...points.map(p=>p.y));
+  c.save();c.imageSmoothingEnabled=true;
+  // Tile only the visible ground, continuously across the playable boundary.
+  for(let x=bounds.x+Math.floor((minX-bounds.x)/240)*240;x<maxX;x+=240)
+    for(let y=bounds.y+Math.floor((minY-bounds.y)/240)*240;y<maxY;y+=240)
+      kit.material.quad(c,'paving',corners({x,y,w:240,h:240}),night?.2:.02);
   c.restore();
+  return {x:minX,y:minY,w:maxX-minX,h:maxY-minY};
 }
-export function softenGroundEdge(c,r,night){
-  c.save();c.transform(1,.5,-1,.5,0,0);
-  const color=night?'86,107,112':'174,186,145',width=95;
-  for(const [x,y,w,h,dx,dy] of [[r.x,r.y,r.w,width,0,width],[r.x,r.y+r.h-width,r.w,width,0,-width],[r.x,r.y,width,r.h,width,0],[r.x+r.w-width,r.y,width,r.h,-width,0]]){
-    const sx=dx<0?x+w:x,sy=dy<0?y+h:y,g=c.createLinearGradient(sx,sy,sx+dx,sy+dy);g.addColorStop(0,`rgba(${color},.9)`);g.addColorStop(1,`rgba(${color},0)`);c.fillStyle=g;c.fillRect(x,y,w,h);
-  }c.restore();
+export function boundaryRailing(c,r,night){
+  c.save();c.strokeStyle=night?'#526d71':'#42686a';c.lineWidth=3;
+  for(const z of [15,38]){const a=project(r.x,r.y,z),b=project(r.x+r.dx,r.y+r.dy,z);c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();}
+  for(let i=0;i<=4;i++){const x=r.x+r.dx*i/4,y=r.y+r.dy*i/4,a=project(x,y),b=project(x,y,42);c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();}
+  c.restore();
 }
 export function cloudShadows(c,s,w,h){
   if(s.life.night)return;
