@@ -1,7 +1,7 @@
-import {project} from './core__geometry.js?v=3550d357cf95';
-import {sceneLight,shadowFootprint} from './core__lighting.js?v=3550d357cf95';
-import {polygon} from './content__district_01__terrain.js?v=3550d357cf95';
-import {STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=3550d357cf95';
+import {project} from './core__geometry.js?v=014abf6eb9c6';
+import {sceneLight,shadowFootprint} from './core__lighting.js?v=014abf6eb9c6';
+import {polygon} from './content__district_01__terrain.js?v=014abf6eb9c6';
+import {STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=014abf6eb9c6';
 export function groundLighting(c,s,w,h,continuation={}){
   const light=sceneLight(s.life.night),cam=s.camera;
   const visible=(x,y,margin=500)=>{const p=project(x,y);return Math.abs(p.x-cam.x)<w/cam.zoom/2+margin&&Math.abs(p.y-cam.y)<h/cam.zoom/2+margin;};

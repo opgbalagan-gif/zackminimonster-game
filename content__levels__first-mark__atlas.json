@@ -829,316 +829,340 @@
       ]
     },
     "traffic_coupe_se": {
-      "sheet": "traffic_coupe",
+      "sheet": "traffic_comic",
       "rect": [
-        0,
-        0,
-        627,
-        627
+        76,
+        83,
+        320,
+        215
       ],
       "groundAnchor": [
         0.5,
-        0.66
-      ]
+        0.76
+      ],
+      "flip": false
     },
     "traffic_coupe_sw": {
-      "sheet": "traffic_coupe",
+      "sheet": "traffic_comic",
       "rect": [
-        627,
-        0,
-        627,
-        627
+        76,
+        83,
+        320,
+        215
       ],
       "groundAnchor": [
         0.5,
-        0.66
-      ]
+        0.76
+      ],
+      "flip": true
     },
     "traffic_coupe_nw": {
-      "sheet": "traffic_coupe",
+      "sheet": "traffic_comic",
       "rect": [
-        0,
-        627,
-        627,
-        627
+        76,
+        389,
+        320,
+        201
       ],
       "groundAnchor": [
         0.5,
-        0.59
-      ]
+        0.76
+      ],
+      "flip": false
     },
     "traffic_coupe_ne": {
-      "sheet": "traffic_coupe",
+      "sheet": "traffic_comic",
       "rect": [
-        627,
-        627,
-        627,
-        627
+        76,
+        389,
+        320,
+        201
       ],
       "groundAnchor": [
         0.5,
-        0.59
-      ]
+        0.76
+      ],
+      "flip": true
     },
     "traffic_hatch_se": {
-      "sheet": "traffic_hatch",
+      "sheet": "traffic_comic",
       "rect": [
-        0,
-        0,
-        627,
-        627
+        488,
+        96,
+        297,
+        202
       ],
       "groundAnchor": [
         0.5,
-        0.66
-      ]
+        0.76
+      ],
+      "flip": false
     },
     "traffic_hatch_sw": {
-      "sheet": "traffic_hatch",
+      "sheet": "traffic_comic",
       "rect": [
-        627,
-        0,
-        627,
-        627
+        488,
+        96,
+        297,
+        202
       ],
       "groundAnchor": [
         0.5,
-        0.66
-      ]
+        0.76
+      ],
+      "flip": true
     },
     "traffic_hatch_nw": {
-      "sheet": "traffic_hatch",
+      "sheet": "traffic_comic",
       "rect": [
-        0,
-        627,
-        627,
-        627
+        493,
+        396,
+        295,
+        192
       ],
       "groundAnchor": [
         0.5,
-        0.59
-      ]
+        0.76
+      ],
+      "flip": false
     },
     "traffic_hatch_ne": {
-      "sheet": "traffic_hatch",
+      "sheet": "traffic_comic",
       "rect": [
-        627,
-        627,
-        627,
-        627
+        493,
+        396,
+        295,
+        192
       ],
       "groundAnchor": [
         0.5,
-        0.59
-      ]
+        0.76
+      ],
+      "flip": true
     },
     "traffic_minivan_se": {
-      "sheet": "traffic_minivan",
+      "sheet": "traffic_comic",
       "rect": [
-        0,
-        0,
-        627,
-        627
+        904,
+        72,
+        280,
+        228
       ],
       "groundAnchor": [
         0.5,
-        0.66
-      ]
+        0.8
+      ],
+      "flip": false
     },
     "traffic_minivan_sw": {
-      "sheet": "traffic_minivan",
+      "sheet": "traffic_comic",
       "rect": [
-        627,
-        0,
-        627,
-        627
+        904,
+        72,
+        280,
+        228
       ],
       "groundAnchor": [
         0.5,
-        0.66
-      ]
+        0.8
+      ],
+      "flip": true
     },
     "traffic_minivan_nw": {
-      "sheet": "traffic_minivan",
+      "sheet": "traffic_comic",
       "rect": [
-        0,
-        627,
-        627,
-        627
+        907,
+        375,
+        284,
+        225
       ],
       "groundAnchor": [
         0.5,
-        0.59
-      ]
+        0.8
+      ],
+      "flip": false
     },
     "traffic_minivan_ne": {
-      "sheet": "traffic_minivan",
+      "sheet": "traffic_comic",
       "rect": [
-        627,
-        627,
-        627,
-        627
+        907,
+        375,
+        284,
+        225
       ],
       "groundAnchor": [
         0.5,
-        0.59
-      ]
+        0.8
+      ],
+      "flip": true
     },
     "traffic_police_se": {
-      "sheet": "traffic_police",
+      "sheet": "traffic_comic",
       "rect": [
-        0,
-        0,
-        627,
-        627
+        63,
+        663,
+        325,
+        221
       ],
       "groundAnchor": [
         0.5,
-        0.66
-      ]
+        0.76
+      ],
+      "flip": false
     },
     "traffic_police_sw": {
-      "sheet": "traffic_police",
+      "sheet": "traffic_comic",
       "rect": [
-        627,
-        0,
-        627,
-        627
+        63,
+        663,
+        325,
+        221
       ],
       "groundAnchor": [
         0.5,
-        0.66
-      ]
+        0.76
+      ],
+      "flip": true
     },
     "traffic_police_nw": {
-      "sheet": "traffic_police",
+      "sheet": "traffic_comic",
       "rect": [
-        0,
-        627,
-        627,
-        627
+        68,
+        954,
+        323,
+        220
       ],
       "groundAnchor": [
         0.5,
-        0.59
-      ]
+        0.76
+      ],
+      "flip": false
     },
     "traffic_police_ne": {
-      "sheet": "traffic_police",
+      "sheet": "traffic_comic",
       "rect": [
-        627,
-        627,
-        627,
-        627
+        68,
+        954,
+        323,
+        220
       ],
       "groundAnchor": [
         0.5,
-        0.59
-      ]
+        0.76
+      ],
+      "flip": true
     },
     "traffic_lowrider_se": {
-      "sheet": "traffic_lowrider",
+      "sheet": "traffic_comic",
       "rect": [
-        0,
-        0,
-        627,
-        627
+        457,
+        687,
+        364,
+        199
       ],
       "groundAnchor": [
         0.5,
-        0.66
-      ]
+        0.76
+      ],
+      "flip": false
     },
     "traffic_lowrider_sw": {
-      "sheet": "traffic_lowrider",
+      "sheet": "traffic_comic",
       "rect": [
-        627,
-        0,
-        627,
-        627
+        457,
+        687,
+        364,
+        199
       ],
       "groundAnchor": [
         0.5,
-        0.66
-      ]
+        0.76
+      ],
+      "flip": true
     },
     "traffic_lowrider_nw": {
-      "sheet": "traffic_lowrider",
+      "sheet": "traffic_comic",
       "rect": [
-        0,
-        627,
-        627,
-        627
+        470,
+        971,
+        355,
+        200
       ],
       "groundAnchor": [
         0.5,
-        0.59
-      ]
+        0.76
+      ],
+      "flip": false
     },
     "traffic_lowrider_ne": {
-      "sheet": "traffic_lowrider",
+      "sheet": "traffic_comic",
       "rect": [
-        627,
-        627,
-        627,
-        627
+        470,
+        971,
+        355,
+        200
       ],
       "groundAnchor": [
         0.5,
-        0.59
-      ]
+        0.76
+      ],
+      "flip": true
     },
     "traffic_executive_se": {
-      "sheet": "traffic_executive",
+      "sheet": "traffic_comic",
       "rect": [
-        0,
-        0,
-        627,
-        627
+        895,
+        683,
+        314,
+        204
       ],
       "groundAnchor": [
         0.5,
-        0.66
-      ]
+        0.76
+      ],
+      "flip": false
     },
     "traffic_executive_sw": {
-      "sheet": "traffic_executive",
+      "sheet": "traffic_comic",
       "rect": [
-        627,
-        0,
-        627,
-        627
+        895,
+        683,
+        314,
+        204
       ],
       "groundAnchor": [
         0.5,
-        0.66
-      ]
+        0.76
+      ],
+      "flip": true
     },
     "traffic_executive_nw": {
-      "sheet": "traffic_executive",
+      "sheet": "traffic_comic",
       "rect": [
-        0,
-        627,
-        627,
-        627
+        894,
+        981,
+        315,
+        195
       ],
       "groundAnchor": [
         0.5,
-        0.59
-      ]
+        0.76
+      ],
+      "flip": false
     },
     "traffic_executive_ne": {
-      "sheet": "traffic_executive",
+      "sheet": "traffic_comic",
       "rect": [
-        627,
-        627,
-        627,
-        627
+        894,
+        981,
+        315,
+        195
       ],
       "groundAnchor": [
         0.5,
-        0.59
-      ]
+        0.76
+      ],
+      "flip": true
     },
     "roby_front": {
       "sheet": "roby_npc",
@@ -1193,21 +1217,29 @@
       ]
     },
     "court_dan": {
-      "sheet": "court_friends",
+      "sheet": "comic_citizens",
       "rect": [
-        61,
-        57,
-        654,
-        929
+        167,
+        830,
+        110,
+        191
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
       ]
     },
     "court_ti": {
-      "sheet": "court_friends",
+      "sheet": "comic_citizens",
       "rect": [
-        919,
-        68,
-        552,
-        917
+        168,
+        1029,
+        123,
+        205
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
       ]
     },
     "poster_reebok": {
@@ -3355,6 +3387,682 @@
         0.5,
         0.9583333333333334
       ]
+    },
+    "comic_citizen_0_front_0": {
+      "sheet": "comic_citizens",
+      "rect": [
+        170,
+        16,
+        109,
+        195
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_0_front_1": {
+      "sheet": "comic_citizens",
+      "rect": [
+        439,
+        16,
+        105,
+        195
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_0_back_0": {
+      "sheet": "comic_citizens",
+      "rect": [
+        720,
+        16,
+        98,
+        194
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_0_back_1": {
+      "sheet": "comic_citizens",
+      "rect": [
+        972,
+        16,
+        99,
+        194
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_1_front_0": {
+      "sheet": "comic_citizens",
+      "rect": [
+        170,
+        219,
+        105,
+        197
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_1_front_1": {
+      "sheet": "comic_citizens",
+      "rect": [
+        444,
+        219,
+        100,
+        197
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_1_back_0": {
+      "sheet": "comic_citizens",
+      "rect": [
+        719,
+        219,
+        99,
+        196
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_1_back_1": {
+      "sheet": "comic_citizens",
+      "rect": [
+        976,
+        219,
+        102,
+        196
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_2_front_0": {
+      "sheet": "comic_citizens",
+      "rect": [
+        167,
+        421,
+        108,
+        200
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_2_front_1": {
+      "sheet": "comic_citizens",
+      "rect": [
+        439,
+        421,
+        108,
+        199
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_2_back_0": {
+      "sheet": "comic_citizens",
+      "rect": [
+        718,
+        423,
+        102,
+        197
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_2_back_1": {
+      "sheet": "comic_citizens",
+      "rect": [
+        977,
+        423,
+        101,
+        197
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_3_front_0": {
+      "sheet": "comic_citizens",
+      "rect": [
+        167,
+        629,
+        109,
+        193
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_3_front_1": {
+      "sheet": "comic_citizens",
+      "rect": [
+        434,
+        629,
+        110,
+        193
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_3_back_0": {
+      "sheet": "comic_citizens",
+      "rect": [
+        710,
+        631,
+        107,
+        191
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_3_back_1": {
+      "sheet": "comic_citizens",
+      "rect": [
+        970,
+        629,
+        103,
+        193
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_4_front_0": {
+      "sheet": "comic_citizens",
+      "rect": [
+        167,
+        830,
+        110,
+        191
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_4_front_1": {
+      "sheet": "comic_citizens",
+      "rect": [
+        441,
+        829,
+        107,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_4_back_0": {
+      "sheet": "comic_citizens",
+      "rect": [
+        714,
+        830,
+        101,
+        199
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_4_back_1": {
+      "sheet": "comic_citizens",
+      "rect": [
+        977,
+        830,
+        100,
+        191
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_5_front_0": {
+      "sheet": "comic_citizens",
+      "rect": [
+        168,
+        1029,
+        123,
+        205
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_5_front_1": {
+      "sheet": "comic_citizens",
+      "rect": [
+        436,
+        1029,
+        128,
+        206
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_5_back_0": {
+      "sheet": "comic_citizens",
+      "rect": [
+        704,
+        1029,
+        110,
+        206
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_citizen_5_back_1": {
+      "sheet": "comic_citizens",
+      "rect": [
+        962,
+        1029,
+        114,
+        206
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_roby_front_0": {
+      "sheet": "comic_services",
+      "rect": [
+        154,
+        15,
+        191,
+        184
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_roby_front_1": {
+      "sheet": "comic_services",
+      "rect": [
+        421,
+        15,
+        192,
+        182
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_roby_front_2": {
+      "sheet": "comic_services",
+      "rect": [
+        685,
+        11,
+        210,
+        185
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_roby_front_3": {
+      "sheet": "comic_services",
+      "rect": [
+        949,
+        15,
+        209,
+        182
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_roby_back_0": {
+      "sheet": "comic_services",
+      "rect": [
+        157,
+        217,
+        161,
+        182
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_roby_back_1": {
+      "sheet": "comic_services",
+      "rect": [
+        435,
+        216,
+        159,
+        180
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_roby_back_2": {
+      "sheet": "comic_services",
+      "rect": [
+        718,
+        216,
+        162,
+        180
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_roby_back_3": {
+      "sheet": "comic_services",
+      "rect": [
+        993,
+        220,
+        168,
+        171
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_cleaner_front_0": {
+      "sheet": "comic_services",
+      "rect": [
+        126,
+        399,
+        190,
+        212
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_cleaner_front_1": {
+      "sheet": "comic_services",
+      "rect": [
+        412,
+        399,
+        190,
+        214
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_cleaner_front_2": {
+      "sheet": "comic_services",
+      "rect": [
+        691,
+        400,
+        196,
+        213
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_cleaner_front_3": {
+      "sheet": "comic_services",
+      "rect": [
+        974,
+        401,
+        194,
+        213
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_cleaner_back_0": {
+      "sheet": "comic_services",
+      "rect": [
+        141,
+        619,
+        160,
+        204
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_cleaner_back_1": {
+      "sheet": "comic_services",
+      "rect": [
+        428,
+        622,
+        172,
+        201
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_cleaner_back_2": {
+      "sheet": "comic_services",
+      "rect": [
+        705,
+        621,
+        176,
+        202
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_cleaner_back_3": {
+      "sheet": "comic_services",
+      "rect": [
+        988,
+        620,
+        176,
+        205
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_officer_front_0": {
+      "sheet": "comic_services",
+      "rect": [
+        132,
+        827,
+        149,
+        218
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_officer_front_1": {
+      "sheet": "comic_services",
+      "rect": [
+        418,
+        829,
+        148,
+        215
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_officer_front_2": {
+      "sheet": "comic_services",
+      "rect": [
+        693,
+        828,
+        162,
+        218
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_officer_front_3": {
+      "sheet": "comic_services",
+      "rect": [
+        982,
+        831,
+        162,
+        215
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_officer_back_0": {
+      "sheet": "comic_services",
+      "rect": [
+        139,
+        1049,
+        138,
+        201
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_officer_back_1": {
+      "sheet": "comic_services",
+      "rect": [
+        425,
+        1048,
+        143,
+        204
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_officer_back_2": {
+      "sheet": "comic_services",
+      "rect": [
+        714,
+        1046,
+        145,
+        206
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_officer_back_3": {
+      "sheet": "comic_services",
+      "rect": [
+        996,
+        1046,
+        139,
+        205
+      ],
+      "groundAnchor": [
+        0.5,
+        0.99
+      ]
+    },
+    "comic_cleaner_paint_0": {
+      "sheet": "comic_cleaner_paint",
+      "rect": [
+        0,
+        0,
+        543,
+        724
+      ],
+      "groundAnchor": [
+        0.46,
+        0.91
+      ]
+    },
+    "comic_cleaner_paint_1": {
+      "sheet": "comic_cleaner_paint",
+      "rect": [
+        543,
+        0,
+        543,
+        724
+      ],
+      "groundAnchor": [
+        0.46,
+        0.91
+      ]
+    },
+    "comic_cleaner_paint_2": {
+      "sheet": "comic_cleaner_paint",
+      "rect": [
+        1086,
+        0,
+        543,
+        724
+      ],
+      "groundAnchor": [
+        0.46,
+        0.91
+      ]
+    },
+    "comic_cleaner_paint_3": {
+      "sheet": "comic_cleaner_paint",
+      "rect": [
+        1629,
+        0,
+        543,
+        724
+      ],
+      "groundAnchor": [
+        0.46,
+        0.91
+      ]
     }
   },
   "version": 2,
@@ -3448,32 +4156,8 @@
       "file": "./content__levels__first-mark__art__blue-mural-house.png"
     },
     {
-      "id": "traffic_coupe",
-      "file": "./content__levels__first-mark__art__traffic-coupe.png"
-    },
-    {
-      "id": "traffic_hatch",
-      "file": "./content__levels__first-mark__art__traffic-hatch.png"
-    },
-    {
-      "id": "traffic_minivan",
-      "file": "./content__levels__first-mark__art__traffic-minivan.png"
-    },
-    {
-      "id": "traffic_police",
-      "file": "./content__levels__first-mark__art__traffic-police.png"
-    },
-    {
       "id": "asphalt_dry",
       "file": "./content__levels__first-mark__art__asphalt-dry.png"
-    },
-    {
-      "id": "traffic_lowrider",
-      "file": "./content__levels__first-mark__art__traffic-lowrider.png"
-    },
-    {
-      "id": "traffic_executive",
-      "file": "./content__levels__first-mark__art__traffic-executive.png"
     },
     {
       "id": "roby_npc",
@@ -3590,6 +4274,22 @@
     {
       "id": "npc_walk_h3",
       "file": "./content__levels__first-mark__art__npc-walk-minimax-h3.png"
+    },
+    {
+      "id": "traffic_comic",
+      "file": "./content__levels__first-mark__art__traffic-comic-v2.png"
+    },
+    {
+      "id": "comic_citizens",
+      "file": "./content__levels__first-mark__art__citizens-comic-v2.png"
+    },
+    {
+      "id": "comic_services",
+      "file": "./content__levels__first-mark__art__services-comic-v2.png"
+    },
+    {
+      "id": "comic_cleaner_paint",
+      "file": "./content__levels__first-mark__art__cleaner-paint-comic-v2.png"
     }
   ]
 }

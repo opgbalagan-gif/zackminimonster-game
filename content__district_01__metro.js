@@ -1,5 +1,5 @@
-import {project} from './core__geometry.js?v=3550d357cf95';
-import {box,polygon} from './content__district_01__terrain.js?v=3550d357cf95';
+import {project} from './core__geometry.js?v=014abf6eb9c6';
+import {box,polygon} from './content__district_01__terrain.js?v=014abf6eb9c6';
 const routes=new WeakMap(),trenches=new WeakMap();
 export function metroRoute(m){
   if(routes.has(m))return routes.get(m);
@@ -65,10 +65,11 @@ export function drawLoopRail(c,r,m,art){
   polygon(c,top,'#404747','#293a42',1);art?.quad(c,'ballast',top);polygon(c,top,'#41473cce');
   const len=r.b.s-r.a.s;
   const dx=(r.b.x-r.a.x)/len,dy=(r.b.y-r.a.y)/len;
-  for(let n=(10-r.a.s%10)%10;n<len;n+=10){
+  const tieSpacing=art?.comic?16:10;
+  for(let n=(tieSpacing-r.a.s%tieSpacing)%tieSpacing;n<len;n+=tieSpacing){
     const t=n/len,p={x:r.a.x+dx*n,y:r.a.y+dy*n},q={x:p.x+dx*3,y:p.y+dy*3},z=r.za+(r.zb-r.za)*t;
     polygon(c,[point(p,-26,z+1),point(q,-26,z+1),point(q,26,z+1),point(p,26,z+1)],Math.floor((r.a.s+n)/10)%3?'#756c58':'#91816b','#302d28',.7);
-    for(const rail of [-19,19]){const bolt=point(p,rail,z+3);c.fillStyle='#c3ad78';c.fillRect(Math.round(bolt.x)-1,Math.round(bolt.y)-1,2,2);}
+    if(!art?.comic)for(const rail of [-19,19]){const bolt=point(p,rail,z+3);c.fillStyle='#c3ad78';c.fillRect(Math.round(bolt.x)-1,Math.round(bolt.y)-1,2,2);}
   }
   for(const n of [-19,19]){const a=point(r.a,n,r.za+4),b=point(r.b,n,r.zb+4);c.strokeStyle='#332c23';c.lineWidth=5;c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();c.strokeStyle='#c5bba0';c.lineWidth=1.8;c.stroke();}
   for(const n of [-34,34]){

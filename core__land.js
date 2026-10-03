@@ -1,4 +1,4 @@
-import {inside} from './core__geometry.js?v=3550d357cf95';
+import {inside} from './core__geometry.js?v=014abf6eb9c6';
 export function inPolygon(x,y,polygon){let hit=false;for(let i=0,j=polygon.length-1;i<polygon.length;j=i++){const a=polygon[i],b=polygon[j];if((a.y>y)!==(b.y>y)&&x<(b.x-a.x)*(y-a.y)/(b.y-a.y)+a.x)hit=!hit;}return hit;}
 export function onLand(world,x,y,radius=0){
   if(!world.landPolygons)return !world.walkableAreas||world.walkableAreas.some(r=>inside(x,y,r,-radius));

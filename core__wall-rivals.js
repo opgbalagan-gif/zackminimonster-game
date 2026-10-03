@@ -1,4 +1,4 @@
-import {distance,moveAlongPath} from './core__geometry.js?v=3550d357cf95';
+import {distance,moveAlongPath} from './core__geometry.js?v=014abf6eb9c6';
 export const PAINT_DRY_SECONDS=60;
 export function dryingOpacity(save,id){return save.wall_damage[id]==='clean'?0:save.wall_damage[id]==='cleaner'?Math.max(0,Math.min(1,(save.wall_drying?.[id]??PAINT_DRY_SECONDS)/PAINT_DRY_SECONDS)):1;}
 
