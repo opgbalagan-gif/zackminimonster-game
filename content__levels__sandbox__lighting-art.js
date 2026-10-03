@@ -1,7 +1,7 @@
-import {project} from './core__geometry.js?v=0bee4946821b';
-import {sceneLight,shadowFootprint} from './core__lighting.js?v=0bee4946821b';
-import {polygon} from './content__district_01__terrain.js?v=0bee4946821b';
-import {STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=0bee4946821b';
+import {project} from './core__geometry.js?v=3550d357cf95';
+import {sceneLight,shadowFootprint} from './core__lighting.js?v=3550d357cf95';
+import {polygon} from './content__district_01__terrain.js?v=3550d357cf95';
+import {STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=3550d357cf95';
 export function groundLighting(c,s,w,h,continuation={}){
   const light=sceneLight(s.life.night),cam=s.camera;
   const visible=(x,y,margin=500)=>{const p=project(x,y);return Math.abs(p.x-cam.x)<w/cam.zoom/2+margin&&Math.abs(p.y-cam.y)<h/cam.zoom/2+margin;};
@@ -26,7 +26,7 @@ export function groundLighting(c,s,w,h,continuation={}){
   c.restore();
   if(light.night)for(const lamp of props.filter(p=>p.id==='lamp'))if(visible(lamp.x,lamp.y,220)){
     const p=project(lamp.x+20,lamp.y);c.save();c.translate(p.x,p.y);c.scale(1,.55);c.globalCompositeOperation='screen';
-    const g=c.createRadialGradient(0,0,0,0,0,125);g.addColorStop(0,'#ffd58a58');g.addColorStop(.45,'#e0a45222');g.addColorStop(1,'#e0a45200');c.fillStyle=g;c.fillRect(-125,-125,250,250);c.restore();
+    const g=c.createRadialGradient(0,0,0,0,0,145);g.addColorStop(0,'#ffd58a80');g.addColorStop(.45,'#e0a45232');g.addColorStop(1,'#e0a45200');c.fillStyle=g;c.fillRect(-145,-145,290,290);c.restore();
   }
   if(light.night)for(const car of s.traffic.cars)if(visible(car.x,car.y,200)){
     const dx=Math.cos(car.heading),dy=Math.sin(car.heading),a=project(car.x+dx*48,car.y+dy*48),b=project(car.x+dx*175-dy*35,car.y+dy*175+dx*35),d=project(car.x+dx*175+dy*35,car.y+dy*175-dx*35);

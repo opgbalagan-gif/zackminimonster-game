@@ -1,4 +1,4 @@
-import {uiIcon,setUIButton,UIPanel,applyUIComponents} from './core__ui-kit.js?v=0bee4946821b';
+import {uiIcon,setUIButton,UIPanel,applyUIComponents} from './core__ui-kit.js?v=3550d357cf95';
 export class TutorialUI{
   constructor(session,onComplete){
     this.s=session;this.signature='';this.panel=document.createElement('section');this.panel.id='tutorial-panel';this.panel.className='ui-panel';this.panel.setAttribute('aria-label','Обучение');
@@ -7,6 +7,7 @@ export class TutorialUI{
     this.panel.querySelector('button').onclick=()=>{session.tutorial.act();this.sync();};
     this.markers=document.createElement('div');this.markers.id='tutorial-markers';document.getElementById('app').append(this.markers);
     this.status=document.createElement('div');this.status.id='street-status';this.status.setAttribute('aria-label','Время и деньги');document.getElementById('app').append(this.status);
+    this.status.innerHTML='<span class="street-time"></span><span class="street-money"></span><span class="street-fame"></span>';
     for(const [id,label,icon] of [['home','Твой дом','home'],['wall','Первая стена','spray'],['facade','Рисовать на доме','spray']]){
       const b=document.createElement('button');b.className='world-marker';b.dataset.marker=id;b.setAttribute('aria-label',label);b.title=label;b.innerHTML=uiIcon(icon);
       b.onclick=()=>{if(session.tutorial.scripted)return;if(id==='facade')session.routeTo(session.world.targets[1].approach,label);else if(id==='wall')session.routeTo(session.world.targets[0].approach,label);else session.routeTo(session.world.hideout,label);};this.markers.append(b);
@@ -25,18 +26,21 @@ export class TutorialUI{
     const app=document.getElementById('app');app.dataset.homeIntro=String(!!s.life?.tour);app.dataset.period=s.life?.state.period??'night';
     app.dataset.sandbox=String(!!s.world.sandbox);
     app.dataset.phone=String(s.mode==='phone');
-    this.status.hidden=!!s.life?.tour;this.status.textContent=(s.life?.night?'☾ НОЧЬ':'☀ ДЕНЬ')+' '+(s.life?.state.day??1)+' · '+s.save.money+' ₽ · '+s.life.fame.name;
+    this.status.hidden=!!s.life?.tour;
+    this.status.querySelector('.street-time').textContent=(s.life?.night?'Ночь ':'День ')+(s.life?.state.day??1);
+    this.status.querySelector('.street-money').textContent=s.save.money.toLocaleString('ru-RU')+' ₽';
+    this.status.querySelector('.street-fame').textContent=s.life.fame.name;
     this.status.title='Узнаваемость: '+s.life.fame.score+(s.life.fame.next?' / '+s.life.fame.next:' · максимальная ступень')+'. Новые работы, снимки разных работ и встречи со зрителями.';
     document.getElementById('chapter-button').hidden=!!s.life?.tour;
     document.getElementById('app').dataset.tutorial='true';
-    document.querySelector('.control-hint').textContent='WASD / стрелки · E действие · клик по земле — маршрут';
+    document.querySelector('.control-hint').textContent='WASD / стрелки для ходьбы, E для действия';
     document.getElementById('hideout-ui').hidden=s.mode!=='hideout';
     document.getElementById('lesson-meter').value=l.step;
     this.markers.hidden=s.mode!=='district';
     document.getElementById('objective-label').textContent=l.help;
     const number=String(s.world.levelNumber??1).padStart(2,'0');
-    document.querySelector('.district-title strong').textContent=s.world.name;
-    document.querySelector('.district-title .eyebrow').textContent='УРОВЕНЬ '+number+(s.world.sandbox?' / ПЕСОЧНИЦА':' / ОБУЧЕНИЕ');
+    document.querySelector('.district-title strong').textContent=s.world.name[0]+s.world.name.slice(1).toLocaleLowerCase('ru');
+    document.querySelector('.district-title .eyebrow').textContent='Уровень '+number+(s.world.sandbox?' / Песочница':' / Обучение');
     document.querySelector('#chapter-button strong').textContent=number;
     document.getElementById('home-route').hidden=t.stage!=='escape';
     if(t.scripted)document.getElementById('interaction').hidden=true;

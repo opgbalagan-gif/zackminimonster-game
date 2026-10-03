@@ -1,15 +1,15 @@
-import {project} from './core__geometry.js?v=0bee4946821b';
-import {polygon} from './content__district_01__terrain.js?v=0bee4946821b';
+import {project} from './core__geometry.js?v=3550d357cf95';
+import {polygon} from './content__district_01__terrain.js?v=3550d357cf95';
 const quad=r=>[[r.x,r.y],[r.x+r.w,r.y],[r.x+r.w,r.y+r.h],[r.x,r.y+r.h]].map(p=>project(...p));
 export function drawWaterfront(c,world,kit,night=false){
   c.save();c.imageSmoothingEnabled=true;
   for(const r of world.water??[]){
-    polygon(c,quad(r),night?'#31566b':'#81b6cd','#d5ccad',5);
+    polygon(c,quad(r),night?'#24485b':'#659eb3','#d5ccad',5);
     c.save();polygon(c,quad(r));c.clip();c.transform(1,.5,-1,.5,0,0);
-    c.strokeStyle=night?'#678294':'#bfd6db';c.lineWidth=1.4;
+    c.strokeStyle=night?'#67829488':'#bfd6db9c';c.lineWidth=1.4;
     for(let y=r.y+40;y<r.y+r.h;y+=95){const x=r.x+35+(Math.floor(y/95)%3)*48;c.beginPath();c.moveTo(x,y);c.lineTo(x+38,y-8);c.stroke();}c.restore();
   }
-  for(const r of world.parks??[]){polygon(c,quad(r),'#9fad73','#747c5c',2);kit.material.quad(c,'grass',quad(r),night?.28:0);}
+  for(const r of world.parks??[]){polygon(c,quad(r),'#9fad73','#747c5c',2);kit.material.quad(c,'grass',quad(r),night?.38:0);polygon(c,quad(r),night?'#18382b20':'#b5bc9433');}
   for(const r of world.paths??[]){
     polygon(c,quad(r),night?'#777969':'#ead9ae','#b6b28a',2);
     c.save();polygon(c,quad(r));c.clip();

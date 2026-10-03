@@ -1,4 +1,4 @@
-import {BALL_GRID,MARKERS,STICKERS} from './core__basketball.js?v=0bee4946821b';
+import {BALL_GRID,MARKERS,STICKERS} from './core__basketball.js?v=3550d357cf95';
 export function drawSticker(c,atlas,sticker,size,selected=false){
   const art=STICKERS.find(s=>s.id===sticker.id),rect=art&&atlas?.rect(art.sprite);if(!rect)return;
   const w=sticker.size*size,h=w*rect[3]/rect[2];

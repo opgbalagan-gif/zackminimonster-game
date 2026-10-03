@@ -1,4 +1,4 @@
-import {distance,moveAlongPath} from './core__geometry.js?v=0bee4946821b';
+import {distance,moveAlongPath} from './core__geometry.js?v=3550d357cf95';
 
 // Both speakers use the comic conversation view, never the HUD notice channel.
 export function talkToStreetNpc(s,npc){

@@ -1,5 +1,5 @@
 // Extend the existing saved district without moving its original buildings or wall IDs.
-import {densifyWaterfront} from './core__waterfront-blocks.js?v=0bee4946821b';
+import {densifyWaterfront} from './core__waterfront-blocks.js?v=3550d357cf95';
 export function addWaterfront(w){
   w.width=3800;w.height=4200;w.mapBounds={x:72,y:92,w:3650,h:4010};
   w.walkableAreas=[{...w.mapBounds}];

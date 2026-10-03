@@ -1,6 +1,7 @@
-import {project} from './core__geometry.js?v=0bee4946821b';
-import {polygon,box} from './content__district_01__terrain.js?v=0bee4946821b';
-import {createMetroArt} from './content__district_01__metro-art.js?v=0bee4946821b';
+import {project} from './core__geometry.js?v=3550d357cf95';
+import {polygon,box} from './content__district_01__terrain.js?v=3550d357cf95';
+import {createMetroArt} from './content__district_01__metro-art.js?v=3550d357cf95';
+import {ART} from './core__art-direction.js?v=3550d357cf95';
 
 // Art dimensions are in world units. Anchors sit on the ground, never on a walk lane.
 export const STREET_PROPS=[
@@ -12,14 +13,25 @@ export const STREET_PROPS=[
 ];
 const quad=(x,y,w,h,z=0)=>[project(x,y,z),project(x+w,y,z),project(x+w,y+h,z),project(x,y+h,z)];
 export function createStreetKit(images){
-  const material=createMetroArt(images.comic_terrain,{asphalt:[2,2,623,623],paving:[629,2,623,623],wall:[2,629,623,623],grass:[629,629,623,623],metal:[2,629,623,623]});
+  const painted=createMetroArt(images.comic_terrain,{asphalt:[2,2,623,623],paving:[629,2,623,623],wall:[2,629,623,623],grass:[629,629,623,623],metal:[2,629,623,623]});
+  const material={quad(c,name,points,shade=0){
+    painted.quad(c,name,points,shade);
+    if(name==='paving'){
+      c.save();polygon(c,points,shade>.1?'#23374555':'#e4dbc580');c.clip();
+      const left=points[0],right=points[1],bottom=points[3],ww=right.x-left.x,hh=left.x-bottom.x;
+      c.transform(1,.5,-1,.5,left.x,left.y);c.strokeStyle=shade>.1?'#182d3a50':'#7d817b36';c.lineWidth=.65;
+      for(let y=0;y<=hh;y+=ART.paving){c.beginPath();c.moveTo(0,y);c.lineTo(ww,y);c.stroke();}
+      for(let row=0;row<hh/ART.paving;row++)for(let x=(row%2)*ART.paving/2;x<=ww;x+=ART.paving){c.beginPath();c.moveTo(x,row*ART.paving);c.lineTo(x,Math.min(hh,(row+1)*ART.paving));c.stroke();}
+      c.restore();
+    }
+  }};
   const roadMaterial=material;
   const parkMaterial=createMetroArt(images.comic_park_materials,{sand:[2,2,623,623]});
   function road(c,x,y,w,h){
     c.save();polygon(c,quad(x,y,w,h),'#353a3d');c.clip();
     c.imageSmoothingEnabled=true;
     for(let tx=Math.floor(x/320)*320;tx<x+w;tx+=320)for(let ty=Math.floor(y/320)*320;ty<y+h;ty+=320)roadMaterial.quad(c,'asphalt',quad(tx,ty,320,320),.02);
-    c.restore();
+    polygon(c,quad(x,y,w,h),'#253d5128');c.restore();
   }
   function floor(c,{night=true}={}){
     box(c,72,92,560,460,0,'#504d43','#1c2a32','#29323a',-22);

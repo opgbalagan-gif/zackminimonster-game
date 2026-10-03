@@ -1,18 +1,22 @@
-import {AimController,MotionAim} from './core__motion-aim.js?v=0bee4946821b';
-import {setUIButton,uiIcon} from './core__ui-kit.js?v=0bee4946821b';
-import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=0bee4946821b';
-import {nearbyPhotoSpot} from './core__photo-spots.js?v=0bee4946821b';
-import {bindCanvasGesture} from './core__canvas-gesture.js?v=0bee4946821b';
-import {appIcon,foldPhoneIcon} from './core__phone-icons.js?v=0bee4946821b';
+import {AimController,MotionAim} from './core__motion-aim.js?v=3550d357cf95';
+import {setUIButton,uiIcon} from './core__ui-kit.js?v=3550d357cf95';
+import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=3550d357cf95';
+import {nearbyPhotoSpot} from './core__photo-spots.js?v=3550d357cf95';
+import {bindCanvasGesture} from './core__canvas-gesture.js?v=3550d357cf95';
+import {appIcon,foldPhoneIcon,phoneGlyph} from './core__phone-icons.js?v=3550d357cf95';
+import {dialogFocus} from './core__dialog-focus.js?v=3550d357cf95';
 export class PhoneUI{
   constructor(s,renderer,audio){
     this.s=s;this.renderer=renderer;this.audio=audio;this.aim=new AimController();this.motion=new MotionAim(this.aim);this.steady=0;this.screen='messages';this.previous={x:0,y:0};
     this.toggle=document.createElement('button');this.toggle.id='phone-toggle';this.toggle.className='secondary';this.toggle.setAttribute('aria-label','Открыть раскладушку');this.toggle.innerHTML='<span class="retro-phone-icon" aria-hidden="true"></span>';this.toggle.onclick=()=>this.open();document.getElementById('app').append(this.toggle);
     this.el=document.createElement('section');this.el.id='phone-ui';this.el.hidden=true;this.el.setAttribute('aria-label','Раскладушка Зака');
-    this.el.innerHTML=`<div class="flip-phone"><header><span>ZAK MINI · ONLINE</span><button class="phone-close" aria-label="Закрыть телефон">×</button></header><div class="phone-lcd"><div class="phone-message"><small>НОВОЕ СООБЩЕНИЕ</small><h2>Твои работы заслуживают кадра</h2><p>Сними новый рисунок, пока стена ещё твоя. Больше работ художника — в @zakminimonster.</p><a href="https://www.instagram.com/zakminimonster/" target="_blank" rel="noopener noreferrer">@zakminimonster ↗</a><p class="phone-notice">Сохрани момент в своём альбоме.</p></div><div class="phone-gallery" hidden></div></div><nav aria-label="Приложения телефона"><button class="phone-app phone-sms"><span class="phone-app-icon app-sms" aria-hidden="true"></span><span>Сообщения</span></button><button class="phone-app phone-camera"><span class="phone-app-icon app-camera" aria-hidden="true"></span><span>Камера</span></button><button class="phone-app phone-album"><span class="phone-app-icon app-album" aria-hidden="true"></span><span>Альбом</span></button></nav><div class="phone-model">MINI / STREET EDITION</div></div>
-      <div class="phone-camera-view" hidden><canvas aria-label="Видоискатель граффити" tabindex="0"></canvas><button class="secondary camera-back">НАЗАД</button><h2>СДЕЛАЙ КРУТОЕ ФОТО ГРАФФИТИ</h2><div class="camera-brackets"><i></i><i></i><i></i><i></i></div><div class="camera-focus"></div><div class="camera-help"><strong class="camera-score"></strong><span class="camera-status"></span><button class="secondary camera-gyro">ВКЛЮЧИТЬ ГИРОСКОП</button></div><div class="camera-actions"><button class="secondary camera-album" aria-label="Посмотреть фотографии">ФОТО</button><button class="camera-shutter" aria-label="Сделать снимок">${uiIcon('camera')}</button><button class="secondary camera-centre" aria-label="Центрировать камеру">↻</button></div></div>`;
+    this.el.innerHTML=`<div class="flip-phone"><header><span>ZAK MINI · ONLINE</span><button class="phone-close" aria-label="Закрыть телефон">×</button></header><div class="phone-lcd"><div class="phone-message"><small>Новое сообщение</small><h2>Твои работы заслуживают кадра</h2><p>Сними новый рисунок, пока стена ещё твоя. Больше работ художника в @zakminimonster.</p><a href="https://www.instagram.com/zakminimonster/" target="_blank" rel="noopener noreferrer">@zakminimonster ↗</a><p class="phone-notice">Сохрани момент в своём альбоме.</p></div><div class="phone-gallery" hidden></div></div><nav aria-label="Приложения телефона"><button class="phone-app phone-sms"><span class="phone-app-icon app-sms" aria-hidden="true"></span><span>Сообщения</span></button><button class="phone-app phone-camera"><span class="phone-app-icon app-camera" aria-hidden="true"></span><span>Камера</span></button><button class="phone-app phone-album"><span class="phone-app-icon app-album" aria-hidden="true"></span><span>Альбом</span></button></nav><div class="phone-model">MINI / STREET EDITION</div></div>
+      <div class="phone-camera-view" hidden><canvas aria-label="Видоискатель граффити" tabindex="0"></canvas><button class="secondary camera-back">Назад</button><h2>Поймай свой рисунок в кадр</h2><div class="camera-brackets"><i></i><i></i><i></i><i></i></div><div class="camera-focus"></div><div class="camera-help"><strong class="camera-score"></strong><span class="camera-status"></span><button class="secondary camera-gyro">Включить гироскоп</button></div><div class="camera-actions"><button class="secondary camera-album" aria-label="Посмотреть фотографии">ФОТО</button><button class="camera-shutter" aria-label="Сделать снимок">${uiIcon('camera')}</button><button class="secondary camera-centre" aria-label="Центрировать камеру">↻</button></div></div>`;
     document.getElementById('app').append(this.el);this.canvas=this.el.querySelector('canvas');this.c=this.canvas.getContext('2d');
-    this.toggle.innerHTML=foldPhoneIcon();this.el.querySelector('.flip-phone header>span').textContent='09:41 · ZAK DUO';this.el.querySelector('.phone-model').textContent='Designed for your streets';
+    this.el.setAttribute('role','dialog');this.el.setAttribute('aria-modal','true');
+    this.focusScope=dialogFocus(this.el,()=>this.screen==='camera'?this.messages():this.close());
+    this.el.querySelector('.phone-close').innerHTML=phoneGlyph('close');this.el.querySelector('.camera-centre').innerHTML=phoneGlyph('reset');
+    this.toggle.innerHTML=foldPhoneIcon();this.el.querySelector('.flip-phone header>span').textContent='ZAK DUO';this.el.querySelector('.phone-model').textContent='Designed for your streets';
     this.el.querySelector('.phone-lcd').insertAdjacentHTML('beforeend','<div class="phone-radio" hidden><small>STREET RADIO</small><h2>181.FM<br>THE BEAT</h2><p class="phone-radio-status" role="status"></p><button class="phone-radio-play">ВКЛЮЧИТЬ</button><label class="phone-volume-label">Громкость <input class="phone-radio-volume" type="range" min="0" max="100" aria-label="Громкость радио в телефоне"></label></div>');
     this.el.querySelector('nav').insertAdjacentHTML('beforeend','<button class="phone-app phone-radio-app">'+uiIcon('music')+'<span>Радио</span></button><button class="phone-app phone-levels">'+uiIcon('rep')+'<span>Уровни</span></button>');
     const bind=(q,f)=>this.el.querySelector(q).onclick=f;
@@ -31,9 +35,9 @@ export class PhoneUI{
     this.resetGesture=bindCanvasGesture(this.canvas,{start:()=>{this.motion.stop();this.motion.status='Веди пальцем · масштаб двумя пальцами';},pan:(dx,dy)=>{const r=this.canvas.getBoundingClientRect();this.aim.drag(-dx/r.width*3,-dy/r.height*3);},zoom:factor=>{this.photoZoom=Math.max(.65,Math.min(2,(this.photoZoom??1)*factor));this.steady=0;}});
     this.canvas.onkeydown=e=>{const dirs={ArrowLeft:[-.07,0],ArrowRight:[.07,0],ArrowUp:[0,-.07],ArrowDown:[0,.07]};if(dirs[e.key]){e.preventDefault();this.aim.drag(...dirs[e.key]);}if(e.key==='Enter'||e.key===' '){e.preventDefault();this.shoot();}};
   }
-  open(){if(!['district','hideout'].includes(this.s.mode)||this.s.tutorial.scripted)return;this.returnMode=this.s.mode;this.s.mode='phone';this.s.player.path=[];this.el.hidden=false;if(this.s.save.phone.unlocked)this.messages();else this.radio();}
-  close(){this.resetGesture();this.motion.stop();this.el.hidden=true;document.getElementById('app').dataset.camera='false';this.s.mode=this.returnMode??'district';this.s.emit('mode');}
-  messages(){this.motion.stop();this.screen='messages';document.getElementById('app').dataset.camera='false';if(this.s.save.phone.unlocked){this.s.save.phone.read=true;this.s.persist();}this.el.querySelector('.flip-phone').hidden=false;this.el.querySelector('.phone-camera-view').hidden=true;this.el.querySelector('.phone-message').hidden=false;this.el.querySelector('.phone-gallery').hidden=true;this.el.querySelector('.phone-radio').hidden=true;}
+  open(){if(!['district','hideout'].includes(this.s.mode)||this.s.tutorial.scripted)return;this.returnMode=this.s.mode;this.s.mode='phone';this.s.player.path=[];this.el.hidden=false;if(this.s.save.phone.unlocked)this.messages();else this.radio();this.focusScope.open(this.toggle);}
+  close(){this.resetGesture();this.motion.stop();this.el.hidden=true;document.getElementById('app').dataset.camera='false';this.s.mode=this.returnMode??'district';this.update(0);this.s.emit('mode');this.focusScope.close();}
+  messages(){const fromCamera=this.screen==='camera';this.motion.stop();this.screen='messages';document.getElementById('app').dataset.camera='false';if(this.s.save.phone.unlocked){this.s.save.phone.read=true;this.s.persist();}this.el.querySelector('.flip-phone').hidden=false;this.el.querySelector('.phone-camera-view').hidden=true;this.el.querySelector('.phone-message').hidden=false;this.el.querySelector('.phone-gallery').hidden=true;this.el.querySelector('.phone-radio').hidden=true;if(fromCamera)this.el.querySelector('.phone-camera').focus();}
   radio(){this.messages();this.screen='radio';this.el.querySelector('.phone-message').hidden=true;this.el.querySelector('.phone-radio').hidden=false;}
   camera(){
     if(!this.s.save.phone.unlocked)return;
@@ -85,14 +89,14 @@ export class PhoneUI{
     camera.title=photoSpot?'Снять: '+photoSpot.name:'';
     if(this.s.mode==='phone'&&this.screen==='radio'){
       const radio=this.audio.radio;this.el.querySelector('.phone-radio-status').textContent=radio.state==='error'?radio.message:radio.state==='loading'?'Подключаемся…':radio.state==='playing'?'В ЭФИРЕ · HIP-HOP / R&B':'Твой саундтрек улиц';
-      const button=this.el.querySelector('.phone-radio-play');button.textContent=radio.wanted?'ВЫКЛЮЧИТЬ':'ВКЛЮЧИТЬ';button.setAttribute('aria-pressed',String(radio.wanted));
+      const button=this.el.querySelector('.phone-radio-play');button.textContent=radio.wanted?'Выключить':'Включить';button.setAttribute('aria-pressed',String(radio.wanted));
     }
     if(this.s.mode!=='phone'||this.screen!=='camera')return;
     const r=this.canvas.getBoundingClientRect();this.canvas.width=Math.round(r.width);this.canvas.height=Math.round(r.height);
     const delta=Math.hypot(this.aim.x-this.previous.x,this.aim.y-this.previous.y);this.steady=delta<.012?this.steady+dt:0;this.previous={x:this.aim.x,y:this.aim.y};
     this.renderer.photograph(this.c,this.s,this.canvas.width,this.canvas.height,this.target,this.aim,this.photoZoom);
     if(this.flash>0){this.flash-=dt;this.c.fillStyle='#ffffffaa';this.c.fillRect(0,0,this.canvas.width,this.canvas.height);}
-    this.el.querySelector('.camera-score').textContent=this.aim.quality>=75&&this.steady>=.55?'В ФОКУСЕ · СНИМАЙ':'КАДР '+this.aim.quality+'% · УДЕРЖИ';
+    this.el.querySelector('.camera-score').textContent=this.aim.quality>=75&&this.steady>=.55?'В фокусе. Снимай':'Кадр '+this.aim.quality+'%. Удержи';
     this.el.querySelector('.camera-status').textContent=this.motion.status;this.el.querySelector('.camera-focus').dataset.ready=String(this.aim.quality>=75&&this.steady>=.55);
   }
 }

@@ -1,0 +1,78 @@
+/* Art-directed game surface. Floating HUD stays frameless; panels share Street Gold. */
+:root{--ui-bg:var(--art-navy,#0e1c29);--ui-text:var(--art-paper,#f4eedb);--ui-muted:#b0c4ca;--ui-gold:#e4bf72;--ui-gold-light:#f8ddb0;--ui-violet:#dc60bd;--ui-button-h:48px;--art-caption:12px;--art-title:24px;--art-stat:30px}
+#app:before{content:'';position:absolute;inset:0 0 auto;height:180px;z-index:9;pointer-events:none;background:linear-gradient(#071725ad,#0b203346 57%,transparent)}
+#app[data-camera=true]:before,#app[data-map=true]:before,#app[data-mode=title]:before{display:none}
+#app #hud{top:max(16px,env(safe-area-inset-top));left:20px;right:86px;gap:16px;align-items:flex-start;z-index:20}
+#app .player-card{gap:10px;min-width:0}
+#app .player-card #portrait{width:66px;height:72px;flex-basis:66px;filter:drop-shadow(0 2px 3px #051521b3)}
+#app .player-card strong{font:800 var(--art-stat)/1.1 var(--ui-heading);color:#fff4d9;letter-spacing:0;text-shadow:0 2px 5px #061523;font-variant-numeric:tabular-nums}
+#app .player-card strong small{font:700 12px/1.2 var(--ui-body);color:#e5e1cf;margin-left:3px}
+#app .player-card #run-rep{font:600 12px/1.4 var(--ui-body);color:#f6c8ec;text-shadow:0 2px 4px #071624;margin-top:4px}
+#app .heat-card{padding-top:7px!important;min-width:116px}
+#app #heat-stars{display:flex;gap:3px;justify-content:center}
+#app .heat-star .graffiti-star{width:24px;height:28px;opacity:.65;filter:grayscale(1) brightness(1.65) drop-shadow(0 1px 2px #051321)}
+#app .heat-star.active .graffiti-star{opacity:1;filter:drop-shadow(0 1px 2px #051321)}
+#app .heat-card #heat-note{font:600 11px/1.4 var(--ui-body);color:#eee9dc;text-shadow:0 2px 4px #071624}
+#app #street-status{top:max(95px,calc(env(safe-area-inset-top) + 90px));left:24px;display:flex;flex-wrap:wrap;gap:6px 16px;max-width:calc(100% - 48px);padding:0;border:0;background:none;color:#e8edf0;font:600 12px/1.4 var(--ui-body);letter-spacing:0;text-shadow:0 2px 4px #061423;pointer-events:none}
+#street-status .street-time{color:#f7d799}#street-status .street-money{font-variant-numeric:tabular-nums}#street-status .street-fame{color:#c3d5dd}
+#app[data-sandbox=true] .district-title{left:24px;top:auto;bottom:28px;max-width:220px;padding:0;border:0;background:none;pointer-events:none;text-shadow:0 2px 5px #142c3be6}
+#app[data-sandbox=true] .district-title .eyebrow{color:#e1e8e8;font:600 11px/1.4 var(--ui-body);letter-spacing:0;text-transform:none}
+#app[data-sandbox=true] .district-title strong{max-width:none;font:800 26px/1.15 var(--ui-heading);color:#fff4da;letter-spacing:0;margin-top:3px}
+#app .control-hint{right:24px;left:auto;bottom:18px;padding:7px 12px;border-radius:4px;background:#102537b8;color:#dce6e8;font:11px/1.4 var(--ui-body)}
+#app #phone-toggle{top:max(16px,env(safe-area-inset-top));right:20px;width:48px;height:64px;transition:filter .15s ease}
+#app #phone-toggle[data-unread=true]:after{content:'1';display:grid;place-items:center;top:0;right:-3px;width:17px;height:20px;border-radius:5px;background:#ce5a9e;color:#fff;border:1px solid #f5c6df;font:700 11px Arial;animation:none}
+#app #joystick{width:116px;height:116px;border-color:#f5e8c19c;box-shadow:0 0 0 1px #0c273844!important;opacity:.9}
+#app #joystick:has(#action-button:not([hidden])){opacity:1}
+#app #joystick #action-button{width:52px;height:52px;border-width:2px!important;filter:drop-shadow(0 1px 2px #0b2531)}
+#app .world-marker{width:48px;height:48px;padding:12px;filter:drop-shadow(0 2px 2px #071723);transition:filter .15s ease}
+#app .world-marker .ui-icon{width:18px;height:18px}
+#app .world-marker:active{filter:brightness(1.5) drop-shadow(0 0 4px #f7d799)}
+#app button:focus-visible,#app a:focus-visible,#app select:focus-visible{outline:2px solid #fff4d9!important;outline-offset:3px;box-shadow:0 0 0 5px #133246!important}
+#app .primary,#app .secondary{min-height:48px;text-transform:none;letter-spacing:0;font-weight:700}
+#app .primary .button-label,#app .secondary .button-label{white-space:normal;overflow-wrap:anywhere;line-height:1.2}
+#app .graffiti-card,#app #tutorial-panel,#app .hideout-panel,#app .chapter-card{border-image-width:10px!important;padding:24px!important}
+#app #tutorial-panel h2,#app .graffiti-heading h2{font-size:30px;line-height:1.15;letter-spacing:0}
+#app .lesson-help,#app .graffiti-bottom p,#app .pane-description{font:14px/1.5 var(--ui-body);color:#c8d5da}
+#app .eyebrow,#app .micro,#app .lesson-kicker,#app .phase-track,#app .graffiti-art-label{letter-spacing:0;text-transform:none}
+#app select{min-height:48px;padding:10px 44px 10px 14px;border-radius:4px}
+#app .room-hotspot{min-width:48px;min-height:48px}
+#app .room-hotspot i{filter:drop-shadow(0 1px 1px #000)}
+#app .phone-close{min-width:48px;min-height:48px!important}
+#app .phone-camera-view button{min-width:48px;min-height:48px}
+#app .world-poster-link{min-width:48px;min-height:48px}
+#app #phone-ui .phone-lcd a{display:inline-flex;align-items:center;min-height:48px;padding:8px 0}
+#app #phone-ui .gallery-return{min-height:48px;padding:10px 16px}
+#app #phone-ui .phone-close svg,#app #phone-ui .camera-centre svg{width:24px;height:24px;display:block;margin:auto}
+#app .phase-track span{border-image:none!important;border:1px solid #516571!important;background:#10222ee6!important;padding:10px 4px;font:600 12px/1.3 var(--ui-body)}
+#app .phase-track .active{color:#fff0c4;border-color:#e4bf72!important;filter:none;background:#514833!important}
+#app .phase-track .complete{color:#9bdbc6;border-color:#4a897d!important;filter:none}
+#app .graffiti-stage{border-image:none;border:2px solid #768983;border-radius:2px}
+#app #graffiti-progress{height:8px;border:1px solid #617274}
+#app progress::-webkit-progress-value{background:#e4bf72;box-shadow:none}
+#app #tutorial-panel button{width:100%}
+#app .new-game-card{border-image-width:10px;padding:28px;border-radius:0}
+#app .title-copy{font-size:16px;line-height:1.5;max-width:360px;color:#d9e0dc}
+#app .title-footer{letter-spacing:0;font:12px/1.4 var(--ui-body)}
+@media(hover:hover) and (pointer:fine){#app .world-marker:hover{filter:brightness(1.3) drop-shadow(0 2px 3px #071723)}#app #phone-toggle:hover{filter:brightness(1.15) drop-shadow(0 3px 4px #0008)}}
+@media(max-width:700px){
+  #app:before{height:166px}
+  #app #hud{left:12px;right:68px;gap:8px;top:max(12px,env(safe-area-inset-top))}
+  #app .player-card{gap:6px}#app .player-card #portrait{width:54px;height:62px;flex-basis:54px}
+  #app .player-card strong{font-size:27px}#app .player-card strong small{font-size:10px}
+  #app .player-card #run-rep{font-size:11px}
+  #app .heat-card{min-width:100px;padding-top:5px!important}#app #heat-stars{gap:1px}
+  #app .heat-star .graffiti-star{width:19px;height:25px}#app .heat-card #heat-note{font-size:10px}
+  #app #phone-toggle{right:12px;top:max(12px,env(safe-area-inset-top));width:44px;height:59px}
+  #app #street-status{top:max(81px,calc(env(safe-area-inset-top) + 77px));left:16px;font-size:11px;gap:5px 12px}
+  #app #street-status .street-fame{flex-basis:100%;font-size:11px}
+  #app[data-sandbox=true] .district-title{left:16px;bottom:calc(var(--ui-safe-bottom) + 148px);max-width:200px}
+  #app[data-sandbox=true] .district-title strong{font-size:22px}
+  #app[data-sandbox=true] .district-title .eyebrow{font-size:10px}
+  #app .control-hint{display:none}
+  #app .graffiti-card,#app #tutorial-panel,#app .hideout-panel,#app .chapter-card{padding:18px!important}
+  #app #tutorial-panel h2,#app .graffiti-heading h2{font-size:26px}
+  #app .lesson-help,#app .graffiti-bottom p{font-size:13px}
+  #app #hud .player-card #toast{font-size:13px;line-height:1.45}
+}
+@media(max-width:359px){#app .player-card #portrait{width:44px;flex-basis:44px}#app .player-card strong{font-size:24px}#app .heat-card{min-width:88px}#app .heat-star .graffiti-star{width:16px}}
+@media(prefers-reduced-motion:reduce){#app *,#app *:before,#app *:after{animation:none!important;transition:none!important}}
