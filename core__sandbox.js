@@ -1,6 +1,6 @@
-import {createSneakWorld} from './core__sneak.js?v=c531a45172ca';
-import {distance,moveAlongPath} from './core__geometry.js?v=c531a45172ca';
-import {updateStreetNpcs} from './core__street-npcs.js?v=c531a45172ca';
+import {createSneakWorld} from './core__sneak.js?v=1604a53b1e7b';
+import {distance,moveAlongPath} from './core__geometry.js?v=1604a53b1e7b';
+import {updateStreetNpcs} from './core__street-npcs.js?v=1604a53b1e7b';
 
 export function createSandboxWorld(){
   const w=createSneakWorld();w.id='sandbox';w.sandbox=true;w.levelNumber=1;w.name='СВОЙ РАЙОН';
@@ -9,7 +9,7 @@ export function createSandboxWorld(){
   w.targets[1]={...w.targets[1],wall_id:'SANDBOX_HOME',rep_reward:60,heat_reward:1};
   // Keep one freestanding wall by home; the rest of the district's art belongs on buildings.
   w.extraWalls=[];
-  w.streetNpcs=[{id:'roby',name:'Роби',x:440,y:362,approach:{x:409,y:389},sprite:'roby_front',line:'',exchange:0,speakingFor:0}];
+  w.streetNpcs=[{id:'roby',name:'Робби',x:440,y:362,approach:{x:409,y:389},sprite:'roby_dog_se_0',roaming:true,direction:'se',path:[],pauseFor:2,line:'',exchange:0,speakingFor:0}];
   w.roads=[{x:76,y:412,w:2142,h:112},{x:76,y:916,w:2142,h:112},{x:950,y:96,w:112,h:1130}];
   const homes=[['north_house','Кирпичная мастерская',700,132,'brick'],['corner_house','Синий склад',1120,132,'blue'],['brick_house','Дом во дворе',350,650,'brick'],['music_house','Репетиционная',740,650,'blue'],['end_house','Дом у перекрёстка',1120,650,'apartment']];
   homes.push(['record_house','Магазин пластинок',1560,132,'brick'],['east_house','Восточный дом',1910,132,'apartment'],['yard_house','Дом у линии',320,1090,'blue'],['studio_house','Студия у метро',690,1090,'brick']);

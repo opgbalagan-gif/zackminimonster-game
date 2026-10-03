@@ -1,6 +1,6 @@
-import {COURT_LINES,STICKERS,MAX_STICKERS,COURT} from './core__basketball.js?v=c531a45172ca';
-import {drawBall,drawSticker} from './core__ball-art.js?v=c531a45172ca';
-import {heroSprite} from './core__hideout.js?v=c531a45172ca';
+import {COURT_LINES,STICKERS,MAX_STICKERS,COURT} from './core__basketball.js?v=1604a53b1e7b';
+import {drawBall,drawSticker} from './core__ball-art.js?v=1604a53b1e7b';
+import {heroSprite} from './core__hideout.js?v=1604a53b1e7b';
 const $=id=>document.getElementById(id);
 export class CourtView{
   constructor(session,renderer){
@@ -28,7 +28,7 @@ export class CourtView{
   }
   release(){this.pointer=null;this.session.ballGame?.end();}
   portrait(canvas,sprite){const c=canvas.getContext('2d');c.clearRect(0,0,canvas.width,canvas.height);c.imageSmoothingEnabled=false;
-    if(sprite==='roby_portrait'){
+    if(sprite.startsWith('roby_portrait')){
       const rect=this.renderer.atlas.rect(sprite),width=canvas.width-16,height=width*rect[3]/rect[2];
       c.imageSmoothingEnabled=true;this.renderer.atlas.draw(c,sprite,canvas.width/2,22+height,width,height);return;
     }
@@ -42,7 +42,13 @@ export class CourtView{
       $('court-title').textContent=s.streetDialogue?'РОББИ · СВОЙ В РАЙОНЕ':'НЕ ПРОСТО МЯЧ.';
       $('court-who').textContent=line.who;$('court-text').textContent=line.text;$('court-count').textContent=String(s.courtLine+1).padStart(2,'0')+' / '+String(lines.length).padStart(2,'0');
       $('court-next').textContent=s.courtLine===lines.length-1?(s.streetDialogue?'ДО ВСТРЕЧИ →':'НАКЛЕИТЬ СТИКЕРЫ →'):'ДАЛЬШЕ →';
-      if(this.line!==s.courtLine){this.portrait($('court-left'),s.streetDialogue?'roby_portrait':s.courtLine>=3?'zack':'court_dan');this.portrait($('court-right'),s.streetDialogue?'zack':'court_ti');$('court-left').setAttribute('aria-label',s.streetDialogue?'Робби':s.courtLine>=3?'Зак':'Дэн');$('court-right').setAttribute('aria-label',s.streetDialogue?'Зак':'Ти с мячом');this.line=s.courtLine;}
+      if(this.line!==s.courtLine){
+        this.portrait($('court-left'),s.streetDialogue?'roby_portrait_'+line.robyExpression:s.courtLine>=3?'zack':'court_dan');
+        this.portrait($('court-right'),s.streetDialogue?'zack':'court_ti');
+        const emotions={smirk:'ухмылка',smile:'улыбка',serious:'серьёзный',laugh:'смеётся'};
+        $('court-left').setAttribute('aria-label',s.streetDialogue?'Робби — '+emotions[line.robyExpression]:s.courtLine>=3?'Зак':'Дэн');
+        $('court-right').setAttribute('aria-label',s.streetDialogue?'Зак':'Ти с мячом');this.line=s.courtLine;
+      }
     }else this.line=-1;
     if(painting||result){
       $('ball-screen').dataset.phase=result?'result':'paint';

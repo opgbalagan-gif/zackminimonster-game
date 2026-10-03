@@ -1281,6 +1281,146 @@
         1471,
         981
       ]
+    },
+    "roby_portrait_smirk": {
+      "sheet": "roby_emotions",
+      "rect": [
+        70,
+        30,
+        545,
+        590
+      ]
+    },
+    "roby_portrait_smile": {
+      "sheet": "roby_emotions",
+      "rect": [
+        675,
+        30,
+        545,
+        590
+      ]
+    },
+    "roby_portrait_serious": {
+      "sheet": "roby_emotions",
+      "rect": [
+        70,
+        635,
+        545,
+        590
+      ]
+    },
+    "roby_portrait_laugh": {
+      "sheet": "roby_emotions",
+      "rect": [
+        675,
+        635,
+        545,
+        590
+      ]
+    },
+    "roby_dog_se_0": {
+      "sheet": "roby_dog",
+      "rect": [
+        0,
+        0,
+        512,
+        384
+      ],
+      "groundAnchor": [
+        0.5,
+        0.92
+      ]
+    },
+    "roby_dog_se_1": {
+      "sheet": "roby_dog",
+      "rect": [
+        512,
+        0,
+        512,
+        384
+      ],
+      "groundAnchor": [
+        0.5,
+        0.92
+      ]
+    },
+    "roby_dog_sw_0": {
+      "sheet": "roby_dog",
+      "rect": [
+        0,
+        384,
+        512,
+        384
+      ],
+      "groundAnchor": [
+        0.5,
+        0.92
+      ]
+    },
+    "roby_dog_sw_1": {
+      "sheet": "roby_dog",
+      "rect": [
+        512,
+        384,
+        512,
+        384
+      ],
+      "groundAnchor": [
+        0.5,
+        0.92
+      ]
+    },
+    "roby_dog_nw_0": {
+      "sheet": "roby_dog",
+      "rect": [
+        0,
+        768,
+        512,
+        384
+      ],
+      "groundAnchor": [
+        0.5,
+        0.92
+      ]
+    },
+    "roby_dog_nw_1": {
+      "sheet": "roby_dog",
+      "rect": [
+        512,
+        768,
+        512,
+        384
+      ],
+      "groundAnchor": [
+        0.5,
+        0.92
+      ]
+    },
+    "roby_dog_ne_0": {
+      "sheet": "roby_dog",
+      "rect": [
+        0,
+        1152,
+        512,
+        384
+      ],
+      "groundAnchor": [
+        0.5,
+        0.92
+      ]
+    },
+    "roby_dog_ne_1": {
+      "sheet": "roby_dog",
+      "rect": [
+        512,
+        1152,
+        512,
+        384
+      ],
+      "groundAnchor": [
+        0.5,
+        0.92
+      ]
     }
   },
   "version": 2,
@@ -1456,6 +1596,14 @@
     {
       "id": "roby_head_avatar",
       "file": "./content__levels__first-mark__art__roby-head-avatar.png"
+    },
+    {
+      "id": "roby_emotions",
+      "file": "./content__levels__first-mark__art__roby-emotions-chain.png"
+    },
+    {
+      "id": "roby_dog",
+      "file": "./content__levels__first-mark__art__roby-dog-walk.png"
     }
   ]
 }

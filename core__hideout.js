@@ -22,12 +22,11 @@ export function heroSprite(skin,state='IDLE',facing='down',step=false){
   const actions={SHAKE_CAN:'shake',SPRAY:'spray',HIDE:'hide',CAUGHT:prefix==='hero'?'caught':'hide',VICTORY:'victory'};
   return prefix+'_'+(actions[state]??((prefix==='hero'&&step?'walk_':'')+facing));
 }
-export function roomLayout(w,h,tutorial=false){
-  const narrow=w<760,availableW=narrow?w:w-350,top=narrow?94:78,bottom=narrow?108:95;
-  const height=Math.max(90,h-top-bottom-(tutorial&&narrow?150:0));
-  // Contain the complete 2:3 room, including its entrance and stairs.
-  const width=Math.min(availableW-16,height/1.5),drawH=width*1.5;
-  return {x:(availableW-width)/2+(narrow?0:10),y:top-12,w:width,h:drawH,clipBottom:h-bottom};
+export function roomLayout(w,h,tutorial=false,camera={}){
+  if(camera.overview){const width=Math.min(w-16,Math.max(80,h-130)/1.5);return {x:(w-width)/2,y:80,w:width,h:width*1.5,clipBottom:h};}
+  const width=Math.max(w,h/1.5)*1.12,height=width*1.5;
+  const clamp=(n,lo,hi)=>Math.max(lo,Math.min(hi,n));
+  return {x:clamp((w-width)/2+(camera.x??0),w-width,0),y:clamp((h-height)/2+(camera.y??0),h-height,0),w:width,h:height,clipBottom:h};
 }
 export const roomPoint=(x,y)=>({x:.08+.86*x,y:.075+.86*y});
 export const ROOM_POINTS=Object.fromEntries(Object.entries({

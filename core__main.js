@@ -1,13 +1,13 @@
-import {ContentLoader} from './core__content-loader.js?v=c531a45172ca';
-import {SaveStore,freshSave} from './core__save-store.js?v=c531a45172ca';
-import {AudioManager} from './core__audio.js?v=c531a45172ca';
-import {GameSession} from './core__session.js?v=c531a45172ca';
-import {InputController} from './core__input.js?v=c531a45172ca';
-import {GameUI} from './core__ui.js?v=c531a45172ca';
-import {POSTERS,posterApproach} from './content__district_01__posters.js?v=c531a45172ca';
-import {TutorialUI} from './core__tutorial-ui.js?v=c531a45172ca';
-import {showChapters} from './core__chapters.js?v=c531a45172ca';
-import {setUIButton} from './core__ui-kit.js?v=c531a45172ca';
+import {ContentLoader} from './core__content-loader.js?v=1604a53b1e7b';
+import {SaveStore,freshSave} from './core__save-store.js?v=1604a53b1e7b';
+import {AudioManager} from './core__audio.js?v=1604a53b1e7b';
+import {GameSession} from './core__session.js?v=1604a53b1e7b';
+import {InputController} from './core__input.js?v=1604a53b1e7b';
+import {GameUI} from './core__ui.js?v=1604a53b1e7b';
+import {POSTERS,posterApproach} from './content__district_01__posters.js?v=1604a53b1e7b';
+import {TutorialUI} from './core__tutorial-ui.js?v=1604a53b1e7b';
+import {showChapters} from './core__chapters.js?v=1604a53b1e7b';
+import {setUIButton} from './core__ui-kit.js?v=1604a53b1e7b';
 
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d',{alpha:false});
 const loader=new ContentLoader(),store=new SaveStore(),audio=new AudioManager();
@@ -102,7 +102,7 @@ function frame(now){
   if(session){
     session.room.beat=audio.radio.audible;
     if(!ui.mapOpen&&!document.getElementById('chapter-select'))session.update(dt,input.movement());
-    else if(session.mode==='district')session.traffic.update(dt);
+    else if(session.mode==='district')session.traffic.update(dt,session.life.night);
     if(session.mode==='hideout')renderer.hideout(ctx,session,canvas.width,canvas.height);
     else{
       session.camera.follow(session.player,dt,canvas.width);

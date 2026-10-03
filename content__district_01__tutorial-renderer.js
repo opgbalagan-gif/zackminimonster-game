@@ -1,16 +1,16 @@
-import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=c531a45172ca';
-import {vehicleProjection} from './core__vehicle-projection.js?v=c531a45172ca';
-import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=c531a45172ca';
-import {surfaceTrain} from './core__sandbox-metro.js?v=c531a45172ca';
-import {SpriteAtlas} from './core__sprites.js?v=c531a45172ca';
-import {project} from './core__geometry.js?v=c531a45172ca';
-import {heroSprite} from './core__hideout.js?v=c531a45172ca';
-import {polygon,box} from './content__district_01__terrain.js?v=c531a45172ca';
-import {drawGraffiti} from './content__district_01__graffiti-art.js?v=c531a45172ca';
-import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=c531a45172ca';
-import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=c531a45172ca';
-import {OccluderFade} from './core__occluder-fade.js?v=c531a45172ca';
-import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=c531a45172ca';
+import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=1604a53b1e7b';
+import {vehicleProjection} from './core__vehicle-projection.js?v=1604a53b1e7b';
+import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=1604a53b1e7b';
+import {surfaceTrain} from './core__sandbox-metro.js?v=1604a53b1e7b';
+import {SpriteAtlas} from './core__sprites.js?v=1604a53b1e7b';
+import {project} from './core__geometry.js?v=1604a53b1e7b';
+import {heroSprite} from './core__hideout.js?v=1604a53b1e7b';
+import {polygon,box} from './content__district_01__terrain.js?v=1604a53b1e7b';
+import {drawGraffiti} from './content__district_01__graffiti-art.js?v=1604a53b1e7b';
+import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=1604a53b1e7b';
+import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=1604a53b1e7b';
+import {OccluderFade} from './core__occluder-fade.js?v=1604a53b1e7b';
+import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=1604a53b1e7b';
 
 function fightCloud(c,s){
   const t=s.tutorial.fightBurst,p=project(s.tutorial.actor.x-11,s.tutorial.actor.y+10),pulse=Math.sin(t*27);
@@ -158,7 +158,7 @@ export function createTutorialRenderer(pack){
         c.fillStyle='#09121955';c.beginPath();c.ellipse(p.x,p.y,37,15,0,0,Math.PI*2);c.fill();
         const projection=vehicleProjection(car.type,direction);
         c.save();c.translate(p.x,p.y);c.transform(1,projection.shear,0,projection.scaleY,0,0);
-        if(!day)c.filter='brightness(.85)';atlas.draw(c,car.type+'_'+direction,0,0,car.type==='traffic_minivan'?114:car.type==='traffic_lowrider'?118:car.type==='traffic_executive'?110:104);c.restore();continue;
+        if(!day)c.filter='brightness(.85)';atlas.draw(c,car.type+'_'+direction,0,0,car.type==='traffic_minivan'?132:car.type==='traffic_lowrider'?138:car.type==='traffic_executive'?130:122);c.restore();continue;
       }
       if(o.kind==='prop'){spriteObject(day?o.id+'_day':o.id,o.x,o.y,o.w,o.depth);continue;}
       if(o.kind==='fence'){const x=o.x??380,length=o.x?210:226,p=project(x,155);faded('fence:'+x,{x:p.x,y:p.y-65,w:length,h:length*.5+65},o.depth,()=>kit.fence(c,x,155,length),(u,v)=>{const localY=v*(length*.5+65)-65;return localY<u*length*.5&&localY>u*length*.5-65;});continue;}
@@ -173,7 +173,7 @@ export function createTutorialRenderer(pack){
       const actor=o.kind==='visitor'||o.kind==='npc'?o.actor:o.kind==='zack'?s.player:s.tutorial.actor,p=project(actor.x,actor.y);
       c.fillStyle='#15202055';c.beginPath();c.ellipse(p.x,p.y,15,6,0,0,Math.PI*2);c.fill();
       const frame=actor.moving&&Math.floor(s.time*7)%2;
-      if(o.kind==='npc'){atlas.draw(c,actor.speakingFor>0?'roby_talk':s.player.x<actor.x?'roby_left':'roby_front',p.x,p.y,null,84);continue;}
+      if(o.kind==='npc'){atlas.draw(c,'roby_dog_'+(actor.direction??'se')+'_'+(actor.moving?Math.floor(s.time*7)%2:0),p.x,p.y,82);continue;}
       const sprite=o.kind==='zack'?heroSprite(s.save.player.skin,s.player.state,s.player.facing,frame):actor.sprite==='officer'&&frame?'officer_walk':actor.sprite;
       atlas.draw(c,sprite,p.x,p.y,null,66);
       if(o.kind==='visitor'&&['photo','tip'].includes(actor.phase)){

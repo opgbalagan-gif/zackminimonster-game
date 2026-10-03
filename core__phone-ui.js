@@ -1,6 +1,7 @@
-import {AimController,MotionAim} from './core__motion-aim.js?v=c531a45172ca';
-import {setUIButton,uiIcon} from './core__ui-kit.js?v=c531a45172ca';
-import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=c531a45172ca';
+import {AimController,MotionAim} from './core__motion-aim.js?v=1604a53b1e7b';
+import {setUIButton,uiIcon} from './core__ui-kit.js?v=1604a53b1e7b';
+import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=1604a53b1e7b';
+import {nearbyPhotoSpot} from './core__photo-spots.js?v=1604a53b1e7b';
 export class PhoneUI{
   constructor(s,renderer,audio){
     this.s=s;this.renderer=renderer;this.audio=audio;this.aim=new AimController();this.motion=new MotionAim(this.aim);this.steady=0;this.screen='messages';this.previous={x:0,y:0};
@@ -31,8 +32,8 @@ export class PhoneUI{
   radio(){this.messages();this.screen='radio';this.el.querySelector('.phone-message').hidden=true;this.el.querySelector('.phone-radio').hidden=false;}
   camera(){
     if(!this.s.save.phone.unlocked)return;
-    const target=this.s.world.targets.filter(t=>this.s.painted.has(t.wall_id)&&(!t.buildingId||this.s.world.id!=='sneak')).sort((a,b)=>Math.hypot(a.approach.x-this.s.player.x,a.approach.y-this.s.player.y)-Math.hypot(b.approach.x-this.s.player.x,b.approach.y-this.s.player.y))[0];
-    if(!target){this.s.notice('Сначала нарисуй работу, которую хочешь снять.');return;}
+    const target=nearbyPhotoSpot(this.s,this.returnMode);
+    if(!target){this.gallery();return;}
     this.target=target;this.screen='camera';this.aim=new AimController();this.motion.aim=this.aim;this.motion.destroy();this.motion=new MotionAim(this.aim);this.steady=0;
     this.el.querySelector('.flip-phone').hidden=true;this.el.querySelector('.phone-camera-view').hidden=false;this.canvas.focus();
     document.getElementById('app').dataset.camera='true';
@@ -66,6 +67,9 @@ export class PhoneUI{
   update(dt){
     this.toggle.hidden=!['district','hideout'].includes(this.s.mode);this.toggle.dataset.unread=String(this.s.save.phone.unlocked&&!this.s.save.phone.read);
     for(const selector of ['.phone-sms','.phone-camera','.phone-album'])this.el.querySelector(selector).disabled=!this.s.save.phone.unlocked;
+    const photoSpot=nearbyPhotoSpot(this.s,this.s.mode==='phone'?this.returnMode:this.s.mode);
+    const camera=this.el.querySelector('.phone-camera');camera.hidden=!photoSpot;
+    camera.title=photoSpot?'Снять: '+photoSpot.name:'';
     if(this.s.mode==='phone'&&this.screen==='radio'){
       const radio=this.audio.radio;this.el.querySelector('.phone-radio-status').textContent=radio.state==='error'?radio.message:radio.state==='loading'?'Подключаемся…':radio.state==='playing'?'В ЭФИРЕ · HIP-HOP / R&B':'Твой саундтрек улиц';
       const button=this.el.querySelector('.phone-radio-play');button.textContent=radio.wanted?'ВЫКЛЮЧИТЬ':'ВКЛЮЧИТЬ';button.setAttribute('aria-pressed',String(radio.wanted));

@@ -1,4 +1,4 @@
-import {districtCar} from './core__vehicle-styles.js?v=c531a45172ca';
+import {districtCar} from './core__vehicle-styles.js?v=1604a53b1e7b';
 // Relative swept bounds catch crossings even when both car and player move in one frame.
 export function trafficContact(car,from,to){
   const angle=car.heading??(car.axis==='x'?0:Math.PI/2),halfX=Math.abs(Math.cos(angle))*29+Math.abs(Math.sin(angle))*13+8,halfY=Math.abs(Math.sin(angle))*29+Math.abs(Math.cos(angle))*13+8;
@@ -15,7 +15,7 @@ export function trafficContact(car,from,to){
 
 export class TrafficSystem{
   constructor(world){
-    this.time=0;this.cars=[];this.crossings=[];
+    this.time=0;this.cars=[];this.crossings=[];this.night=false;
     const vertical=world.roads.filter(r=>r.h>r.w),horizontal=world.roads.filter(r=>r.w>r.h);
     for(const v of vertical)for(const h of horizontal)if(v.x<h.x+h.w&&v.x+v.w>h.x&&h.y<v.y+v.h&&h.y+h.h>v.y)this.crossings.push({x:v.x,y:h.y,w:v.w,h:h.h});
     world.roads.forEach((road,index)=>{
@@ -46,7 +46,14 @@ export class TrafficSystem{
     });
   }
   green(axis){const phase=this.time%21;return axis==='x'?phase<7:phase>=10.5&&phase<17.5;}
-  update(dt){
+  setNight(night){
+    if(this.night===night)return;
+    this.night=night;this.fleet??=this.cars;
+    this.cars=night?this.fleet.filter((car,i)=>i%3===0):this.fleet.slice();
+    for(const car of this.cars){car.previous={x:car.x,y:car.y};car.travel=0;}
+  }
+  update(dt,night=this.night){
+    this.setNight(night);
     // Bounded substeps make traffic lights and following distances independent of frame rate.
     let remaining=Math.max(0,dt);
     for(const car of this.cars){car.previous={x:car.x,y:car.y};car.travel=0;}

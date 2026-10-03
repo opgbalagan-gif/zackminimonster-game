@@ -1,5 +1,5 @@
 // Measured longitudinal and transverse body-edge slopes in each source sheet.
-// Map both to the world's 2:1 axes while keeping vertical edges vertical.
+// Preserve the original body height; align the driving axis by shear only.
 const SLOPES={
   traffic_coupe:[[.61,-.24],[.72,-.24]],
   traffic_hatch:[[.60,-.24],[.72,-.22]],
@@ -11,6 +11,6 @@ const SLOPES={
 export function vehicleProjection(type,direction){
   const rear=direction==='nw'||direction==='ne',mirror=direction==='sw'||direction==='ne';
   const [long,cross]=(SLOPES[type]??SLOPES.traffic_coupe)[rear?1:0];
-  const scaleY=1/(long-cross),shear=.5-scaleY*long;
+  const scaleY=1,shear=.5-long;
   return {scaleY,shear:mirror?-shear:shear};
 }

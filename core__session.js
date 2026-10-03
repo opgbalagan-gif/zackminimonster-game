@@ -1,21 +1,21 @@
-import {NavigationGrid} from './core__navigation.js?v=c531a45172ca';
-import {PoliceSystem} from './core__police.js?v=c531a45172ca';
-import {GraffitiGame} from './core__graffiti.js?v=c531a45172ca';
-import {Camera,clamp,distance,moveAlongPath,project} from './core__geometry.js?v=c531a45172ca';
-import {EffectPool} from './core__effects.js?v=c531a45172ca';
-import {OUTFITS,INKS,TROPHIES} from './core__hideout.js?v=c531a45172ca';
-import {TrafficSystem} from './core__traffic.js?v=c531a45172ca';
-import {CitizenSystem} from './core__citizens.js?v=c531a45172ca';
-import {COURT,COURT_LINES,BallArtGame} from './core__basketball.js?v=c531a45172ca';
-import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=c531a45172ca';
-import {cityProgress,canEnter,regionAt,gateMessage} from './core__city-progress.js?v=c531a45172ca';
-import {POSTERS,posterApproach} from './content__district_01__posters.js?v=c531a45172ca';
-import {BridgeGangs} from './core__bridge-gangs.js?v=c531a45172ca';
-import {TutorialFlow} from './core__tutorial.js?v=c531a45172ca';
-import {StreetLife} from './core__street-life.js?v=c531a45172ca';
-import {SneakFlow} from './core__sneak.js?v=c531a45172ca';
-import {SandboxFlow} from './core__sandbox.js?v=c531a45172ca';
-import {talkToStreetNpc} from './core__street-npcs.js?v=c531a45172ca';
+import {NavigationGrid} from './core__navigation.js?v=1604a53b1e7b';
+import {PoliceSystem} from './core__police.js?v=1604a53b1e7b';
+import {GraffitiGame} from './core__graffiti.js?v=1604a53b1e7b';
+import {Camera,clamp,distance,moveAlongPath,project} from './core__geometry.js?v=1604a53b1e7b';
+import {EffectPool} from './core__effects.js?v=1604a53b1e7b';
+import {OUTFITS,INKS,TROPHIES} from './core__hideout.js?v=1604a53b1e7b';
+import {TrafficSystem} from './core__traffic.js?v=1604a53b1e7b';
+import {CitizenSystem} from './core__citizens.js?v=1604a53b1e7b';
+import {COURT,COURT_LINES,BallArtGame} from './core__basketball.js?v=1604a53b1e7b';
+import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=1604a53b1e7b';
+import {cityProgress,canEnter,regionAt,gateMessage} from './core__city-progress.js?v=1604a53b1e7b';
+import {POSTERS,posterApproach} from './content__district_01__posters.js?v=1604a53b1e7b';
+import {BridgeGangs} from './core__bridge-gangs.js?v=1604a53b1e7b';
+import {TutorialFlow} from './core__tutorial.js?v=1604a53b1e7b';
+import {StreetLife} from './core__street-life.js?v=1604a53b1e7b';
+import {SneakFlow} from './core__sneak.js?v=1604a53b1e7b';
+import {SandboxFlow} from './core__sandbox.js?v=1604a53b1e7b';
+import {talkToStreetNpc} from './core__street-npcs.js?v=1604a53b1e7b';
 
 export class GameSession{
   constructor(pack,store){
@@ -266,7 +266,7 @@ export class GameSession{
     }
     this.knockedFor=Math.max(0,this.knockedFor-dt);this.trafficGrace=Math.max(0,this.trafficGrace-dt);
     const previous={x:this.player.x,y:this.player.y};
-    this.movePlayer(dt,movement);this.gangs.update(dt,this,previous);this.traffic.update(dt);
+    this.movePlayer(dt,movement);this.gangs.update(dt,this,previous);this.traffic.update(dt,this.life?.night??false);
     const car=this.hiddenFor<=0&&this.trafficGrace<=0&&this.grace<=0&&this.traffic.collision(previous,this.player);
     if(car)this.hitByTraffic(car);
     this.near=this.knockedFor>0||this.gangs.push?null:this.nearest();
