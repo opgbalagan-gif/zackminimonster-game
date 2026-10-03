@@ -1,3 +1,4 @@
+import {bindCanvasGesture} from './core__canvas-gesture.js?v=cfa54f753bac';
 export class InputController{
   constructor(canvas,callbacks){
     this.canvas=canvas;this.callbacks=callbacks;this.keys=new Set();this.stick={x:0,y:0};this.activeStick=null;
@@ -17,10 +18,7 @@ export class InputController{
     document.addEventListener('keyup',e=>this.keys.delete(e.code));
     window.addEventListener('blur',()=>this.reset());
     document.addEventListener('visibilitychange',()=>{if(document.hidden)this.reset();});
-    canvas.addEventListener('pointerdown',event=>{
-      if(event.button!==0)return;
-      const r=canvas.getBoundingClientRect();callbacks.destination((event.clientX-r.left)*canvas.width/r.width,(event.clientY-r.top)*canvas.height/r.height);
-    });
+    this.resetCanvas=bindCanvasGesture(canvas,{zoom:callbacks.zoom,tap:(x,y)=>{const r=canvas.getBoundingClientRect();callbacks.destination((x-r.left)*canvas.width/r.width,(y-r.top)*canvas.height/r.height);}});
     const pad=document.querySelector('#joystick'),knob=pad.querySelector('.stick-knob'),action=document.querySelector('#action-button');
     knob.append(action);
     // Pointer actions are resolved on release, so dragging never also activates an object.
@@ -44,5 +42,5 @@ export class InputController{
     if(k.has('ArrowUp')||k.has('KeyW'))y--;if(k.has('ArrowDown')||k.has('KeyS'))y++;
     const n=Math.hypot(x,y);return n>1?{x:x/n,y:y/n}:{x,y};
   }
-  reset(){this.keys.clear();this.resetStick?.();this.stick={x:0,y:0};this.activeStick=null;}
+  reset(){this.keys.clear();this.resetCanvas?.();this.resetStick?.();this.stick={x:0,y:0};this.activeStick=null;}
 }

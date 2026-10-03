@@ -1,4 +1,4 @@
-import {buildingOccludesZack} from './content__district_01__occlusion.js?v=391ab0f86039';
+import {buildingOccludesZack} from './content__district_01__occlusion.js?v=cfa54f753bac';
 
 // One opacity per object; entering and leaving an obstruction both ease smoothly.
 export class OccluderFade{

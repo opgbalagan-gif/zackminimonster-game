@@ -1,13 +1,13 @@
-import {ContentLoader} from './core__content-loader.js?v=391ab0f86039';
-import {SaveStore,freshSave} from './core__save-store.js?v=391ab0f86039';
-import {AudioManager} from './core__audio.js?v=391ab0f86039';
-import {GameSession} from './core__session.js?v=391ab0f86039';
-import {InputController} from './core__input.js?v=391ab0f86039';
-import {GameUI} from './core__ui.js?v=391ab0f86039';
-import {POSTERS,posterApproach} from './content__district_01__posters.js?v=391ab0f86039';
-import {TutorialUI} from './core__tutorial-ui.js?v=391ab0f86039';
-import {showChapters} from './core__chapters.js?v=391ab0f86039';
-import {setUIButton} from './core__ui-kit.js?v=391ab0f86039';
+import {ContentLoader} from './core__content-loader.js?v=cfa54f753bac';
+import {SaveStore,freshSave} from './core__save-store.js?v=cfa54f753bac';
+import {AudioManager} from './core__audio.js?v=cfa54f753bac';
+import {GameSession} from './core__session.js?v=cfa54f753bac';
+import {InputController} from './core__input.js?v=cfa54f753bac';
+import {GameUI} from './core__ui.js?v=cfa54f753bac';
+import {POSTERS,posterApproach} from './content__district_01__posters.js?v=cfa54f753bac';
+import {TutorialUI} from './core__tutorial-ui.js?v=cfa54f753bac';
+import {showChapters} from './core__chapters.js?v=cfa54f753bac';
+import {setUIButton} from './core__ui-kit.js?v=cfa54f753bac';
 
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d',{alpha:false});
 const loader=new ContentLoader(),store=new SaveStore(),audio=new AudioManager();
@@ -39,6 +39,7 @@ const ui=new GameUI({
   confirm:()=>{if(session?.graffiti?.done)session.completeGraffiti();else session?.graffiti?.confirm();ui.sync();}
 });
 const input=new InputController(canvas,{
+  zoom:factor=>{if(session?.mode==='district'&&!ui.mapOpen){session.camera.zoomFactor=Math.max(.65,Math.min(1.8,(session.camera.zoomFactor??1)*factor));session.player.path=[];}},
   action,map:()=>ui.toggleMap(),back:()=>{
     if(session?.mode==='phone')ui.phoneUI.close();else if(session?.mode==='poi')ui.closePoi();else if(session?.mode==='poster')ui.closePoster();else if(ui.mapOpen)ui.toggleMap(false);else if(session?.mode==='graffiti')session.cancelGraffiti();
     else if(['court-dialogue','ball-art','ball-result'].includes(session?.mode)){session.cancelCourt();ui.sync();}

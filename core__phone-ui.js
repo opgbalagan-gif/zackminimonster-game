@@ -1,7 +1,9 @@
-import {AimController,MotionAim} from './core__motion-aim.js?v=391ab0f86039';
-import {setUIButton,uiIcon} from './core__ui-kit.js?v=391ab0f86039';
-import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=391ab0f86039';
-import {nearbyPhotoSpot} from './core__photo-spots.js?v=391ab0f86039';
+import {AimController,MotionAim} from './core__motion-aim.js?v=cfa54f753bac';
+import {setUIButton,uiIcon} from './core__ui-kit.js?v=cfa54f753bac';
+import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=cfa54f753bac';
+import {nearbyPhotoSpot} from './core__photo-spots.js?v=cfa54f753bac';
+import {bindCanvasGesture} from './core__canvas-gesture.js?v=cfa54f753bac';
+import {appIcon,foldPhoneIcon} from './core__phone-icons.js?v=cfa54f753bac';
 export class PhoneUI{
   constructor(s,renderer,audio){
     this.s=s;this.renderer=renderer;this.audio=audio;this.aim=new AimController();this.motion=new MotionAim(this.aim);this.steady=0;this.screen='messages';this.previous={x:0,y:0};
@@ -10,6 +12,7 @@ export class PhoneUI{
     this.el.innerHTML=`<div class="flip-phone"><header><span>ZAK MINI · ONLINE</span><button class="phone-close" aria-label="Закрыть телефон">×</button></header><div class="phone-lcd"><div class="phone-message"><small>НОВОЕ СООБЩЕНИЕ</small><h2>Твои работы заслуживают кадра</h2><p>Сними новый рисунок, пока стена ещё твоя. Больше работ художника — в @zakminimonster.</p><a href="https://www.instagram.com/zakminimonster/" target="_blank" rel="noopener noreferrer">@zakminimonster ↗</a><p class="phone-notice">Сохрани момент в своём альбоме.</p></div><div class="phone-gallery" hidden></div></div><nav aria-label="Приложения телефона"><button class="phone-app phone-sms"><span class="phone-app-icon app-sms" aria-hidden="true"></span><span>Сообщения</span></button><button class="phone-app phone-camera"><span class="phone-app-icon app-camera" aria-hidden="true"></span><span>Камера</span></button><button class="phone-app phone-album"><span class="phone-app-icon app-album" aria-hidden="true"></span><span>Альбом</span></button></nav><div class="phone-model">MINI / STREET EDITION</div></div>
       <div class="phone-camera-view" hidden><canvas aria-label="Видоискатель граффити" tabindex="0"></canvas><button class="secondary camera-back">НАЗАД</button><h2>СДЕЛАЙ КРУТОЕ ФОТО ГРАФФИТИ</h2><div class="camera-brackets"><i></i><i></i><i></i><i></i></div><div class="camera-focus"></div><div class="camera-help"><strong class="camera-score"></strong><span class="camera-status"></span><button class="secondary camera-gyro">ВКЛЮЧИТЬ ГИРОСКОП</button></div><div class="camera-actions"><button class="secondary camera-album" aria-label="Посмотреть фотографии">ФОТО</button><button class="camera-shutter" aria-label="Сделать снимок">${uiIcon('camera')}</button><button class="secondary camera-centre" aria-label="Центрировать камеру">↻</button></div></div>`;
     document.getElementById('app').append(this.el);this.canvas=this.el.querySelector('canvas');this.c=this.canvas.getContext('2d');
+    this.toggle.innerHTML=foldPhoneIcon();this.el.querySelector('.flip-phone header>span').textContent='09:41 · ZAK DUO';this.el.querySelector('.phone-model').textContent='Designed for your streets';
     this.el.querySelector('.phone-lcd').insertAdjacentHTML('beforeend','<div class="phone-radio" hidden><small>STREET RADIO</small><h2>181.FM<br>THE BEAT</h2><p class="phone-radio-status" role="status"></p><button class="phone-radio-play">ВКЛЮЧИТЬ</button><label class="phone-volume-label">Громкость <input class="phone-radio-volume" type="range" min="0" max="100" aria-label="Громкость радио в телефоне"></label></div>');
     this.el.querySelector('nav').insertAdjacentHTML('beforeend','<button class="phone-app phone-radio-app">'+uiIcon('music')+'<span>Радио</span></button><button class="phone-app phone-levels">'+uiIcon('rep')+'<span>Уровни</span></button>');
     const bind=(q,f)=>this.el.querySelector(q).onclick=f;
@@ -20,32 +23,37 @@ export class PhoneUI{
     bind('.phone-levels',()=>{this.close();document.getElementById('chapter-button').click();});
     bind('.phone-training',()=>{this.close();const b=document.getElementById('chapter-button');b.dataset.tab='training';b.click();});
     if(s.world.sandbox){this.el.querySelector('nav').insertAdjacentHTML('beforeend','<button class="phone-app phone-map"><span class="phone-app-icon app-map" aria-hidden="true">⌁</span><span>Карта</span></button>');bind('.phone-map',()=>{this.close();document.getElementById('map-button').click();});}
+    for(const [selector,name,label] of [['sms','sms','Сообщения'],['camera','camera','Камера'],['album','album','Галерея'],['radio-app','radio','Музыка'],['levels','levels','Мой путь'],['training','training','Обучение'],['map','map','Карты']]){const button=this.el.querySelector('.phone-'+selector);if(button)button.innerHTML=appIcon(name)+'<span>'+label+'</span>';}
+    this.el.querySelector('.camera-album').setAttribute('aria-label','Открыть галерею');this.el.querySelector('.camera-album').innerHTML=appIcon('album');
+    this.el.querySelector('.camera-shutter').innerHTML='<span class="shutter-disc"></span>';
     const volume=this.el.querySelector('.phone-radio-volume');volume.value=Math.round(audio.radio.media.volume*100);
     volume.oninput=()=>audio.radio.setVolume(Number(volume.value)/100);volume.onchange=()=>{s.save.settings.radioVolume=audio.radio.media.volume;s.persist();};
-    this.canvas.onpointerdown=e=>{this.motion.stop();this.motion.status='Наведение пальцем / мышью';this.drag={x:e.clientX,y:e.clientY};this.canvas.setPointerCapture(e.pointerId);};
-    this.canvas.onpointermove=e=>{if(!this.drag)return;const r=this.canvas.getBoundingClientRect();this.aim.drag((e.clientX-this.drag.x)/r.width*3,(e.clientY-this.drag.y)/r.height*3);this.drag={x:e.clientX,y:e.clientY};};
-    this.canvas.onpointerup=this.canvas.onpointercancel=()=>this.drag=null;
+    this.resetGesture=bindCanvasGesture(this.canvas,{start:()=>{this.motion.stop();this.motion.status='Веди пальцем · масштаб двумя пальцами';},pan:(dx,dy)=>{const r=this.canvas.getBoundingClientRect();this.aim.drag(-dx/r.width*3,-dy/r.height*3);},zoom:factor=>{this.photoZoom=Math.max(.65,Math.min(2,(this.photoZoom??1)*factor));this.steady=0;}});
     this.canvas.onkeydown=e=>{const dirs={ArrowLeft:[-.07,0],ArrowRight:[.07,0],ArrowUp:[0,-.07],ArrowDown:[0,.07]};if(dirs[e.key]){e.preventDefault();this.aim.drag(...dirs[e.key]);}if(e.key==='Enter'||e.key===' '){e.preventDefault();this.shoot();}};
   }
   open(){if(!['district','hideout'].includes(this.s.mode)||this.s.tutorial.scripted)return;this.returnMode=this.s.mode;this.s.mode='phone';this.s.player.path=[];this.el.hidden=false;if(this.s.save.phone.unlocked)this.messages();else this.radio();}
-  close(){this.motion.stop();this.el.hidden=true;document.getElementById('app').dataset.camera='false';this.s.mode=this.returnMode??'district';this.s.emit('mode');}
+  close(){this.resetGesture();this.motion.stop();this.el.hidden=true;document.getElementById('app').dataset.camera='false';this.s.mode=this.returnMode??'district';this.s.emit('mode');}
   messages(){this.motion.stop();this.screen='messages';document.getElementById('app').dataset.camera='false';if(this.s.save.phone.unlocked){this.s.save.phone.read=true;this.s.persist();}this.el.querySelector('.flip-phone').hidden=false;this.el.querySelector('.phone-camera-view').hidden=true;this.el.querySelector('.phone-message').hidden=false;this.el.querySelector('.phone-gallery').hidden=true;this.el.querySelector('.phone-radio').hidden=true;}
   radio(){this.messages();this.screen='radio';this.el.querySelector('.phone-message').hidden=true;this.el.querySelector('.phone-radio').hidden=false;}
   camera(){
     if(!this.s.save.phone.unlocked)return;
     const target=nearbyPhotoSpot(this.s,this.returnMode);
     if(!target){this.gallery();return;}
-    this.target=target;this.screen='camera';this.aim=new AimController();this.motion.aim=this.aim;this.motion.destroy();this.motion=new MotionAim(this.aim);this.steady=0;
+    this.target=target;this.screen='camera';this.photoZoom=1;this.aim=new AimController();this.motion.aim=this.aim;this.motion.destroy();this.motion=new MotionAim(this.aim);this.steady=0;
     this.el.querySelector('.flip-phone').hidden=true;this.el.querySelector('.phone-camera-view').hidden=false;this.canvas.focus();
     document.getElementById('app').dataset.camera='true';
     this.thumbnail();
   }
   gallery(){
-    this.messages();this.screen='gallery';this.el.querySelector('.phone-message').hidden=true;const box=this.el.querySelector('.phone-gallery');box.hidden=false;box.replaceChildren();
+    this.messages();this.screen='gallery';this.el.querySelector('.phone-message').hidden=true;const box=this.el.querySelector('.phone-gallery');box.hidden=false;box.replaceChildren();box.classList.remove('photo-expanded');
     if(!this.s.save.phone.photos.length){box.textContent='Пока пусто. Первый кадр ждёт в камере.';return;}
     for(const photo of [...this.s.save.phone.photos].reverse()){
-      const card=document.createElement('figure'),canvas=document.createElement('canvas'),label=document.createElement('figcaption');canvas.width=240;canvas.height=360;this.drawScene(canvas.getContext('2d'),240,360,photo.art,photo.x??0,photo.y??0,photo.period??'night');label.textContent='День '+photo.day+' · '+photo.quality+'%';card.append(canvas,label);box.append(card);
+      const card=document.createElement('figure'),label=document.createElement('figcaption'),button=document.createElement('button');button.className='gallery-photo';button.setAttribute('aria-label','Открыть фото · день '+photo.day);button.append(this.photoMedia(photo));button.onclick=()=>{box.replaceChildren();const back=document.createElement('button');back.className='gallery-return';back.textContent='← Все фото';back.onclick=()=>this.gallery();box.classList.add('photo-expanded');box.append(back,this.photoMedia(photo));};label.textContent='День '+photo.day+' · '+photo.quality+'%';card.append(button,label);box.append(card);
     }
+  }
+  photoMedia(photo){
+    if(photo.image){const img=document.createElement('img');img.src=photo.image;img.alt='Граффити · день '+photo.day;return img;}
+    const canvas=document.createElement('canvas');canvas.width=240;canvas.height=360;this.drawScene(canvas.getContext('2d'),240,360,photo.art,photo.x??0,photo.y??0,photo.period??'night');return canvas;
   }
   drawScene(c,w,h,art,x=0,y=0,period='night'){
     const img=this.renderer.atlas.images.camera;if(!img)return;
@@ -60,11 +68,15 @@ export class PhoneUI{
   shoot(){
     if(this.screen!=='camera')return;
     if(this.aim.quality<75||this.steady<.55){this.motion.status='Совмести рисунок с рамкой и удержи телефон';return;}
-    const photo={wall:this.target.wall_id,art:this.target.graffiti_id,day:this.s.life.state.day,period:this.s.life.state.period,x:this.aim.x,y:this.aim.y,quality:this.aim.quality};
+    // Capture the rendered world pixels before the shutter flash, without any DOM HUD.
+    const shot=document.createElement('canvas'),scale=Math.min(1,640/this.canvas.width,960/this.canvas.height);shot.width=Math.round(this.canvas.width*scale);shot.height=Math.round(this.canvas.height*scale);
+    this.renderer.photograph(shot.getContext('2d'),this.s,shot.width,shot.height,this.target,this.aim,this.photoZoom);
+    let quality=.7,image=shot.toDataURL('image/jpeg',quality);while(image.length>180000&&quality>.25){quality-=.1;image=shot.toDataURL('image/jpeg',quality);}
+    const photo={wall:this.target.wall_id,art:this.target.graffiti_id,day:this.s.life.state.day,period:this.s.life.state.period,x:this.aim.x,y:this.aim.y,quality:this.aim.quality,image};
     this.s.save.phone.photos.push(photo);this.s.save.phone.photos=this.s.save.phone.photos.slice(-12);this.s.persist();this.s.tutorial.finishPhoto?.();
     this.flash=.18;this.motion.status='Снимок сохранён в альбом';this.steady=0;this.thumbnail();
   }
-  thumbnail(){const photo=this.s.save.phone.photos.at(-1);if(!photo)return;const button=this.el.querySelector('.camera-album');button.replaceChildren();const canvas=document.createElement('canvas');canvas.width=80;canvas.height=120;this.drawScene(canvas.getContext('2d'),80,120,photo.art,photo.x,photo.y,photo.period);button.append(canvas);}
+  thumbnail(){const photo=this.s.save.phone.photos.at(-1);if(!photo)return;const button=this.el.querySelector('.camera-album');button.replaceChildren(this.photoMedia(photo));}
   update(dt){
     this.toggle.hidden=!['district','hideout'].includes(this.s.mode);this.toggle.dataset.unread=String(this.s.save.phone.unlocked&&!this.s.save.phone.read);
     for(const selector of ['.phone-sms','.phone-camera','.phone-album'])this.el.querySelector(selector).disabled=!this.s.save.phone.unlocked;
@@ -78,7 +90,7 @@ export class PhoneUI{
     if(this.s.mode!=='phone'||this.screen!=='camera')return;
     const r=this.canvas.getBoundingClientRect();this.canvas.width=Math.round(r.width);this.canvas.height=Math.round(r.height);
     const delta=Math.hypot(this.aim.x-this.previous.x,this.aim.y-this.previous.y);this.steady=delta<.012?this.steady+dt:0;this.previous={x:this.aim.x,y:this.aim.y};
-    this.drawScene(this.c,this.canvas.width,this.canvas.height,this.target.graffiti_id,this.aim.x,this.aim.y,this.s.life.state.period);
+    this.renderer.photograph(this.c,this.s,this.canvas.width,this.canvas.height,this.target,this.aim,this.photoZoom);
     if(this.flash>0){this.flash-=dt;this.c.fillStyle='#ffffffaa';this.c.fillRect(0,0,this.canvas.width,this.canvas.height);}
     this.el.querySelector('.camera-score').textContent=this.aim.quality>=75&&this.steady>=.55?'В ФОКУСЕ · СНИМАЙ':'КАДР '+this.aim.quality+'% · УДЕРЖИ';
     this.el.querySelector('.camera-status').textContent=this.motion.status;this.el.querySelector('.camera-focus').dataset.ready=String(this.aim.quality>=75&&this.steady>=.55);

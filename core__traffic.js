@@ -1,4 +1,4 @@
-import {districtCar} from './core__vehicle-styles.js?v=391ab0f86039';
+import {districtCar} from './core__vehicle-styles.js?v=cfa54f753bac';
 // Relative swept bounds catch crossings even when both car and player move in one frame.
 export function trafficContact(car,from,to){
   const angle=car.heading??(car.axis==='x'?0:Math.PI/2),halfX=Math.abs(Math.cos(angle))*29+Math.abs(Math.sin(angle))*13+8,halfY=Math.abs(Math.sin(angle))*29+Math.abs(Math.cos(angle))*13+8;
@@ -22,7 +22,9 @@ export class TrafficSystem{
       const axis=road.w>road.h?'x':'y',other=axis==='x'?'y':'x',length=axis==='x'?road.w:road.h;
       const turnEnds=(world.roadEnds??[]).filter(e=>e.kind==='turn'&&e.axis===axis&&Math.abs(e[other]-(road[other]+(axis==='x'?road.h:road.w)/2))<1&&Math.min(Math.abs(e[axis]-road[axis]),Math.abs(e[axis]-road[axis]-length))<1);
       for(const direction of [-1,1])for(let n=0;n<2;n++){
-        const start=turnEnds.find(e=>e.sign<0)?.point[axis]??road[axis]+70,end=turnEnds.find(e=>e.sign>0)?.point[axis]??road[axis]+length-70,span=end-start;
+        let start=turnEnds.find(e=>e.sign<0)?.point[axis]??road[axis]+70,end=turnEnds.find(e=>e.sign>0)?.point[axis]??road[axis]+length-70;
+        if(world.sandbox){const b=world.mapBounds,far=b[axis]+(axis==='x'?b.w:b.h);if(road[axis]-b[axis]<180)start=b[axis]-320;if(far-road[axis]-length<180)end=far+320;}
+        const span=end-start;
         const breadth=axis==='x'?road.h:road.w,center=road[other]+breadth/2,side=direction*(axis==='x'?1:-1);
         let lane=center+side*(axis==='x'?24:16);
         // Some graffiti supports sit inside the asphalt: choose a clear lane within its half-road.

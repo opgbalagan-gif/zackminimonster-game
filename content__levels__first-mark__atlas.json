@@ -1901,207 +1901,207 @@
       "rect": [
         0,
         0,
-        256,
-        256
+        314,
+        314
       ],
       "groundAnchor": [
         0.5,
-        0.9375
+        0.97
       ]
     },
     "cleaner_walk_front_1": {
       "sheet": "cleaner_hf",
       "rect": [
-        256,
+        314,
         0,
-        256,
-        256
+        313,
+        314
       ],
       "groundAnchor": [
         0.5,
-        0.9375
+        0.97
       ]
     },
     "cleaner_walk_front_2": {
       "sheet": "cleaner_hf",
       "rect": [
-        512,
+        627,
         0,
-        256,
-        256
+        314,
+        314
       ],
       "groundAnchor": [
         0.5,
-        0.9375
+        0.97
       ]
     },
     "cleaner_walk_front_3": {
       "sheet": "cleaner_hf",
       "rect": [
-        768,
+        941,
         0,
-        256,
-        256
+        313,
+        314
       ],
       "groundAnchor": [
         0.5,
-        0.9375
+        0.97
       ]
     },
     "cleaner_walk_back_0": {
       "sheet": "cleaner_hf",
       "rect": [
         0,
-        256,
-        256,
-        256
+        314,
+        314,
+        313
       ],
       "groundAnchor": [
         0.5,
-        0.9375
+        0.97
       ]
     },
     "cleaner_walk_back_1": {
       "sheet": "cleaner_hf",
       "rect": [
-        256,
-        256,
-        256,
-        256
+        314,
+        314,
+        313,
+        313
       ],
       "groundAnchor": [
         0.5,
-        0.9375
+        0.97
       ]
     },
     "cleaner_walk_back_2": {
       "sheet": "cleaner_hf",
       "rect": [
-        512,
-        256,
-        256,
-        256
+        627,
+        314,
+        314,
+        313
       ],
       "groundAnchor": [
         0.5,
-        0.9375
+        0.97
       ]
     },
     "cleaner_walk_back_3": {
       "sheet": "cleaner_hf",
       "rect": [
-        768,
-        256,
-        256,
-        256
+        941,
+        314,
+        313,
+        313
       ],
       "groundAnchor": [
         0.5,
-        0.9375
+        0.97
       ]
     },
     "cleaner_paint_front_0": {
       "sheet": "cleaner_hf",
       "rect": [
         0,
-        512,
-        256,
-        256
+        627,
+        314,
+        314
       ],
       "groundAnchor": [
         0.5,
-        0.9375
+        0.97
       ]
     },
     "cleaner_paint_front_1": {
       "sheet": "cleaner_hf",
       "rect": [
-        256,
-        512,
-        256,
-        256
+        314,
+        627,
+        313,
+        314
       ],
       "groundAnchor": [
         0.5,
-        0.9375
+        0.97
       ]
     },
     "cleaner_paint_front_2": {
       "sheet": "cleaner_hf",
       "rect": [
-        512,
-        512,
-        256,
-        256
+        627,
+        627,
+        314,
+        314
       ],
       "groundAnchor": [
         0.5,
-        0.9375
+        0.97
       ]
     },
     "cleaner_paint_front_3": {
       "sheet": "cleaner_hf",
       "rect": [
-        768,
-        512,
-        256,
-        256
+        941,
+        627,
+        313,
+        314
       ],
       "groundAnchor": [
         0.5,
-        0.9375
+        0.97
       ]
     },
     "cleaner_paint_back_0": {
       "sheet": "cleaner_hf",
       "rect": [
         0,
-        768,
-        256,
-        256
+        941,
+        314,
+        313
       ],
       "groundAnchor": [
         0.5,
-        0.9375
+        0.97
       ]
     },
     "cleaner_paint_back_1": {
       "sheet": "cleaner_hf",
       "rect": [
-        256,
-        768,
-        256,
-        256
+        314,
+        941,
+        313,
+        313
       ],
       "groundAnchor": [
         0.5,
-        0.9375
+        0.97
       ]
     },
     "cleaner_paint_back_2": {
       "sheet": "cleaner_hf",
       "rect": [
-        512,
-        768,
-        256,
-        256
+        627,
+        941,
+        314,
+        313
       ],
       "groundAnchor": [
         0.5,
-        0.9375
+        0.97
       ]
     },
     "cleaner_paint_back_3": {
       "sheet": "cleaner_hf",
       "rect": [
-        768,
-        768,
-        256,
-        256
+        941,
+        941,
+        313,
+        313
       ],
       "groundAnchor": [
         0.5,
-        0.9375
+        0.97
       ]
     },
     "h3_roby_front_0": {
@@ -3581,7 +3581,7 @@
     },
     {
       "id": "cleaner_hf",
-      "file": "./content__levels__first-mark__art__cleaner-animation-higgsfield.png"
+      "file": "./content__levels__first-mark__art__cleaner-npc-v2.png"
     },
     {
       "id": "npc_walk_h3",

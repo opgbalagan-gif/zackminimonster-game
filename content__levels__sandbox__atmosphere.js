@@ -1,5 +1,5 @@
-import {project,unproject} from './core__geometry.js?v=391ab0f86039';
-import {polygon} from './content__district_01__terrain.js?v=391ab0f86039';
+import {project,unproject} from './core__geometry.js?v=cfa54f753bac';
+import {polygon} from './content__district_01__terrain.js?v=cfa54f753bac';
 const corners=r=>[project(r.x,r.y),project(r.x+r.w,r.y),project(r.x+r.w,r.y+r.h),project(r.x,r.y+r.h)];
 
 export function districtSurroundings(c,cam,w,h,kit,night,bounds){
@@ -17,7 +17,7 @@ export function districtSurroundings(c,cam,w,h,kit,night,bounds){
 export function boundaryRailing(c,r,night){
   c.save();c.strokeStyle=night?'#526d71':'#42686a';c.lineWidth=3;
   for(const z of [15,38]){const a=project(r.x,r.y,z),b=project(r.x+r.dx,r.y+r.dy,z);c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();}
-  for(let i=0;i<=4;i++){const x=r.x+r.dx*i/4,y=r.y+r.dy*i/4,a=project(x,y),b=project(x,y,42);c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();}
+  for(const i of [0,1]){const x=r.x+r.dx*i,y=r.y+r.dy*i,a=project(x,y),b=project(x,y,42);c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();}
   c.restore();
 }
 export function cloudShadows(c,s,w,h){

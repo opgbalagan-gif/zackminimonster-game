@@ -1,4 +1,4 @@
-import {cleanBallSave} from './core__basketball.js?v=391ab0f86039';
+import {cleanBallSave} from './core__basketball.js?v=cfa54f753bac';
 export const SAVE_KEY='zackminimonster.save';
 export const SAVE_VERSION=3;
 export function freshSave(){
@@ -20,7 +20,7 @@ export function migrateSave(raw){
     money:Number.isFinite(raw.money)?Math.max(0,Math.floor(raw.money)):0,
     recognition:{works:strings(raw.recognition?.works).slice(0,200),photos:strings(raw.recognition?.photos).slice(0,200),encounters:Number.isFinite(raw.recognition?.encounters)?Math.max(0,Math.min(60,Math.floor(raw.recognition.encounters))):0},
     streetLife:{period:raw.streetLife?.period==='day'?'day':raw.streetLife?.period==='night'?'night':raw.campaign?.tutorialCheckpoint&&raw.campaign.tutorialCheckpoint!=='home'?'night':'day',day:Number.isInteger(raw.streetLife?.day)?Math.max(1,raw.streetLife.day):1,elapsed:Number.isFinite(raw.streetLife?.elapsed)?Math.max(0,Math.min(300,raw.streetLife.elapsed)):0,donations:strings(raw.streetLife?.donations).slice(0,20),audienceTier:Number.isInteger(raw.streetLife?.audienceTier)?Math.max(0,Math.min(3,raw.streetLife.audienceTier)):strings(raw.streetLife?.donations).length?0:null},
-    phone:{unlocked:raw.phone?.unlocked===true,read:raw.phone?.read===true,photos:Array.isArray(raw.phone?.photos)?raw.phone.photos.filter(p=>p&&typeof p.wall==='string'&&Number.isFinite(p.day)).slice(-12).map(p=>({wall:p.wall,day:p.day,art:['zack_tag','monster'].includes(p.art)?p.art:'zack_tag',quality:Math.max(0,Math.min(100,Number(p.quality)||0)),x:Math.max(-1,Math.min(1,Number(p.x)||0)),y:Math.max(-1,Math.min(1,Number(p.y)||0)),period:p.period==='day'?'day':'night'})):[]},
+    phone:{unlocked:raw.phone?.unlocked===true,read:raw.phone?.read===true,photos:Array.isArray(raw.phone?.photos)?raw.phone.photos.filter(p=>p&&typeof p.wall==='string'&&Number.isFinite(p.day)).slice(-12).map(p=>({wall:p.wall,day:p.day,art:['zack_tag','monster'].includes(p.art)?p.art:'zack_tag',quality:Math.max(0,Math.min(100,Number(p.quality)||0)),x:Math.max(-1,Math.min(1,Number(p.x)||0)),y:Math.max(-1,Math.min(1,Number(p.y)||0)),period:p.period==='day'?'day':'night',...(typeof p.image==='string'&&p.image.length<=350000&&/^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(p.image)?{image:p.image}:{})})):[]},
     campaign:{tutorialComplete:raw.campaign?raw.campaign.tutorialComplete===true:(Number(raw.rep)>0||strings(raw.painted_walls).length>0),
       tutorialFacadePainted:raw.campaign?.tutorialFacadePainted===true,
       homeIntroStep:Number.isInteger(raw.campaign?.homeIntroStep)?Math.max(0,Math.min(7,raw.campaign.homeIntroStep)):0,

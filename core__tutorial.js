@@ -1,4 +1,4 @@
-import {distance,moveAlongPath} from './core__geometry.js?v=391ab0f86039';
+import {distance,moveAlongPath} from './core__geometry.js?v=cfa54f753bac';
 
 export const TUTORIAL_WALL='TUTORIAL_FIRST_WALL';
 export const TUTORIAL_FACADE='TUTORIAL_HOME_FACADE';

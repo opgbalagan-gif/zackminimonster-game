@@ -1,6 +1,6 @@
-import {OUTFITS,INKS,TROPHIES,outfit,ink,heroSprite,roomLayout,ROOM_POINTS,wallCount} from './core__hideout.js?v=391ab0f86039';
-import {homeIcon} from './core__home-icons.js?v=391ab0f86039';
-import {drawBall} from './core__ball-art.js?v=391ab0f86039';
+import {OUTFITS,INKS,TROPHIES,outfit,ink,heroSprite,roomLayout,ROOM_POINTS,wallCount} from './core__hideout.js?v=cfa54f753bac';
+import {homeIcon} from './core__home-icons.js?v=cfa54f753bac';
+import {drawBall} from './core__ball-art.js?v=cfa54f753bac';
 const $=id=>document.getElementById(id);
 export class HideoutUI{
   constructor(session,renderer,onChange,audio){

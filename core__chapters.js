@@ -1,4 +1,4 @@
-import {UIPanel,UISecondaryButton,UITitleLarge} from './core__ui-kit.js?v=391ab0f86039';
+import {UIPanel,UISecondaryButton,UITitleLarge} from './core__ui-kit.js?v=cfa54f753bac';
 export function showChapters(save,onPick,initialTab='path'){
   document.getElementById('chapter-select')?.remove();
   const panel=document.createElement('section');panel.id='chapter-select';panel.setAttribute('aria-label','Путь и обучение');
