@@ -1,14 +1,14 @@
-import {GraffitiView} from './core__graffiti-view.js?v=3e5b725efe0e';
-import {HideoutUI} from './core__hideout-ui.js?v=3e5b725efe0e';
-import {CourtView} from './core__court-view.js?v=3e5b725efe0e';
-import {PhoneUI} from './core__phone-ui.js?v=3e5b725efe0e';
-import {PeriodTransition} from './core__period-transition.js?v=3e5b725efe0e';
-import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=3e5b725efe0e';
-import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=3e5b725efe0e';
-import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=3e5b725efe0e';
-import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=3e5b725efe0e';
-import {regionAt,gateMessage} from './core__city-progress.js?v=3e5b725efe0e';
-import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=3e5b725efe0e';
+import {GraffitiView} from './core__graffiti-view.js?v=a7cd92ef07f6';
+import {HideoutUI} from './core__hideout-ui.js?v=a7cd92ef07f6';
+import {CourtView} from './core__court-view.js?v=a7cd92ef07f6';
+import {PhoneUI} from './core__phone-ui.js?v=a7cd92ef07f6';
+import {PeriodTransition} from './core__period-transition.js?v=a7cd92ef07f6';
+import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=a7cd92ef07f6';
+import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=a7cd92ef07f6';
+import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=a7cd92ef07f6';
+import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=a7cd92ef07f6';
+import {regionAt,gateMessage} from './core__city-progress.js?v=a7cd92ef07f6';
+import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=a7cd92ef07f6';
 const $=id=>document.getElementById(id);
 export class GameUI{
   constructor(callbacks){
@@ -155,7 +155,7 @@ export class GameUI{
       $('graffiti-screen').dataset.phase=g.phase;
       $('graffiti-screen').classList.toggle('exiting',g.done&&g.resultTime>GRAFFITI_CONFIG.resultSeconds-.4);
       $('graffiti-wall-state').textContent=URBAN_WALL.states[g.phase==='shake'?'clean':g.phase];
-      $('graffiti-reward').hidden=!g.done;$('graffiti-rep').textContent='+'+g.target.rep_reward+' REP';$('graffiti-heat').textContent='HEAT +'+g.target.heat_reward;
+      $('graffiti-reward').hidden=!g.done;$('graffiti-rep').textContent='+'+(s.world.sandbox&&s.painted.has(g.target.wall_id)?0:g.target.rep_reward)+' REP';$('graffiti-heat').textContent='HEAT +'+g.target.heat_reward;
       $('cancel-graffiti').hidden=g.done;
       $('wall-id').textContent=(this.session.world.tutorial?'УРОВЕНЬ '+String(s.world.levelNumber??1).padStart(2,'0'):'EAST BLOCK')+(g.target.buildingId?' / ФАСАД':' / СТЕНА');$('wall-name').textContent=g.target.name;
       if(g.target.rep_reward===0&&g.target.buildingId)$('graffiti-rep').textContent='ТВОЙ ДОМ';

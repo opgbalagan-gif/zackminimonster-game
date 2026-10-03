@@ -1,10 +1,10 @@
-import {createSneakWorld} from './core__sneak.js?v=3e5b725efe0e';
-import {distance,moveAlongPath} from './core__geometry.js?v=3e5b725efe0e';
+import {createSneakWorld} from './core__sneak.js?v=a7cd92ef07f6';
+import {distance,moveAlongPath} from './core__geometry.js?v=a7cd92ef07f6';
 
 export function createSandboxWorld(){
   const w=createSneakWorld();w.id='sandbox';w.sandbox=true;w.levelNumber=1;w.name='СВОЙ РАЙОН';
-  w.targets[0]={...w.targets[0],wall_id:'SANDBOX_WALL_1',name:'Стена у дома',graffiti_id:'zack_tag',rep_reward:60};
-  w.targets[1]={...w.targets[1],wall_id:'SANDBOX_HOME',rep_reward:60};
+  w.targets[0]={...w.targets[0],wall_id:'SANDBOX_WALL_1',name:'Стена у дома',graffiti_id:'zack_tag',rep_reward:60,heat_reward:1};
+  w.targets[1]={...w.targets[1],wall_id:'SANDBOX_HOME',rep_reward:60,heat_reward:1};
   w.extraWalls=[{x:680,y:172,w:160},{x:670,y:344,w:180}];
   for(const [i,wall] of w.extraWalls.entries()){
     w.obstacles.push({x:wall.x,y:wall.y,w:wall.w,h:14,wallCollider:true});
