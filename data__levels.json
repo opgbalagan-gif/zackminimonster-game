@@ -1,14 +1,14 @@
 [
   {
     "id": "sandbox",
-    "manifest": "./content__levels__sandbox__manifest.json?v=af18bdaf4c2b"
+    "manifest": "./content__levels__sandbox__manifest.json?v=f05a335c569a"
   },
   {
     "id": "tutorial",
-    "manifest": "./content__levels__first-mark__manifest.json?v=af18bdaf4c2b"
+    "manifest": "./content__levels__first-mark__manifest.json?v=f05a335c569a"
   },
   {
     "id": "sneak",
-    "manifest": "./content__levels__second-mark__manifest.json?v=af18bdaf4c2b"
+    "manifest": "./content__levels__second-mark__manifest.json?v=f05a335c569a"
   }
 ]

@@ -9,7 +9,7 @@ export class ContentLoader{
     return this.loadPack(id,'./data/districts.json',onProgress);
   }
   async loadLevel(id,onProgress=()=>{}){
-    return this.loadPack(id,'./data__levels.json?v=af18bdaf4c2b',onProgress);
+    return this.loadPack(id,'./data__levels.json?v=f05a335c569a',onProgress);
   }
   async loadPack(id,catalogPath,onProgress){
     if(this.packs.has(id))return this.packs.get(id);

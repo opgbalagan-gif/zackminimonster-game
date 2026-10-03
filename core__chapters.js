@@ -1,4 +1,4 @@
-import {UIPanel,UISecondaryButton,UITitleLarge} from './core__ui-kit.js?v=af18bdaf4c2b';
+import {UIPanel,UISecondaryButton,UITitleLarge} from './core__ui-kit.js?v=f05a335c569a';
 export function showChapters(save,onPick,initialTab='path'){
   document.getElementById('chapter-select')?.remove();
   const panel=document.createElement('section');panel.id='chapter-select';panel.setAttribute('aria-label','Путь и обучение');
@@ -16,7 +16,7 @@ export function showChapters(save,onPick,initialTab='path'){
         const number=document.createElement('b'),title=document.createElement('strong'),detail=document.createElement('small');number.textContent=String(i+1).padStart(2,'0');title.textContent=l.name;detail.textContent=l.done?'Пройдено · повторить урок':l.open?l.detail:'Сначала пройди «Первый след»';
         button.append(number,title,detail);button.onclick=()=>{panel.remove();onPick(l.id);};body.append(button);});
     }else{
-      const level=document.createElement('button');level.className='chapter-card';level.innerHTML='<b>01</b><strong>СВОЙ РАЙОН</strong><small>Квартал · 6 домов, 9 мест для рисунков</small>';level.onclick=()=>{panel.remove();onPick('sandbox');};body.append(level);
+      const level=document.createElement('button');level.className='chapter-card';level.innerHTML='<b>01</b><strong>СВОЙ РАЙОН</strong><small>Квартал · 6 фасадов и стена у дома</small>';level.onclick=()=>{panel.remove();onPick('sandbox');};body.append(level);
       const learn=UISecondaryButton(null,{label:save.campaign.sneakComplete?'ПОВТОРИТЬ ОБУЧЕНИЕ':'ПЕРЕЙТИ К ОБУЧЕНИЮ'});learn.onclick=()=>select('training');body.append(learn);
     }
   };

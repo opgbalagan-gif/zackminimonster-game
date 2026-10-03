@@ -1,12 +1,12 @@
-import {SpriteAtlas} from './core__sprites.js?v=af18bdaf4c2b';
-import {project} from './core__geometry.js?v=af18bdaf4c2b';
-import {heroSprite} from './core__hideout.js?v=af18bdaf4c2b';
-import {polygon,box} from './content__district_01__terrain.js?v=af18bdaf4c2b';
-import {drawGraffiti} from './content__district_01__graffiti-art.js?v=af18bdaf4c2b';
-import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=af18bdaf4c2b';
-import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=af18bdaf4c2b';
-import {OccluderFade} from './core__occluder-fade.js?v=af18bdaf4c2b';
-import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=af18bdaf4c2b';
+import {SpriteAtlas} from './core__sprites.js?v=f05a335c569a';
+import {project} from './core__geometry.js?v=f05a335c569a';
+import {heroSprite} from './core__hideout.js?v=f05a335c569a';
+import {polygon,box} from './content__district_01__terrain.js?v=f05a335c569a';
+import {drawGraffiti} from './content__district_01__graffiti-art.js?v=f05a335c569a';
+import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=f05a335c569a';
+import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=f05a335c569a';
+import {OccluderFade} from './core__occluder-fade.js?v=f05a335c569a';
+import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=f05a335c569a';
 
 function fightCloud(c,s){
   const t=s.tutorial.fightBurst,p=project(s.tutorial.actor.x-11,s.tutorial.actor.y+10),pulse=Math.sin(t*27);
@@ -46,11 +46,13 @@ export function createTutorialRenderer(pack){
   function house(c,s,building=s.world.buildings[0]){
     const target=s.world.targets.find(t=>t.buildingId===building.id),p=project(building.x+building.w,building.y+building.h,-36);atlas.draw(c,s.life&&!s.life.night?'apartment_day':'apartment',p.x,p.y,335);
     if(s.world.sandbox?!target||!s.painted.has(target.wall_id):!s.save.campaign.tutorialFacadePainted)return;
-    // Coordinates on the source facade: between the pipes, clear of doors and plants.
+    // A large mural on the lower side facade, with its drainpipe restored in front.
     const scale=335/950;
     c.save();c.translate(Math.round(p.x)+Math.round(-335/2),Math.round(p.y)+Math.round(-335*1284/950));c.scale(scale,scale);
-    c.translate(510,950);c.transform(1,-.36,0,1,0,0);c.beginPath();c.rect(0,0,108,145);c.clip();
-    drawGraffiti(c,target?.graffiti_id??'zack_tag',0,0,108,145,atlas);c.restore();
+    c.save();c.translate(500,795);c.transform(1,-.36,0,1,0,0);c.beginPath();c.rect(0,0,240,360);c.clip();
+    drawGraffiti(c,target?.graffiti_id??'zack_tag',0,0,240,360,atlas);c.restore();
+    const sprite=pack.atlas.sprites[s.life&&!s.life.night?'apartment_day':'apartment'],[sx,sy,sw,sh]=sprite.rect;
+    c.beginPath();c.rect(620,700,32,480);c.rect(710,840,140,180);c.clip();c.drawImage(pack.images[sprite.sheet],sx,sy,sw,sh,0,0,950,1284);c.restore();
   }
   function wall(c,s,target=s.world.targets[0],placement){
     if(placement){c.save();const anchor=project(placement.x,placement.y+14),base=project(392,266);c.translate(anchor.x,anchor.y);c.scale(placement.w/202,placement.w/202);c.translate(-base.x,-base.y);}
