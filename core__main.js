@@ -1,13 +1,13 @@
-import {ContentLoader} from './core__content-loader.js?v=0eb11640c641';
-import {SaveStore} from './core__save-store.js?v=0eb11640c641';
-import {AudioManager} from './core__audio.js?v=0eb11640c641';
-import {GameSession} from './core__session.js?v=0eb11640c641';
-import {InputController} from './core__input.js?v=0eb11640c641';
-import {GameUI} from './core__ui.js?v=0eb11640c641';
-import {POSTERS,posterApproach} from './content__district_01__posters.js?v=0eb11640c641';
-import {TutorialUI} from './core__tutorial-ui.js?v=0eb11640c641';
-import {showChapters} from './core__chapters.js?v=0eb11640c641';
-import {setUIButton} from './core__ui-kit.js?v=0eb11640c641';
+import {ContentLoader} from './core__content-loader.js?v=858a2abe0ff4';
+import {SaveStore} from './core__save-store.js?v=858a2abe0ff4';
+import {AudioManager} from './core__audio.js?v=858a2abe0ff4';
+import {GameSession} from './core__session.js?v=858a2abe0ff4';
+import {InputController} from './core__input.js?v=858a2abe0ff4';
+import {GameUI} from './core__ui.js?v=858a2abe0ff4';
+import {POSTERS,posterApproach} from './content__district_01__posters.js?v=858a2abe0ff4';
+import {TutorialUI} from './core__tutorial-ui.js?v=858a2abe0ff4';
+import {showChapters} from './core__chapters.js?v=858a2abe0ff4';
+import {setUIButton} from './core__ui-kit.js?v=858a2abe0ff4';
 
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d',{alpha:false});
 const loader=new ContentLoader(),store=new SaveStore(),audio=new AudioManager();

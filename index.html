@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="./content__basketball__ui.css?v=1034b8708df3">
 <link rel="stylesheet" href="./content__tutorial.css?v=dc14eb7ece07">
 <link rel="stylesheet" href="./content__ui__theme.css?v=773fec3ed2e2">
-<link rel="stylesheet" href="./content__ui__street-life.css?v=b6a1a5f8f4cf">
+<link rel="stylesheet" href="./content__ui__street-life.css?v=87aa17f0af85">
 </head>
 <body>
   <main id="app">
@@ -40,6 +40,7 @@
     <section id="hideout-ui" class="hideout-ui" hidden>
       <div class="hideout-brand"><span class="eyebrow">ZACKMINIMONSTER / MY SAFEHOUSE</span><h1>HIDEOUT<span>СВОИ. ВЕЩИ. ИСТОРИИ.</span></h1></div>
       <div id="room-hotspots" aria-label="Предметы убежища">
+        <button id="leave-button" class="room-hotspot" data-hotspot="exit" aria-label="Выйти в район"><i>↗</i><span>В РАЙОН</span></button>
         <button class="room-hotspot" data-hotspot="wardrobe" data-home-tab="wardrobe" aria-label="Открыть гардероб"><i>♟</i><span>ОДЕЖДА</span></button>
         <button class="room-hotspot" data-hotspot="sprays" data-home-tab="sprays" aria-label="Открыть баллоны"><i>▥</i><span>БАЛЛОНЫ</span></button>
         <button class="room-hotspot" data-hotspot="collection" data-home-tab="collection" aria-label="Открыть коллекцию"><i>◉</i><span>КОЛЛЕКЦИЯ</span></button>
@@ -68,7 +69,7 @@
         <button data-home-tab="wardrobe"><i>♟</i><span>ОДЕЖДА</span></button>
         <button data-home-tab="sprays"><i>▥</i><span>БАЛЛОНЫ</span></button>
         <button data-home-tab="collection"><i>◉</i><span>КОЛЛЕКЦИЯ</span></button>
-        <button id="leave-button"><i>↗</i><span>В РАЙОН</span></button>
+
       </nav>
     </section>
     <div id="district-ui" hidden>
@@ -113,7 +114,7 @@
     <div id="toast" role="status" aria-live="polite" hidden></div><pre id="debug-overlay" hidden></pre>
     <div id="transition" aria-hidden="true"></div>
   </main>
-  <script type="module" src="./core__boot.js?v=0eb11640c641"></script>
+  <script type="module" src="./core__boot.js?v=858a2abe0ff4"></script>
 </body>
 </html>
 

@@ -1,5 +1,5 @@
-import {createSneakWorld} from './core__sneak.js?v=0eb11640c641';
-import {distance,moveAlongPath} from './core__geometry.js?v=0eb11640c641';
+import {createSneakWorld} from './core__sneak.js?v=858a2abe0ff4';
+import {distance,moveAlongPath} from './core__geometry.js?v=858a2abe0ff4';
 
 export function createSandboxWorld(){
   const w=createSneakWorld();w.id='sandbox';w.sandbox=true;w.levelNumber=1;w.name='СВОЙ РАЙОН';
@@ -8,6 +8,7 @@ export function createSandboxWorld(){
   w.targets[1]={...w.targets[1],wall_id:'SANDBOX_HOME',rep_reward:60,heat_reward:1};
   // Keep one freestanding wall by home; the rest of the district's art belongs on buildings.
   w.extraWalls=[];
+  w.roads=[{x:76,y:412,w:1442,h:112},{x:76,y:916,w:1442,h:112},{x:950,y:96,w:112,h:928}];
   const homes=[['north_house','Кирпичная мастерская',700,132,'brick'],['corner_house','Синий склад',1120,132,'blue'],['brick_house','Дом во дворе',350,650,'brick'],['music_house','Репетиционная',740,650,'blue'],['end_house','Дом у перекрёстка',1120,650,'apartment']];
   for(const [id,name,x,y,artType] of homes){
     const b={id,type:'apartment',artType,x,y,w:166,h:156};w.buildings.push(b);

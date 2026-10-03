@@ -827,6 +827,214 @@
         980,
         1230
       ]
+    },
+    "traffic_coupe_se": {
+      "sheet": "traffic_coupe",
+      "rect": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_coupe_sw": {
+      "sheet": "traffic_coupe",
+      "rect": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_coupe_nw": {
+      "sheet": "traffic_coupe",
+      "rect": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_coupe_ne": {
+      "sheet": "traffic_coupe",
+      "rect": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_hatch_se": {
+      "sheet": "traffic_hatch",
+      "rect": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_hatch_sw": {
+      "sheet": "traffic_hatch",
+      "rect": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_hatch_nw": {
+      "sheet": "traffic_hatch",
+      "rect": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_hatch_ne": {
+      "sheet": "traffic_hatch",
+      "rect": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_minivan_se": {
+      "sheet": "traffic_minivan",
+      "rect": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_minivan_sw": {
+      "sheet": "traffic_minivan",
+      "rect": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_minivan_nw": {
+      "sheet": "traffic_minivan",
+      "rect": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_minivan_ne": {
+      "sheet": "traffic_minivan",
+      "rect": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_police_se": {
+      "sheet": "traffic_police",
+      "rect": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_police_sw": {
+      "sheet": "traffic_police",
+      "rect": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_police_nw": {
+      "sheet": "traffic_police",
+      "rect": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
+    },
+    "traffic_police_ne": {
+      "sheet": "traffic_police",
+      "rect": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "groundAnchor": [
+        0.5,
+        0.76
+      ]
     }
   },
   "version": 2,
@@ -918,6 +1126,26 @@
     {
       "id": "blue_house",
       "file": "./content__levels__first-mark__art__blue-mural-house.png"
+    },
+    {
+      "id": "traffic_coupe",
+      "file": "./content__levels__first-mark__art__traffic-coupe.png"
+    },
+    {
+      "id": "traffic_hatch",
+      "file": "./content__levels__first-mark__art__traffic-hatch.png"
+    },
+    {
+      "id": "traffic_minivan",
+      "file": "./content__levels__first-mark__art__traffic-minivan.png"
+    },
+    {
+      "id": "traffic_police",
+      "file": "./content__levels__first-mark__art__traffic-police.png"
+    },
+    {
+      "id": "asphalt_dry",
+      "file": "./content__levels__first-mark__art__asphalt-dry.png"
     }
   ]
 }

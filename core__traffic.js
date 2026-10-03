@@ -1,4 +1,4 @@
-import {districtCar} from './core__vehicle-styles.js?v=0eb11640c641';
+import {districtCar} from './core__vehicle-styles.js?v=858a2abe0ff4';
 // Relative swept bounds catch crossings even when both car and player move in one frame.
 export function trafficContact(car,from,to){
   const angle=car.heading??(car.axis==='x'?0:Math.PI/2),halfX=Math.abs(Math.cos(angle))*29+Math.abs(Math.sin(angle))*13+8,halfY=Math.abs(Math.sin(angle))*29+Math.abs(Math.cos(angle))*13+8;
@@ -39,6 +39,7 @@ export class TrafficSystem{
         const car={id:'traffic_'+index+'_'+direction+'_'+n,axis,direction,start,end,lane,center,turnEnds,roadId:index,heading:axis==='x'?(direction>0?0:Math.PI):(direction>0?Math.PI/2:-Math.PI/2),
           speed:88+index%3*7,hold:0,travel:0,type:['taxi','blue_car','van'][(index+n+(direction===1?1:0))%3],
           x:axis==='x'?position:lane,y:axis==='y'?position:lane};
+        if(world.sandbox)car.type=['traffic_coupe','traffic_hatch','traffic_minivan','traffic_police'][(index+n+(direction===1?2:0))%4];
         if(world.regions&&(index+n)%3!==0)car.type=districtCar(world,car.x,car.y,car.type);
         car.previous={x:car.x,y:car.y};this.cars.push(car);
       }

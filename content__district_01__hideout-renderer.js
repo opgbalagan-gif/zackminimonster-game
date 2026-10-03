@@ -1,4 +1,4 @@
-import {roomLayout,heroSprite,ink} from './core__hideout.js?v=0eb11640c641';
+import {roomLayout,heroSprite,ink} from './core__hideout.js?v=858a2abe0ff4';
 export function drawTrophy(c,id,atlas,x,y,size){
   if(id==='mini')atlas.draw(c,'companion',x,y,null,size);
   else if(id==='metro'){
@@ -22,7 +22,7 @@ export function renderHideout(c,s,w,h,atlas){
   c.imageSmoothingEnabled=false;c.fillStyle='#111720';c.fillRect(0,0,w,h);
   const backdrop=s.life&&!s.life.night?atlas.images.reference_background_day:atlas.images.reference_background;
   if(backdrop)c.drawImage(backdrop,0,600,1024,936,0,0,w,h);
-  const r=roomLayout(w,h,s.world.tutorial);c.save();c.beginPath();c.rect(0,0,w,r.clipBottom);c.clip();
+  const r=roomLayout(w,h,s.world.tutorial&&!s.world.sandbox);c.save();c.beginPath();c.rect(0,0,w,r.clipBottom);c.clip();
   if(s.life&&!s.life.night)c.filter='brightness(1.16) saturate(.86)';
   c.drawImage(atlas.images.room,r.x,r.y,r.w,r.h);c.filter='none';
   const local=(x,y)=>({x:r.x+x*r.w,y:r.y+y*r.h});

@@ -1,12 +1,13 @@
-import {SpriteAtlas} from './core__sprites.js?v=0eb11640c641';
-import {project} from './core__geometry.js?v=0eb11640c641';
-import {heroSprite} from './core__hideout.js?v=0eb11640c641';
-import {polygon,box} from './content__district_01__terrain.js?v=0eb11640c641';
-import {drawGraffiti} from './content__district_01__graffiti-art.js?v=0eb11640c641';
-import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=0eb11640c641';
-import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=0eb11640c641';
-import {OccluderFade} from './core__occluder-fade.js?v=0eb11640c641';
-import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=0eb11640c641';
+import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=858a2abe0ff4';
+import {SpriteAtlas} from './core__sprites.js?v=858a2abe0ff4';
+import {project} from './core__geometry.js?v=858a2abe0ff4';
+import {heroSprite} from './core__hideout.js?v=858a2abe0ff4';
+import {polygon,box} from './content__district_01__terrain.js?v=858a2abe0ff4';
+import {drawGraffiti} from './content__district_01__graffiti-art.js?v=858a2abe0ff4';
+import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=858a2abe0ff4';
+import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=858a2abe0ff4';
+import {OccluderFade} from './core__occluder-fade.js?v=858a2abe0ff4';
+import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=858a2abe0ff4';
 
 function fightCloud(c,s){
   const t=s.tutorial.fightBurst,p=project(s.tutorial.actor.x-11,s.tutorial.actor.y+10),pulse=Math.sin(t*27);
@@ -45,7 +46,7 @@ export function createTutorialRenderer(pack){
   }
   function houseArt(building,day){
     const type=building.artType??'apartment';
-    return type==='brick'?{id:'brick_house',width:320,mural:[540,620,360,400]}:type==='blue'?{id:'blue_house',width:320,mural:[510,620,370,400]}:{id:day?'apartment_day':'apartment',width:335,mural:[505,765,350,420]};
+    return type==='brick'?{id:'brick_house',width:320,mural:[540,930,360,270]}:type==='blue'?{id:'blue_house',width:320,mural:[510,930,370,270]}:{id:day?'apartment_day':'apartment',width:335,mural:[505,960,350,280]};
   }
   function house(c,s,building=s.world.buildings[0]){
     const day=s.life&&!s.life.night,art=houseArt(building,day),rect=atlas.rect(art.id),target=s.world.targets.find(t=>t.buildingId===building.id),p=project(building.x+building.w,building.y+building.h,-36);
@@ -92,9 +93,17 @@ export function createTutorialRenderer(pack){
       c.save();polygon(c,quad(72,92,1450,940),'#625d51');c.clip();
       for(let x=72;x<1522;x+=180)for(let y=92;y<1032;y+=180)kit.material.quad(c,'paving',quad(x,y,180,180),.24);
       c.restore();
-      for(const [x,y,ww,hh] of [[76,412,1442,112],[76,916,1442,112],[950,96,112,928]]){
-        kit.material.quad(c,'asphalt',quad(x,y,ww,hh),.28);
-        c.save();c.transform(1,.5,-1,.5,0,0);c.strokeStyle='#b4aa8c';c.lineWidth=4;c.strokeRect(x,y,ww,hh);c.strokeStyle='#c3ab70';c.lineWidth=2;c.setLineDash([22,21]);c.beginPath();if(ww>hh){c.moveTo(x+20,y+hh/2);c.lineTo(x+ww-20,y+hh/2);}else{c.moveTo(x+ww/2,y+20);c.lineTo(x+ww/2,y+hh-20);}c.stroke();c.restore();
+      for(const r of s.world.roads)kit.road(c,r.x,r.y,r.w,r.h);
+      for(const r of s.world.roads){
+        // Leave junctions open: neither curbs nor centre lines cross the other street.
+        const horizontal=r.w>r.h,start=horizontal?r.x:r.y,end=start+(horizontal?r.w:r.h),cross=s.traffic.crossings.map(t=>[horizontal?t.x:t.y,(horizontal?t.x+t.w:t.y+t.h)]).sort((a,b)=>a[0]-b[0]);
+        let at=start;const spans=[];for(const [a,b] of cross){if(a>at)spans.push([at,a]);at=Math.max(at,b);}if(at<end)spans.push([at,end]);
+        c.save();c.transform(1,.5,-1,.5,0,0);
+        for(const [a,b] of spans){
+          c.strokeStyle='#b4aa8c';c.lineWidth=4;c.setLineDash([]);c.beginPath();
+          for(const side of [0,1]){if(horizontal){c.moveTo(a,r.y+side*r.h);c.lineTo(b,r.y+side*r.h);}else{c.moveTo(r.x+side*r.w,a);c.lineTo(r.x+side*r.w,b);}}c.stroke();
+          c.strokeStyle='#c3ab70';c.lineWidth=2;c.setLineDash([22,21]);c.beginPath();if(horizontal){c.moveTo(a+12,r.y+r.h/2);c.lineTo(b-12,r.y+r.h/2);}else{c.moveTo(r.x+r.w/2,a+12);c.lineTo(r.x+r.w/2,b-12);}c.stroke();
+        }c.restore();
       }
       // Crossings connect both sides of the block without crossing building footprints.
       c.save();c.transform(1,.5,-1,.5,0,0);c.fillStyle='#c2b99e';for(const x of [100,900,1080,1450])for(const y of [424,928])for(let k=0;k<6;k++)c.fillRect(x,y+k*15,16,7);c.restore();
@@ -102,9 +111,11 @@ export function createTutorialRenderer(pack){
     if(s.world.id==='sneak'){
       box(c,632,92,250,460,0,'#504d43','#1c2a32','#29323a',-22);
       const quad=(x,y,ww,hh)=>[project(x,y),project(x+ww,y),project(x+ww,y+hh),project(x,y+hh)];
-      kit.material.quad(c,'paving',quad(632,92,250,460),.24);kit.material.quad(c,'asphalt',quad(632,412,250,112),.28);
+      kit.material.quad(c,'paving',quad(632,92,250,460),.24);kit.road(c,632,412,250,112);
     }
+    if(sandbox)drawTrafficSignals(c,s.traffic);
     const queue=[{kind:'house',depth:566},{kind:'wall',depth:760},{kind:'zack',depth:s.player.x+s.player.y}];
+    for(const car of s.traffic.cars)queue.push({kind:'car',car,depth:car.x+car.y});
     for(const building of s.world.buildings.slice(1))queue.push({kind:'block-house',building,depth:building.x+building.w+building.y+building.h});
     for(const [i,placement] of (s.world.extraWalls??[]).entries())queue.push({kind:'extra-wall',placement,target:s.world.targets[i+2],depth:placement.x+placement.w/2+placement.y+14});
     const fighting=s.tutorial.stage==='fight'&&s.tutorial.fightBurst>0;
@@ -119,6 +130,11 @@ export function createTutorialRenderer(pack){
     for(const v of s.life?.visitors??[])queue.push({kind:'visitor',actor:v,depth:v.x+v.y});
     if(s.player.path.length){c.strokeStyle='#f1ce7888';c.lineWidth=3;c.setLineDash([6,7]);c.beginPath();const start=project(s.player.x,s.player.y);c.moveTo(start.x,start.y);for(const n of s.player.path){const p=project(n.x,n.y);c.lineTo(p.x,p.y);}c.stroke();c.setLineDash([]);}
     for(const o of queue.sort((a,b)=>a.depth-b.depth)){
+      if(o.kind==='car'){
+        const car=o.car,p=project(car.x,car.y),direction=car.axis==='x'?(car.direction>0?'se':'nw'):(car.direction>0?'sw':'ne');
+        c.fillStyle='#09121955';c.beginPath();c.ellipse(p.x,p.y,37,15,0,0,Math.PI*2);c.fill();
+        c.save();if(!day)c.filter='brightness(.85)';atlas.draw(c,car.type+'_'+direction,p.x,p.y,car.type==='traffic_minivan'?114:104);c.restore();continue;
+      }
       if(o.kind==='prop'){spriteObject(day?o.id+'_day':o.id,o.x,o.y,o.w,o.depth);continue;}
       if(o.kind==='fence'){const x=o.x??380,length=o.x?210:226,p=project(x,155);faded('fence:'+x,{x:p.x,y:p.y-65,w:length,h:length*.5+65},o.depth,()=>kit.fence(c,x,155,length),(u,v)=>{const localY=v*(length*.5+65)-65;return localY<u*length*.5&&localY>u*length*.5-65;});continue;}
       if(o.kind==='bollard'){kit.bollard(c,o.x,o.y);continue;}

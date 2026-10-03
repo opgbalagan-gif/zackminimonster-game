@@ -24,13 +24,12 @@ export function heroSprite(skin,state='IDLE',facing='down',step=false){
 }
 export function roomLayout(w,h,tutorial=false){
   const narrow=w<760,availableW=narrow?w:w-350,top=narrow?94:78,bottom=narrow?108:95;
-  const height=Math.max(210,h-top-bottom),lessonSpace=h<=720?276:300;
-  const width=Math.min(availableW,height*.98,tutorial&&narrow?Math.max(210,(h-top-lessonSpace)/.9):Infinity);
-  // Background is 2:3; crop only its lowest entrance steps to enlarge the living room.
-  const drawH=width*1.5;
+  const height=Math.max(90,h-top-bottom-(tutorial&&narrow?150:0));
+  // Contain the complete 2:3 room, including its entrance and stairs.
+  const width=Math.min(availableW,height/1.5),drawH=width*1.5;
   return {x:(availableW-width)/2+(narrow?0:10),y:top-12,w:width,h:drawH,clipBottom:h-bottom};
 }
 export const ROOM_POINTS={
   wardrobe:{x:.86,y:.39},sprays:{x:.27,y:.32},collection:{x:.62,y:.16},
-  rest:{x:.57,y:.30},save:{x:.17,y:.43},music:{x:.78,y:.57},pet:{x:.54,y:.60}
+  rest:{x:.57,y:.30},save:{x:.17,y:.43},music:{x:.78,y:.57},pet:{x:.54,y:.60},exit:{x:.695,y:.79}
 };

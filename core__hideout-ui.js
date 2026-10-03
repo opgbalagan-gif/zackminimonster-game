@@ -1,6 +1,6 @@
-import {OUTFITS,INKS,TROPHIES,outfit,ink,heroSprite,roomLayout,ROOM_POINTS,wallCount} from './core__hideout.js?v=0eb11640c641';
-import {homeIcon} from './core__home-icons.js?v=0eb11640c641';
-import {drawBall} from './core__ball-art.js?v=0eb11640c641';
+import {OUTFITS,INKS,TROPHIES,outfit,ink,heroSprite,roomLayout,ROOM_POINTS,wallCount} from './core__hideout.js?v=858a2abe0ff4';
+import {homeIcon} from './core__home-icons.js?v=858a2abe0ff4';
+import {drawBall} from './core__ball-art.js?v=858a2abe0ff4';
 const $=id=>document.getElementById(id);
 export class HideoutUI{
   constructor(session,renderer,onChange,audio){
@@ -50,7 +50,7 @@ export class HideoutUI{
     trophy.innerHTML='<canvas width="160" height="160" aria-label="Твой расписанный мяч"></canvas><div><strong>COURT CUSTOM</strong><p>Мяч с твоим рисунком.<br>Подарок от Дэна и Ти.</p></div>';$('trophy-list').append(trophy);
   }
   sync(){
-    const s=this.s,canvas=$('game'),rect=canvas.getBoundingClientRect(),r=roomLayout(canvas.width,canvas.height,s.world.tutorial);
+    const s=this.s,canvas=$('game'),rect=canvas.getBoundingClientRect(),r=roomLayout(canvas.width,canvas.height,s.world.tutorial&&!s.world.sandbox);
     document.querySelector('[data-room-action="pet"]').hidden=s.world.tutorial||s.save.campaign?.companionUnlocked===false;
     document.querySelector('.home-status>strong').textContent=s.save.campaign?.companionUnlocked===false?'ZACK / ДОМА':'ZACK + MINI';
     for(const el of document.querySelectorAll('[data-hotspot]')){

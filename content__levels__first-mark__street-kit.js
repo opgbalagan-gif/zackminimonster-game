@@ -1,6 +1,6 @@
-import {project} from './core__geometry.js?v=0eb11640c641';
-import {polygon,box} from './content__district_01__terrain.js?v=0eb11640c641';
-import {createMetroArt} from './content__district_01__metro-art.js?v=0eb11640c641';
+import {project} from './core__geometry.js?v=858a2abe0ff4';
+import {polygon,box} from './content__district_01__terrain.js?v=858a2abe0ff4';
+import {createMetroArt} from './content__district_01__metro-art.js?v=858a2abe0ff4';
 
 // Art dimensions are in world units. Anchors sit on the ground, never on a walk lane.
 export const STREET_PROPS=[
@@ -12,13 +12,19 @@ export const STREET_PROPS=[
 const quad=(x,y,w,h,z=0)=>[project(x,y,z),project(x+w,y,z),project(x+w,y+h,z),project(x,y+h,z)];
 export function createStreetKit(images){
   const material=createMetroArt(images.materials,{asphalt:[8,8,610,610],paving:[636,8,610,610],wall:[8,636,610,610],metal:[636,636,610,610]});
+  const roadMaterial=images.asphalt_dry?createMetroArt(images.asphalt_dry,{asphalt:[0,0,images.asphalt_dry.width,images.asphalt_dry.height]}):material;
+  function road(c,x,y,w,h){
+    c.save();polygon(c,quad(x,y,w,h),'#353a3d');c.clip();
+    for(let tx=Math.floor(x/160)*160;tx<x+w;tx+=160)for(let ty=Math.floor(y/160)*160;ty<y+h;ty+=160)roadMaterial.quad(c,'asphalt',quad(tx,ty,160,160),.12);
+    c.restore();
+  }
   function floor(c,{night=true}={}){
     box(c,72,92,560,460,0,'#504d43','#1c2a32','#29323a',-22);
     // One continuous sidewalk material, clipped to the level platform.
     c.save();polygon(c,quad(72,92,560,460),'#625d51');c.clip();
     for(let x=72;x<632;x+=180)for(let y=92;y<552;y+=180)material.quad(c,'paving',quad(x,y,180,180),.24);
     c.restore();
-    material.quad(c,'asphalt',quad(76,412,552,112),.28);
+    road(c,76,412,552,112);
     c.save();c.transform(1,.5,-1,.5,0,0);
     c.fillStyle='#0a151944';c.fillRect(76,412,552,112);
     c.strokeStyle='#aaa38b';c.lineWidth=5;c.strokeRect(76,410,552,116);
@@ -48,5 +54,5 @@ export function createStreetKit(images){
     for(let dx=0;dx<=length;dx+=length/3){const p=project(x+dx,y);c.fillStyle='#273b40';c.fillRect(p.x-2,p.y-64,4,64);c.fillStyle='#9a9574';c.fillRect(p.x-2,p.y-65,4,3);}
   }
   function bollard(c,x,y){const p=project(x,y);c.fillStyle='#15222a';c.fillRect(p.x-4,p.y-30,8,30);c.fillStyle='#878877';c.fillRect(p.x-5,p.y-30,10,4);c.fillStyle='#40515a';c.fillRect(p.x-3,p.y-24,2,22);}
-  return {material,floor,fence,bollard};
+  return {material,road,floor,fence,bollard};
 }
