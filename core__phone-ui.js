@@ -1,11 +1,11 @@
-import {AimController,MotionAim} from './core__motion-aim.js?v=715810e652df';
-import {setUIButton,uiIcon} from './core__ui-kit.js?v=715810e652df';
-import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=715810e652df';
-import {nearbyPhotoSpot} from './core__photo-spots.js?v=715810e652df';
-import {bindCanvasGesture} from './core__canvas-gesture.js?v=715810e652df';
-import {appIcon,foldPhoneIcon,phoneGlyph} from './core__phone-icons.js?v=715810e652df';
-import {dialogFocus} from './core__dialog-focus.js?v=715810e652df';
-import {instagramScreen} from './core__phone-instagram.js?v=715810e652df';
+import {AimController,MotionAim} from './core__motion-aim.js?v=200bdb7a657c';
+import {setUIButton,uiIcon} from './core__ui-kit.js?v=200bdb7a657c';
+import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=200bdb7a657c';
+import {nearbyPhotoSpot} from './core__photo-spots.js?v=200bdb7a657c';
+import {bindCanvasGesture} from './core__canvas-gesture.js?v=200bdb7a657c';
+import {appIcon,foldPhoneIcon,phoneGlyph} from './core__phone-icons.js?v=200bdb7a657c';
+import {dialogFocus} from './core__dialog-focus.js?v=200bdb7a657c';
+import {instagramScreen} from './core__phone-instagram.js?v=200bdb7a657c';
 export class PhoneUI{
   constructor(s,renderer,audio){
     this.s=s;this.renderer=renderer;this.audio=audio;this.aim=new AimController();this.motion=new MotionAim(this.aim);this.steady=0;this.screen='messages';this.previous={x:0,y:0};

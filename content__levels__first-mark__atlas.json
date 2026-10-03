@@ -5316,6 +5316,14 @@
   "version": 2,
   "sheets": [
     {
+      "id": "metro_cab_comic",
+      "file": "./content__levels__first-mark__art__metro-cab-comic-v3.png"
+    },
+    {
+      "id": "metro_coach_comic",
+      "file": "./content__levels__first-mark__art__metro-coach-comic-v3.png"
+    },
+    {
       "id": "characters",
       "file": "./content__district_01__art__characters.png"
     },
