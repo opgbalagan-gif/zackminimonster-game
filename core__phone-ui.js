@@ -1,6 +1,6 @@
-import {AimController,MotionAim} from './core__motion-aim.js?v=3746185ef7c6';
-import {setUIButton,uiIcon} from './core__ui-kit.js?v=3746185ef7c6';
-import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=3746185ef7c6';
+import {AimController,MotionAim} from './core__motion-aim.js?v=3e5b725efe0e';
+import {setUIButton,uiIcon} from './core__ui-kit.js?v=3e5b725efe0e';
+import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=3e5b725efe0e';
 export class PhoneUI{
   constructor(s,renderer,audio){
     this.s=s;this.renderer=renderer;this.audio=audio;this.aim=new AimController();this.motion=new MotionAim(this.aim);this.steady=0;this.screen='messages';this.previous={x:0,y:0};
@@ -31,7 +31,7 @@ export class PhoneUI{
   radio(){this.messages();this.screen='radio';this.el.querySelector('.phone-message').hidden=true;this.el.querySelector('.phone-radio').hidden=false;}
   camera(){
     if(!this.s.save.phone.unlocked)return;
-    const target=this.s.world.targets.find(t=>this.s.painted.has(t.wall_id)&&(!t.buildingId||this.s.world.id!=='sneak'));
+    const target=this.s.world.targets.filter(t=>this.s.painted.has(t.wall_id)&&(!t.buildingId||this.s.world.id!=='sneak')).sort((a,b)=>Math.hypot(a.approach.x-this.s.player.x,a.approach.y-this.s.player.y)-Math.hypot(b.approach.x-this.s.player.x,b.approach.y-this.s.player.y))[0];
     if(!target){this.s.notice('Сначала нарисуй работу, которую хочешь снять.');return;}
     this.target=target;this.screen='camera';this.aim=new AimController();this.motion.aim=this.aim;this.motion.destroy();this.motion=new MotionAim(this.aim);this.steady=0;
     this.el.querySelector('.flip-phone').hidden=true;this.el.querySelector('.phone-camera-view').hidden=false;this.canvas.focus();

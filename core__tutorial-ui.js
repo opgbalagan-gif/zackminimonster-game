@@ -1,4 +1,4 @@
-import {uiIcon,setUIButton,UIPanel,applyUIComponents} from './core__ui-kit.js?v=3746185ef7c6';
+import {uiIcon,setUIButton,UIPanel,applyUIComponents} from './core__ui-kit.js?v=3e5b725efe0e';
 export class TutorialUI{
   constructor(session,onComplete){
     this.s=session;this.signature='';this.panel=document.createElement('section');this.panel.id='tutorial-panel';this.panel.className='ui-panel';this.panel.setAttribute('aria-label','Обучение');
@@ -12,14 +12,16 @@ export class TutorialUI{
       b.onclick=()=>{if(session.tutorial.scripted)return;if(id==='facade')session.routeTo(session.world.targets[1].approach,label);else if(id==='wall')session.routeTo(session.world.targets[0].approach,label);else session.routeTo(session.world.hideout,label);};this.markers.append(b);
     }
     for(const bin of session.world.bins??[]){const b=document.createElement('button');b.className='world-marker';b.dataset.marker=bin.id;b.setAttribute('aria-label',bin.name+' · укрытие');b.innerHTML=uiIcon('bin');b.onclick=()=>session.routeTo(bin.approach,'Бак / спрятаться');this.markers.append(b);}
+    for(const target of session.world.targets.slice(2)){const b=document.createElement('button');b.className='world-marker';b.dataset.marker=target.wall_id;b.setAttribute('aria-label',target.name);b.innerHTML=uiIcon('spray');b.onclick=()=>session.routeTo(target.approach,target.name);this.markers.append(b);}
   }
   updateWorldMarkers(renderer){
     const s=this.s,canvas=document.getElementById('game'),rect=canvas.getBoundingClientRect();this.markers.hidden=s.mode!=='district';
     for(const b of this.markers.children){const p=renderer.markerHits?.find(p=>p.id===b.dataset.marker);b.hidden=!p;if(!p)continue;b.style.left=p.x*rect.width/canvas.width+'px';b.style.top=p.y*rect.height/canvas.height+'px';b.dataset.active=String(b.dataset.marker==='home'?s.tutorial.stage==='escape':['walk','paint','return_wall','repaint'].includes(s.tutorial.stage));}
   }
   sync(){
-    const s=this.s,t=s.tutorial,l=t.lesson;this.panel.hidden=['graffiti','phone'].includes(s.mode)||(s.mode==='hideout'&&document.getElementById('hideout-ui').dataset.tab!=='home');
+    const s=this.s,t=s.tutorial,l=t.lesson;this.panel.hidden=s.world.sandbox||['graffiti','phone'].includes(s.mode)||(s.mode==='hideout'&&document.getElementById('hideout-ui').dataset.tab!=='home');
     const app=document.getElementById('app');app.dataset.homeIntro=String(!!s.life?.tour);app.dataset.period=s.life?.state.period??'night';
+    app.dataset.sandbox=String(!!s.world.sandbox);
     app.dataset.phone=String(s.mode==='phone');
     this.status.hidden=!!s.life?.tour;this.status.textContent=(s.life?.night?'☾ НОЧЬ':'☀ ДЕНЬ')+' '+(s.life?.state.day??1)+' · '+s.save.money+' ₽ · '+s.life.fame.name;
     this.status.title='Узнаваемость: '+s.life.fame.score+(s.life.fame.next?' / '+s.life.fame.next:' · максимальная ступень')+'. Новые работы, снимки разных работ и встречи со зрителями.';
@@ -32,7 +34,7 @@ export class TutorialUI{
     document.getElementById('objective-label').textContent=l.help;
     const number=String(s.world.levelNumber??1).padStart(2,'0');
     document.querySelector('.district-title strong').textContent=s.world.name;
-    document.querySelector('.district-title .eyebrow').textContent='УРОВЕНЬ '+number+' / ОБУЧЕНИЕ';
+    document.querySelector('.district-title .eyebrow').textContent='УРОВЕНЬ '+number+(s.world.sandbox?' / ПЕСОЧНИЦА':' / ОБУЧЕНИЕ');
     document.querySelector('#chapter-button strong').textContent=number;
     document.getElementById('home-route').hidden=t.stage!=='escape';
     if(t.scripted)document.getElementById('interaction').hidden=true;

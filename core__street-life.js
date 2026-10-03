@@ -1,5 +1,5 @@
-import {moveAlongPath,distance} from './core__geometry.js?v=3746185ef7c6';
-import {recognition,rememberWorks,RECOGNITION_TIERS} from './core__recognition.js?v=3746185ef7c6';
+import {moveAlongPath,distance} from './core__geometry.js?v=3e5b725efe0e';
+import {recognition,rememberWorks,RECOGNITION_TIERS} from './core__recognition.js?v=3e5b725efe0e';
 
 export const HOME_TOUR=[
   ['Знакомый потолок','Кровать — мой первый спонсор. Пока платит только сном.','Это дом Зака. Радио — в телефоне справа. Остальные значки появятся по ходу знакомства.','О КРОВАТИ'],
@@ -21,7 +21,7 @@ export class StreetLife{
   }
   get state(){return this.s.save.streetLife;}
   get night(){return this.state.period==='night';}
-  get tour(){return this.s.mode==='hideout'&&this.s.save.campaign.homeIntroStep<7;}
+  get tour(){return !this.s.world.sandbox&&this.s.mode==='hideout'&&this.s.save.campaign.homeIntroStep<7;}
   get introStep(){return this.s.save.campaign.homeIntroStep;}
   iconVisible(id){if(!this.tour)return id!=='pet';return ({rest:1,wardrobe:2,sprays:3,collection:4,save:5,music:6}[id]??99)<=this.introStep;}
   tourLesson(){const [title,line,help,button]=HOME_TOUR[this.introStep];return {step:1,who:'ЗАК · ДОМА '+(this.introStep+1)+'/7',title,line,help,button};}
@@ -42,7 +42,7 @@ export class StreetLife{
     this.s.emit('period-change',{from,to:state.period});
     this.s.notice(this.night?'Наступила ночь. Пора рисовать.':'Доброе утро. Посмотрим, кому понравились работы.');
   }
-  works(){return this.s.world.targets.filter(t=>this.s.painted.has(t.wall_id)&&(t.buildingId||this.s.tutorial.wall==='own'&&this.s.tutorial.tag===0&&this.s.tutorial.coating===0));}
+  works(){return this.s.world.targets.filter(t=>this.s.painted.has(t.wall_id)&&(this.s.world.sandbox||t.buildingId||this.s.tutorial.wall==='own'&&this.s.tutorial.tag===0&&this.s.tutorial.coating===0));}
   update(dt){
     this.syncRecognition();
     if(this.sleeping){this.sleeping=Math.max(0,this.sleeping-dt);if(!this.sleeping){if(!(this.tour&&this.introStep===1&&this.night))this.changePeriod();if(this.tour&&this.introStep===1){this.s.save.campaign.homeIntroStep=2;this.s.persist();}}return;}

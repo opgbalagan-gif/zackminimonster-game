@@ -1,13 +1,13 @@
-import {ContentLoader} from './core__content-loader.js?v=3746185ef7c6';
-import {SaveStore} from './core__save-store.js?v=3746185ef7c6';
-import {AudioManager} from './core__audio.js?v=3746185ef7c6';
-import {GameSession} from './core__session.js?v=3746185ef7c6';
-import {InputController} from './core__input.js?v=3746185ef7c6';
-import {GameUI} from './core__ui.js?v=3746185ef7c6';
-import {POSTERS,posterApproach} from './content__district_01__posters.js?v=3746185ef7c6';
-import {TutorialUI} from './core__tutorial-ui.js?v=3746185ef7c6';
-import {showChapters} from './core__chapters.js?v=3746185ef7c6';
-import {setUIButton} from './core__ui-kit.js?v=3746185ef7c6';
+import {ContentLoader} from './core__content-loader.js?v=3e5b725efe0e';
+import {SaveStore} from './core__save-store.js?v=3e5b725efe0e';
+import {AudioManager} from './core__audio.js?v=3e5b725efe0e';
+import {GameSession} from './core__session.js?v=3e5b725efe0e';
+import {InputController} from './core__input.js?v=3e5b725efe0e';
+import {GameUI} from './core__ui.js?v=3e5b725efe0e';
+import {POSTERS,posterApproach} from './content__district_01__posters.js?v=3e5b725efe0e';
+import {TutorialUI} from './core__tutorial-ui.js?v=3e5b725efe0e';
+import {showChapters} from './core__chapters.js?v=3e5b725efe0e';
+import {setUIButton} from './core__ui-kit.js?v=3e5b725efe0e';
 
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d',{alpha:false});
 const loader=new ContentLoader(),store=new SaveStore(),audio=new AudioManager();
@@ -53,8 +53,8 @@ async function start(choice){
   if(starting)return;starting=true;ui.loading(0);
   try{
     const saved=store.load();
-    const wanted=['tutorial','sneak'].includes(choice)?choice:saved.campaign.activeLevel;
-    const level=wanted==='sneak'&&saved.campaign.tutorialComplete?'sneak':'tutorial';
+    const wanted=['tutorial','sneak','sandbox'].includes(choice)?choice:saved.campaign.activeLevel;
+    const level=wanted==='sandbox'?'sandbox':wanted==='sneak'&&saved.campaign.tutorialComplete?'sneak':'tutorial';
     loadedPack=await loader.loadLevel(level,p=>ui.loading(p));
     if(choice==='tutorial'){saved.campaign.tutorialCheckpoint='home';saved.campaign.tutorialAtHome=false;store.write(saved);}
     saved.campaign.activeLevel=level;store.write(saved);

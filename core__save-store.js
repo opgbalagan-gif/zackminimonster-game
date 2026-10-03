@@ -1,4 +1,4 @@
-import {cleanBallSave} from './core__basketball.js?v=3746185ef7c6';
+import {cleanBallSave} from './core__basketball.js?v=3e5b725efe0e';
 export const SAVE_KEY='zackminimonster.save';
 export const SAVE_VERSION=3;
 export function freshSave(){
@@ -25,7 +25,8 @@ export function migrateSave(raw){
       tutorialFacadePainted:raw.campaign?.tutorialFacadePainted===true,
       homeIntroStep:Number.isInteger(raw.campaign?.homeIntroStep)?Math.max(0,Math.min(7,raw.campaign.homeIntroStep)):0,
       tutorialAtHome:raw.campaign?.tutorialAtHome===true,
-      activeLevel:raw.campaign?.activeLevel==='sneak'?'sneak':'tutorial',
+      activeLevel:['sandbox','sneak','tutorial'].includes(raw.campaign?.activeLevel)?raw.campaign.activeLevel:'tutorial',
+      sandboxStarted:raw.campaign?.sandboxStarted===true,sandboxAtHome:raw.campaign?.sandboxAtHome===true,sandboxComplete:raw.campaign?.sandboxComplete===true,
       sneakComplete:raw.campaign?.sneakComplete===true,giftUnlocked:raw.campaign?.giftUnlocked===true,
       sneakCheckpoint:['gift','paint','hide','photo','complete'].includes(raw.campaign?.sneakCheckpoint)?raw.campaign.sneakCheckpoint:'gift',
       tutorialCheckpoint:['home','walk','first_done','rival_done','recovery','return_wall','repaint','escape','complete'].includes(raw.campaign?.tutorialCheckpoint)?raw.campaign.tutorialCheckpoint:'home',

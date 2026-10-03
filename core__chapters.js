@@ -1,4 +1,4 @@
-import {UIPanel,UISecondaryButton,UITitleLarge} from './core__ui-kit.js?v=3746185ef7c6';
+import {UIPanel,UISecondaryButton,UITitleLarge} from './core__ui-kit.js?v=3e5b725efe0e';
 export function showChapters(save,onPick,initialTab='path'){
   document.getElementById('chapter-select')?.remove();
   const panel=document.createElement('section');panel.id='chapter-select';panel.setAttribute('aria-label','Путь и обучение');
@@ -10,13 +10,13 @@ export function showChapters(save,onPick,initialTab='path'){
   const select=tab=>{
     for(const button of tabs.children){const active=button.dataset.tab===tab;button.setAttribute('aria-selected',String(active));button.tabIndex=active?0:-1;}
     body.replaceChildren();body.setAttribute('aria-labelledby','chapter-tab-'+tab);
-    const copy=document.createElement('p');copy.textContent=tab==='training'?'Уроки можно пройти по порядку и повторить позже.':'История продолжится в новых районах. Основные уровни будут идти друг за другом.';body.append(copy);
+    const copy=document.createElement('p');copy.textContent=tab==='training'?'Уроки можно пройти по порядку и повторить позже.':'Первый район открыт. Рисуй, исследуй и живи в своём ритме. Следующие районы продолжат этот путь.';body.append(copy);
     if(tab==='training'){
       training.forEach((l,i)=>{const button=document.createElement('button');button.className='chapter-card';button.disabled=!l.open;
         const number=document.createElement('b'),title=document.createElement('strong'),detail=document.createElement('small');number.textContent=String(i+1).padStart(2,'0');title.textContent=l.name;detail.textContent=l.done?'Пройдено · повторить урок':l.open?l.detail:'Сначала пройди «Первый след»';
         button.append(number,title,detail);button.onclick=()=>{panel.remove();onPick(l.id);};body.append(button);});
     }else{
-      const status=document.createElement('p');status.className='campaign-status';status.textContent=save.campaign.sneakComplete?'Обучение пройдено. Новые сюжетные районы ещё в работе.':'Сейчас доступны два урока: освой рисунки, прятки и съёмку.';body.append(status);
+      const level=document.createElement('button');level.className='chapter-card';level.innerHTML='<b>01</b><strong>СВОЙ РАЙОН</strong><small>Песочница · дом, 4 стены, прятки и фото</small>';level.onclick=()=>{panel.remove();onPick('sandbox');};body.append(level);
       const learn=UISecondaryButton(null,{label:save.campaign.sneakComplete?'ПОВТОРИТЬ ОБУЧЕНИЕ':'ПЕРЕЙТИ К ОБУЧЕНИЮ'});learn.onclick=()=>select('training');body.append(learn);
     }
   };

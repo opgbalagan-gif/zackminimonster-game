@@ -1,0 +1,9 @@
+{
+  "id": "sandbox",
+  "version": 26,
+  "scene": "./content__levels__sandbox__scene.js?v=3e5b725efe0e",
+  "renderer": "./content__levels__sandbox__renderer.js?v=3e5b725efe0e",
+  "graffiti_data": "./data__graffiti__definitions.json?v=3e5b725efe0e",
+  "atlas_data": "./content__levels__first-mark__atlas.json?v=3e5b725efe0e",
+  "art_base": ""
+}

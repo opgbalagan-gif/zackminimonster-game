@@ -1,19 +1,20 @@
-import {NavigationGrid} from './core__navigation.js?v=3746185ef7c6';
-import {PoliceSystem} from './core__police.js?v=3746185ef7c6';
-import {GraffitiGame} from './core__graffiti.js?v=3746185ef7c6';
-import {Camera,clamp,distance,moveAlongPath,project} from './core__geometry.js?v=3746185ef7c6';
-import {EffectPool} from './core__effects.js?v=3746185ef7c6';
-import {OUTFITS,INKS,TROPHIES} from './core__hideout.js?v=3746185ef7c6';
-import {TrafficSystem} from './core__traffic.js?v=3746185ef7c6';
-import {CitizenSystem} from './core__citizens.js?v=3746185ef7c6';
-import {COURT,COURT_LINES,BallArtGame} from './core__basketball.js?v=3746185ef7c6';
-import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=3746185ef7c6';
-import {cityProgress,canEnter,regionAt,gateMessage} from './core__city-progress.js?v=3746185ef7c6';
-import {POSTERS,posterApproach} from './content__district_01__posters.js?v=3746185ef7c6';
-import {BridgeGangs} from './core__bridge-gangs.js?v=3746185ef7c6';
-import {TutorialFlow} from './core__tutorial.js?v=3746185ef7c6';
-import {StreetLife} from './core__street-life.js?v=3746185ef7c6';
-import {SneakFlow} from './core__sneak.js?v=3746185ef7c6';
+import {NavigationGrid} from './core__navigation.js?v=3e5b725efe0e';
+import {PoliceSystem} from './core__police.js?v=3e5b725efe0e';
+import {GraffitiGame} from './core__graffiti.js?v=3e5b725efe0e';
+import {Camera,clamp,distance,moveAlongPath,project} from './core__geometry.js?v=3e5b725efe0e';
+import {EffectPool} from './core__effects.js?v=3e5b725efe0e';
+import {OUTFITS,INKS,TROPHIES} from './core__hideout.js?v=3e5b725efe0e';
+import {TrafficSystem} from './core__traffic.js?v=3e5b725efe0e';
+import {CitizenSystem} from './core__citizens.js?v=3e5b725efe0e';
+import {COURT,COURT_LINES,BallArtGame} from './core__basketball.js?v=3e5b725efe0e';
+import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=3e5b725efe0e';
+import {cityProgress,canEnter,regionAt,gateMessage} from './core__city-progress.js?v=3e5b725efe0e';
+import {POSTERS,posterApproach} from './content__district_01__posters.js?v=3e5b725efe0e';
+import {BridgeGangs} from './core__bridge-gangs.js?v=3e5b725efe0e';
+import {TutorialFlow} from './core__tutorial.js?v=3e5b725efe0e';
+import {StreetLife} from './core__street-life.js?v=3e5b725efe0e';
+import {SneakFlow} from './core__sneak.js?v=3e5b725efe0e';
+import {SandboxFlow} from './core__sandbox.js?v=3e5b725efe0e';
 
 export class GameSession{
   constructor(pack,store){
@@ -43,7 +44,7 @@ export class GameSession{
         this.notice('Вылазка восстановлена. Граффити на месте — отнеси REP домой.');
       }
     }
-    if(this.world.tutorial){this.citizens.people=[];this.tutorial=this.world.id==='sneak'?new SneakFlow(this):new TutorialFlow(this);this.life=new StreetLife(this);}
+    if(this.world.tutorial){this.citizens.people=[];this.tutorial=this.world.sandbox?new SandboxFlow(this):this.world.id==='sneak'?new SneakFlow(this):new TutorialFlow(this);this.life=new StreetLife(this);}
   }
   emit(type,data={}){this.events.push({type,...data});}
   notice(message){this.emit('notice',{message});}
@@ -132,7 +133,7 @@ export class GameSession{
     const options=[];
     const add=(type,item,p,radius)=>{const d=distance(this.player,p);if(d<radius)options.push({type,item,d});};
     for(const home of this.world.hideouts??[this.world.hideout])add('hideout',home,home,62);
-    if(this.tutorial){for(const target of this.world.targets)if(this.tutorial.allowedTarget(target))add('target',target,target.approach,62);if(this.tutorial.stage==='hide')for(const bin of this.world.bins??[])add('bin',bin,bin.approach,58);options.sort((a,b)=>a.d-b.d);return options[0]??null;}
+    if(this.tutorial){for(const target of this.world.targets)if(this.tutorial.allowedTarget(target))add('target',target,target.approach,62);if(this.tutorial.stage==='hide'||this.world.sandbox)for(const bin of this.world.bins??[])add('bin',bin,bin.approach,58);options.sort((a,b)=>a.d-b.d);return options[0]??null;}
     for(const poster of POSTERS)add('poster',{...poster,name:'Плакат '+poster.brand},posterApproach(this.world,poster),65);
     for(const bridge of this.world.bridges??[])add('bridge',bridge,bridge.approach,100);
     for(const poi of this.world.pointsOfInterest??[])add('poi',poi,poi,68);
@@ -192,7 +193,7 @@ export class GameSession{
     this.player.state='IDLE';this.emit('mode');
   }
   completeGraffiti(){
-    const g=this.graffiti;if(!g||this.painted.has(g.target.wall_id))return;
+    const g=this.graffiti;if(!g||!this.world.sandbox&&this.painted.has(g.target.wall_id))return;
     if(this.tutorial)return this.tutorial.painted();
     this.painted.add(g.target.wall_id);this.runWalls.push(g.target.wall_id);g.target.state='PAINTED';
     this.runStyles[g.target.wall_id]=g.ink??'purple';
