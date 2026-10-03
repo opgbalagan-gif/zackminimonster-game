@@ -3,6 +3,8 @@ export const SAVE_KEY='zackminimonster.save';
 export const SAVE_VERSION=3;
 export function freshSave(){
   return {save_version:SAVE_VERSION,player:{skin:'zack',ink:'purple'},rep:0,
+    campaign:{tutorialComplete:false,tutorialCheckpoint:'home',companionUnlocked:false,tutorialFacadePainted:false,homeIntroStep:0,tutorialAtHome:false,sneakComplete:false,sneakCheckpoint:'gift',giftUnlocked:false},
+    money:0,recognition:{works:[],photos:[],encounters:0},streetLife:{period:'day',day:1,elapsed:0,donations:[],audienceTier:null},phone:{unlocked:false,read:false,photos:[]},
     district_progress:{district_01:{visits:0}},painted_walls:[],graffiti_by_wall:{},basketball:{completed:false,pixels:[],stickers:[]},
     wall_styles:{},active_run:null,graffiti_unlocks:['zack_tag','monster','crown','panda_king'],hideout:{upgrades:[],collectibles:[],display:'mini'},settings:{sound:true,radioVolume:.22}};
 }
@@ -15,6 +17,19 @@ export function migrateSave(raw){
     skin:['zack','night','metro'].includes(raw.player?.skin)?raw.player.skin:'zack',
     ink:['purple','cyan','gold'].includes(raw.player?.ink)?raw.player.ink:'purple'},
     rep:Number.isFinite(raw.rep)?Math.max(0,Math.floor(raw.rep)):0,
+    money:Number.isFinite(raw.money)?Math.max(0,Math.floor(raw.money)):0,
+    recognition:{works:strings(raw.recognition?.works).slice(0,200),photos:strings(raw.recognition?.photos).slice(0,200),encounters:Number.isFinite(raw.recognition?.encounters)?Math.max(0,Math.min(60,Math.floor(raw.recognition.encounters))):0},
+    streetLife:{period:raw.streetLife?.period==='day'?'day':raw.streetLife?.period==='night'?'night':raw.campaign?.tutorialCheckpoint&&raw.campaign.tutorialCheckpoint!=='home'?'night':'day',day:Number.isInteger(raw.streetLife?.day)?Math.max(1,raw.streetLife.day):1,elapsed:Number.isFinite(raw.streetLife?.elapsed)?Math.max(0,Math.min(300,raw.streetLife.elapsed)):0,donations:strings(raw.streetLife?.donations).slice(0,20),audienceTier:Number.isInteger(raw.streetLife?.audienceTier)?Math.max(0,Math.min(3,raw.streetLife.audienceTier)):strings(raw.streetLife?.donations).length?0:null},
+    phone:{unlocked:raw.phone?.unlocked===true,read:raw.phone?.read===true,photos:Array.isArray(raw.phone?.photos)?raw.phone.photos.filter(p=>p&&typeof p.wall==='string'&&Number.isFinite(p.day)).slice(-12).map(p=>({wall:p.wall,day:p.day,art:['zack_tag','monster'].includes(p.art)?p.art:'zack_tag',quality:Math.max(0,Math.min(100,Number(p.quality)||0)),x:Math.max(-1,Math.min(1,Number(p.x)||0)),y:Math.max(-1,Math.min(1,Number(p.y)||0)),period:p.period==='day'?'day':'night'})):[]},
+    campaign:{tutorialComplete:raw.campaign?raw.campaign.tutorialComplete===true:(Number(raw.rep)>0||strings(raw.painted_walls).length>0),
+      tutorialFacadePainted:raw.campaign?.tutorialFacadePainted===true,
+      homeIntroStep:Number.isInteger(raw.campaign?.homeIntroStep)?Math.max(0,Math.min(7,raw.campaign.homeIntroStep)):0,
+      tutorialAtHome:raw.campaign?.tutorialAtHome===true,
+      activeLevel:raw.campaign?.activeLevel==='sneak'?'sneak':'tutorial',
+      sneakComplete:raw.campaign?.sneakComplete===true,giftUnlocked:raw.campaign?.giftUnlocked===true,
+      sneakCheckpoint:['gift','paint','hide','photo','complete'].includes(raw.campaign?.sneakCheckpoint)?raw.campaign.sneakCheckpoint:'gift',
+      tutorialCheckpoint:['home','walk','first_done','rival_done','recovery','return_wall','repaint','escape','complete'].includes(raw.campaign?.tutorialCheckpoint)?raw.campaign.tutorialCheckpoint:'home',
+      companionUnlocked:raw.campaign?raw.campaign.companionUnlocked===true:(Number(raw.rep)>0||strings(raw.painted_walls).length>0)},
     basketball:cleanBallSave(raw.basketball),
     district_progress:{...base.district_progress,...raw.district_progress},
     painted_walls:strings(raw.painted_walls),graffiti_by_wall:raw.graffiti_by_wall??{},

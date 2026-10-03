@@ -1,14 +1,17 @@
 import {GraffitiView} from './core__graffiti-view.js';
 import {HideoutUI} from './core__hideout-ui.js';
 import {CourtView} from './core__court-view.js';
+import {PhoneUI} from './core__phone-ui.js';
 import {POSTERS,ARTIST_URL} from './content__district_01__posters.js';
 import {GRAFFITI_ART} from './content__district_01__graffiti-art.js';
 import {GRAFFITI_CONFIG} from './content__graffiti__config.js';
 import {URBAN_WALL} from './content__graffiti__walls__urban.js';
 import {regionAt,gateMessage} from './core__city-progress.js';
+import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js';
 const $=id=>document.getElementById(id);
 export class GameUI{
   constructor(callbacks){
+    initUITheme();
     this.callbacks=callbacks;this.mapOpen=false;this.debug=false;this.toastUntil=0;this.lastMode='';
     $('start-button').onclick=callbacks.start;$('leave-button').onclick=callbacks.leave;
     $('upgrade-button').onclick=callbacks.upgrade;$('action-button').onclick=callbacks.action;
@@ -21,7 +24,7 @@ export class GameUI{
   }
   loading(progress,error=''){
     $('start-button').disabled=!error;$('load-progress').hidden=!!error;$('load-progress').value=progress;
-    $('load-status').textContent=error||'ЗАГРУЗКА EAST BLOCK · '+Math.round(progress*100)+'%';
+    $('load-status').textContent=error||'ЗАГРУЗКА УРОВНЯ · '+Math.round(progress*100)+'%';
     if(error)$('start-button').textContent='ПОВТОРИТЬ';
   }
   bind(session,renderer,audio){
@@ -47,7 +50,9 @@ export class GameUI{
     $('motion-enable').onclick=async()=>{await this.graffitiView.motion.enable();this.sync();};
     $('motion-touch').onclick=()=>{this.graffitiView.motion.useTouch();this.sync();};
     this.hideoutUI=new HideoutUI(session,renderer,()=>this.sync(),audio);
+    if(session.world.tutorial)this.phoneUI=new PhoneUI(session,renderer,audio);
     $('radio-stop').onclick=()=>{audio.radio.stop();this.sync();};
+    $('radio-toggle').onclick=()=>{audio.radio.toggle();this.sync();};
     $('radio-retry').onclick=()=>{audio.radio.start();this.sync();};
     $('radio-volume').value=Math.round(audio.radio.media.volume*100);
     $('radio-volume').oninput=()=>{audio.radio.setVolume(Number($('radio-volume').value)/100);this.sync();};
@@ -87,6 +92,7 @@ export class GameUI{
     if(old)select.value=old;
   }
   toggleMap(force){
+    if(this.session?.tutorial)return;
     if(!this.session||!['hideout','district'].includes(this.session.mode))return;
     this.mapOpen=force??!this.mapOpen;$('map-screen').hidden=!this.mapOpen;
     if(this.mapOpen){this.updateRoutes();this.drawMap();}
@@ -121,7 +127,7 @@ export class GameUI{
     $('graffiti-screen').hidden=s.mode!=='graffiti';
     this.courtView.sync();
     $('rep-label').innerHTML=s.save.rep+' <small>REP</small>';$('run-rep').textContent='Вылазка +'+s.runRep;
-    $('heat-stars').textContent='★'.repeat(s.heat)+'☆'.repeat(5-s.heat);
+    syncUIStats(s,radio);
     $('heat-stars').setAttribute('aria-label','Розыск '+s.heat+' из 5');
     $('heat-note').textContent=s.hiddenFor>0?'СКРЫТ':s.police.units.some(u=>u.state==='CHASE')?'ПОГОНЯ':s.heat?'Патрули активны':'Чисто';
     $('home-rep').textContent=s.save.rep;$('home-walls').textContent=s.save.painted_walls.length+' / '+s.world.targets.length;
@@ -134,11 +140,11 @@ export class GameUI{
       $('interaction-name').textContent=near.item.name;
       $('interaction-detail').textContent=near.type==='court'?(s.save.basketball.completed?'Поговорить и украсить новый мяч':'Два друга спорят о мяче · +300 REP'):near.type==='target'?'+'+near.item.rep_reward+' REP · HEAT +'+near.item.heat_reward:near.type==='safe'?(near.item.cooldown>0?'Повторно через '+Math.ceil(near.item.cooldown)+' сек.':'Спрятаться и снизить розыск'):'Сохранить вылазку и сбросить HEAT';
       $('action-button').disabled=near.type==='safe'&&near.item.cooldown>0;
+      if(near.type==='bin'){$('interaction-type').textContent='УКРЫТИЕ';$('interaction-detail').textContent='Спрятаться и переждать патруль';}
       if(near.type==='poster'){$('interaction-type').textContent='ART COLLAB';$('interaction-detail').textContent='Открыть плакат · Instagram художника';}
       if(near.type==='poi'){$('interaction-type').textContent='МЕСТО В ГОРОДЕ';$('interaction-detail').textContent=near.item.kind==='meet'?'Сходка стритрейсеров · поговорить':'Заглянуть и узнать, что рядом';}
       if(near.type==='bridge'){$('interaction-type').textContent='БАНДА / ПРОХОД В РАЙОН';$('interaction-detail').textContent=gateMessage(s.city,near.item.to);}
     }
-    $('sound-button').textContent=s.save.settings.sound?'♪':'×';
     if(s.mode==='graffiti'){
       const g=s.graffiti;if(this.graffitiView.game!==g)this.graffitiView.bind(g);
       const art=GRAFFITI_ART[g.definition.id];$('graffiti-art-name').textContent=art.name;
@@ -148,7 +154,8 @@ export class GameUI{
       $('graffiti-wall-state').textContent=URBAN_WALL.states[g.phase==='shake'?'clean':g.phase];
       $('graffiti-reward').hidden=!g.done;$('graffiti-rep').textContent='+'+g.target.rep_reward+' REP';$('graffiti-heat').textContent='HEAT +'+g.target.heat_reward;
       $('cancel-graffiti').hidden=g.done;
-      $('wall-id').textContent=g.target.buildingId?'EAST BLOCK / ФАСАД':'EAST BLOCK / СТЕНА';$('wall-name').textContent=g.target.name;
+      $('wall-id').textContent=(this.session.world.tutorial?'УРОВЕНЬ '+String(s.world.levelNumber??1).padStart(2,'0'):'EAST BLOCK')+(g.target.buildingId?' / ФАСАД':' / СТЕНА');$('wall-name').textContent=g.target.name;
+      if(g.target.rep_reward===0&&g.target.buildingId)$('graffiti-rep').textContent='ТВОЙ ДОМ';
       const phases=['shake','stencil','spray','result'];
       for(const el of document.querySelectorAll('[data-phase]')){
         el.classList.toggle('active',el.dataset.phase===g.phase);el.classList.toggle('complete',phases.indexOf(el.dataset.phase)<phases.indexOf(g.phase));
@@ -173,13 +180,14 @@ export class GameUI{
       const progress=g.done?1:g.phase==='shake'?g.shakeProgress:g.phase==='stencil'?0:g.coverage;
       $('coverage-label').textContent=g.phase==='stencil'?'READY':Math.round(progress*100)+'%';$('graffiti-progress').value=progress;
       $('confirm-stencil').hidden=!['stencil','result'].includes(g.phase);
-      $('confirm-stencil').textContent=g.done?'ЗАБРАТЬ НАГРАДУ →':'ЗАКРЕПИТЬ ТРАФАРЕТ';
+      setUIButton($('confirm-stencil'),g.done?'ЗАБРАТЬ НАГРАДУ':'ЗАКРЕПИТЬ ТРАФАРЕТ',g.done?'rep':'spray');
     }
     this.graffitiView.motion.setActive(this.graffitiView.motion.mobile&&s.mode==='graffiti'&&s.graffiti?.phase==='shake');
     $('debug-overlay').hidden=!this.debug;
     if(this.debug)$('debug-overlay').textContent='FPS '+s.metrics.fps+'\nFRAME '+s.metrics.frame+' ms\nMEM '+s.metrics.memory+'\nPACK '+s.world.id+'\nDRAW '+s.metrics.drawCalls+'\nPOLICE '+s.metrics.activePolice+'\nNPC '+s.citizens.people.length+'\nTRAFFIC '+s.traffic.cars.filter(c=>c.travel>0).length+' / '+s.traffic.cars.length+'\nHEAT '+s.heat;
     if(performance.now()>this.toastUntil)$('toast').hidden=true;
     for(const event of s.events.splice(0)){
+      if(event.type==='phone-open')this.phoneUI?.open();
       if(event.type==='poster-open')this.openPoster(event.id);
       if(event.type==='poi-open')this.openPoi(event.id);
       if(event.type==='notice')this.showToast(event.message);

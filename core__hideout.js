@@ -22,9 +22,10 @@ export function heroSprite(skin,state='IDLE',facing='down',step=false){
   const actions={SHAKE_CAN:'shake',SPRAY:'spray',HIDE:'hide',CAUGHT:prefix==='hero'?'caught':'hide',VICTORY:'victory'};
   return prefix+'_'+(actions[state]??((prefix==='hero'&&step?'walk_':'')+facing));
 }
-export function roomLayout(w,h){
+export function roomLayout(w,h,tutorial=false){
   const narrow=w<760,availableW=narrow?w:w-350,top=narrow?94:78,bottom=narrow?108:95;
-  const height=Math.max(210,h-top-bottom),width=Math.min(availableW,height*.98);
+  const height=Math.max(210,h-top-bottom),lessonSpace=h<=720?276:300;
+  const width=Math.min(availableW,height*.98,tutorial&&narrow?Math.max(210,(h-top-lessonSpace)/.9):Infinity);
   // Background is 2:3; crop only its lowest entrance steps to enlarge the living room.
   const drawH=width*1.5;
   return {x:(availableW-width)/2+(narrow?0:10),y:top-12,w:width,h:drawH,clipBottom:h-bottom};

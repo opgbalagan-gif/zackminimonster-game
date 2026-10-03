@@ -1,0 +1,16 @@
+#tutorial-panel{position:absolute;z-index:16;right:22px;bottom:22px;width:min(395px,42vw);padding:20px;background:#111d25f2;border:1px solid #899586;border-top:3px solid #e2bd65;box-shadow:0 12px 40px #0006;color:#f0e5c9;pointer-events:auto}
+#tutorial-panel h2{font:700 23px/1.12 LocalMono,monospace;margin:12px 0}
+.lesson-kicker{font:10px LocalMono,monospace;letter-spacing:1.6px;color:#edc76c}.lesson-line{font:15px/1.45 Arial,sans-serif;color:#efd5a1;margin:12px 0}.lesson-help{font:13px/1.5 Arial,sans-serif;color:#b9c7c8;margin:12px 0 16px}.lesson-progress{display:flex;gap:5px;margin-bottom:13px}.lesson-progress i{height:3px;background:#35444a;flex:1}.lesson-progress i.active{background:#dfbd69}#tutorial-panel button{width:100%;font-size:11px}
+[data-tutorial=true] .district-title>span:last-child,[data-tutorial=true] #map-button,[data-tutorial=true] #radio-panel{display:none!important}
+[data-tutorial=true] #toast{bottom:auto;top:155px}
+[data-tutorial=true] .interaction{left:20px;bottom:180px;transform:none;max-width:300px}
+[data-tutorial=true] #joystick{left:90px}
+#chapter-select{position:absolute;inset:0;z-index:55;background:#111d25f5;display:grid;align-content:center;justify-items:center;padding:24px;gap:12px;overflow:auto}
+#chapter-select h2{font:700 24px LocalMono,monospace;color:#ebcc78;margin:0 0 8px}#chapter-select>p{font:13px Arial,sans-serif;color:#abbabd;max-width:540px;text-align:center;margin:0 0 10px}
+.chapter-card{width:min(560px,100%);padding:16px 20px;text-align:left;border:1px solid #697879;background:#1b2b34;color:#f2e5c9;display:grid;grid-template-columns:40px 1fr;gap:2px 12px}.chapter-card b{grid-row:span 2;font:700 25px LocalMono,monospace;color:#e6bd6c}.chapter-card strong{font:700 14px LocalMono,monospace}.chapter-card small{font:12px/1.45 Arial,sans-serif;color:#b2c0be}.chapter-card:disabled{opacity:.45;cursor:not-allowed}
+#chapter-button{position:absolute;top:116px;right:20px;z-index:17;font:10px LocalMono,monospace;padding:9px 13px;background:#15232cdd}
+.title-content #title-chapters{margin-top:12px;width:100%}
+@media(max-width:700px){#tutorial-panel{left:12px;right:12px;bottom:144px;width:auto;padding:13px 15px}#tutorial-panel h2{font-size:18px;margin:7px 0}.lesson-line{font-size:13px;line-height:1.35;margin:8px 0}.lesson-help{font-size:11px;line-height:1.4;margin:8px 0 10px}.lesson-progress{margin-bottom:9px}#tutorial-panel button{padding:11px;font-size:10px}[data-tutorial=true] .interaction{left:auto;right:12px;bottom:25px;max-width:180px;width:180px;padding:10px;display:block}[data-tutorial=true] .interaction .micro,[data-tutorial=true] .interaction small,[data-tutorial=true] .interaction strong{display:none}[data-tutorial=true] .interaction button{width:100%}[data-tutorial=true] #joystick{left:65px;bottom:24px;width:90px;height:90px}[data-tutorial=true] #home-route{bottom:75px;right:16px;padding:6px 12px;font-size:17px}#chapter-button{top:78px;right:12px;font-size:8px;padding:7px 9px}[data-tutorial=true] #toast{top:120px;font-size:10px}#tutorial-panel[data-stage=home],#tutorial-panel[data-stage=complete]{bottom:28px}}
+@media(max-height:600px) and (min-width:701px){#tutorial-panel{padding:12px;width:335px}.lesson-line,.lesson-help{font-size:12px}#tutorial-panel h2{font-size:18px}}
+
+@media(max-width:700px){#tutorial-panel[data-stage=recovery]{bottom:28px}}

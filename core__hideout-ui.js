@@ -18,11 +18,12 @@ export class HideoutUI{
     this.populate();this.open('home');
   }
   open(tab){
+    if(tab!=='home'&&this.s.life&&!this.s.life.iconVisible(tab))return;
     this.tab=tab;document.getElementById('hideout-ui').dataset.tab=tab;
     for(const el of document.querySelectorAll('[data-home-pane]'))el.hidden=el.dataset.homePane!==tab;
     for(const el of document.querySelectorAll('.home-dock [data-home-tab]')){el.classList.toggle('active',el.dataset.homeTab===tab);el.setAttribute('aria-pressed',el.dataset.homeTab===tab);}
     $('home-panel-title').textContent={home:'Твоя территория',wardrobe:'ТВОЙ СТИЛЬ',sprays:'ЦВЕТ УЛИЦЫ',collection:'ТВОЯ КОЛЛЕКЦИЯ'}[tab];
-    $('home-panel-kicker').textContent={home:'MAKE YOURSELF AT HOME',wardrobe:'WARDROBE / ZACK',sprays:'SPRAY LAB / 400 ML',collection:'SMALL TOYS. BIG STORIES.'}[tab];
+    $('home-panel-kicker').textContent={home:'КВАРТИРА',wardrobe:'ГАРДЕРОБ / ЗАК',sprays:'КРАСКА / 400 МЛ',collection:'КОЛЛЕКЦИЯ'}[tab];
     this.sync();
   }
   populate(){
@@ -44,15 +45,19 @@ export class HideoutUI{
     };
     for(const item of OUTFITS)create('outfit-list',item,'outfit');
     for(const item of INKS)create('ink-list',item,'ink');
-    for(const item of TROPHIES)create('trophy-list',item,'display');
+    for(const item of TROPHIES)if(item.id!=='mini'||(!this.s.world.tutorial&&this.s.save.campaign?.companionUnlocked!==false))create('trophy-list',item,'display');
     const trophy=document.createElement('div');trophy.id='court-trophy';trophy.className='court-trophy';trophy.hidden=true;
     trophy.innerHTML='<canvas width="160" height="160" aria-label="Твой расписанный мяч"></canvas><div><strong>COURT CUSTOM</strong><p>Мяч с твоим рисунком.<br>Подарок от Дэна и Ти.</p></div>';$('trophy-list').append(trophy);
   }
   sync(){
-    const s=this.s,canvas=$('game'),rect=canvas.getBoundingClientRect(),r=roomLayout(canvas.width,canvas.height);
+    const s=this.s,canvas=$('game'),rect=canvas.getBoundingClientRect(),r=roomLayout(canvas.width,canvas.height,s.world.tutorial);
+    document.querySelector('[data-room-action="pet"]').hidden=s.world.tutorial||s.save.campaign?.companionUnlocked===false;
+    document.querySelector('.home-status>strong').textContent=s.save.campaign?.companionUnlocked===false?'ZACK / ДОМА':'ZACK + MINI';
     for(const el of document.querySelectorAll('[data-hotspot]')){
+      if(s.life){el.hidden=!s.life.iconVisible(el.dataset.hotspot);el.classList.toggle('new-room-icon',s.life.tour&&({rest:1,wardrobe:2,sprays:3,collection:4,save:5,music:6}[el.dataset.hotspot]===s.life.introStep));}
       const p=ROOM_POINTS[el.dataset.hotspot];el.style.left=((r.x+p.x*r.w)*rect.width/canvas.width)+'px';el.style.top=((r.y+p.y*r.h)*rect.height/canvas.height)+'px';
     }
+    if(s.life){const rest=document.querySelector('[data-room-action="rest"]');rest.setAttribute('aria-label',s.life.night?'Спать до утра':'Спать до ночи');rest.disabled=!!s.life.sleeping;}
     $('home-status-text').textContent=s.room.action==='rest'?'Пять минут тишины…':s.room.action==='pet'?'MINI рад тебя видеть.':s.room.beat?'Наш маленький afterparty.':'Дома. Можно выдохнуть.';
     for(const el of document.querySelectorAll('[data-room-action="music"]')){
       el.setAttribute('aria-pressed',String(this.audio.radio.wanted));
@@ -72,6 +77,5 @@ export class HideoutUI{
     $('equipped-outfit').textContent=outfit(s.save.player.skin).name;$('equipped-ink').textContent=ink(s.save.player.ink).name;
     const next=TROPHIES.find(t=>t.walls>walls);$('next-unlock').textContent=next?'ДАЛЬШЕ: '+next.name+' · ещё '+wallCount(next.walls-walls):'Все трофеи района собраны.';
     const p=$('home-tag-preview'),c=p.getContext('2d');c.clearRect(0,0,p.width,p.height);this.renderer.drawGraffiti(c,'zack_tag',0,0,p.width,p.height,ink(s.save.player.ink).color);
-    const portrait=$('portrait'),pc=portrait.getContext('2d');pc.clearRect(0,0,64,64);pc.imageSmoothingEnabled=false;this.renderer.atlas.draw(pc,heroSprite(s.save.player.skin),32,86,null,85);
   }
 }

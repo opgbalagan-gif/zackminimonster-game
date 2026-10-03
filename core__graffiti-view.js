@@ -58,7 +58,8 @@ export class GraffitiView{
   draw(dt){
     const g=this.game;if(!g)return;const c=this.c,a=this.area,atlas=this.renderer.atlas;this.time+=dt;
     c.clearRect(0,0,768,512);c.imageSmoothingEnabled=false;
-    if(g.target.wall_type==='brick_wall'||g.definition.wall_asset==='urban_blocks')atlas.draw(c,'graffiti_wall',384,512,768,512);
+    if(this.session.world.tutorial){atlas.draw(c,'graffiti_wall',384,512,768,512);c.fillStyle='#15292566';c.fillRect(0,0,768,512);}
+    else if(g.target.wall_type==='brick_wall'||g.definition.wall_asset==='urban_blocks')atlas.draw(c,'graffiti_wall',384,512,768,512);
     else wallSurface(c,g.target.wall_type,0,0,768,512);
     if(g.phase==='shake'){
       c.fillStyle='#101821d9';c.fillRect(0,0,768,512);

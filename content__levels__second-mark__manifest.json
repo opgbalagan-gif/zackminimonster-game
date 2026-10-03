@@ -1,0 +1,9 @@
+{
+  "id": "sneak",
+  "version": 24,
+  "scene": "./content__levels__second-mark__scene.js",
+  "renderer": "./content__levels__second-mark__renderer.js",
+  "graffiti_data": "./data__graffiti__definitions.json",
+  "atlas_data": "./content__levels__first-mark__atlas.json",
+  "art_base": ""
+}

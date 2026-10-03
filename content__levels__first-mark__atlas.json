@@ -1,0 +1,778 @@
+{
+  "sprites": {
+    "hero_down": {
+      "sheet": "characters",
+      "rect": [
+        46,
+        36,
+        230,
+        280
+      ]
+    },
+    "hero_left": {
+      "sheet": "characters",
+      "rect": [
+        362,
+        34,
+        222,
+        283
+      ]
+    },
+    "hero_up": {
+      "sheet": "characters",
+      "rect": [
+        669,
+        36,
+        210,
+        283
+      ]
+    },
+    "hero_right": {
+      "sheet": "characters",
+      "rect": [
+        979,
+        34,
+        227,
+        283
+      ]
+    },
+    "hero_walk_down": {
+      "sheet": "characters",
+      "rect": [
+        54,
+        343,
+        226,
+        277
+      ]
+    },
+    "hero_walk_left": {
+      "sheet": "characters",
+      "rect": [
+        363,
+        339,
+        214,
+        301
+      ]
+    },
+    "hero_walk_up": {
+      "sheet": "characters",
+      "rect": [
+        681,
+        345,
+        193,
+        275
+      ]
+    },
+    "hero_walk_right": {
+      "sheet": "characters",
+      "rect": [
+        980,
+        339,
+        223,
+        280
+      ]
+    },
+    "hero_spray": {
+      "sheet": "characters",
+      "rect": [
+        37,
+        640,
+        265,
+        278
+      ]
+    },
+    "hero_shake": {
+      "sheet": "characters",
+      "rect": [
+        347,
+        640,
+        258,
+        280
+      ]
+    },
+    "hero_hide": {
+      "sheet": "characters",
+      "rect": [
+        682,
+        686,
+        208,
+        232
+      ]
+    },
+    "hero_caught": {
+      "sheet": "characters",
+      "rect": [
+        971,
+        640,
+        251,
+        278
+      ]
+    },
+    "hero_victory": {
+      "sheet": "characters",
+      "rect": [
+        44,
+        934,
+        259,
+        291
+      ]
+    },
+    "companion": {
+      "sheet": "characters",
+      "rect": [
+        386,
+        981,
+        183,
+        241
+      ]
+    },
+    "officer": {
+      "sheet": "characters",
+      "rect": [
+        685,
+        948,
+        194,
+        276
+      ]
+    },
+    "officer_walk": {
+      "sheet": "characters",
+      "rect": [
+        999,
+        948,
+        185,
+        278
+      ]
+    },
+    "night_down": {
+      "sheet": "outfits",
+      "rect": [
+        76,
+        18,
+        177,
+        293
+      ]
+    },
+    "night_left": {
+      "sheet": "outfits",
+      "rect": [
+        360,
+        17,
+        198,
+        294
+      ]
+    },
+    "night_up": {
+      "sheet": "outfits",
+      "rect": [
+        702,
+        17,
+        168,
+        294
+      ]
+    },
+    "night_right": {
+      "sheet": "outfits",
+      "rect": [
+        1015,
+        18,
+        185,
+        293
+      ]
+    },
+    "night_shake": {
+      "sheet": "outfits",
+      "rect": [
+        28,
+        319,
+        249,
+        288
+      ]
+    },
+    "night_spray": {
+      "sheet": "outfits",
+      "rect": [
+        315,
+        327,
+        295,
+        280
+      ]
+    },
+    "night_hide": {
+      "sheet": "outfits",
+      "rect": [
+        687,
+        393,
+        197,
+        214
+      ]
+    },
+    "night_victory": {
+      "sheet": "outfits",
+      "rect": [
+        983,
+        319,
+        240,
+        288
+      ]
+    },
+    "metro_down": {
+      "sheet": "outfits",
+      "rect": [
+        78,
+        632,
+        175,
+        301
+      ]
+    },
+    "metro_left": {
+      "sheet": "outfits",
+      "rect": [
+        370,
+        632,
+        197,
+        301
+      ]
+    },
+    "metro_up": {
+      "sheet": "outfits",
+      "rect": [
+        698,
+        632,
+        173,
+        301
+      ]
+    },
+    "metro_right": {
+      "sheet": "outfits",
+      "rect": [
+        1011,
+        632,
+        187,
+        301
+      ]
+    },
+    "metro_shake": {
+      "sheet": "outfits",
+      "rect": [
+        27,
+        944,
+        287,
+        291
+      ]
+    },
+    "metro_spray": {
+      "sheet": "outfits",
+      "rect": [
+        314,
+        951,
+        296,
+        284
+      ]
+    },
+    "metro_hide": {
+      "sheet": "outfits",
+      "rect": [
+        687,
+        1015,
+        212,
+        219
+      ]
+    },
+    "metro_victory": {
+      "sheet": "outfits",
+      "rect": [
+        984,
+        941,
+        251,
+        294
+      ]
+    },
+    "can_front": {
+      "sheet": "artist_can",
+      "rect": [
+        237,
+        69,
+        533,
+        1389
+      ]
+    },
+    "can_side": {
+      "sheet": "artist_can",
+      "rect": [
+        237,
+        69,
+        533,
+        1389
+      ]
+    },
+    "can_threequarter": {
+      "sheet": "artist_can",
+      "rect": [
+        237,
+        69,
+        533,
+        1389
+      ]
+    },
+    "can_puff": {
+      "sheet": "artist_can",
+      "rect": [
+        237,
+        69,
+        533,
+        1389
+      ]
+    },
+    "can_shake_0": {
+      "sheet": "artist_can",
+      "rect": [
+        237,
+        69,
+        533,
+        1389
+      ]
+    },
+    "can_shake_1": {
+      "sheet": "artist_can",
+      "rect": [
+        237,
+        69,
+        533,
+        1389
+      ]
+    },
+    "can_shake_2": {
+      "sheet": "artist_can",
+      "rect": [
+        237,
+        69,
+        533,
+        1389
+      ]
+    },
+    "can_shake_3": {
+      "sheet": "artist_can",
+      "rect": [
+        237,
+        69,
+        533,
+        1389
+      ]
+    },
+    "can_spray_0": {
+      "sheet": "artist_can",
+      "rect": [
+        237,
+        69,
+        533,
+        1389
+      ]
+    },
+    "can_spray_1": {
+      "sheet": "artist_can",
+      "rect": [
+        237,
+        69,
+        533,
+        1389
+      ]
+    },
+    "can_spray_2": {
+      "sheet": "artist_can",
+      "rect": [
+        237,
+        69,
+        533,
+        1389
+      ]
+    },
+    "can_success": {
+      "sheet": "artist_can",
+      "rect": [
+        237,
+        69,
+        533,
+        1389
+      ]
+    },
+    "citizen_2_0": {
+      "sheet": "citizens",
+      "rect": [
+        96,
+        646,
+        141,
+        278
+      ]
+    },
+    "citizen_3_1": {
+      "sheet": "citizens",
+      "rect": [
+        394,
+        950,
+        154,
+        273
+      ]
+    },
+    "citizen_0_3": {
+      "sheet": "citizens",
+      "rect": [
+        1026,
+        34,
+        130,
+        271
+      ]
+    },
+    "citizen_2_1": {
+      "sheet": "citizens",
+      "rect": [
+        399,
+        648,
+        149,
+        276
+      ]
+    },
+    "citizen_3_2": {
+      "sheet": "citizens",
+      "rect": [
+        716,
+        947,
+        147,
+        276
+      ]
+    },
+    "citizen_1_1": {
+      "sheet": "citizens",
+      "rect": [
+        404,
+        336,
+        139,
+        286
+      ]
+    },
+    "citizen_2_3": {
+      "sheet": "citizens",
+      "rect": [
+        1027,
+        646,
+        133,
+        278
+      ]
+    },
+    "citizen_3_3": {
+      "sheet": "citizens",
+      "rect": [
+        1030,
+        947,
+        128,
+        276
+      ]
+    },
+    "citizen_1_3": {
+      "sheet": "citizens",
+      "rect": [
+        1025,
+        335,
+        135,
+        288
+      ]
+    },
+    "citizen_0_2": {
+      "sheet": "citizens",
+      "rect": [
+        722,
+        34,
+        140,
+        271
+      ]
+    },
+    "citizen_1_0": {
+      "sheet": "citizens",
+      "rect": [
+        97,
+        337,
+        143,
+        285
+      ]
+    },
+    "citizen_2_2": {
+      "sheet": "citizens",
+      "rect": [
+        716,
+        648,
+        147,
+        276
+      ]
+    },
+    "citizen_0_1": {
+      "sheet": "citizens",
+      "rect": [
+        408,
+        34,
+        141,
+        271
+      ]
+    },
+    "citizen_0_0": {
+      "sheet": "citizens",
+      "rect": [
+        103,
+        34,
+        130,
+        271
+      ]
+    },
+    "citizen_1_2": {
+      "sheet": "citizens",
+      "rect": [
+        721,
+        336,
+        131,
+        286
+      ]
+    },
+    "citizen_3_0": {
+      "sheet": "citizens",
+      "rect": [
+        95,
+        948,
+        138,
+        275
+      ]
+    },
+    "mural_color_crew": {
+      "sheet": "mural_color_crew",
+      "rect": [
+        9,
+        17,
+        1523,
+        991
+      ]
+    },
+    "gang_colour": {
+      "sheet": "gang_colour",
+      "rect": [
+        0,
+        120,
+        1942,
+        555
+      ]
+    },
+    "apartment": {
+      "sheet": "building",
+      "rect": [
+        100,
+        20,
+        950,
+        1284
+      ]
+    },
+    "lamp": {
+      "sheet": "street_props",
+      "rect": [
+        188,
+        42,
+        170,
+        524
+      ]
+    },
+    "bench": {
+      "sheet": "street_props",
+      "rect": [
+        544,
+        198,
+        412,
+        350
+      ]
+    },
+    "dumpster": {
+      "sheet": "street_props",
+      "rect": [
+        1056,
+        142,
+        408,
+        422
+      ]
+    },
+    "hydrant": {
+      "sheet": "street_props",
+      "rect": [
+        148,
+        602,
+        206,
+        344
+      ]
+    },
+    "crates": {
+      "sheet": "street_props",
+      "rect": [
+        564,
+        630,
+        396,
+        328
+      ]
+    },
+    "planter": {
+      "sheet": "street_props",
+      "rect": [
+        1058,
+        614,
+        412,
+        362
+      ]
+    },
+    "hideout_room": {
+      "sheet": "room",
+      "rect": [
+        0,
+        0,
+        1024,
+        1536
+      ]
+    },
+    "graffiti_wall": {
+      "sheet": "materials",
+      "rect": [
+        8,
+        636,
+        610,
+        610
+      ]
+    },
+    "material_asphalt": {
+      "sheet": "materials",
+      "rect": [
+        8,
+        8,
+        610,
+        610
+      ]
+    },
+    "material_paving": {
+      "sheet": "materials",
+      "rect": [
+        636,
+        8,
+        610,
+        610
+      ]
+    },
+    "material_metal": {
+      "sheet": "materials",
+      "rect": [
+        636,
+        636,
+        610,
+        610
+      ]
+    },
+    "building_window": {
+      "sheet": "building",
+      "rect": [
+        791,
+        398,
+        95,
+        151
+      ]
+    },
+    "building_door": {
+      "sheet": "building",
+      "rect": [
+        406,
+        930,
+        100,
+        255
+      ]
+    },
+    "building_roof_tank": {
+      "sheet": "building",
+      "rect": [
+        619,
+        25,
+        155,
+        182
+      ]
+    },
+    "building_ac": {
+      "sheet": "building",
+      "rect": [
+        450,
+        560,
+        95,
+        99
+      ]
+    },
+    "mural_paper_ghost": {
+      "sheet": "mural_paper_ghost",
+      "rect": [
+        35,
+        23,
+        1465,
+        957
+      ]
+    }
+  },
+  "version": 2,
+  "sheets": [
+    {
+      "id": "characters",
+      "file": "./content__district_01__art__characters.png"
+    },
+    {
+      "id": "outfits",
+      "file": "./content__district_01__art__outfits.png"
+    },
+    {
+      "id": "citizens",
+      "file": "./content__district_01__art__citizens.png"
+    },
+    {
+      "id": "mural_color_crew",
+      "file": "./content__graffiti__assets__color-crew.png"
+    },
+    {
+      "id": "artist_can",
+      "file": "./content__graffiti__assets__artist-can.png"
+    },
+    {
+      "id": "gang_colour",
+      "file": "./content__district_01__art__gang-colour.png"
+    },
+    {
+      "id": "building",
+      "file": "./content__levels__first-mark__art__house-night.png"
+    },
+    {
+      "id": "street_props",
+      "file": "./content__levels__first-mark__art__street-props.png"
+    },
+    {
+      "id": "room",
+      "file": "./content__levels__first-mark__art__room-artist.png"
+    },
+    {
+      "id": "materials",
+      "file": "./content__levels__first-mark__art__materials-night.png"
+    },
+    {
+      "id": "skyline",
+      "file": "./content__levels__first-mark__art__skyline-night.png"
+    },
+    {
+      "id": "mural_paper_ghost",
+      "file": "./content__graffiti__assets__paper-ghost.png"
+    },
+    {
+      "id": "camera",
+      "file": "./content__ui__art__camera-alley-wide.png"
+    },
+    {
+      "id": "reference_background",
+      "file": "./content__levels__first-mark__art__background-reference.png"
+    },
+    {
+      "id": "roller_patch",
+      "file": "./content__levels__first-mark__art__roller-patch.png"
+    }
+  ]
+}

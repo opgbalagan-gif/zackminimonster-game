@@ -11,6 +11,9 @@ import {GRAFFITI_CONFIG} from './content__graffiti__config.js';
 import {cityProgress,canEnter,regionAt,gateMessage} from './core__city-progress.js';
 import {POSTERS,posterApproach} from './content__district_01__posters.js';
 import {BridgeGangs} from './core__bridge-gangs.js';
+import {TutorialFlow} from './core__tutorial.js';
+import {StreetLife} from './core__street-life.js';
+import {SneakFlow} from './core__sneak.js';
 
 export class GameSession{
   constructor(pack,store){
@@ -29,7 +32,7 @@ export class GameSession{
     this.room={action:'idle',remaining:0,beat:false,reaction:'',reactionFor:0};
     this.runStyles={};this.court=COURT;this.courtLine=0;this.ballGame=null;this.ballReward=false;
     const checkpoint=this.save.active_run;
-    if(checkpoint?.district===this.world.id){
+    if(!this.world.tutorial&&checkpoint?.district===this.world.id){
       this.runWalls=checkpoint.walls.filter(id=>this.world.targets.some(t=>t.wall_id===id)&&!this.painted.has(id));
       if(this.runWalls.length){
         for(const id of this.runWalls){this.painted.add(id);this.runStyles[id]=['purple','cyan','gold'].includes(checkpoint.styles[id])?checkpoint.styles[id]:'purple';}
@@ -40,6 +43,7 @@ export class GameSession{
         this.notice('Вылазка восстановлена. Граффити на месте — отнеси REP домой.');
       }
     }
+    if(this.world.tutorial){this.citizens.people=[];this.tutorial=this.world.id==='sneak'?new SneakFlow(this):new TutorialFlow(this);this.life=new StreetLife(this);}
   }
   emit(type,data={}){this.events.push({type,...data});}
   notice(message){this.emit('notice',{message});}
@@ -53,6 +57,7 @@ export class GameSession{
   }
   refreshCity(){this.city=cityProgress(this.world,this.save);this.nav.access=null;}
   enterDistrict(){
+    if(this.tutorial)return this.tutorial.leave();
     this.gangs.reset();
     this.room.action='idle';this.room.remaining=0;this.runStyles={};
     const home=this.world.hideouts?.find(h=>h.regionId===this.save.district_progress[this.world.id]?.home&&this.city.find(r=>r.id===h.regionId)?.open);
@@ -68,6 +73,7 @@ export class GameSession{
     this.notice(this.painted.has(this.world.targets[0].wall_id)?'Выбери следующую стену на карте. Возвращайся домой, чтобы сохранить вылазку.':'Найди фиолетовый баллон. Первая стена — рядом с гаражом.');
   }
   returnHideout(caught=false){
+    if(this.tutorial)return this.tutorial.goHome();
     this.gangs.reset();
     const openBefore=new Set(this.city.filter(r=>r.open).map(r=>r.id));
     const region=regionAt(this.world,this.player);
@@ -112,10 +118,11 @@ export class GameSession{
   roomAction(action){
     if(this.mode!=='hideout')return;
     if(action==='save'){const ok=this.persist();if(ok)this.notice('Дома. Прогресс сохранён.');}
-    else if(action==='rest'){this.room.action='rest';this.room.remaining=5;this.room.reaction='Тихо. Мы дома.';this.room.reactionFor=4;}
+    else if(action==='rest'){if(this.life)return this.life.sleep();this.room.action='rest';this.room.remaining=5;this.room.reaction='Тихо. Мы дома.';this.room.reactionFor=4;}
     else if(action==='pet'){this.room.action='pet';this.room.remaining=2;this.room.reaction='♥';this.room.reactionFor=2;}
   }
   routeTo(point,label='Точка назначения'){
+    if(this.tutorial?.scripted)return;
     if(this.knockedFor>0||this.gangs.push)return;
     this.player.path=this.nav.path(this.player,point);this.waypoint={...point,label};
     if(!this.player.path.length){this.notice('К этой точке пока нет прохода.');this.waypoint=null;}
@@ -124,6 +131,7 @@ export class GameSession{
     const options=[];
     const add=(type,item,p,radius)=>{const d=distance(this.player,p);if(d<radius)options.push({type,item,d});};
     for(const home of this.world.hideouts??[this.world.hideout])add('hideout',home,home,62);
+    if(this.tutorial){for(const target of this.world.targets)if(this.tutorial.allowedTarget(target))add('target',target,target.approach,62);if(this.tutorial.stage==='hide')for(const bin of this.world.bins??[])add('bin',bin,bin.approach,58);options.sort((a,b)=>a.d-b.d);return options[0]??null;}
     for(const poster of POSTERS)add('poster',{...poster,name:'Плакат '+poster.brand},posterApproach(this.world,poster),65);
     for(const bridge of this.world.bridges??[])add('bridge',bridge,bridge.approach,100);
     for(const poi of this.world.pointsOfInterest??[])add('poi',poi,poi,68);
@@ -133,8 +141,11 @@ export class GameSession{
     options.sort((a,b)=>a.d-b.d);return options[0]??null;
   }
   interact(){
+    if(this.tutorial?.scripted)return;
     if(this.mode!=='district'||this.hiddenFor>0||this.knockedFor>0||this.gangs.push||!this.near)return;
     const {type,item}=this.near;this.player.path=[];this.waypoint=null;
+    if(type==='target'&&this.tutorial&&!this.tutorial.allowedTarget(item))return;
+    if(type==='bin')return this.tutorial.hideIn(item);
     if(type==='hideout')return this.returnHideout();
     if(type==='poster'){this.emit('poster-open',{id:item.id});return;}
     if(type==='poi'){
@@ -181,6 +192,7 @@ export class GameSession{
   }
   completeGraffiti(){
     const g=this.graffiti;if(!g||this.painted.has(g.target.wall_id))return;
+    if(this.tutorial)return this.tutorial.painted();
     this.painted.add(g.target.wall_id);this.runWalls.push(g.target.wall_id);g.target.state='PAINTED';
     this.runStyles[g.target.wall_id]=g.ink??'purple';
     this.runRep+=g.target.rep_reward;this.heat=clamp(this.heat+g.target.heat_reward,0,5);
@@ -191,6 +203,7 @@ export class GameSession{
     this.graffiti=null;this.mode='district';this.grace=2;this.victoryFor=1;this.player.state='VICTORY';this.emit('mode');
   }
   checkpointResult(g){
+    if(this.tutorial)return;
     if(g.checkpointed)return;g.checkpointed=true;
     this.save.active_run={district:this.world.id,walls:[...new Set([...this.runWalls,g.target.wall_id])],
       styles:{...this.runStyles,[g.target.wall_id]:g.ink??'purple'},heat:clamp(this.heat+g.target.heat_reward,0,5),position:{x:this.player.x,y:this.player.y}};
@@ -198,6 +211,7 @@ export class GameSession{
   }
   movePlayer(dt,movement){
     this.player.moving=false;
+    if(this.tutorial?.scripted)return;
     if(this.knockedFor>0||this.gangs.push){this.player.state='HIT';return;}
     if(this.hiddenFor>0)return;
     const length=Math.hypot(movement.x,movement.y);
@@ -217,6 +231,8 @@ export class GameSession{
   }
   update(dt,movement={x:0,y:0}){
     this.time+=dt;this.effects.update(dt);
+    this.life?.update(dt);
+    this.tutorial?.update(dt);
     if(this.mode==='hideout'){
       this.room.remaining=Math.max(0,this.room.remaining-dt);this.room.reactionFor=Math.max(0,this.room.reactionFor-dt);
       if(!this.room.remaining)this.room.action='idle';
@@ -247,6 +263,7 @@ export class GameSession{
     for(const t of this.world.targets)if(t.state!=='PAINTED')t.state=this.near?.item===t?'AVAILABLE':'CLEAN';
     this.metrics.activePolice=this.police.update(dt,this.player,this.heat,this.world,this.hiddenFor>0,this.grace);
     if(this.police.caught){this.mode='caught';this.caughtFor=1.6;this.player.state='CAUGHT';this.player.path=[];this.notice('ПЕРЕХВАТ! Половина REP спасена.');return;}
+    if(this.save.campaign?.companionUnlocked===false){this.citizens.update(dt,this.player);return;}
     this.companion.repathIn-=dt;
     if(distance(this.companion,this.player)>38&&this.companion.repathIn<=0){
       this.companion.path=this.nav.path(this.companion,{x:this.player.x-18,y:this.player.y+18});this.companion.repathIn=.55;

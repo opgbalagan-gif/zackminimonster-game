@@ -1,0 +1,10 @@
+[
+  {
+    "id": "tutorial",
+    "manifest": "./content__levels__first-mark__manifest.json"
+  },
+  {
+    "id": "sneak",
+    "manifest": "./content__levels__second-mark__manifest.json"
+  }
+]

@@ -6,8 +6,14 @@ export class ContentLoader{
     const value=await response.json();this.cache.set(url,value);return value;
   }
   async loadDistrict(id,onProgress=()=>{}){
+    return this.loadPack(id,'./data/districts.json',onProgress);
+  }
+  async loadLevel(id,onProgress=()=>{}){
+    return this.loadPack(id,'./data__levels.json',onProgress);
+  }
+  async loadPack(id,catalogPath,onProgress){
     if(this.packs.has(id))return this.packs.get(id);
-    const catalog=await this.json('./data__districts.json'),record=catalog.find(p=>p.id===id);
+    const catalog=await this.json(catalogPath),record=catalog.find(p=>p.id===id);
     if(!record)throw new Error('Unknown content pack: '+id);
     onProgress(.05);const manifest=await this.json(record.manifest);onProgress(.12);
     const [scene,renderer,graffiti,atlas]=await Promise.all([
@@ -29,7 +35,7 @@ export class ContentLoader{
     this.packs.delete(id);this.loaded.delete(id);
   }
   async prefetchCutscene(id){
-    const catalog=await this.json('./cutscenes__manifest.json'),item=catalog.cutscenes.find(v=>v.id===id);
+    const catalog=await this.json('./cutscenes/manifest.json'),item=catalog.cutscenes.find(v=>v.id===id);
     if(!item)return null;
     const key='video:'+id;if(this.cache.has(key))return this.cache.get(key);
     const response=await fetch(item.url);if(!response.ok)throw new Error('Cutscene HTTP '+response.status);

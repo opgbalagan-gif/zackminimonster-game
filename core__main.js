@@ -5,10 +5,13 @@ import {GameSession} from './core__session.js';
 import {InputController} from './core__input.js';
 import {GameUI} from './core__ui.js';
 import {POSTERS,posterApproach} from './content__district_01__posters.js';
+import {TutorialUI} from './core__tutorial-ui.js';
+import {showChapters} from './core__chapters.js';
+import {setUIButton} from './core__ui-kit.js';
 
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d',{alpha:false});
 const loader=new ContentLoader(),store=new SaveStore(),audio=new AudioManager();
-let session=null,renderer=null,starting=false;
+let session=null,renderer=null,starting=false,loadedPack=null,tutorialUI=null;
 const ui=new GameUI({
   start,leave,action,upgrade:()=>session?.upgrade(),
   home:()=>{if(session){const h=(session.world.hideouts??[session.world.hideout]).reduce((a,b)=>Math.hypot(a.x-session.player.x,a.y-session.player.y)<Math.hypot(b.x-session.player.x,b.y-session.player.y)?a:b);session.routeTo(h,h.name);}},
@@ -36,30 +39,42 @@ const ui=new GameUI({
 });
 const input=new InputController(canvas,{
   action,map:()=>ui.toggleMap(),back:()=>{
-    if(session?.mode==='poi')ui.closePoi();else if(session?.mode==='poster')ui.closePoster();else if(ui.mapOpen)ui.toggleMap(false);else if(session?.mode==='graffiti')session.cancelGraffiti();
+    if(session?.mode==='phone')ui.phoneUI.close();else if(session?.mode==='poi')ui.closePoi();else if(session?.mode==='poster')ui.closePoster();else if(ui.mapOpen)ui.toggleMap(false);else if(session?.mode==='graffiti')session.cancelGraffiti();
     else if(['court-dialogue','ball-art','ball-result'].includes(session?.mode)){session.cancelCourt();ui.sync();}
     else if(session?.mode==='hideout')ui.hideoutUI.open('home');
   },
   debug:()=>{ui.debug=!ui.debug;ui.sync();},
   destination:(x,y)=>{
-    if(session?.mode!=='district'||ui.mapOpen||session.hiddenFor>0)return;
+    if(session?.mode!=='district'||ui.mapOpen||session.hiddenFor>0||document.getElementById('chapter-select'))return;
     session.routeTo(session.camera.screenToWorld(x,y,canvas.width,canvas.height),'Точка на улице');
   }
 });
-async function start(){
+async function start(choice){
   if(starting)return;starting=true;ui.loading(0);
   try{
-    const pack=await loader.loadDistrict('district_01',p=>ui.loading(p));
+    const saved=store.load();
+    const wanted=['tutorial','sneak'].includes(choice)?choice:saved.campaign.activeLevel;
+    const level=wanted==='sneak'&&saved.campaign.tutorialComplete?'sneak':'tutorial';
+    loadedPack=await loader.loadLevel(level,p=>ui.loading(p));
+    if(choice==='tutorial'){saved.campaign.tutorialCheckpoint='home';saved.campaign.tutorialAtHome=false;store.write(saved);}
+    saved.campaign.activeLevel=level;store.write(saved);
+    const pack=loadedPack;
     session=new GameSession(pack,store);renderer=pack.createRenderer(pack);
     audio.enabled=session.save.settings.sound;audio.radio.setVolume(session.save.settings.radioVolume);ui.bind(session,renderer,audio);
+    tutorialUI=new TutorialUI(session,openChapters);
+    document.getElementById('chapter-button').hidden=false;
+    tutorialUI?.sync();
     if(store.warning)ui.showToast(store.warning);
   }catch(error){console.error(error);ui.loading(0,'Ошибка загрузки: '+error.message);}
   finally{starting=false;}
 }
 function leave(){if(!session)return;input.reset();session.enterDistrict();ui.sync();}
 function action(){
+  if(document.getElementById('chapter-select'))return;
+  if(session?.mode==='phone')return;
   if(!session){start();return;}
   if(ui.mapOpen)return;
+  if(session.tutorial?.stage==='home'){session.tutorial.act();ui.sync();tutorialUI.sync();return;}
   if(session.mode==='hideout')leave();
   else if(session.mode==='court-dialogue')session.advanceCourt();
   else if(['ball-art','ball-result'].includes(session.mode))session.finishBall();
@@ -79,16 +94,18 @@ function frame(now){
   const begin=performance.now();
   if(session){
     session.room.beat=audio.radio.audible;
-    if(!ui.mapOpen)session.update(dt,input.movement());
+    if(!ui.mapOpen&&!document.getElementById('chapter-select'))session.update(dt,input.movement());
     else if(session.mode==='district')session.traffic.update(dt);
     if(session.mode==='hideout')renderer.hideout(ctx,session,canvas.width,canvas.height);
     else{
       session.camera.follow(session.player,dt,canvas.width);
       renderer.world(ctx,session,canvas.width,canvas.height);
+      tutorialUI?.updateWorldMarkers(renderer);
       ui.updatePosterLinks();
     }
     if(session.mode==='graffiti')ui.graffitiView.draw(dt);
-    uiElapsed+=dt;if(uiElapsed>.1||session.events.length){ui.sync();if(ui.mapOpen)ui.drawMap();uiElapsed=0;}
+    ui.phoneUI?.update(dt);
+    uiElapsed+=dt;if(uiElapsed>.1||session.events.length){ui.sync();tutorialUI?.sync();if(ui.mapOpen)ui.drawMap();uiElapsed=0;}
     frames++;elapsed+=rawDt;
     if(elapsed>=1){
       session.metrics.fps=Math.round(frames/elapsed);frames=0;elapsed=0;
@@ -98,4 +115,18 @@ function frame(now){
   }
   requestAnimationFrame(frame);
 }
+async function openChapters(){
+  if(starting)return;
+  try{
+    showChapters(session?.save??store.load(),id=>{
+      if(session){sessionStorage.setItem('zack.chapter',id);location.reload();}
+      else start(id);
+    });
+  }catch(error){ui.showToast('Не удалось загрузить уровни: '+error.message);}
+}
+document.getElementById('title-chapters').onclick=openChapters;
+document.getElementById('chapter-button').onclick=openChapters;
+const pickedChapter=sessionStorage.getItem('zack.chapter');
+if(pickedChapter){sessionStorage.removeItem('zack.chapter');start(pickedChapter);}
+else if(store.load().campaign.tutorialComplete)setUIButton(document.getElementById('start-button'),'ПРОДОЛЖИТЬ ИСТОРИЮ');
 requestAnimationFrame(frame);
