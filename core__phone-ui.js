@@ -1,11 +1,11 @@
-import {AimController,MotionAim} from './core__motion-aim.js?v=200bdb7a657c';
-import {setUIButton,uiIcon} from './core__ui-kit.js?v=200bdb7a657c';
-import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=200bdb7a657c';
-import {nearbyPhotoSpot} from './core__photo-spots.js?v=200bdb7a657c';
-import {bindCanvasGesture} from './core__canvas-gesture.js?v=200bdb7a657c';
-import {appIcon,foldPhoneIcon,phoneGlyph} from './core__phone-icons.js?v=200bdb7a657c';
-import {dialogFocus} from './core__dialog-focus.js?v=200bdb7a657c';
-import {instagramScreen} from './core__phone-instagram.js?v=200bdb7a657c';
+import {AimController,MotionAim} from './core__motion-aim.js?v=8b3759ea8c13';
+import {setUIButton,uiIcon} from './core__ui-kit.js?v=8b3759ea8c13';
+import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=8b3759ea8c13';
+import {nearbyPhotoSpot} from './core__photo-spots.js?v=8b3759ea8c13';
+import {bindCanvasGesture} from './core__canvas-gesture.js?v=8b3759ea8c13';
+import {appIcon,foldPhoneIcon,phoneGlyph} from './core__phone-icons.js?v=8b3759ea8c13';
+import {dialogFocus} from './core__dialog-focus.js?v=8b3759ea8c13';
+import {instagramScreen} from './core__phone-instagram.js?v=8b3759ea8c13';
 export class PhoneUI{
   constructor(s,renderer,audio){
     this.s=s;this.renderer=renderer;this.audio=audio;this.aim=new AimController();this.motion=new MotionAim(this.aim);this.steady=0;this.screen='messages';this.previous={x:0,y:0};
@@ -21,9 +21,8 @@ export class PhoneUI{
     this.el.querySelector('.phone-lcd').insertAdjacentHTML('beforeend','<div class="phone-radio" hidden><small>STREET RADIO</small><h2>181.FM<br>THE BEAT</h2><p class="phone-radio-status" role="status"></p><button class="phone-radio-play">ВКЛЮЧИТЬ</button><label class="phone-volume-label">Громкость <input class="phone-radio-volume" type="range" min="0" max="100" aria-label="Громкость радио в телефоне"></label></div>');
     this.el.querySelector('nav').insertAdjacentHTML('beforeend','<button class="phone-app phone-radio-app">'+uiIcon('music')+'<span>Радио</span></button><button class="phone-app phone-levels">'+uiIcon('rep')+'<span>Уровни</span></button>');
     const bind=(q,f)=>this.el.querySelector(q).onclick=f;
-    this.el.querySelector('.phone-lcd').append(instagramScreen(renderer));
-    this.el.querySelector('nav').insertAdjacentHTML('afterbegin','<button class="phone-app phone-instagram-app">'+appIcon('instagram')+'<span>Instagram</span></button>');
-    bind('.phone-instagram-app',()=>this.instagram());
+    this.el.querySelector('.phone-lcd').append(instagramScreen());
+    this.el.querySelector('nav').insertAdjacentHTML('afterbegin','<a class="phone-app phone-instagram-app" href="https://www.instagram.com/zakminimonster/" target="_blank" rel="noopener noreferrer" aria-label="Открыть Instagram Зака в новой вкладке">'+appIcon('instagram')+'<span>Instagram ↗</span></a>');
     bind('.phone-close',()=>this.close());bind('.phone-camera',()=>this.camera());bind('.phone-sms',()=>this.messages());bind('.phone-album',()=>this.gallery());bind('.camera-back',()=>this.messages());bind('.camera-album',()=>this.gallery());bind('.camera-centre',()=>{this.aim.centre();this.steady=0;});bind('.camera-shutter',()=>this.shoot());bind('.camera-gyro',()=>this.motion.enable());
     bind('.phone-radio-app',()=>this.radio());bind('.phone-radio-play',()=>this.audio.radio.toggle());
     this.el.querySelector('.phone-levels span:last-child').textContent='Путь';

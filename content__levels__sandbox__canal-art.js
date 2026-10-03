@@ -1,5 +1,5 @@
-import {project} from './core__geometry.js?v=200bdb7a657c';
-import {polygon} from './content__district_01__terrain.js?v=200bdb7a657c';
+import {project} from './core__geometry.js?v=8b3759ea8c13';
+import {polygon} from './content__district_01__terrain.js?v=8b3759ea8c13';
 
 // Sparse painted shapes stay anchored in world space while the surface drifts.
 export function drawCanal(c,r,{night=false,time=0,view=r,bridges=[]}={}){

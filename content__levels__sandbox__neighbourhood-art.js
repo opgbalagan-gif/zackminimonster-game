@@ -1,10 +1,10 @@
-import {project} from './core__geometry.js?v=200bdb7a657c';
-import {polygon,box} from './content__district_01__terrain.js?v=200bdb7a657c';
-import {createMetroArt} from './content__district_01__metro-art.js?v=200bdb7a657c';
-import {drawLoopRail} from './content__district_01__metro.js?v=200bdb7a657c';
-import {illustratedTrain} from './content__levels__sandbox__illustrated-metro.js?v=200bdb7a657c';
-import {comicStation} from './content__levels__sandbox__comic-station.js?v=200bdb7a657c';
-import {drawHoop} from './content__district_01__court-props.js?v=200bdb7a657c';
+import {project} from './core__geometry.js?v=8b3759ea8c13';
+import {polygon,box} from './content__district_01__terrain.js?v=8b3759ea8c13';
+import {createMetroArt} from './content__district_01__metro-art.js?v=8b3759ea8c13';
+import {drawLoopRail} from './content__district_01__metro.js?v=8b3759ea8c13';
+import {illustratedTrain} from './content__levels__sandbox__illustrated-metro.js?v=8b3759ea8c13';
+import {comicStation} from './content__levels__sandbox__comic-station.js?v=8b3759ea8c13';
+import {drawHoop} from './content__district_01__court-props.js?v=8b3759ea8c13';
 export function neighbourhoodArt(images,atlas){
   const track={comic:true,quad(c,name,points){polygon(c,points,{ballast:'#667777',concrete:'#d4d6c4',steel:'#52787b'}[name]);}};
   const board=createMetroArt(images.court_board,{board:[0,0,1536,1024]});

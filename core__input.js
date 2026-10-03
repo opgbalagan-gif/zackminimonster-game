@@ -1,4 +1,4 @@
-import {bindCanvasGesture} from './core__canvas-gesture.js?v=200bdb7a657c';
+import {bindCanvasGesture} from './core__canvas-gesture.js?v=8b3759ea8c13';
 export class InputController{
   constructor(canvas,callbacks){
     this.canvas=canvas;this.callbacks=callbacks;this.keys=new Set();this.stick={x:0,y:0};this.activeStick=null;

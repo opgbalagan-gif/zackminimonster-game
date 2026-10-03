@@ -1,8 +1,8 @@
-import {project} from './core__geometry.js?v=200bdb7a657c';
-import {sceneLight,shadowFootprint} from './core__lighting.js?v=200bdb7a657c';
-import {polygon} from './content__district_01__terrain.js?v=200bdb7a657c';
-import {routeFade} from './core__route-fade.js?v=200bdb7a657c';
-import {STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=200bdb7a657c';
+import {project} from './core__geometry.js?v=8b3759ea8c13';
+import {sceneLight,shadowFootprint} from './core__lighting.js?v=8b3759ea8c13';
+import {polygon} from './content__district_01__terrain.js?v=8b3759ea8c13';
+import {routeFade} from './core__route-fade.js?v=8b3759ea8c13';
+import {STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=8b3759ea8c13';
 export function groundLighting(c,s,w,h,continuation={}){
   const light=sceneLight(s.life.night),cam=s.camera;
   const visible=(x,y,margin=500)=>{const p=project(x,y);return Math.abs(p.x-cam.x)<w/cam.zoom/2+margin&&Math.abs(p.y-cam.y)<h/cam.zoom/2+margin;};
