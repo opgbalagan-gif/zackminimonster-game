@@ -1,5 +1,5 @@
-import {project} from './core__geometry.js?v=4c32f2c839ac';
-import {polygon} from './content__district_01__terrain.js?v=4c32f2c839ac';
+import {project} from './core__geometry.js?v=0bee4946821b';
+import {polygon} from './content__district_01__terrain.js?v=0bee4946821b';
 const quad=r=>[[r.x,r.y],[r.x+r.w,r.y],[r.x+r.w,r.y+r.h],[r.x,r.y+r.h]].map(p=>project(...p));
 export function drawWaterfront(c,world,kit,night=false){
   c.save();c.imageSmoothingEnabled=true;
