@@ -1,4 +1,4 @@
-import {cleanBallSave} from './core__basketball.js?v=a7cd92ef07f6';
+import {cleanBallSave} from './core__basketball.js?v=af18bdaf4c2b';
 export const SAVE_KEY='zackminimonster.save';
 export const SAVE_VERSION=3;
 export function freshSave(){

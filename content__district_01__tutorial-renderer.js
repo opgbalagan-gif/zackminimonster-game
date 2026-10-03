@@ -1,12 +1,12 @@
-import {SpriteAtlas} from './core__sprites.js?v=a7cd92ef07f6';
-import {project} from './core__geometry.js?v=a7cd92ef07f6';
-import {heroSprite} from './core__hideout.js?v=a7cd92ef07f6';
-import {polygon,box} from './content__district_01__terrain.js?v=a7cd92ef07f6';
-import {drawGraffiti} from './content__district_01__graffiti-art.js?v=a7cd92ef07f6';
-import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=a7cd92ef07f6';
-import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=a7cd92ef07f6';
-import {OccluderFade} from './core__occluder-fade.js?v=a7cd92ef07f6';
-import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=a7cd92ef07f6';
+import {SpriteAtlas} from './core__sprites.js?v=af18bdaf4c2b';
+import {project} from './core__geometry.js?v=af18bdaf4c2b';
+import {heroSprite} from './core__hideout.js?v=af18bdaf4c2b';
+import {polygon,box} from './content__district_01__terrain.js?v=af18bdaf4c2b';
+import {drawGraffiti} from './content__district_01__graffiti-art.js?v=af18bdaf4c2b';
+import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=af18bdaf4c2b';
+import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=af18bdaf4c2b';
+import {OccluderFade} from './core__occluder-fade.js?v=af18bdaf4c2b';
+import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=af18bdaf4c2b';
 
 function fightCloud(c,s){
   const t=s.tutorial.fightBurst,p=project(s.tutorial.actor.x-11,s.tutorial.actor.y+10),pulse=Math.sin(t*27);
@@ -43,14 +43,14 @@ export function createTutorialRenderer(pack){
       masks.set(id,(u,v)=>pixels[(Math.min(surface.height-1,Math.floor(v*surface.height))*128+Math.min(127,Math.floor(u*128)))*4+3]>100);
     }return masks.get(id);
   }
-  function house(c,s){
-    const p=project(278,288,-36);atlas.draw(c,s.life&&!s.life.night?'apartment_day':'apartment',p.x,p.y,335);
-    if(s.world.sandbox?!s.painted.has(s.world.targets[1].wall_id):!s.save.campaign.tutorialFacadePainted)return;
+  function house(c,s,building=s.world.buildings[0]){
+    const target=s.world.targets.find(t=>t.buildingId===building.id),p=project(building.x+building.w,building.y+building.h,-36);atlas.draw(c,s.life&&!s.life.night?'apartment_day':'apartment',p.x,p.y,335);
+    if(s.world.sandbox?!target||!s.painted.has(target.wall_id):!s.save.campaign.tutorialFacadePainted)return;
     // Coordinates on the source facade: between the pipes, clear of doors and plants.
     const scale=335/950;
     c.save();c.translate(Math.round(p.x)+Math.round(-335/2),Math.round(p.y)+Math.round(-335*1284/950));c.scale(scale,scale);
     c.translate(510,950);c.transform(1,-.36,0,1,0,0);c.beginPath();c.rect(0,0,108,145);c.clip();
-    drawGraffiti(c,'zack_tag',0,0,108,145,atlas);c.restore();
+    drawGraffiti(c,target?.graffiti_id??'zack_tag',0,0,108,145,atlas);c.restore();
   }
   function wall(c,s,target=s.world.targets[0],placement){
     if(placement){c.save();const anchor=project(placement.x,placement.y+14),base=project(392,266);c.translate(anchor.x,anchor.y);c.scale(placement.w/202,placement.w/202);c.translate(-base.x,-base.y);}
@@ -81,17 +81,31 @@ export function createTutorialRenderer(pack){
     function faded(id,bounds,depth,draw,mask){c.save();c.globalAlpha*=fades.alpha(id,bounds,depth,hero,dt,mask);draw();c.restore();}
     function spriteObject(id,x,y,width,depth,draw){const p=project(x,y),rect=atlas.rect(id),height=width*rect[3]/rect[2];faded(id+':'+x+':'+y,{x:p.x-width/2,y:p.y-height,w:width,h:height},depth,draw??(()=>atlas.draw(c,id,p.x,p.y,width)),spriteMask(id));}
     c.save();c.translate(originX,originY);c.scale(cam.zoom,cam.zoom);c.translate(-cam.x,-cam.y);
-    kit.floor(c,{night:!day});
-    if(s.world.id==='sneak'||sandbox){
+    if(sandbox){
+      const quad=(x,y,ww,hh)=>[project(x,y),project(x+ww,y),project(x+ww,y+hh),project(x,y+hh)];
+      box(c,72,92,1450,940,0,'#504d43','#1c2a32','#29323a',-22);
+      c.save();polygon(c,quad(72,92,1450,940),'#625d51');c.clip();
+      for(let x=72;x<1522;x+=180)for(let y=92;y<1032;y+=180)kit.material.quad(c,'paving',quad(x,y,180,180),.24);
+      c.restore();
+      for(const [x,y,ww,hh] of [[76,412,1442,112],[76,916,1442,112],[950,96,112,928]]){
+        kit.material.quad(c,'asphalt',quad(x,y,ww,hh),.28);
+        c.save();c.transform(1,.5,-1,.5,0,0);c.strokeStyle='#b4aa8c';c.lineWidth=4;c.strokeRect(x,y,ww,hh);c.strokeStyle='#c3ab70';c.lineWidth=2;c.setLineDash([22,21]);c.beginPath();if(ww>hh){c.moveTo(x+20,y+hh/2);c.lineTo(x+ww-20,y+hh/2);}else{c.moveTo(x+ww/2,y+20);c.lineTo(x+ww/2,y+hh-20);}c.stroke();c.restore();
+      }
+      // Crossings connect both sides of the block without crossing building footprints.
+      c.save();c.transform(1,.5,-1,.5,0,0);c.fillStyle='#c2b99e';for(const x of [100,900,1080,1450])for(const y of [424,928])for(let k=0;k<6;k++)c.fillRect(x,y+k*15,16,7);c.restore();
+    }else kit.floor(c,{night:!day});
+    if(s.world.id==='sneak'){
       box(c,632,92,250,460,0,'#504d43','#1c2a32','#29323a',-22);
       const quad=(x,y,ww,hh)=>[project(x,y),project(x+ww,y),project(x+ww,y+hh),project(x,y+hh)];
       kit.material.quad(c,'paving',quad(632,92,250,460),.24);kit.material.quad(c,'asphalt',quad(632,412,250,112),.28);
     }
     const queue=[{kind:'house',depth:566},{kind:'wall',depth:760},{kind:'zack',depth:s.player.x+s.player.y}];
+    for(const building of s.world.buildings.slice(1))queue.push({kind:'block-house',building,depth:building.x+building.w+building.y+building.h});
     for(const [i,placement] of (s.world.extraWalls??[]).entries())queue.push({kind:'extra-wall',placement,target:s.world.targets[i+2],depth:placement.x+placement.w/2+placement.y+14});
     const fighting=s.tutorial.stage==='fight'&&s.tutorial.fightBurst>0;
     if(fighting)queue.push({kind:'fight',depth:s.tutorial.actor.x+s.tutorial.actor.y+25});
     for(const p of STREET_PROPS)queue.push({kind:'prop',...p,depth:p.x+p.y});
+    for(const p of s.world.blockProps??[])queue.push({kind:'prop',...p,depth:p.x+p.y});
     queue.push({kind:'fence',depth:500});
     if(s.world.id==='sneak')queue.push({kind:'fence',x:655,depth:810});
     for(const x of [242,469])queue.push({kind:'bollard',x,y:397,depth:x+397});
@@ -104,6 +118,7 @@ export function createTutorialRenderer(pack){
       if(o.kind==='fence'){const x=o.x??380,length=o.x?210:226,p=project(x,155);faded('fence:'+x,{x:p.x,y:p.y-65,w:length,h:length*.5+65},o.depth,()=>kit.fence(c,x,155,length),(u,v)=>{const localY=v*(length*.5+65)-65;return localY<u*length*.5&&localY>u*length*.5-65;});continue;}
       if(o.kind==='bollard'){kit.bollard(c,o.x,o.y);continue;}
       if(o.kind==='house'){const p=project(278,288,-36),hh=335*1284/950;faded('house',{x:p.x-167.5,y:p.y-hh,w:335,h:hh},o.depth,()=>house(c,s),spriteMask('apartment'));continue;}
+      if(o.kind==='block-house'){const b=o.building,p=project(b.x+b.w,b.y+b.h,-36),hh=335*1284/950;faded(b.id,{x:p.x-167.5,y:p.y-hh,w:335,h:hh},o.depth,()=>house(c,s,b),spriteMask('apartment'));continue;}
       if(o.kind==='bin'){const p=project(o.x,o.y);spriteObject(day?'dumpster_day':'dumpster',o.x,o.y,90,o.depth);if(s.tutorial.bin?.id===o.id){c.fillStyle='#f3d283';c.font='bold 13px monospace';c.textAlign='center';c.fillText('ТИШЕ…',p.x,p.y-58);}continue;}
       if(o.kind==='wall'){const p=project(392,266);faded('wall',{x:p.x,y:p.y-94,w:202,h:195},o.depth,()=>wall(c,s),(u,v)=>{const yy=v*195-94;return yy<=u*101&&yy>=u*101-94;});continue;}
       if(o.kind==='extra-wall'){const p=project(o.placement.x,o.placement.y+14),width=o.placement.w;faded(o.target.wall_id,{x:p.x,y:p.y-94,w:width,h:94+width/2},o.depth,()=>wall(c,s,o.target,o.placement));continue;}
@@ -136,7 +151,7 @@ export function createTutorialRenderer(pack){
     for(const [id,x,y,z] of [['home',278,288,425],['wall',494,266,106]]){const p=project(x,y,z);markerHits.push({id,x:originX+(p.x-cam.x)*cam.zoom,y:originY+(p.y-cam.y)*cam.zoom});}
     if(s.tutorial.allowedTarget(s.world.targets[1]))markerHits.push({id:'facade',x:originX+(24-cam.x)*cam.zoom,y:originY+(173-cam.y)*cam.zoom});
     for(const bin of s.world.bins??[]){const p=project(bin.x,bin.y,62);markerHits.push({id:bin.id,x:originX+(p.x-cam.x)*cam.zoom,y:originY+(p.y-cam.y)*cam.zoom});}
-    for(const target of s.world.targets.slice(2)){const p=project(target.x,target.y,106);markerHits.push({id:target.wall_id,x:originX+(p.x-cam.x)*cam.zoom,y:originY+(p.y-cam.y)*cam.zoom});}
+    for(const target of s.world.targets.slice(2)){const p=target.buildingId?project(target.x+20,target.y-20,14):project(target.x,target.y,106);markerHits.push({id:target.wall_id,x:originX+(p.x-cam.x)*cam.zoom,y:originY+(p.y-cam.y)*cam.zoom});}
     if(fighting&&s.tutorial.fightBurst>3.1){c.fillStyle='rgba(12,19,26,'+Math.min(1,(s.tutorial.fightBurst-3.1)/.5)+')';c.fillRect(0,0,w,h);}
     // Camera input uses a screen-centred origin; compensate for the raised composition.
     cam.x+=(w/2-originX)/cam.zoom;cam.y+=(h/2-originY)/cam.zoom;

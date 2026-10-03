@@ -1,4 +1,4 @@
-import {facadeGeometry} from './content__district_01__facades.js?v=a7cd92ef07f6';
+import {facadeGeometry} from './content__district_01__facades.js?v=af18bdaf4c2b';
 export const ARTIST_URL='https://www.instagram.com/zakminimonster?stkn=NnA2cG13MXFsemU0';
 export const POSTERS=[
   {id:'reebok',brand:'Reebok',buildingId:'D01_B02'},

@@ -1,4 +1,4 @@
-import {roomLayout,heroSprite,ink} from './core__hideout.js?v=a7cd92ef07f6';
+import {roomLayout,heroSprite,ink} from './core__hideout.js?v=af18bdaf4c2b';
 export function drawTrophy(c,id,atlas,x,y,size){
   if(id==='mini')atlas.draw(c,'companion',x,y,null,size);
   else if(id==='metro'){

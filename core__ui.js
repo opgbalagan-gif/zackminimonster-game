@@ -1,18 +1,19 @@
-import {GraffitiView} from './core__graffiti-view.js?v=a7cd92ef07f6';
-import {HideoutUI} from './core__hideout-ui.js?v=a7cd92ef07f6';
-import {CourtView} from './core__court-view.js?v=a7cd92ef07f6';
-import {PhoneUI} from './core__phone-ui.js?v=a7cd92ef07f6';
-import {PeriodTransition} from './core__period-transition.js?v=a7cd92ef07f6';
-import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=a7cd92ef07f6';
-import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=a7cd92ef07f6';
-import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=a7cd92ef07f6';
-import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=a7cd92ef07f6';
-import {regionAt,gateMessage} from './core__city-progress.js?v=a7cd92ef07f6';
-import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=a7cd92ef07f6';
+import {GraffitiView} from './core__graffiti-view.js?v=af18bdaf4c2b';
+import {HideoutUI} from './core__hideout-ui.js?v=af18bdaf4c2b';
+import {CourtView} from './core__court-view.js?v=af18bdaf4c2b';
+import {PhoneUI} from './core__phone-ui.js?v=af18bdaf4c2b';
+import {PeriodTransition} from './core__period-transition.js?v=af18bdaf4c2b';
+import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=af18bdaf4c2b';
+import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=af18bdaf4c2b';
+import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=af18bdaf4c2b';
+import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=af18bdaf4c2b';
+import {regionAt,gateMessage} from './core__city-progress.js?v=af18bdaf4c2b';
+import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=af18bdaf4c2b';
 const $=id=>document.getElementById(id);
 export class GameUI{
   constructor(callbacks){
     initUITheme();
+    $('action-button').classList.remove('primary','ui-primary');
     document.querySelector('.player-card').append($('toast'));
     this.callbacks=callbacks;this.mapOpen=false;this.debug=false;this.toastUntil=0;this.lastMode='';
     $('start-button').onclick=callbacks.start;$('leave-button').onclick=callbacks.leave;
@@ -138,6 +139,8 @@ export class GameUI{
     $('upgrade-button').disabled=bought;$('upgrade-button').querySelector('b').textContent=bought?'УСТАНОВЛЕН':'500 REP';
     $('objective-label').textContent=s.knockedFor>0?'СБИЛИ · Зак поднимается…':s.waypoint?'↗ '+s.waypoint.label:s.runRep?'Вернись в убежище, чтобы сохранить':s.painted.size===s.world.targets.length?'Район полностью твой':'Найди свободную стену · берегись машин';
     const near=s.near;$('interaction').hidden=!near||s.hiddenFor>0||s.mode!=='district';
+    $('action-button').hidden=$('interaction').hidden||!!s.tutorial?.scripted;
+    if(near){const [label,icon]=near.type==='target'?['Рисовать','spray']:near.type==='hideout'?['Войти','home']:['Спрятаться','bin'];$('action-button').setAttribute('aria-label',label);$('action-button').title=label+' · нажми; тяни, чтобы идти';setUIButton($('action-button'),label,icon);}
     if(near){
       $('interaction-type').textContent=near.type==='court'?'COURT STORY':near.type==='target'?'GRAFFITI SPOT':near.type==='safe'?'SAFE SPOT':'HIDEOUT / SAVE';
       $('interaction-name').textContent=near.item.name;

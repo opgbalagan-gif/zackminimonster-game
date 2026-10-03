@@ -136,3 +136,15 @@ button.secondary,.room-hotspot,#radio-toggle,#chapter-button,#phone-toggle,.phas
 #app[data-sandbox=true] .home-dock button:not(#leave-button){display:none}
 #app[data-sandbox=true] #leave-button{width:170px;min-height:58px;flex-direction:row;gap:12px;border:0;border-radius:0;background:var(--painted-panel) center/100% 100% no-repeat;box-shadow:none}
 #app[data-sandbox=true] #leave-button span{font:700 19px var(--ui-heading);color:#f2cc77}
+#app #joystick{left:50%;right:auto;bottom:max(24px,env(safe-area-inset-bottom));transform:translateX(-50%);width:116px;height:116px;touch-action:none;overflow:visible}
+#app #joystick .stick-knob{left:30px;top:30px;width:52px;height:52px;overflow:visible}
+#app #joystick .stick-direction.up,#app #joystick .stick-direction.down{left:49px}
+#app #joystick .stick-direction.left,#app #joystick .stick-direction.right{top:48px}
+#app #joystick #action-button{position:absolute;inset:-2px;width:52px;height:52px;min-height:0;min-width:0;padding:8px;display:grid;place-items:center;border:2px solid #e5c774;border-radius:50%;background:radial-gradient(circle at 35% 25%,#394247,#081219 80%);box-shadow:0 0 12px #eccb6340;outline:none;clip-path:none;touch-action:none}
+#app #joystick #action-button[hidden]{display:none!important}
+#app #joystick #action-button:before,#app #joystick #action-button:after,#app #joystick #action-button .button-label,#app #joystick #action-button .button-arrow{display:none}
+#app #joystick #action-button .button-icon{display:block;width:30px;height:30px;margin:0}
+#app #joystick #action-button .ui-icon{width:30px;height:30px}
+#app #joystick #action-button{pointer-events:auto}
+#app #interaction{display:none!important}
+#app #joystick #action-button:focus-visible{outline:3px solid #fff;outline-offset:4px}

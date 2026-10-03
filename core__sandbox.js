@@ -1,15 +1,23 @@
-import {createSneakWorld} from './core__sneak.js?v=a7cd92ef07f6';
-import {distance,moveAlongPath} from './core__geometry.js?v=a7cd92ef07f6';
+import {createSneakWorld} from './core__sneak.js?v=af18bdaf4c2b';
+import {distance,moveAlongPath} from './core__geometry.js?v=af18bdaf4c2b';
 
 export function createSandboxWorld(){
   const w=createSneakWorld();w.id='sandbox';w.sandbox=true;w.levelNumber=1;w.name='СВОЙ РАЙОН';
+  w.width=1650;w.height=1160;w.walkableAreas=[{x:72,y:92,w:1450,h:940}];w.mapBounds={x:72,y:92,w:1450,h:940};
   w.targets[0]={...w.targets[0],wall_id:'SANDBOX_WALL_1',name:'Стена у дома',graffiti_id:'zack_tag',rep_reward:60,heat_reward:1};
   w.targets[1]={...w.targets[1],wall_id:'SANDBOX_HOME',rep_reward:60,heat_reward:1};
-  w.extraWalls=[{x:680,y:172,w:160},{x:670,y:344,w:180}];
+  w.extraWalls=[{x:1120,y:340,w:160},{x:670,y:344,w:180}];
   for(const [i,wall] of w.extraWalls.entries()){
     w.obstacles.push({x:wall.x,y:wall.y,w:wall.w,h:14,wallCollider:true});
     w.targets.push({...w.targets[0],wall_id:'SANDBOX_WALL_'+(i+2),name:i?'Стена у дороги':'Стена переулка',x:wall.x+wall.w/2,y:wall.y+14,approach:{x:wall.x+wall.w/2,y:wall.y+56},graffiti_id:i?'zack_tag':'monster'});
   }
+  const homes=[['north_house','Северный дом',700,132],['corner_house','Угловой дом',1120,132],['brick_house','Дом во дворе',350,650],['music_house','Дом музыкантов',740,650],['end_house','Дом у перекрёстка',1120,650]];
+  for(const [id,name,x,y] of homes){
+    const b={id,type:'apartment',x,y,w:166,h:156};w.buildings.push(b);
+    w.targets.push({...w.targets[1],wall_id:'SANDBOX_'+id.toUpperCase(),buildingId:id,name:'Фасад · '+name,x:x+b.w,y:y+b.h,approach:{x:x+b.w+37,y:y+b.h+17},graffiti_id:id==='music_house'?'monster':'zack_tag'});
+  }
+  for(const [i,x,y] of [[2,620,825],[3,1360,825]]){const b={id:'block_bin_'+i,name:'Бак во дворе',x,y,approach:{x,y:y+38}};w.bins.push(b);w.obstacles.push({x:x-24,y:y-18,w:48,h:27});}
+  w.blockProps=[{id:'lamp',x:900,y:385,w:44},{id:'lamp',x:1400,y:390,w:44},{id:'lamp',x:650,y:880,w:44},{id:'lamp',x:1350,y:880,w:44},{id:'bench',x:550,y:870,w:91},{id:'planter',x:1025,y:580,w:62}];
   return w;
 }
 

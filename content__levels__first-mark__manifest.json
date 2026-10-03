@@ -1,9 +1,9 @@
 {
   "id": "tutorial",
   "version": 24,
-  "scene": "./content__levels__first-mark__scene.js?v=a7cd92ef07f6",
-  "renderer": "./content__levels__first-mark__renderer.js?v=a7cd92ef07f6",
-  "graffiti_data": "./data__graffiti__definitions.json?v=a7cd92ef07f6",
-  "atlas_data": "./content__levels__first-mark__atlas.json?v=a7cd92ef07f6",
+  "scene": "./content__levels__first-mark__scene.js?v=af18bdaf4c2b",
+  "renderer": "./content__levels__first-mark__renderer.js?v=af18bdaf4c2b",
+  "graffiti_data": "./data__graffiti__definitions.json?v=af18bdaf4c2b",
+  "atlas_data": "./content__levels__first-mark__atlas.json?v=af18bdaf4c2b",
   "art_base": ""
 }

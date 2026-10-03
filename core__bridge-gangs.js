@@ -1,5 +1,5 @@
-import {distance} from './core__geometry.js?v=a7cd92ef07f6';
-import {canEnter,regionAt} from './core__city-progress.js?v=a7cd92ef07f6';
+import {distance} from './core__geometry.js?v=af18bdaf4c2b';
+import {canEnter,regionAt} from './core__city-progress.js?v=af18bdaf4c2b';
 
 export class BridgeGangs{
   constructor(world){
