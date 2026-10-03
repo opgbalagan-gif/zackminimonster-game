@@ -1,13 +1,13 @@
-import {ContentLoader} from './core__content-loader.js?v=b5bc09075cbf';
-import {SaveStore} from './core__save-store.js?v=b5bc09075cbf';
-import {AudioManager} from './core__audio.js?v=b5bc09075cbf';
-import {GameSession} from './core__session.js?v=b5bc09075cbf';
-import {InputController} from './core__input.js?v=b5bc09075cbf';
-import {GameUI} from './core__ui.js?v=b5bc09075cbf';
-import {POSTERS,posterApproach} from './content__district_01__posters.js?v=b5bc09075cbf';
-import {TutorialUI} from './core__tutorial-ui.js?v=b5bc09075cbf';
-import {showChapters} from './core__chapters.js?v=b5bc09075cbf';
-import {setUIButton} from './core__ui-kit.js?v=b5bc09075cbf';
+import {ContentLoader} from './core__content-loader.js?v=3746185ef7c6';
+import {SaveStore} from './core__save-store.js?v=3746185ef7c6';
+import {AudioManager} from './core__audio.js?v=3746185ef7c6';
+import {GameSession} from './core__session.js?v=3746185ef7c6';
+import {InputController} from './core__input.js?v=3746185ef7c6';
+import {GameUI} from './core__ui.js?v=3746185ef7c6';
+import {POSTERS,posterApproach} from './content__district_01__posters.js?v=3746185ef7c6';
+import {TutorialUI} from './core__tutorial-ui.js?v=3746185ef7c6';
+import {showChapters} from './core__chapters.js?v=3746185ef7c6';
+import {setUIButton} from './core__ui-kit.js?v=3746185ef7c6';
 
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d',{alpha:false});
 const loader=new ContentLoader(),store=new SaveStore(),audio=new AudioManager();
@@ -70,6 +70,7 @@ async function start(choice){
 }
 function leave(){if(!session)return;input.reset();session.enterDistrict();ui.sync();}
 function action(){
+  if(session?.cinematic)return;
   if(document.getElementById('chapter-select'))return;
   if(session?.mode==='phone')return;
   if(!session){start();return;}

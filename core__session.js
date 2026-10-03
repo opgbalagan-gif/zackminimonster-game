@@ -1,19 +1,19 @@
-import {NavigationGrid} from './core__navigation.js?v=b5bc09075cbf';
-import {PoliceSystem} from './core__police.js?v=b5bc09075cbf';
-import {GraffitiGame} from './core__graffiti.js?v=b5bc09075cbf';
-import {Camera,clamp,distance,moveAlongPath,project} from './core__geometry.js?v=b5bc09075cbf';
-import {EffectPool} from './core__effects.js?v=b5bc09075cbf';
-import {OUTFITS,INKS,TROPHIES} from './core__hideout.js?v=b5bc09075cbf';
-import {TrafficSystem} from './core__traffic.js?v=b5bc09075cbf';
-import {CitizenSystem} from './core__citizens.js?v=b5bc09075cbf';
-import {COURT,COURT_LINES,BallArtGame} from './core__basketball.js?v=b5bc09075cbf';
-import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=b5bc09075cbf';
-import {cityProgress,canEnter,regionAt,gateMessage} from './core__city-progress.js?v=b5bc09075cbf';
-import {POSTERS,posterApproach} from './content__district_01__posters.js?v=b5bc09075cbf';
-import {BridgeGangs} from './core__bridge-gangs.js?v=b5bc09075cbf';
-import {TutorialFlow} from './core__tutorial.js?v=b5bc09075cbf';
-import {StreetLife} from './core__street-life.js?v=b5bc09075cbf';
-import {SneakFlow} from './core__sneak.js?v=b5bc09075cbf';
+import {NavigationGrid} from './core__navigation.js?v=3746185ef7c6';
+import {PoliceSystem} from './core__police.js?v=3746185ef7c6';
+import {GraffitiGame} from './core__graffiti.js?v=3746185ef7c6';
+import {Camera,clamp,distance,moveAlongPath,project} from './core__geometry.js?v=3746185ef7c6';
+import {EffectPool} from './core__effects.js?v=3746185ef7c6';
+import {OUTFITS,INKS,TROPHIES} from './core__hideout.js?v=3746185ef7c6';
+import {TrafficSystem} from './core__traffic.js?v=3746185ef7c6';
+import {CitizenSystem} from './core__citizens.js?v=3746185ef7c6';
+import {COURT,COURT_LINES,BallArtGame} from './core__basketball.js?v=3746185ef7c6';
+import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=3746185ef7c6';
+import {cityProgress,canEnter,regionAt,gateMessage} from './core__city-progress.js?v=3746185ef7c6';
+import {POSTERS,posterApproach} from './content__district_01__posters.js?v=3746185ef7c6';
+import {BridgeGangs} from './core__bridge-gangs.js?v=3746185ef7c6';
+import {TutorialFlow} from './core__tutorial.js?v=3746185ef7c6';
+import {StreetLife} from './core__street-life.js?v=3746185ef7c6';
+import {SneakFlow} from './core__sneak.js?v=3746185ef7c6';
 
 export class GameSession{
   constructor(pack,store){
@@ -231,6 +231,7 @@ export class GameSession{
     if(this.victoryFor<=0)this.player.state=this.player.moving?'MOVE_'+this.player.facing.toUpperCase():'IDLE';
   }
   update(dt,movement={x:0,y:0}){
+    if(this.cinematic)return;
     this.time+=dt;this.effects.update(dt);
     this.life?.update(dt);
     this.tutorial?.update(dt);

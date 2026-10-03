@@ -1,13 +1,14 @@
-import {GraffitiView} from './core__graffiti-view.js?v=b5bc09075cbf';
-import {HideoutUI} from './core__hideout-ui.js?v=b5bc09075cbf';
-import {CourtView} from './core__court-view.js?v=b5bc09075cbf';
-import {PhoneUI} from './core__phone-ui.js?v=b5bc09075cbf';
-import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=b5bc09075cbf';
-import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=b5bc09075cbf';
-import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=b5bc09075cbf';
-import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=b5bc09075cbf';
-import {regionAt,gateMessage} from './core__city-progress.js?v=b5bc09075cbf';
-import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=b5bc09075cbf';
+import {GraffitiView} from './core__graffiti-view.js?v=3746185ef7c6';
+import {HideoutUI} from './core__hideout-ui.js?v=3746185ef7c6';
+import {CourtView} from './core__court-view.js?v=3746185ef7c6';
+import {PhoneUI} from './core__phone-ui.js?v=3746185ef7c6';
+import {PeriodTransition} from './core__period-transition.js?v=3746185ef7c6';
+import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=3746185ef7c6';
+import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=3746185ef7c6';
+import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=3746185ef7c6';
+import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=3746185ef7c6';
+import {regionAt,gateMessage} from './core__city-progress.js?v=3746185ef7c6';
+import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=3746185ef7c6';
 const $=id=>document.getElementById(id);
 export class GameUI{
   constructor(callbacks){
@@ -51,6 +52,7 @@ export class GameUI{
     $('motion-enable').onclick=async()=>{await this.graffitiView.motion.enable();this.sync();};
     $('motion-touch').onclick=()=>{this.graffitiView.motion.useTouch();this.sync();};
     this.hideoutUI=new HideoutUI(session,renderer,()=>this.sync(),audio);
+    this.periodTransition=new PeriodTransition(session,()=>{if(this.pendingComment){const text=this.pendingComment;this.pendingComment='';this.showToast(text);}});
     if(session.world.tutorial)this.phoneUI=new PhoneUI(session,renderer,audio);
     $('radio-stop').onclick=()=>{audio.radio.stop();this.sync();};
     $('radio-toggle').onclick=()=>{audio.radio.toggle();this.sync();};
@@ -109,7 +111,7 @@ export class GameUI{
     const selected=this.session.city.find(r=>r.id===this.session.mapRegion);
     $('city-status').textContent=selected?selected.open?selected.subtitle+' · Сохранено '+selected.rep+' REP':gateMessage(this.session.city,selected.id):'Единый город · река · кольцо метро. Проходы: 800 → 1200 → 1600 REP в предыдущем районе.';
   }
-  showToast(text){$('toast').textContent=text;$('toast').hidden=false;this.toastUntil=performance.now()+4500;}
+  showToast(text){if(this.periodTransition?.active){this.pendingComment=text;return;}$('toast').textContent=text;$('toast').hidden=false;this.toastUntil=performance.now()+4500;}
   sync(){
     const s=this.session;if(!s)return;
     $('app').dataset.mode=s.mode;
@@ -188,6 +190,7 @@ export class GameUI{
     if(this.debug)$('debug-overlay').textContent='FPS '+s.metrics.fps+'\nFRAME '+s.metrics.frame+' ms\nMEM '+s.metrics.memory+'\nPACK '+s.world.id+'\nDRAW '+s.metrics.drawCalls+'\nPOLICE '+s.metrics.activePolice+'\nNPC '+s.citizens.people.length+'\nTRAFFIC '+s.traffic.cars.filter(c=>c.travel>0).length+' / '+s.traffic.cars.length+'\nHEAT '+s.heat;
     if(performance.now()>this.toastUntil)$('toast').hidden=true;
     for(const event of s.events.splice(0)){
+      if(event.type==='period-change')this.periodTransition.play(event.from,event.to);
       if(event.type==='phone-open')this.phoneUI?.open();
       if(event.type==='poster-open')this.openPoster(event.id);
       if(event.type==='poi-open')this.openPoi(event.id);

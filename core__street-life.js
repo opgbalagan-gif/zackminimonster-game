@@ -1,5 +1,5 @@
-import {moveAlongPath,distance} from './core__geometry.js?v=b5bc09075cbf';
-import {recognition,rememberWorks,RECOGNITION_TIERS} from './core__recognition.js?v=b5bc09075cbf';
+import {moveAlongPath,distance} from './core__geometry.js?v=3746185ef7c6';
+import {recognition,rememberWorks,RECOGNITION_TIERS} from './core__recognition.js?v=3746185ef7c6';
 
 export const HOME_TOUR=[
   ['Знакомый потолок','Кровать — мой первый спонсор. Пока платит только сном.','Это дом Зака. Радио — в телефоне справа. Остальные значки появятся по ходу знакомства.','О КРОВАТИ'],
@@ -36,9 +36,10 @@ export class StreetLife{
     this.sleeping=2.6;this.s.room.action='rest';this.s.room.remaining=2.6;this.s.emit('mode');
   }
   changePeriod(){
-    const state=this.state;
+    const state=this.state,from=state.period;
     if(this.night){state.period='day';state.day++;state.donations=[];state.audienceTier=null;}else state.period='night';
     state.elapsed=0;this.visitors=[];this.spawnIn=2;this.s.persist();
+    this.s.emit('period-change',{from,to:state.period});
     this.s.notice(this.night?'Наступила ночь. Пора рисовать.':'Доброе утро. Посмотрим, кому понравились работы.');
   }
   works(){return this.s.world.targets.filter(t=>this.s.painted.has(t.wall_id)&&(t.buildingId||this.s.tutorial.wall==='own'&&this.s.tutorial.tag===0&&this.s.tutorial.coating===0));}
