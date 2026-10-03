@@ -1,4 +1,5 @@
 // Extend the existing saved district without moving its original buildings or wall IDs.
+import {densifyWaterfront} from './core__waterfront-blocks.js?v=0b8195c8da56';
 export function addWaterfront(w){
   w.width=3800;w.height=4200;w.mapBounds={x:72,y:92,w:3650,h:4010};
   w.walkableAreas=[{...w.mapBounds}];
@@ -45,5 +46,5 @@ export function addWaterfront(w){
   for(const y of [1820,2130,2440])w.nature.push({id:'comic_pier',x:350,y,w:120});
   for(const p of w.nature.filter(p=>p.id==='comic_tree'||p.id==='comic_palm'))w.obstacles.push({x:p.x-8,y:p.y-8,w:16,h:16});
   w.mapRoutes=[{id:'walk_park',name:'Парк на восточном берегу',x:2990,y:2390},{id:'walk_marina',name:'Причал и набережная',x:650,y:1850},{id:'walk_garden',name:'Дворы у канала',x:1920,y:1990},{id:'walk_factory',name:'Старые резервуары',x:1520,y:3360},{id:'walk_south',name:'Южный мост',x:2200,y:3260},{id:'walk_metro',name:'Станция метро',...w.surfaceMetro.approach}];
-  return w;
+  return densifyWaterfront(w);
 }

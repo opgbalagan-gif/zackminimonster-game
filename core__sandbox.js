@@ -1,8 +1,8 @@
-import {createSneakWorld} from './core__sneak.js?v=09df463d6cde';
-import {distance,moveAlongPath} from './core__geometry.js?v=09df463d6cde';
-import {updateStreetNpcs} from './core__street-npcs.js?v=09df463d6cde';
-import {addWaterfront} from './core__waterfront-layout.js?v=09df463d6cde';
-import {WallRivals} from './core__wall-rivals.js?v=09df463d6cde';
+import {createSneakWorld} from './core__sneak.js?v=0b8195c8da56';
+import {distance,moveAlongPath} from './core__geometry.js?v=0b8195c8da56';
+import {updateStreetNpcs} from './core__street-npcs.js?v=0b8195c8da56';
+import {addWaterfront} from './core__waterfront-layout.js?v=0b8195c8da56';
+import {WallRivals} from './core__wall-rivals.js?v=0b8195c8da56';
 
 export function createSandboxWorld(){
   const w=createSneakWorld();w.id='sandbox';w.sandbox=true;w.levelNumber=1;w.name='СВОЙ РАЙОН';
@@ -27,7 +27,7 @@ export function createSandboxWorld(){
   w.courtActivity={id:'court',name:'Баскетбольная площадка',x:1840,y:825,reward:300,friends:[{x:1795,y:802,sprite:'court_dan'},{x:1860,y:802,sprite:'court_ti'}]};
   w.hoops=[{x:1654,y:750,facing:1},{x:2050,y:750,facing:-1}];
   for(const h of w.hoops)w.obstacles.push({x:h.x-8,y:h.y-8,w:16,h:16});
-  w.surfaceMetro={start:80,end:2210,y:1350,height:12,loop:true,station:{x:1770,y:1350,dx:-1,dy:0},approach:{x:1770,y:1220}};
+  w.surfaceMetro={start:80,end:2210,y:1350,height:150,loop:true,station:{x:1770,y:1350,dx:-1,dy:0},approach:{x:1900,y:1190}};
   w.obstacles.push({x:72,y:1302,w:2150,h:100,railway:true});
   return addWaterfront(w);
 }

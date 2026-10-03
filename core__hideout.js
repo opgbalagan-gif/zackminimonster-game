@@ -23,7 +23,6 @@ export function heroSprite(skin,state='IDLE',facing='down',step=false){
   return prefix+'_'+(actions[state]??((prefix==='hero'&&step?'walk_':'')+facing));
 }
 export function roomLayout(w,h,tutorial=false,camera={}){
-  if(camera.overview){const width=Math.min(w-16,Math.max(80,h-130)/1.5);return {x:(w-width)/2,y:80,w:width,h:width*1.5,clipBottom:h};}
   const width=Math.max(w,h/1.5)*1.12,height=width*1.5;
   const clamp=(n,lo,hi)=>Math.max(lo,Math.min(hi,n));
   return {x:clamp((w-width)/2+(camera.x??0),w-width,0),y:clamp((h-height)/2+(camera.y??0),h-height,0),w:width,h:height,clipBottom:h};

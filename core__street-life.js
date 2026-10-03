@@ -1,5 +1,5 @@
-import {moveAlongPath,distance} from './core__geometry.js?v=09df463d6cde';
-import {recognition,rememberWorks,RECOGNITION_TIERS} from './core__recognition.js?v=09df463d6cde';
+import {moveAlongPath,distance} from './core__geometry.js?v=0b8195c8da56';
+import {recognition,rememberWorks,RECOGNITION_TIERS} from './core__recognition.js?v=0b8195c8da56';
 
 export const HOME_TOUR=[
   ['Знакомый потолок','Кровать — мой первый спонсор. Пока платит только сном.','Это дом Зака. Радио — в телефоне справа. Остальные значки появятся по ходу знакомства.','О КРОВАТИ'],

@@ -1,4 +1,4 @@
-import {distance,moveAlongPath} from './core__geometry.js?v=09df463d6cde';
+import {distance,moveAlongPath} from './core__geometry.js?v=0b8195c8da56';
 
 // Keep earned reputation and work history; damage is a separate, repairable layer.
 export class WallRivals{
@@ -18,7 +18,7 @@ export class WallRivals{
     }
     const a=this.actor;
     if(a.phase==='walk'||a.phase==='leave'){
-      moveAlongPath(a,a.path,95,dt);
+      const old={x:a.x,y:a.y};moveAlongPath(a,a.path,95,dt);a.walkDistance=(a.walkDistance??0)+distance(old,a);
       if(!a.path.length){if(a.phase==='leave'){this.actor=null;this.wait=55;}else{a.phase='paint';a.age=0;a.line=a.kind==='cleaner'?'Порядок будет. Сейчас валик возьму.':'Нормальная стена. Мой тег ей подойдёт.';}}
       return;
     }

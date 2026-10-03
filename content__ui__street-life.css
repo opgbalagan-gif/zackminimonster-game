@@ -152,14 +152,15 @@ button.secondary,.room-hotspot,#radio-toggle,#chapter-button,#phone-toggle,.phas
 #app #joystick:active,#app #joystick #action-button:active{border-color:#fff9df;box-shadow:0 0 0 2px #fff4ce25!important}
 
 #app[data-sandbox=true] .home-dock{display:none}
-#room-overview{position:absolute;right:16px;bottom:18px;z-index:22;min-height:42px;font-size:12px}
 #room-pan-hint{position:absolute;left:16px;bottom:72px;color:#f3dfad;background:#071018bc;padding:5px 8px;font:12px var(--ui-body);pointer-events:none}
 #app[data-mode=hideout] #game{cursor:grab;touch-action:none}
 #app[data-mode=hideout] #game:active{cursor:grabbing}
 .room-hotspot:active{scale:.82;filter:brightness(2) drop-shadow(0 0 10px #ffe195)}
 .room-hotspot:focus-visible{outline:3px solid #fff0bd!important;outline-offset:5px!important}
 .room-hotspot[aria-pressed=true]{filter:brightness(1.5) drop-shadow(0 0 7px #ffd376)}
-.room-hotspot{border:0!important;border-image:none!important;background:none!important;box-shadow:none!important}
+.room-hotspot{border:2px solid #fff1b8!important;border-image:none!important;background:#081924ed!important;box-shadow:0 2px 8px #000a,0 0 0 3px #08192499!important;border-radius:50%!important;width:42px;height:42px;min-width:42px;min-height:42px;padding:7px!important;color:#fff3c8!important}
+.room-hotspot .ui-icon{filter:brightness(1.65) drop-shadow(0 1px 1px #000)!important}
+.room-hotspot:hover{background:#29424c!important;box-shadow:0 0 0 4px #ffe39b66!important}
 .world-marker .ui-icon,.room-hotspot .ui-icon{filter:drop-shadow(0 1px 2px #050a10) drop-shadow(0 0 1px #fff1cd)}
 .phone-app[hidden]{display:none!important}
 .app-map{background:linear-gradient(135deg,#8aa764,#c9dca4 44%,#67b8d3 46%,#67b8d3 58%,#e1d5ad 60%);border-radius:4px;color:#304653;font:bold 35px/36px sans-serif;transform:rotate(-8deg)}

@@ -1,18 +1,17 @@
-import {OUTFITS,INKS,TROPHIES,outfit,ink,heroSprite,roomLayout,ROOM_POINTS,wallCount} from './core__hideout.js?v=09df463d6cde';
-import {homeIcon} from './core__home-icons.js?v=09df463d6cde';
-import {drawBall} from './core__ball-art.js?v=09df463d6cde';
+import {OUTFITS,INKS,TROPHIES,outfit,ink,heroSprite,roomLayout,ROOM_POINTS,wallCount} from './core__hideout.js?v=0b8195c8da56';
+import {homeIcon} from './core__home-icons.js?v=0b8195c8da56';
+import {drawBall} from './core__ball-art.js?v=0b8195c8da56';
 const $=id=>document.getElementById(id);
 export class HideoutUI{
   constructor(session,renderer,onChange,audio){
     this.s=session;this.renderer=renderer;this.onChange=onChange;this.tab='home';this.signature='';
-    session.room.camera??={x:0,y:0,overview:false};
-    const canvas=$('game'),view=document.createElement('button');view.id='room-overview';view.className='secondary';
-    view.onclick=()=>{session.room.camera={x:0,y:0,overview:!session.room.camera.overview};this.sync();};
-    $('hideout-ui').append(view);
+    session.room.camera??={x:0,y:0};
+    delete session.room.camera.overview;
+    const canvas=$('game');
     const hint=document.createElement('span');hint.id='room-pan-hint';hint.textContent='Потяни комнату, чтобы осмотреться';$('hideout-ui').append(hint);
     let pan=null;
     canvas.addEventListener('pointerdown',e=>{
-      if(e.button!==0||session.mode!=='hideout'||this.tab!=='home'||session.room.camera.overview)return;
+      if(e.button!==0||session.mode!=='hideout'||this.tab!=='home')return;
       e.preventDefault();canvas.setPointerCapture(e.pointerId);
       const r=roomLayout(canvas.width,canvas.height,false,session.room.camera);
       pan={id:e.pointerId,x:e.clientX,y:e.clientY,rx:r.x,ry:r.y,w:r.w,h:r.h};
@@ -71,8 +70,7 @@ export class HideoutUI{
   }
   sync(){
     const s=this.s,canvas=$('game'),rect=canvas.getBoundingClientRect(),r=roomLayout(canvas.width,canvas.height,s.world.tutorial&&!s.world.sandbox,s.room.camera);
-    $('room-overview').hidden=this.tab!=='home';$('room-overview').textContent=s.room.camera.overview?'ПРИБЛИЗИТЬ':'ВСЯ КВАРТИРА';
-    $('room-pan-hint').hidden=this.tab!=='home'||s.room.camera.overview;
+    $('room-pan-hint').hidden=this.tab!=='home';
     document.querySelector('[data-room-action="pet"]').hidden=s.world.tutorial||s.save.campaign?.companionUnlocked===false;
     document.querySelector('.home-status>strong').textContent=s.save.campaign?.companionUnlocked===false?'ZACK / ДОМА':'ZACK + MINI';
     for(const el of document.querySelectorAll('[data-hotspot]')){

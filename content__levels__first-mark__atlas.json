@@ -1817,6 +1817,1540 @@
         0.5,
         0.83
       ]
+    },
+    "nano_house_0": {
+      "sheet": "nano_buildings",
+      "rect": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "groundAnchor": [
+        0.4932,
+        0.96875
+      ]
+    },
+    "nano_house_1": {
+      "sheet": "nano_buildings",
+      "rect": [
+        512,
+        0,
+        512,
+        512
+      ],
+      "groundAnchor": [
+        0.5018,
+        0.96875
+      ]
+    },
+    "nano_house_2": {
+      "sheet": "nano_buildings",
+      "rect": [
+        1024,
+        0,
+        512,
+        512
+      ],
+      "groundAnchor": [
+        0.4971,
+        0.96875
+      ]
+    },
+    "nano_house_3": {
+      "sheet": "nano_buildings",
+      "rect": [
+        0,
+        512,
+        512,
+        512
+      ],
+      "groundAnchor": [
+        0.3668,
+        0.96875
+      ]
+    },
+    "nano_house_4": {
+      "sheet": "nano_buildings",
+      "rect": [
+        512,
+        512,
+        512,
+        512
+      ],
+      "groundAnchor": [
+        0.4939,
+        0.96875
+      ]
+    },
+    "nano_house_5": {
+      "sheet": "nano_buildings",
+      "rect": [
+        1024,
+        512,
+        512,
+        512
+      ],
+      "groundAnchor": [
+        0.2556,
+        0.96875
+      ]
+    },
+    "cleaner_walk_front_0": {
+      "sheet": "cleaner_hf",
+      "rect": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9375
+      ]
+    },
+    "cleaner_walk_front_1": {
+      "sheet": "cleaner_hf",
+      "rect": [
+        256,
+        0,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9375
+      ]
+    },
+    "cleaner_walk_front_2": {
+      "sheet": "cleaner_hf",
+      "rect": [
+        512,
+        0,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9375
+      ]
+    },
+    "cleaner_walk_front_3": {
+      "sheet": "cleaner_hf",
+      "rect": [
+        768,
+        0,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9375
+      ]
+    },
+    "cleaner_walk_back_0": {
+      "sheet": "cleaner_hf",
+      "rect": [
+        0,
+        256,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9375
+      ]
+    },
+    "cleaner_walk_back_1": {
+      "sheet": "cleaner_hf",
+      "rect": [
+        256,
+        256,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9375
+      ]
+    },
+    "cleaner_walk_back_2": {
+      "sheet": "cleaner_hf",
+      "rect": [
+        512,
+        256,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9375
+      ]
+    },
+    "cleaner_walk_back_3": {
+      "sheet": "cleaner_hf",
+      "rect": [
+        768,
+        256,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9375
+      ]
+    },
+    "cleaner_paint_front_0": {
+      "sheet": "cleaner_hf",
+      "rect": [
+        0,
+        512,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9375
+      ]
+    },
+    "cleaner_paint_front_1": {
+      "sheet": "cleaner_hf",
+      "rect": [
+        256,
+        512,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9375
+      ]
+    },
+    "cleaner_paint_front_2": {
+      "sheet": "cleaner_hf",
+      "rect": [
+        512,
+        512,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9375
+      ]
+    },
+    "cleaner_paint_front_3": {
+      "sheet": "cleaner_hf",
+      "rect": [
+        768,
+        512,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9375
+      ]
+    },
+    "cleaner_paint_back_0": {
+      "sheet": "cleaner_hf",
+      "rect": [
+        0,
+        768,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9375
+      ]
+    },
+    "cleaner_paint_back_1": {
+      "sheet": "cleaner_hf",
+      "rect": [
+        256,
+        768,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9375
+      ]
+    },
+    "cleaner_paint_back_2": {
+      "sheet": "cleaner_hf",
+      "rect": [
+        512,
+        768,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9375
+      ]
+    },
+    "cleaner_paint_back_3": {
+      "sheet": "cleaner_hf",
+      "rect": [
+        768,
+        768,
+        256,
+        256
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9375
+      ]
+    },
+    "h3_roby_front_0": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        0,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_front_1": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        192,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_front_2": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        384,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_front_3": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        576,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_front_4": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        768,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_front_5": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        960,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_front_6": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1152,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_front_7": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1344,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_front_8": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1536,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_front_9": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1728,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_front_10": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1920,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_front_11": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2112,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_front_12": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2304,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_front_13": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2496,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_front_14": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2688,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_front_15": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2880,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_back_0": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        0,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_back_1": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        192,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_back_2": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        384,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_back_3": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        576,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_back_4": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        768,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_back_5": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        960,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_back_6": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1152,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_back_7": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1344,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_back_8": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1536,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_back_9": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1728,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_back_10": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1920,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_back_11": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2112,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_back_12": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2304,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_back_13": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2496,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_back_14": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2688,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_roby_back_15": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2880,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_front_0": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        0,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_front_1": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        192,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_front_2": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        384,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_front_3": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        576,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_front_4": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        768,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_front_5": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        960,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_front_6": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1152,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_front_7": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1344,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_front_8": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1536,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_front_9": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1728,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_front_10": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1920,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_front_11": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2112,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_front_12": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2304,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_front_13": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2496,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_front_14": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2688,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_front_15": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2880,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_back_0": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        0,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_back_1": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        192,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_back_2": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        384,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_back_3": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        576,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_back_4": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        768,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_back_5": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        960,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_back_6": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1152,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_back_7": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1344,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_back_8": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1536,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_back_9": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1728,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_back_10": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1920,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_back_11": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2112,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_back_12": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2304,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_back_13": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2496,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_back_14": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2688,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_cleaner_back_15": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2880,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_front_0": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        0,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_front_1": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        192,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_front_2": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        384,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_front_3": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        576,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_front_4": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        768,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_front_5": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        960,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_front_6": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1152,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_front_7": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1344,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_front_8": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1536,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_front_9": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1728,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_front_10": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1920,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_front_11": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2112,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_front_12": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2304,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_front_13": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2496,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_front_14": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2688,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_front_15": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2880,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_back_0": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        0,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_back_1": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        192,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_back_2": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        384,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_back_3": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        576,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_back_4": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        768,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_back_5": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        960,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_back_6": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1152,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_back_7": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1344,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_back_8": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1536,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_back_9": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1728,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_back_10": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        1920,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_back_11": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2112,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_back_12": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2304,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_back_13": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2496,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_back_14": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2688,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "h3_officer_back_15": {
+      "sheet": "npc_walk_h3",
+      "rect": [
+        2880,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
     }
   },
   "version": 2,
@@ -2040,6 +3574,18 @@
     {
       "id": "roby_walk_higgsfield",
       "file": "./content__levels__first-mark__art__roby-walk-higgsfield.png"
+    },
+    {
+      "id": "nano_buildings",
+      "file": "./content__levels__first-mark__art__district-buildings-nanobanana.png"
+    },
+    {
+      "id": "cleaner_hf",
+      "file": "./content__levels__first-mark__art__cleaner-animation-higgsfield.png"
+    },
+    {
+      "id": "npc_walk_h3",
+      "file": "./content__levels__first-mark__art__npc-walk-minimax-h3.png"
     }
   ]
 }

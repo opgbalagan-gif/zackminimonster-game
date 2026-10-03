@@ -1,4 +1,4 @@
-import {roomLayout,roomPoint,heroSprite,ink} from './core__hideout.js?v=09df463d6cde';
+import {roomLayout,roomPoint,heroSprite,ink} from './core__hideout.js?v=0b8195c8da56';
 export function drawTrophy(c,id,atlas,x,y,size){
   if(id==='mini')atlas.draw(c,'companion',x,y,null,size);
   else if(id==='metro'){
@@ -28,7 +28,8 @@ export function renderHideout(c,s,w,h,atlas){
   const local=(x,y)=>{const p=roomPoint(x,y);return {x:r.x+p.x*r.w,y:r.y+p.y*r.h};};
   const t=s.time,rest=s.room.action==='rest'||s.life?.tour&&s.life.introStep<=1,celebrate=s.room.action==='victory';
   const walking=!rest&&s.room.action==='idle'&&Math.floor(t/5)%3===1;
-  const hx=rest?.57:.43+(walking?Math.sin(t*.9)*.028:0),hy=rest?.347:.60;
+  // Clear tiled aisle between the work desk and the lounge table.
+  const hx=rest?.57:.43+(walking?Math.sin(t*.9)*.018:0),hy=rest?.347:.485;
   const hero=local(hx,hy),pet=local(.565+Math.sin(t*.65)*.017,.622);
   const state=rest?'HIDE':celebrate?'VICTORY':s.room.action==='spray'?'SHAKE_CAN':'IDLE';
   const step=walking&&Math.floor(t*7)%2;

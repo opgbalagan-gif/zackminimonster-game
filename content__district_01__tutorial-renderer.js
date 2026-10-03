@@ -1,18 +1,21 @@
-import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=09df463d6cde';
-import {vehicleProjection} from './core__vehicle-projection.js?v=09df463d6cde';
-import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=09df463d6cde';
-import {surfaceTrain} from './core__sandbox-metro.js?v=09df463d6cde';
-import {drawWaterfront,drawNeighbourhoodMap} from './content__levels__sandbox__waterfront-art.js?v=09df463d6cde';
-import {districtSurroundings,softenGroundEdge,cloudShadows} from './content__levels__sandbox__atmosphere.js?v=09df463d6cde';
-import {SpriteAtlas} from './core__sprites.js?v=09df463d6cde';
-import {project} from './core__geometry.js?v=09df463d6cde';
-import {heroSprite} from './core__hideout.js?v=09df463d6cde';
-import {polygon,box} from './content__district_01__terrain.js?v=09df463d6cde';
-import {drawGraffiti} from './content__district_01__graffiti-art.js?v=09df463d6cde';
-import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=09df463d6cde';
-import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=09df463d6cde';
-import {OccluderFade} from './core__occluder-fade.js?v=09df463d6cde';
-import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=09df463d6cde';
+import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=0b8195c8da56';
+import {vehicleProjection} from './core__vehicle-projection.js?v=0b8195c8da56';
+import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=0b8195c8da56';
+import {surfaceTrain} from './core__sandbox-metro.js?v=0b8195c8da56';
+import {drawWaterfront,drawNeighbourhoodMap} from './content__levels__sandbox__waterfront-art.js?v=0b8195c8da56';
+import {districtSurroundings,softenGroundEdge,cloudShadows} from './content__levels__sandbox__atmosphere.js?v=0b8195c8da56';
+import {groundLighting} from './content__levels__sandbox__lighting-art.js?v=0b8195c8da56';
+import {lampBrightness} from './core__lighting.js?v=0b8195c8da56';
+import {NpcAnimation} from './core__npc-animation.js?v=0b8195c8da56';
+import {SpriteAtlas} from './core__sprites.js?v=0b8195c8da56';
+import {project} from './core__geometry.js?v=0b8195c8da56';
+import {heroSprite} from './core__hideout.js?v=0b8195c8da56';
+import {polygon,box} from './content__district_01__terrain.js?v=0b8195c8da56';
+import {drawGraffiti} from './content__district_01__graffiti-art.js?v=0b8195c8da56';
+import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=0b8195c8da56';
+import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=0b8195c8da56';
+import {OccluderFade} from './core__occluder-fade.js?v=0b8195c8da56';
+import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=0b8195c8da56';
 
 function fightCloud(c,s){
   const t=s.tutorial.fightBurst,p=project(s.tutorial.actor.x-11,s.tutorial.actor.y+10),pulse=Math.sin(t*27);
@@ -40,7 +43,7 @@ export function createTutorialRenderer(pack){
   const markerHits=[],posterHits=[];
   const atlas=new SpriteAtlas(pack.atlas,pack.images),kit=createStreetKit(pack.images);
   const neighbourhood=neighbourhoodArt(pack.images,atlas);
-  const fades=new OccluderFade(),masks=new Map();let lastTime,followPoint;
+  const fades=new OccluderFade(),masks=new Map(),npcAnimation=new NpcAnimation();let lastTime,followPoint;
   function spriteMask(id){
     if(!masks.has(id)){
       const sprite=pack.atlas.sprites[id],[sx,sy,sw,sh]=sprite.rect;
@@ -51,6 +54,7 @@ export function createTutorialRenderer(pack){
     }return masks.get(id);
   }
   function houseArt(building,day){
+    if(building.nanoVariant!==undefined){const v=building.nanoVariant,id='nano_house_'+v;return {id,width:(building.w+building.h)/[.51,.85,.60,.938,.938,.938][v],mural:v===0?[265,402,110,76]:[263,422,128,72],poster:[295,411,34,48],slope:-.5,anchor:pack.atlas.sprites[id].groundAnchor};}
     if(building.longHouse)return {id:'comic_long_house',width:700,mural:[290,515,630,160],poster:[850,310,46,69],slope:-.34,anchor:pack.atlas.sprites.comic_long_house.groundAnchor};
     const type=building.artType??'apartment';
     const variant=building.comicVariant??(type==='brick'?3:type==='blue'?1:0);
@@ -60,7 +64,7 @@ export function createTutorialRenderer(pack){
   }
   function house(c,s,building=s.world.buildings[0]){
     const day=s.life&&!s.life.night,art=houseArt(building,day),rect=atlas.rect(art.id),target=s.world.targets.find(t=>t.buildingId===building.id),p=project(building.x+building.w,building.y+building.h);
-    c.save();c.imageSmoothingEnabled=true;if(!day)c.filter='brightness(.58) saturate(.8)';atlas.draw(c,art.id,p.x,p.y,art.width);c.restore();
+    c.save();c.imageSmoothingEnabled=true;if(!day)c.filter='brightness('+lampBrightness(building.x+building.w,building.y+building.h,[...STREET_PROPS,...s.world.blockProps??[]])+') saturate(.8)';atlas.draw(c,art.id,p.x,p.y,art.width);c.restore();
     if(building.poster){
       const scale=art.width/rect[2];c.save();c.translate(Math.round(p.x)-art.width*art.anchor[0],Math.round(p.y)-rect[3]*scale*art.anchor[1]);c.scale(scale,scale);
       const [px,py,pw,ph]=art.poster;c.translate(px,py);c.transform(1,art.slope,0,1,0,0);
@@ -70,7 +74,9 @@ export function createTutorialRenderer(pack){
     // The drawn side facades are blank: no windows or pipes cut through the artwork.
     const scale=art.width/rect[2],[mx,my,fullWidth,mh]=art.mural,mw=building.poster?128:fullWidth;
     c.save();c.translate(Math.round(p.x)-art.width*art.anchor[0],Math.round(p.y)-rect[3]*scale*art.anchor[1]);c.scale(scale,scale);
-    c.translate(mx,my);c.transform(1,art.slope,0,1,0,0);c.beginPath();c.rect(0,0,mw,mh);c.clip();
+    // Normalize the sloping wall axis: shear alone lengthened every horizontal stroke.
+    const axisScale=1/Math.hypot(1,art.slope);
+    c.translate(mx,my);c.transform(axisScale,art.slope*axisScale,0,1,0,0);c.beginPath();c.rect(0,0,mw,mh);c.clip();
     drawGraffiti(c,target?.graffiti_id??'zack_tag',0,0,mw,mh,atlas);damage(c,s,target,0,0,mw,mh);c.restore();
   }
   function damage(c,s,target,x,y,w,h){
@@ -136,7 +142,8 @@ export function createTutorialRenderer(pack){
       }
       // Crossings connect both sides of the block without crossing building footprints.
       c.save();c.transform(1,.5,-1,.5,0,0);c.fillStyle='#c2b99e';for(const x of [100,900,1080,1450])for(const y of [424,928])for(let k=0;k<6;k++)c.fillRect(x,y+k*15,16,7);c.restore();
-      neighbourhood.court(c,s.world.court);neighbourhood.rails(c,s.world.surfaceMetro);
+      neighbourhood.court(c,s.world.court);
+      groundLighting(c,s,w,h);
       cloudShadows(c,s,w,h);
     }else kit.floor(c,{night:!day});
     if(s.world.id==='sneak'){
@@ -147,11 +154,13 @@ export function createTutorialRenderer(pack){
     if(sandbox)drawTrafficSignals(c,s.traffic);
     const queue=[{kind:'house',depth:566},{kind:'wall',depth:760},{kind:'zack',depth:s.player.x+s.player.y}];
     if(sandbox){
-      for(const car of surfaceTrain(s.world.surfaceMetro,s.time))queue.push({kind:'metro',car,depth:car.x+car.y});
+      const metro=s.world.surfaceMetro;
+      for(let x=metro.start;x<metro.end;x+=80)queue.push({kind:'viaduct',x,depth:Math.min(x+80,metro.end)+metro.y+34});
+      for(const pier of s.world.metroPiers??[])queue.push({kind:'metro-pier',...pier,depth:pier.x+pier.y});
+      for(const car of surfaceTrain(metro,s.time))queue.push({kind:'metro',car,depth:car.x+65+car.y+35});
       const station=s.world.surfaceMetro.station;queue.push({kind:'station',depth:station.x+station.y-50});
       for(const hoop of s.world.hoops)queue.push({kind:'hoop',hoop,depth:hoop.x+hoop.y});
       for(const actor of s.court.friends)queue.push({kind:'visitor',actor,depth:actor.x+actor.y});
-      for(let x=80;x<2200;x+=160)if(x<1360||x>1570)queue.push({kind:'rail-fence',x,depth:x+80+1298});
       for(const item of s.world.nature??[])queue.push({kind:'nature',...item,depth:item.x+item.y});
     }
     for(const car of s.traffic.cars)queue.push({kind:'car',car,depth:car.x+car.y});
@@ -172,6 +181,8 @@ export function createTutorialRenderer(pack){
     if(s.player.path.length){c.strokeStyle='#f1ce7888';c.lineWidth=3;c.setLineDash([6,7]);c.beginPath();const start=project(s.player.x,s.player.y);c.moveTo(start.x,start.y);for(const n of s.player.path){const p=project(n.x,n.y);c.lineTo(p.x,p.y);}c.stroke();c.setLineDash([]);}
     for(const o of queue.sort((a,b)=>a.depth-b.depth)){
       if(o.kind==='nature'){const p=project(o.x,o.y);if(Math.abs(p.x-cam.x)<w/cam.zoom/2+200&&Math.abs(p.y-cam.y)<h/cam.zoom/2+240){c.save();c.imageSmoothingEnabled=true;if(!day)c.filter='brightness(.62) saturate(.8)';spriteObject(o.id,o.x,o.y,o.w,o.depth);c.restore();}continue;}
+      if(o.kind==='viaduct'){neighbourhood.rails(c,s.world.surfaceMetro,o.x);continue;}
+      if(o.kind==='metro-pier'){neighbourhood.pier(c,o,s.world.surfaceMetro);continue;}
       if(o.kind==='metro'){neighbourhood.train(c,o.car,s.world.surfaceMetro);continue;}
       if(o.kind==='station'){neighbourhood.station(c,s.world.surfaceMetro);continue;}
       if(o.kind==='hoop'){neighbourhood.hoop(c,o.hoop);continue;}
@@ -200,9 +211,21 @@ export function createTutorialRenderer(pack){
       const actor=o.kind==='visitor'||o.kind==='npc'?o.actor:o.kind==='zack'?s.player:s.tutorial.actor,p=project(actor.x,actor.y);
       c.fillStyle='#15202055';c.beginPath();c.ellipse(p.x,p.y,15,6,0,0,Math.PI*2);c.fill();
       const frame=actor.moving&&Math.floor(s.time*7)%2;
+      const cleaner=actor.kind==='cleaner'||o.kind==='guest'&&s.tutorial.stage.startsWith('cleaner');
+      const painting=cleaner&&(actor.phase==='paint'||o.kind==='guest'&&!actor.moving);
+      const animated=o.kind==='npc'?'roby':cleaner&&!painting?'cleaner':actor.sprite==='officer'?'officer':null;
+      if(animated&&atlas.rect('h3_'+animated+'_front_0')){
+        const pose=npcAnimation.pose(actor,dt);c.save();c.imageSmoothingEnabled=true;c.translate(p.x,p.y);
+        atlas.draw(c,'h3_'+animated+'_'+pose.view+'_'+pose.frame,0,0,animated==='roby'?100:null,animated==='roby'?null:86,pose.flip);c.restore();continue;
+      }
       if(o.kind==='npc'){
         const direction=actor.direction??'se',frame=Math.floor((actor.walkDistance??0)/6.5)%8,back=direction==='ne'||direction==='nw';
         c.save();c.imageSmoothingEnabled=true;c.translate(p.x,p.y);atlas.draw(c,'roby_hf_'+(back?'back':'front')+'_'+frame,0,0,92,null,direction==='sw'||direction==='nw');c.restore();continue;
+      }
+      if(cleaner&&atlas.rect('cleaner_walk_front_0')){
+        const back=painting||actor.facing==='up',flip=actor.facing==='left';
+        const step=painting?Math.floor(s.time*5)%4:Math.floor((actor.walkDistance??s.time*40)/12)%4;
+        c.save();c.imageSmoothingEnabled=true;atlas.draw(c,'cleaner_'+(painting?'paint':'walk')+'_'+(back?'back':'front')+'_'+step,p.x,p.y,null,88,flip);c.restore();continue;
       }
       const sprite=o.kind==='zack'?heroSprite(s.save.player.skin,s.player.state,s.player.facing,frame):actor.sprite==='officer'&&frame?'officer_walk':actor.sprite;
       atlas.draw(c,sprite,p.x,p.y,null,66);

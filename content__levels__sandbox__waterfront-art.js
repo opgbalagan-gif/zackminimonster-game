@@ -1,5 +1,5 @@
-import {project} from './core__geometry.js?v=09df463d6cde';
-import {polygon} from './content__district_01__terrain.js?v=09df463d6cde';
+import {project} from './core__geometry.js?v=0b8195c8da56';
+import {polygon} from './content__district_01__terrain.js?v=0b8195c8da56';
 const quad=r=>[[r.x,r.y],[r.x+r.w,r.y],[r.x+r.w,r.y+r.h],[r.x,r.y+r.h]].map(p=>project(...p));
 export function drawWaterfront(c,world,kit,night=false){
   c.save();c.imageSmoothingEnabled=true;
@@ -31,7 +31,7 @@ export function drawNeighbourhoodMap(c,s,w,h,atlas,kit){
   // A steeper cartographic view fills a portrait phone and keeps the canal vertical.
   const project=(x,y,z=0)=>({x:x*.85+y*.15,y:y*.9-x*.25-z});
   const quad=(r,z=0)=>[[r.x,r.y],[r.x+r.w,r.y],[r.x+r.w,r.y+r.h],[r.x,r.y+r.h]].map(p=>project(...p,z));
-  const regions={all:s.world.mapBounds,home:{x:70,y:90,w:2150,h:1320},canal:{x:1630,y:1320,w:1300,h:2310},park:{x:2490,y:990,w:1190,h:3060},marina:{x:72,y:1480,w:1300,h:2500}};
+  const regions={all:s.world.mapBounds,home:{x:70,y:90,w:3550,h:1380},canal:{x:750,y:1480,w:1700,h:2620},park:{x:2490,y:1490,w:1190,h:1520},marina:{x:72,y:1480,w:1000,h:2620}};
   const r=regions[s.mapRegion??'all']??regions.all,points=quad(r),xs=points.map(p=>p.x),ys=points.map(p=>p.y);
   const minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys)-250,maxY=Math.max(...ys),scale=Math.min((w-30)/(maxX-minX),(h-30)/(maxY-minY));
   c.fillStyle='#b6d2d6';c.fillRect(0,0,w,h);c.save();c.beginPath();c.rect(0,0,w,h);c.clip();c.translate(w/2-(minX+maxX)/2*scale,h/2-(minY+maxY)/2*scale);c.scale(scale,scale);
@@ -57,7 +57,7 @@ export function drawNeighbourhoodMap(c,s,w,h,atlas,kit){
     }else atlas.draw(c,o.id,p.x,p.y,o.w);
   }
   function label(text,x,y,color){const p=project(x,y);c.save();c.translate(p.x,p.y);c.scale(1/scale,1/scale);c.font='bold 11px sans-serif';c.textAlign='center';const width=c.measureText(text).width+14;c.fillStyle='#fbf4dbed';c.fillRect(-width/2,-10,width,19);c.fillStyle=color;c.fillText(text,0,3);c.restore();}
-  for(const [name,x,y] of [['КВАРТАЛ',1180,560],['ПАРК',3100,2130],['ПРИЧАЛ',400,2460],['КАНАЛ',2390,2890],['МАСТЕРСКИЕ',1590,3800]])label(name,x,y,'#344d50');
+  for(const [name,x,y] of [['КВАРТАЛ',1180,560],['ЛЕСОПАРК',3100,2130],['ПРИЧАЛ',400,2460],['КАНАЛ',920,2890],['ДВОРЫ',1630,2250],['МАСТЕРСКИЕ',2940,3700]])label(name,x,y,'#344d50');
   for(const t of s.world.targets){const p=project(t.approach.x,t.approach.y);c.fillStyle=s.painted.has(t.wall_id)?'#598657':'#9665ab';c.beginPath();c.arc(p.x,p.y,2.5/scale,0,Math.PI*2);c.fill();}
   const home=project(s.world.hideout.x,s.world.hideout.y);c.fillStyle='#d3a338';c.fillRect(home.x-4/scale,home.y-4/scale,8/scale,8/scale);
   const p=project(s.player.x,s.player.y);c.save();c.translate(p.x,p.y);c.scale(1/scale,1/scale);c.fillStyle='#cf40a1';c.strokeStyle='#fff9e6';c.lineWidth=2;c.beginPath();c.arc(0,0,6,0,Math.PI*2);c.fill();c.stroke();c.restore();
