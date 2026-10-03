@@ -1,10 +1,11 @@
-import {AimController,MotionAim} from './core__motion-aim.js?v=014abf6eb9c6';
-import {setUIButton,uiIcon} from './core__ui-kit.js?v=014abf6eb9c6';
-import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=014abf6eb9c6';
-import {nearbyPhotoSpot} from './core__photo-spots.js?v=014abf6eb9c6';
-import {bindCanvasGesture} from './core__canvas-gesture.js?v=014abf6eb9c6';
-import {appIcon,foldPhoneIcon,phoneGlyph} from './core__phone-icons.js?v=014abf6eb9c6';
-import {dialogFocus} from './core__dialog-focus.js?v=014abf6eb9c6';
+import {AimController,MotionAim} from './core__motion-aim.js?v=715810e652df';
+import {setUIButton,uiIcon} from './core__ui-kit.js?v=715810e652df';
+import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=715810e652df';
+import {nearbyPhotoSpot} from './core__photo-spots.js?v=715810e652df';
+import {bindCanvasGesture} from './core__canvas-gesture.js?v=715810e652df';
+import {appIcon,foldPhoneIcon,phoneGlyph} from './core__phone-icons.js?v=715810e652df';
+import {dialogFocus} from './core__dialog-focus.js?v=715810e652df';
+import {instagramScreen} from './core__phone-instagram.js?v=715810e652df';
 export class PhoneUI{
   constructor(s,renderer,audio){
     this.s=s;this.renderer=renderer;this.audio=audio;this.aim=new AimController();this.motion=new MotionAim(this.aim);this.steady=0;this.screen='messages';this.previous={x:0,y:0};
@@ -20,6 +21,9 @@ export class PhoneUI{
     this.el.querySelector('.phone-lcd').insertAdjacentHTML('beforeend','<div class="phone-radio" hidden><small>STREET RADIO</small><h2>181.FM<br>THE BEAT</h2><p class="phone-radio-status" role="status"></p><button class="phone-radio-play">ВКЛЮЧИТЬ</button><label class="phone-volume-label">Громкость <input class="phone-radio-volume" type="range" min="0" max="100" aria-label="Громкость радио в телефоне"></label></div>');
     this.el.querySelector('nav').insertAdjacentHTML('beforeend','<button class="phone-app phone-radio-app">'+uiIcon('music')+'<span>Радио</span></button><button class="phone-app phone-levels">'+uiIcon('rep')+'<span>Уровни</span></button>');
     const bind=(q,f)=>this.el.querySelector(q).onclick=f;
+    this.el.querySelector('.phone-lcd').append(instagramScreen(renderer));
+    this.el.querySelector('nav').insertAdjacentHTML('afterbegin','<button class="phone-app phone-instagram-app">'+appIcon('instagram')+'<span>Instagram</span></button>');
+    bind('.phone-instagram-app',()=>this.instagram());
     bind('.phone-close',()=>this.close());bind('.phone-camera',()=>this.camera());bind('.phone-sms',()=>this.messages());bind('.phone-album',()=>this.gallery());bind('.camera-back',()=>this.messages());bind('.camera-album',()=>this.gallery());bind('.camera-centre',()=>{this.aim.centre();this.steady=0;});bind('.camera-shutter',()=>this.shoot());bind('.camera-gyro',()=>this.motion.enable());
     bind('.phone-radio-app',()=>this.radio());bind('.phone-radio-play',()=>this.audio.radio.toggle());
     this.el.querySelector('.phone-levels span:last-child').textContent='Путь';
@@ -35,9 +39,10 @@ export class PhoneUI{
     this.resetGesture=bindCanvasGesture(this.canvas,{start:()=>{this.motion.stop();this.motion.status='Веди пальцем · масштаб двумя пальцами';},pan:(dx,dy)=>{const r=this.canvas.getBoundingClientRect();this.aim.drag(-dx/r.width*3,-dy/r.height*3);},zoom:factor=>{this.photoZoom=Math.max(.65,Math.min(2,(this.photoZoom??1)*factor));this.steady=0;}});
     this.canvas.onkeydown=e=>{const dirs={ArrowLeft:[-.07,0],ArrowRight:[.07,0],ArrowUp:[0,-.07],ArrowDown:[0,.07]};if(dirs[e.key]){e.preventDefault();this.aim.drag(...dirs[e.key]);}if(e.key==='Enter'||e.key===' '){e.preventDefault();this.shoot();}};
   }
-  open(){if(!['district','hideout'].includes(this.s.mode)||this.s.tutorial.scripted)return;this.returnMode=this.s.mode;this.s.mode='phone';this.s.player.path=[];this.el.hidden=false;if(this.s.save.phone.unlocked)this.messages();else this.radio();this.focusScope.open(this.toggle);}
+  open(){if(!['district','hideout'].includes(this.s.mode)||this.s.tutorial.scripted)return;this.returnMode=this.s.mode;this.s.mode='phone';this.s.player.path=[];this.el.hidden=false;this.instagram();this.focusScope.open(this.toggle);}
   close(){this.resetGesture();this.motion.stop();this.el.hidden=true;document.getElementById('app').dataset.camera='false';this.s.mode=this.returnMode??'district';this.update(0);this.s.emit('mode');this.focusScope.close();}
-  messages(){const fromCamera=this.screen==='camera';this.motion.stop();this.screen='messages';document.getElementById('app').dataset.camera='false';if(this.s.save.phone.unlocked){this.s.save.phone.read=true;this.s.persist();}this.el.querySelector('.flip-phone').hidden=false;this.el.querySelector('.phone-camera-view').hidden=true;this.el.querySelector('.phone-message').hidden=false;this.el.querySelector('.phone-gallery').hidden=true;this.el.querySelector('.phone-radio').hidden=true;if(fromCamera)this.el.querySelector('.phone-camera').focus();}
+  messages(markRead=true){const fromCamera=this.screen==='camera';this.motion.stop();this.screen='messages';document.getElementById('app').dataset.camera='false';if(markRead&&this.s.save.phone.unlocked){this.s.save.phone.read=true;this.s.persist();}this.el.querySelector('.flip-phone').hidden=false;this.el.querySelector('.phone-camera-view').hidden=true;this.el.querySelector('.phone-message').hidden=false;this.el.querySelector('.phone-gallery').hidden=true;this.el.querySelector('.phone-radio').hidden=true;this.el.querySelector('.phone-instagram').hidden=true;if(fromCamera)this.el.querySelector('.phone-camera').focus();}
+  instagram(){this.messages(false);this.screen='instagram';this.el.querySelector('.phone-message').hidden=true;this.el.querySelector('.phone-instagram').hidden=false;this.el.querySelector('.phone-lcd').scrollTop=0;}
   radio(){this.messages();this.screen='radio';this.el.querySelector('.phone-message').hidden=true;this.el.querySelector('.phone-radio').hidden=false;}
   camera(){
     if(!this.s.save.phone.unlocked)return;

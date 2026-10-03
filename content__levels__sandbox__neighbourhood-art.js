@@ -1,9 +1,9 @@
-import {project} from './core__geometry.js?v=014abf6eb9c6';
-import {polygon,box} from './content__district_01__terrain.js?v=014abf6eb9c6';
-import {createMetroArt} from './content__district_01__metro-art.js?v=014abf6eb9c6';
-import {drawLoopRail,drawLoopStation} from './content__district_01__metro.js?v=014abf6eb9c6';
-import {comicTrain} from './content__levels__sandbox__comic-metro.js?v=014abf6eb9c6';
-import {drawHoop} from './content__district_01__court-props.js?v=014abf6eb9c6';
+import {project} from './core__geometry.js?v=715810e652df';
+import {polygon,box} from './content__district_01__terrain.js?v=715810e652df';
+import {createMetroArt} from './content__district_01__metro-art.js?v=715810e652df';
+import {drawLoopRail,drawLoopStation} from './content__district_01__metro.js?v=715810e652df';
+import {comicTrain} from './content__levels__sandbox__comic-metro.js?v=715810e652df';
+import {drawHoop} from './content__district_01__court-props.js?v=715810e652df';
 export function neighbourhoodArt(images,atlas){
   const track={comic:true,quad(c,name,points){polygon(c,points,{ballast:'#667777',concrete:'#d4d6c4',steel:'#52787b'}[name]);}};
   const board=createMetroArt(images.court_board,{board:[0,0,1536,1024]});

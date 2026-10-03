@@ -1,6 +1,6 @@
-import {project} from './core__geometry.js?v=014abf6eb9c6';
-import {polygon} from './content__district_01__terrain.js?v=014abf6eb9c6';
-import {drawCanal} from './content__levels__sandbox__canal-art.js?v=014abf6eb9c6';
+import {project} from './core__geometry.js?v=715810e652df';
+import {polygon} from './content__district_01__terrain.js?v=715810e652df';
+import {drawCanal} from './content__levels__sandbox__canal-art.js?v=715810e652df';
 const quad=r=>[[r.x,r.y],[r.x+r.w,r.y],[r.x+r.w,r.y+r.h],[r.x,r.y+r.h]].map(p=>project(...p));
 export function drawWaterfront(c,world,kit,night=false,time=0,view){
   c.save();c.imageSmoothingEnabled=true;

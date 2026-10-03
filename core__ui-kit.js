@@ -1,4 +1,4 @@
-import {installArtTokens} from './core__art-direction.js?v=014abf6eb9c6';
+import {installArtTokens} from './core__art-direction.js?v=715810e652df';
 const paths={
   talk:'<path d="M3 4h20v14H12l-6 5v-5H3Z"/><path d="M7 9h12M7 13h8"/>',
   ball:'<circle cx="13" cy="13" r="10"/><path d="M3 13h20M13 3v20M6 6c9 2 9 12 0 14M20 6c-9 2-9 12 0 14"/>',

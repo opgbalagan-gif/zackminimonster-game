@@ -1,4 +1,4 @@
-import {routeFade} from './core__route-fade.js?v=014abf6eb9c6';
+import {routeFade} from './core__route-fade.js?v=715810e652df';
 // Each whole car dissolves before leaving the line; no clipped wagon silhouettes.
 export function surfaceTrain(m,time){
   const speed=140,start=m.start-600,stop=m.station.x+110,end=m.end+620;

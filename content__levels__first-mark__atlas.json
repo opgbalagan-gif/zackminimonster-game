@@ -4063,6 +4063,1254 @@
         0.46,
         0.91
       ]
+    },
+    "roby_idle_h3_front_0": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        0,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_1": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        192,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_2": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        384,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_3": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        576,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_4": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        768,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_5": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        960,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_6": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1152,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_7": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1344,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_8": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1536,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_9": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1728,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_10": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1920,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_11": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        2112,
+        0,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_12": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        0,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_13": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        192,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_14": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        384,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_15": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        576,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_16": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        768,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_17": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        960,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_18": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1152,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_19": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1344,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_20": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1536,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_21": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1728,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_22": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1920,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_23": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        2112,
+        192,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_24": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        0,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_25": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        192,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_26": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        384,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_27": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        576,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_28": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        768,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_29": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        960,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_30": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1152,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_31": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1344,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_32": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1536,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_33": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1728,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_34": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1920,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_35": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        2112,
+        384,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_36": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        0,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_37": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        192,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_38": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        384,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_39": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        576,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_40": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        768,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_41": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        960,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_42": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1152,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_43": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1344,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_44": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1536,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_45": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1728,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_46": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1920,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_front_47": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        2112,
+        576,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_0": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        0,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_1": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        192,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_2": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        384,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_3": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        576,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_4": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        768,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_5": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        960,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_6": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1152,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_7": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1344,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_8": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1536,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_9": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1728,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_10": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1920,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_11": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        2112,
+        768,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_12": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        0,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_13": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        192,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_14": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        384,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_15": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        576,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_16": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        768,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_17": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        960,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_18": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1152,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_19": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1344,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_20": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1536,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_21": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1728,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_22": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1920,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_23": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        2112,
+        960,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_24": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        0,
+        1152,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_25": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        192,
+        1152,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_26": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        384,
+        1152,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_27": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        576,
+        1152,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_28": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        768,
+        1152,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_29": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        960,
+        1152,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_30": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1152,
+        1152,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_31": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1344,
+        1152,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_32": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1536,
+        1152,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_33": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1728,
+        1152,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_34": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1920,
+        1152,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_35": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        2112,
+        1152,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_36": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        0,
+        1344,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_37": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        192,
+        1344,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_38": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        384,
+        1344,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_39": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        576,
+        1344,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_40": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        768,
+        1344,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_41": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        960,
+        1344,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_42": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1152,
+        1344,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_43": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1344,
+        1344,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_44": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1536,
+        1344,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_45": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1728,
+        1344,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_46": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        1920,
+        1344,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
+    },
+    "roby_idle_h3_back_47": {
+      "sheet": "roby_idle_h3",
+      "rect": [
+        2112,
+        1344,
+        192,
+        192
+      ],
+      "groundAnchor": [
+        0.5,
+        0.9583333333333334
+      ]
     }
   },
   "version": 2,
@@ -4290,6 +5538,10 @@
     {
       "id": "comic_cleaner_paint",
       "file": "./content__levels__first-mark__art__cleaner-paint-comic-v2.png"
+    },
+    {
+      "id": "roby_idle_h3",
+      "file": "./content__levels__first-mark__art__roby-idle-h3.png"
     }
   ]
 }

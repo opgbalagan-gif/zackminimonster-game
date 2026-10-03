@@ -1,7 +1,8 @@
-import {project} from './core__geometry.js?v=014abf6eb9c6';
-import {sceneLight,shadowFootprint} from './core__lighting.js?v=014abf6eb9c6';
-import {polygon} from './content__district_01__terrain.js?v=014abf6eb9c6';
-import {STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=014abf6eb9c6';
+import {project} from './core__geometry.js?v=715810e652df';
+import {sceneLight,shadowFootprint} from './core__lighting.js?v=715810e652df';
+import {polygon} from './content__district_01__terrain.js?v=715810e652df';
+import {routeFade} from './core__route-fade.js?v=715810e652df';
+import {STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=715810e652df';
 export function groundLighting(c,s,w,h,continuation={}){
   const light=sceneLight(s.life.night),cam=s.camera;
   const visible=(x,y,margin=500)=>{const p=project(x,y);return Math.abs(p.x-cam.x)<w/cam.zoom/2+margin&&Math.abs(p.y-cam.y)<h/cam.zoom/2+margin;};
@@ -29,7 +30,11 @@ export function groundLighting(c,s,w,h,continuation={}){
     const g=c.createRadialGradient(0,0,0,0,0,145);g.addColorStop(0,'#ffd58a80');g.addColorStop(.45,'#e0a45232');g.addColorStop(1,'#e0a45200');c.fillStyle=g;c.fillRect(-145,-145,290,290);c.restore();
   }
   if(light.night)for(const car of s.traffic.cars)if(visible(car.x,car.y,200)){
-    const dx=Math.cos(car.heading),dy=Math.sin(car.heading),a=project(car.x+dx*48,car.y+dy*48),b=project(car.x+dx*175-dy*35,car.y+dy*175+dx*35),d=project(car.x+dx*175+dy*35,car.y+dy*175-dx*35);
-    c.save();c.globalCompositeOperation='screen';polygon(c,[a,b,d]);c.clip();const g=c.createRadialGradient(a.x,a.y,0,a.x,a.y,170);g.addColorStop(0,'#fff1b95c');g.addColorStop(1,'#fff1b900');c.fillStyle=g;c.fillRect(a.x-170,a.y-170,340,340);c.restore();
+    const dx=Math.cos(car.heading),dy=Math.sin(car.heading);
+    for(const side of [-1,1]){
+      const x=car.x+dx*38-dy*side*14,y=car.y+dy*38+dx*side*14;
+      const a=project(x,y),b=project(x+dx*127-dy*24,y+dy*127+dx*24),d=project(x+dx*127+dy*24,y+dy*127-dx*24);
+      c.save();if(!car.turn)c.globalAlpha*=routeFade(car[car.axis],car.start,car.end);c.globalCompositeOperation='screen';polygon(c,[a,b,d]);c.clip();const g=c.createRadialGradient(a.x,a.y,0,a.x,a.y,155);g.addColorStop(0,'#fff1b960');g.addColorStop(1,'#fff1b900');c.fillStyle=g;c.fillRect(a.x-155,a.y-155,310,310);c.restore();
+    }
   }
 }

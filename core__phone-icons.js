@@ -1,4 +1,5 @@
 const shapes={
+  instagram:'<rect x="6" y="6" width="36" height="36" rx="10"/><circle cx="24" cy="24" r="9"/><circle cx="35" cy="13" r="1.4"/>',
   close:'<path d="m13 13 22 22M35 13 13 35"/>',
   reset:'<path d="M39 16a17 17 0 1 0 1 14M39 5v12H27"/>',
   camera:'<path d="M8 14h8l4-5h10l4 5h6a4 4 0 0 1 4 4v19a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4Z"/><circle cx="24" cy="27" r="9"/><circle cx="37" cy="20" r="1"/>',

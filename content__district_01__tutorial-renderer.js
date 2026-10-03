@@ -1,25 +1,26 @@
-import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=014abf6eb9c6';
-import {streetFinish,facadeFinish,sceneGrade} from './content__levels__sandbox__street-finish.js?v=014abf6eb9c6';
-import {vehicleProjection} from './core__vehicle-projection.js?v=014abf6eb9c6';
-import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=014abf6eb9c6';
-import {surfaceTrain} from './core__sandbox-metro.js?v=014abf6eb9c6';
-import {drawWaterfront,drawNeighbourhoodMap} from './content__levels__sandbox__waterfront-art.js?v=014abf6eb9c6';
-import {districtSurroundings,boundaryRailing,cloudShadows} from './content__levels__sandbox__atmosphere.js?v=014abf6eb9c6';
-import {districtContinuation,roadToBoundary} from './core__district-continuation.js?v=014abf6eb9c6';
-import {dryingOpacity} from './core__wall-rivals.js?v=014abf6eb9c6';
-import {routeFade} from './core__route-fade.js?v=014abf6eb9c6';
-import {groundLighting} from './content__levels__sandbox__lighting-art.js?v=014abf6eb9c6';
-import {lampBrightness} from './core__lighting.js?v=014abf6eb9c6';
-import {NpcAnimation} from './core__npc-animation.js?v=014abf6eb9c6';
-import {SpriteAtlas} from './core__sprites.js?v=014abf6eb9c6';
-import {project} from './core__geometry.js?v=014abf6eb9c6';
-import {heroSprite} from './core__hideout.js?v=014abf6eb9c6';
-import {polygon,box} from './content__district_01__terrain.js?v=014abf6eb9c6';
-import {drawGraffiti} from './content__district_01__graffiti-art.js?v=014abf6eb9c6';
-import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=014abf6eb9c6';
-import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=014abf6eb9c6';
-import {OccluderFade} from './core__occluder-fade.js?v=014abf6eb9c6';
-import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=014abf6eb9c6';
+import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=715810e652df';
+import {vehicleLenses} from './content__district_01__vehicle-lights.js?v=715810e652df';
+import {streetFinish,facadeFinish,sceneGrade} from './content__levels__sandbox__street-finish.js?v=715810e652df';
+import {vehicleProjection} from './core__vehicle-projection.js?v=715810e652df';
+import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=715810e652df';
+import {surfaceTrain} from './core__sandbox-metro.js?v=715810e652df';
+import {drawWaterfront,drawNeighbourhoodMap} from './content__levels__sandbox__waterfront-art.js?v=715810e652df';
+import {districtSurroundings,boundaryRailing,cloudShadows} from './content__levels__sandbox__atmosphere.js?v=715810e652df';
+import {districtContinuation,roadToBoundary} from './core__district-continuation.js?v=715810e652df';
+import {dryingOpacity} from './core__wall-rivals.js?v=715810e652df';
+import {routeFade} from './core__route-fade.js?v=715810e652df';
+import {groundLighting} from './content__levels__sandbox__lighting-art.js?v=715810e652df';
+import {lampBrightness} from './core__lighting.js?v=715810e652df';
+import {NpcAnimation} from './core__npc-animation.js?v=715810e652df';
+import {SpriteAtlas} from './core__sprites.js?v=715810e652df';
+import {project} from './core__geometry.js?v=715810e652df';
+import {heroSprite} from './core__hideout.js?v=715810e652df';
+import {polygon,box} from './content__district_01__terrain.js?v=715810e652df';
+import {drawGraffiti} from './content__district_01__graffiti-art.js?v=715810e652df';
+import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=715810e652df';
+import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=715810e652df';
+import {OccluderFade} from './core__occluder-fade.js?v=715810e652df';
+import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=715810e652df';
 
 function fightCloud(c,s){
   const t=s.tutorial.fightBurst,p=project(s.tutorial.actor.x-11,s.tutorial.actor.y+10),pulse=Math.sin(t*27);
@@ -219,7 +220,8 @@ export function createTutorialRenderer(pack){
         c.save();c.translate(p.x,p.y);c.rotate(car.axis==='x'?.46:-.46);c.scale(1,.55);const shadow=c.createRadialGradient(0,0,12,0,0,49);shadow.addColorStop(0,'#09121970');shadow.addColorStop(1,'#09121900');c.fillStyle=shadow;c.fillRect(-50,-50,100,100);c.restore();
         const projection=vehicleProjection(car.type,direction);
         c.save();c.imageSmoothingEnabled=true;c.translate(p.x,p.y);c.transform(1,projection.shear,0,projection.scaleY,0,0);
-        if(!day)c.filter='brightness(.85)';atlas.draw(c,car.type+'_'+direction,0,0,car.type==='traffic_minivan'?132:car.type==='traffic_lowrider'?138:car.type==='traffic_executive'?130:122);c.restore();c.restore();continue;
+        const carWidth=car.type==='traffic_minivan'?132:car.type==='traffic_lowrider'?138:car.type==='traffic_executive'?130:122;
+        if(!day)c.filter='brightness(.85)';atlas.draw(c,car.type+'_'+direction,0,0,carWidth);if(!day)vehicleLenses(c,atlas,car.type,direction,carWidth);c.restore();c.restore();continue;
       }
       if(o.kind==='prop'){
         const id=pack.atlas.sprites['comic_'+o.id]?'comic_'+o.id:day?o.id+'_day':o.id;
@@ -247,6 +249,12 @@ export function createTutorialRenderer(pack){
       }
       if((animated||cleaner&&!painting)&&atlas.rect('comic_'+(animated??'cleaner')+'_front_0')){
         const kind=animated??'cleaner',pose=npcAnimation.pose(actor,dt),step=Math.floor(pose.frame/4);
+        if(kind==='roby'&&!actor.moving&&atlas.rect('roby_idle_h3_front_0')){
+          const tick=Math.floor(pose.idleTime*12)%94,idleFrame=tick<48?tick:94-tick,blend=Math.min(1,pose.idleTime/.18);
+          c.save();c.imageSmoothingEnabled=true;
+          if(blend<1)atlas.draw(c,'comic_roby_'+pose.view+'_'+step,p.x,p.y,null,48,pose.flip,1-blend);
+          atlas.draw(c,'roby_idle_h3_'+pose.view+'_'+idleFrame,p.x,p.y,null,192*48/(pose.view==='front'?153:172),pose.flip,blend);c.restore();continue;
+        }
         c.save();c.imageSmoothingEnabled=true;atlas.draw(c,'comic_'+kind+'_'+pose.view+'_'+step,p.x,p.y,null,kind==='roby'?48:70,pose.flip);c.restore();continue;
       }
       if(animated&&atlas.rect('h3_'+animated+'_front_0')){
