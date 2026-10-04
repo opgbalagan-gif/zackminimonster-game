@@ -1,1 +1,1 @@
-export {createTutorialWorld as createDistrict} from './core__tutorial.js?v=8b3759ea8c13';
+export {createTutorialWorld as createDistrict} from './core__tutorial.js?v=5e1de61c4ab4';

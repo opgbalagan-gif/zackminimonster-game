@@ -1,4 +1,5 @@
-import {UIPanel,UISecondaryButton,UITitleLarge} from './core__ui-kit.js?v=8b3759ea8c13';
+import {UIPanel,UISecondaryButton,UITitleLarge} from './core__ui-kit.js?v=5e1de61c4ab4';
+import {dialogFocus} from './core__dialog-focus.js?v=5e1de61c4ab4';
 export function showChapters(save,onPick,initialTab='path'){
   document.getElementById('chapter-select')?.remove();
   const panel=document.createElement('section');panel.id='chapter-select';panel.setAttribute('aria-label','Путь и обучение');
@@ -10,17 +11,20 @@ export function showChapters(save,onPick,initialTab='path'){
   const select=tab=>{
     for(const button of tabs.children){const active=button.dataset.tab===tab;button.setAttribute('aria-selected',String(active));button.tabIndex=active?0:-1;}
     body.replaceChildren();body.setAttribute('aria-labelledby','chapter-tab-'+tab);
-    const copy=document.createElement('p');copy.textContent=tab==='training'?'Уроки можно пройти по порядку и повторить позже.':'Первый район открыт. Рисуй, исследуй и живи в своём ритме. Следующие районы продолжат этот путь.';body.append(copy);
+    const copy=document.createElement('p');copy.textContent=tab==='training'?'Освой улицу. Уроки можно повторять.':'Твой район. Твои правила.';body.append(copy);
     if(tab==='training'){
       training.forEach((l,i)=>{const button=document.createElement('button');button.className='chapter-card';button.disabled=!l.open;
         const number=document.createElement('b'),title=document.createElement('strong'),detail=document.createElement('small');number.textContent=String(i+1).padStart(2,'0');title.textContent=l.name;detail.textContent=l.done?'Пройдено · повторить урок':l.open?l.detail:'Сначала пройди «Первый след»';
         button.append(number,title,detail);button.onclick=()=>{panel.remove();onPick(l.id);};body.append(button);});
     }else{
-      const level=document.createElement('button');level.className='chapter-card';level.innerHTML='<b>01</b><strong>СВОЙ РАЙОН</strong><small>10 домов · трафик · баскетбол · наземное метро</small>';level.onclick=()=>{panel.remove();onPick('sandbox');};body.append(level);
+      const level=document.createElement('button');level.className='chapter-card';level.innerHTML='<b>01</b><strong>Свой район</strong><small>Переулки, граффити, баскетбол и наземное метро</small>';level.onclick=()=>{panel.remove();onPick('sandbox');};body.append(level);
       const learn=UISecondaryButton(null,{label:save.campaign.sneakComplete?'ПОВТОРИТЬ ОБУЧЕНИЕ':'ПЕРЕЙТИ К ОБУЧЕНИЮ'});learn.onclick=()=>select('training');body.append(learn);
     }
   };
   for(const [id,label] of [['path','ПУТЬ'],['training','ОБУЧЕНИЕ']]){const b=UISecondaryButton(null,{label});b.id='chapter-tab-'+id;b.dataset.tab=id;b.setAttribute('role','tab');b.setAttribute('aria-controls','chapter-body');b.onclick=()=>select(id);b.onkeydown=e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const next=e.key==='Home'?'path':e.key==='End'?'training':id==='path'?'training':'path';select(next);document.getElementById('chapter-tab-'+next).focus();}};tabs.append(b);}
   panel.append(tabs,body);select(initialTab==='training'?'training':'path');
-  const back=UISecondaryButton(null,{label:'НАЗАД'});back.onclick=()=>panel.remove();panel.append(back);document.getElementById('app').append(panel);
+  const back=UISecondaryButton(null,{label:'НАЗАД'});panel.append(back);document.getElementById('app').append(panel);
+  const focus=dialogFocus(panel,()=>back.click());back.onclick=()=>{focus.close();panel.remove();};focus.open();
+  // Picking a chapter also releases the sibling input lock before removing the dialog.
+  panel.addEventListener('click',e=>{if(e.target.closest('.chapter-card:not(:disabled)'))focus.close();},{capture:true});
 }

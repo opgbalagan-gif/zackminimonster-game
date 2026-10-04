@@ -1,5 +1,5 @@
-import {project} from './core__geometry.js?v=8b3759ea8c13';
-import {polygon,box} from './content__district_01__terrain.js?v=8b3759ea8c13';
+import {project} from './core__geometry.js?v=5e1de61c4ab4';
+import {polygon,box} from './content__district_01__terrain.js?v=5e1de61c4ab4';
 
 const ink='#29424b';
 function line(c,a,b,color=ink,width=1){c.strokeStyle=color;c.lineWidth=width;c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();}
@@ -32,12 +32,12 @@ export function comicStation(c,m,night=false){
   }
   // A shallow folded roof, thick fascia and sparse standing seams.
   const a=p(-112,-100,54),b=p(112,-100,54),d=p(-112,-66,62),e=p(112,-66,62),f=p(-112,-31,54),g=p(112,-31,54);
-  polygon(c,[a,b,e,d],night?'#436374':'#93ada7',ink,1.3);
-  polygon(c,[d,e,g,f],night?'#304d60':'#61888a',ink,1.3);
-  polygon(c,[f,g,p(112,-31,50),p(-112,-31,50)],'#345760',ink,1);
+  polygon(c,[a,b,e,d],night?'#965f58':'#e3977c',ink,1.3);
+  polygon(c,[d,e,g,f],night?'#794e4c':'#cb7967',ink,1.3);
+  polygon(c,[f,g,p(112,-31,50),p(-112,-31,50)],'#435e61',ink,1);
   polygon(c,[b,g,p(112,-31,50),p(112,-100,50)],'#54787b',ink,1);
-  for(let u=-94;u<110;u+=23){line(c,p(u,-99,54.4),p(u,-66,62.4),'#b2c4b8',.7);line(c,p(u,-66,62.4),p(u,-32,54.4),'#739694',.8);}
-  line(c,d,e,'#c3d0bd',1.5);
+  for(let u=-94;u<110;u+=23){line(c,p(u,-99,54.4),p(u,-66,62.4),'#f1bba0',.7);line(c,p(u,-66,62.4),p(u,-32,54.4),'#dfa08a',.8);}
+  line(c,d,e,'#f2c2a3',1.5);
   // Warm station lighting is limited to the sheltered platform at night.
   for(const u of [-64,64]){
     const q=p(u,-49,47);
@@ -45,9 +45,11 @@ export function comicStation(c,m,night=false){
     line(c,p(u-7,-49,47),p(u+7,-49,47),night?'#ffe4a0':'#d4d5bd',2.5);
   }
   const sign=p(0,-32,40);
-  c.fillStyle='#173b49';c.strokeStyle='#acbbb1';c.lineWidth=1;
-  c.beginPath();c.roundRect(sign.x-34,sign.y-9,68,18,3);c.fill();c.stroke();
-  c.fillStyle='#f2e6c8';c.font='bold 9px sans-serif';c.textAlign='center';c.fillText('М • КВАРТАЛ',sign.x,sign.y+3);
+  c.fillStyle='#204b53';c.strokeStyle='#e6d6b3';c.lineWidth=1.5;
+  c.beginPath();c.roundRect(sign.x-45,sign.y-11,90,22,4);c.fill();c.stroke();
+  c.fillStyle='#e9bd6f';c.beginPath();c.arc(sign.x-33,sign.y,8,0,Math.PI*2);c.fill();
+  c.fillStyle='#244c53';c.font='bold 11px sans-serif';c.textAlign='center';c.fillText('М',sign.x-33,sign.y+4);
+  c.fillStyle='#f2e6c8';c.font='bold 9px sans-serif';c.fillText('КВАРТАЛ',sign.x+10,sign.y+3);
   // Stairs follow the same footprint as before, now with connected stringers.
   const stair=(u,v,z)=>project(x+u,y+v,z);
   for(const v of [-132,-86]){

@@ -1,5 +1,6 @@
-import {routeFade} from './core__route-fade.js?v=8b3759ea8c13';
-// Each whole car dissolves before leaving the line; no clipped wagon silhouettes.
+import {routeFade} from './core__route-fade.js?v=5e1de61c4ab4';
+// The line extends beyond the playable bounds. Whole cars fade only in that
+// scenic continuation; the complete tail has left before the next train loops.
 export function surfaceTrain(m,time){
   const speed=140,start=m.start-600,stop=m.station.x+110,end=m.end+620;
   const arrival=(stop-start)/speed,hold=5,cycle=(end-start)/speed+hold,t=(time+9)%cycle;

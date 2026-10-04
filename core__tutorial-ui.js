@@ -1,8 +1,8 @@
-import {uiIcon,setUIButton,UIPanel,applyUIComponents} from './core__ui-kit.js?v=8b3759ea8c13';
+import {uiIcon,setUIButton,UIPanel,applyUIComponents} from './core__ui-kit.js?v=5e1de61c4ab4';
 export class TutorialUI{
   constructor(session,onComplete){
     this.s=session;this.signature='';this.panel=document.createElement('section');this.panel.id='tutorial-panel';this.panel.className='ui-panel';this.panel.setAttribute('aria-label','Обучение');
-    this.panel.innerHTML='<div class="lesson-progress" aria-label="Этапы обучения"></div><div class="lesson-kicker"></div><h2></h2><p class="lesson-line"></p><p class="lesson-help"></p><button class="primary"></button>';
+    this.panel.innerHTML='<div class="lesson-progress" aria-label="Этапы обучения"></div><div class="lesson-kicker"></div><h2></h2><p class="lesson-help"></p><details class="lesson-aside"><summary>Реплика Зака</summary><p class="lesson-line"></p></details><button class="primary"></button>';
     UIPanel(this.panel);applyUIComponents(this.panel);document.getElementById('app').append(this.panel);
     this.panel.querySelector('button').onclick=()=>{session.tutorial.act();this.sync();};
     this.markers=document.createElement('div');this.markers.id='tutorial-markers';document.getElementById('app').append(this.markers);
@@ -56,6 +56,7 @@ export class TutorialUI{
     this.panel.querySelector('.lesson-kicker').textContent=s.life?.tour?'ДОМА · '+step+' / 7 · ЗАК':l.step+' / 6 · '+l.who;
     this.panel.querySelector('h2').textContent=l.title;this.panel.querySelector('.lesson-line').textContent='«'+l.line+'»';
     this.panel.querySelector('.lesson-line').hidden=!l.who.startsWith('ЗАК')&&!!t.actor;
+    this.panel.querySelector('.lesson-aside').hidden=this.panel.querySelector('.lesson-line').hidden;
     this.panel.querySelector('.lesson-help').textContent=l.help;
     const button=this.panel.querySelector('button');button.hidden=!l.button;setUIButton(button,l.button??'',t.stage==='paint'?'spray':['home','recovery','escape'].includes(t.stage)?'home':'');
     button.disabled=!!s.life?.sleeping;

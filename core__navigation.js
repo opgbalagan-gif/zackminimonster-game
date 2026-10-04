@@ -1,5 +1,5 @@
-import {inside,distance} from './core__geometry.js?v=8b3759ea8c13';
-import {onLand} from './core__land.js?v=8b3759ea8c13';
+import {inside,distance} from './core__geometry.js?v=5e1de61c4ab4';
+import {onLand} from './core__land.js?v=5e1de61c4ab4';
 export class NavigationGrid{
   constructor(world,cell=24){
     this.world=world;this.cell=cell;this.cols=Math.ceil(world.width/cell);this.rows=Math.ceil(world.height/cell);

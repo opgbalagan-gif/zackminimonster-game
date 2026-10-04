@@ -1,0 +1,179 @@
+/* Artist's print studio. The image is the choice; text explains only its state. */
+:root{--menu-paper:#f4eedb;--menu-ink:#172f3c;--menu-muted:#536166;--menu-teal:#e4bf72;--menu-pink:#dc60bd;--menu-edge:#172f3c;--studio-white:#fffcf2}
+#app .object-hotspot{transform:none!important;background:none!important;border:0!important;border-radius:0!important;padding:0!important;box-shadow:none!important;min-height:48px;min-width:48px;overflow:visible;animation:none!important}
+#app .object-hotspot svg{width:100%;height:100%;overflow:visible;pointer-events:none}
+#app .object-hotspot polygon{fill:#fff4ad08;stroke:#fff1b9;stroke-width:1.2;vector-effect:non-scaling-stroke;opacity:.6;transition:fill .18s,stroke-width .18s;filter:drop-shadow(0 0 3px #f0c25a)}
+#app .object-hotspot:hover polygon,#app .object-hotspot:focus-visible polygon,#app .object-hotspot.new-room-icon polygon{fill:#ffdc7333;stroke-width:2.5;opacity:1}
+#app .object-hotspot span{display:block!important;position:absolute;left:50%;bottom:-18px;transform:translateX(-50%);padding:7px 10px;background:#f4eedb;border:1px solid #172f3c;color:#172f3c;font:800 12px var(--ui-heading);opacity:0;pointer-events:none;transition:opacity .15s}
+#app .object-hotspot:hover span,#app .object-hotspot:focus-visible span,#app .object-hotspot:active span,#app .object-hotspot.new-room-icon span{opacity:1}
+#app :is(.graffiti-card,.ball-card,.poi-card,.poster-card,.new-game-card,.hideout-panel,#tutorial-panel,.map-sidebar,.radio-panel,.district-dialog-card){border:2px solid var(--menu-ink)!important;border-image:none!important;border-radius:3px!important;background:var(--menu-paper)!important;color:var(--menu-ink)!important;box-shadow:8px 8px 0 #10232b80!important;padding:24px!important}
+#app :is(.screen,#chapter-select,#hideout-panel,#tutorial-panel,.district-dialog,#radio-panel) :is(.primary,.secondary),#app :is(#home-panel-close,#radio-stop,.upgrade-button,#sticker-tools button,#city-tabs button,.district-dialog header button){border:2px solid var(--menu-ink)!important;border-radius:3px!important;background:transparent!important;color:var(--menu-ink)!important;box-shadow:none!important;min-height:48px;padding:12px 18px!important;font:800 16px/1.15 var(--ui-heading);transition:transform .16s,background-color .16s,box-shadow .16s}
+#app :is(.screen,#chapter-select,#hideout-panel,#tutorial-panel,.district-dialog) .primary{background:var(--menu-ink)!important;color:var(--menu-paper)!important;box-shadow:3px 3px 0 #cf7e67!important}
+#app :is(.screen,#chapter-select,#hideout-panel,#tutorial-panel,.district-dialog) :is(button,a):focus-visible{outline:3px solid #dc60bd!important;outline-offset:4px}
+#app :is(.screen,#chapter-select,#hideout-panel,#tutorial-panel,.district-dialog) button:not(:disabled):hover{box-shadow:3px 3px 0 #172f3c55!important;transform:translateY(-2px)}
+#app :is(.screen,#chapter-select,#hideout-panel,#tutorial-panel) .primary:not(:disabled):hover{background:#294957!important;color:#fffcf2!important}
+#app :is(.screen,#chapter-select,#hideout-panel,#tutorial-panel) .secondary:not(:disabled):hover{background:#e4bf7255!important;color:#172f3c!important}
+#app :is(.screen,#chapter-select,#hideout-panel,#tutorial-panel,.district-dialog) button:not(:disabled):active{transform:translateY(1px) scale(.98);translate:0;box-shadow:none!important}
+#app :is(.screen,#chapter-select,#hideout-panel,#tutorial-panel,.district-dialog) button:disabled{background:#e3dece!important;color:#68706e!important;border-color:#a3aaa3!important;box-shadow:none!important;opacity:1}
+#app :is(.graffiti-card,.ball-card,.poi-card,.poster-card,.new-game-card,.hideout-panel,#tutorial-panel,.map-sidebar,.district-dialog-card) :is(h1,h2,h3,strong){color:var(--menu-ink)}
+#app :is(.graffiti-card,.ball-card,.poi-card,.poster-card,.new-game-card,.hideout-panel,#tutorial-panel,.map-sidebar,.district-dialog-card) :is(p,small,label,.eyebrow){color:var(--menu-muted)}
+#app :is(.graffiti-card,.ball-card,.poi-card,.poster-card,.new-game-card,.hideout-panel) h2{font:900 clamp(27px,4vw,42px)/1 var(--ui-heading);letter-spacing:-.025em;margin:4px 0 8px}
+#app :is(.graffiti-screen,.ball-screen,.poster-screen,#new-game-dialog,.district-dialog){background:#172f3cb8;backdrop-filter:blur(9px);padding:24px}
+#app :is(.screen,#chapter-select,#hideout-panel) .secondary .painted-icon{filter:brightness(0)!important}
+#app :is(.screen,#chapter-select,#hideout-panel) .primary .painted-icon{filter:brightness(0) invert(1)!important}
+
+/* Cover: an oversized piece of actual Zak art, with a compact play menu. */
+#app #title-screen{background:#f4eedb;padding:40px 7vw;align-items:center}
+#app .title-art{inset:0 0 0 38%;width:auto;opacity:1;background:#cf7e67 url('./content__graffiti__assets__color-crew.png') center/contain no-repeat;transform:none;filter:none;border-left:3px solid #172f3c}
+#app .title-art:before,#app .title-art:after,#app .title-art i{display:none}
+#app .title-content{width:min(410px,45%);padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
+#app #title-screen .title-content{border-image:none!important;background:transparent!important;border:0!important;box-shadow:none!important;color:#172f3c}
+#app #title-screen .title-content:before{display:none!important}
+#app #title-screen .title-art{mask-image:none;height:auto}
+#app #start-button:disabled + #new-game-button{background:#172f3c!important;color:#f4eedb!important;border-color:#172f3c!important;box-shadow:3px 3px 0 #cf7e67!important}
+#app .brand{color:#172f3c;text-shadow:3px 3px 0 #cf7e67;font-size:clamp(70px,9vw,120px);transform:none;margin:0 0 28px}
+#app .brand>span:last-child{color:#172f3c;font-size:.21em;letter-spacing:.055em;margin-top:7px}
+#app .edition{color:#536166;letter-spacing:.08em;font-size:10px}
+#app .edition b{color:#172f3c;font-size:30px}
+#app .title-copy{color:#536166;font-size:17px;margin:8px 0 28px}
+#app #title-chapters{border:0!important;text-decoration:underline;text-underline-offset:5px;justify-content:center;min-height:48px}
+#app #load-status{color:#536166;min-height:16px;margin:16px 0 0}
+#app .title-footer{color:#172f3c;text-shadow:none}
+#app .new-game-card{width:min(460px,100%)}
+#app .new-game-card .eyebrow{letter-spacing:.16em}
+#app .new-game-card>button{margin-top:12px;width:100%}
+#app #new-game-cancel{border:0!important}
+
+/* Wardrobe / paint / collection: illustrated objects, not rows of instructions. */
+#app #hideout-panel{left:50%;right:auto;top:50%;bottom:auto;transform:translate(-50%,-50%);width:min(790px,calc(100% - 40px));max-height:calc(100dvh - 64px);overflow:auto;z-index:55}
+#app #hideout-panel{left:50%!important;right:auto!important;top:50%!important;bottom:auto!important;width:min(790px,calc(100% - 40px))!important}
+#app .hideout-panel-heading{border-bottom:2px solid #172f3c!important;margin-bottom:18px;padding-bottom:14px}
+#app .hideout-panel-heading .eyebrow{font-size:10px;letter-spacing:.13em}
+#app #home-panel-close{background:transparent!important;border:0!important;padding:10px!important;color:#172f3c}
+#app #home-panel-close .painted-icon{filter:brightness(0)}
+#app .outfit-list,#app .ink-list,#app .trophy-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+#app .loadout-card,#app .trophy-list .loadout-card{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:14px;margin:0;padding:16px 10px;min-height:0;background:#fffcf2;border:2px solid #b7b9ac;border-radius:3px;color:#172f3c;position:relative;text-align:center;overflow:hidden}
+#app .loadout-card>canvas{width:100%;height:190px;object-fit:contain;image-rendering:auto;background:transparent;border:0}
+#app .loadout-card>span{display:flex;flex-direction:column;gap:5px}
+#app .loadout-card strong{font:900 21px/1 var(--ui-heading)}
+#app .loadout-card small{font:12px/1.4 var(--ui-body);color:#536166}
+#app .loadout-card .card-status{font:800 11px/1.4 var(--ui-body);color:#536166;margin-top:7px}
+#app .loadout-card.equipped{border:3px solid #172f3c;background:#e4bf7266;padding:15px 9px;box-shadow:none}
+#app .loadout-card.equipped .card-status{color:#172f3c}
+#app .loadout-card:disabled{background:#e3dece!important;border-color:#bcc0b5!important}
+#app .loadout-card:disabled canvas{filter:grayscale(1);opacity:.4}
+#app .ink-list .loadout-card>canvas{height:112px}
+#app .pane-description{font:14px/1.4 var(--ui-body);margin:0 0 16px}
+#app .pane-footnote{display:none}
+#app .spray-preview{margin:14px 0;background:#fffcf2;border:1px solid #a8b0a7;border-radius:0}
+#app .upgrade-button{background:#e4bf72!important;color:#172f3c!important}
+#app .loadout-summary,#app .court-trophy{background:#fffcf2;border:1px solid #b6b9ad;border-radius:2px;color:#172f3c}
+#app .court-trophy{grid-column:1/-1}
+#app .home-stats>div{background:transparent;border-bottom:2px solid #172f3c}
+
+/* Mini-games are work surfaces. Controls sit around the art, never over it. */
+.studio-tabs{display:flex;gap:4px;margin:-6px 0 18px;border-bottom:1px solid #a8b0a7}
+#app .studio-tabs button{min-height:48px;flex:1;border:0;border-bottom:3px solid transparent;background:transparent;color:#536166;padding:10px;font:800 16px var(--ui-heading)}
+#app .studio-tabs button[aria-pressed=true]{color:#172f3c;border-bottom-color:#172f3c}
+#app #hideout-ui:not([data-tab=home]) #room-hotspots{visibility:hidden}
+#app .phase-track{gap:0;margin:12px 0;counter-reset:step}
+#app .phase-track span{border:0!important;border-radius:0;background:transparent!important;color:#536166;box-shadow:none!important;border-bottom:3px solid #c4c8bd!important;padding:9px 4px!important}
+#app .phase-track span.active{background:transparent!important;color:#172f3c;border-bottom-color:#172f3c!important}
+#app #graffiti-screen .phase-track span.active{transform:none;border:0!important;border-bottom:3px solid #172f3c!important}
+#app .phase-track span.complete{color:#388a91;border-bottom-color:#388a91!important;background:transparent!important}
+#app .graffiti-stage{border:2px solid #172f3c;border-radius:0;box-shadow:none;background:#ded9c8}
+#app .graffiti-bottom strong{font-size:26px;color:#172f3c}
+#app .graffiti-bottom p{font-size:13px;margin-top:6px}
+#app #coverage-label{color:#388a91;font-size:36px}
+#app .graffiti-bottom #coverage-label{color:#388a91}
+#app #graffiti-picker{gap:8px;max-height:146px;padding:4px 2px 12px}
+#app #graffiti-picker button{background:#fffcf2;color:#172f3c;border:1px solid #9eaba4;border-radius:2px;position:relative}
+#app #graffiti-picker button[aria-pressed=true]{border:3px solid #172f3c;background:#e4bf7255;padding:3px}
+#app #graffiti-picker small{color:#536166}
+#app #graffiti-picker canvas{height:64px}
+#app #graffiti-picker{scrollbar-width:thin;scrollbar-color:#388a91 #ded9c8}
+#app #graffiti-picker::-webkit-scrollbar{height:4px}
+#app #graffiti-picker::-webkit-scrollbar-track{background:#ded9c8}
+#app #graffiti-picker::-webkit-scrollbar-thumb{background:#388a91;border:0}
+#app #graffiti-picker::-webkit-scrollbar-button{display:none}
+#app :is(#graffiti-progress,#ball-progress,#load-progress){background:#d5dacd;border:0;border-radius:0;height:6px}
+#app :is(#graffiti-progress,#ball-progress,#load-progress)::-webkit-progress-bar{background:#d5dacd}
+#app :is(#graffiti-progress,#ball-progress,#load-progress)::-webkit-progress-value{background:#388a91;border-radius:0}
+#app #ball-canvas{border:0;border-radius:0;background:#ded9c8;box-shadow:none}
+#app #sticker-tray button{background:#fffcf2;border:1px solid #9eaba4;border-radius:3px;color:#172f3c;min-width:56px;min-height:56px}
+#app #sticker-tray button[aria-pressed=true],#app #sticker-tray button.active{border:3px solid #172f3c;background:#e4bf7266}
+#app #sticker-tools{gap:8px}
+#app #sticker-tools button{padding:10px!important}
+#app .ball-meter{color:#172f3c}
+#app .ball-meter strong{color:#172f3c}
+#app #phone-ui .camera-help{border:2px solid #172f3c!important;border-image:none!important;background:#f4eedb!important;border-radius:3px;box-shadow:4px 4px 0 #172f3c77!important}
+#app .graffiti-reward{border:2px solid #172f3c;border-radius:0;background:#e4bf72;box-shadow:3px 3px 0 #172f3c}
+
+/* Map, shop, lessons, chapter choice and result dialogs share the print system. */
+#app #chapter-select{background:#f4eedb;padding:28px 20px;color:#172f3c}
+#app #chapter-select h2{color:#172f3c;font-size:48px}
+#app .chapter-body>p{color:#536166;max-width:42ch}
+#app .chapter-card{border:2px solid #172f3c!important;border-image:none!important;background:#fffcf2!important;border-radius:3px;padding:22px!important;box-shadow:5px 5px 0 #cf7e67!important;margin-bottom:16px}
+#app .chapter-card b{color:#388a91;font-size:64px}
+#app .chapter-card strong{color:#172f3c}
+#app .chapter-card small{color:#536166}
+#app #chapter-select .chapter-tabs [aria-selected=true]{background:#172f3c!important;color:#f4eedb!important;border-color:#172f3c!important}
+#app .district-dialog-card{width:min(620px,100%)}
+#app .shop-wallet{font:900 30px var(--ui-heading);color:#172f3c}
+#app .shop-stock button{background:#fffcf2;color:#172f3c;border:2px solid #172f3c;border-top:8px solid var(--paint-color);border-radius:2px;padding:18px 10px}
+#app .shop-stock strong{font-size:18px}
+#app .shop-stock .ui-icon{width:70px!important;height:70px!important}
+#app .shop-stock button:disabled{opacity:.65}
+#app .map-sidebar .map-legend{color:#536166;font-size:11px;gap:8px}
+#app #route-select{background:#fffcf2;border:2px solid #172f3c;border-radius:2px;color:#172f3c;min-height:48px;padding:10px}
+#app .map-sidebar #route-select{background:#fffcf2!important;color:#172f3c!important;border-color:#172f3c!important}
+#app .map-header{background:#f4eedb;border-bottom:2px solid #172f3c}
+#app .map-header h1{color:#172f3c}
+#app .map-header .eyebrow{color:#536166}
+#app #city-status{color:#172f3c}
+#app #tutorial-panel .lesson-help{color:#536166}
+#app #tutorial-panel .lesson-kicker{color:#388a91}
+#app #tutorial-panel h2{font-size:28px;margin-bottom:12px}
+#app .lesson-aside{margin:10px 0 14px;border-top:1px solid #b9bdae;padding-top:8px;color:#536166}
+#app .lesson-aside summary{cursor:pointer;min-height:32px;font:700 12px/32px var(--ui-body)}
+#app .lesson-aside .lesson-line{font:14px/1.5 var(--ui-body);margin:0 0 12px}
+#app .poi-card #poi-quote{background:#e4bf7233;border:1px solid #b9bdae;color:#172f3c;border-radius:2px}
+#app #court-screen .speech-bubble{border:2px solid #172f3c;border-radius:4px;box-shadow:5px 5px 0 #cf7e6799;background:#f4eedb}
+#app #court-screen .speech-bubble:after{background:#f4eedb}
+#app :is(.night-summary,.night-results,.fight-card){background:#f4eedb;color:#172f3c;border:2px solid #172f3c;border-radius:3px;box-shadow:6px 6px 0 #172f3c70}
+@media(max-width:600px){
+ #app :is(.graffiti-screen,.ball-screen,.poster-screen,#new-game-dialog,.district-dialog){padding:12px}
+ #app :is(.graffiti-card,.ball-card,.poi-card,.poster-card,.new-game-card,.hideout-panel,.district-dialog-card){padding:16px!important;box-shadow:4px 4px 0 #10232b80!important}
+ #app #title-screen{padding:24px;align-items:flex-end}
+ #app .title-art{inset:0 0 44%;border-left:0;border-bottom:3px solid #172f3c;background-size:auto 100%;background-position:60% center}
+ #app .title-content{width:100%;max-width:400px;margin:0 auto 14px;background:#f4eedb!important;padding:16px!important;border:2px solid #172f3c!important;box-shadow:5px 5px 0 #172f3c!important}
+ #app #title-screen .title-content{background:#f4eedb!important;border:2px solid #172f3c!important;box-shadow:5px 5px 0 #172f3c!important}
+ #app .brand{font-size:62px;margin-bottom:16px}
+ #app .brand>span:last-child{font-size:14px}
+ #app .edition b{font-size:23px}
+ #app .title-copy{margin:6px 0 14px;font-size:14px}
+ #app .title-content>button{margin-top:8px}
+ #app .title-footer{display:none}
+ #app #hideout-panel{width:calc(100% - 24px);max-height:calc(100dvh - 32px)}
+ #app #hideout-panel{width:calc(100% - 24px)!important}
+ #app .outfit-list,#app .trophy-list{gap:8px}
+ #app .loadout-card,#app .trophy-list .loadout-card{padding:12px 6px;gap:10px}
+ #app .loadout-card.equipped{padding:11px 5px}
+ #app .loadout-card>canvas{height:142px}
+ #app .loadout-card strong{font-size:16px}
+ #app .loadout-card small{font-size:10px}
+ #app .loadout-card .card-status{font-size:9px}
+ #app #outfit-list{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+ #app #outfit-list .loadout-card{flex-direction:column;text-align:center;padding:12px 6px;gap:10px;min-height:0}
+ #app #outfit-list canvas{width:100%;height:142px;flex:auto}
+ #app #outfit-list strong{font-size:16px}
+ #app #outfit-list small{font-size:10px;margin:0}
+ #app .ink-list{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+ #app .ink-list .loadout-card>canvas{height:88px}
+ #app .graffiti-heading h2,#app .ball-heading h2{font-size:26px}
+ #app .phase-track{font-size:10px}
+ #app .graffiti-bottom strong{font-size:22px}
+ #app #graffiti-picker{max-height:132px}
+ #app #graffiti-screen .graffiti-card{max-height:calc(100dvh - 24px)}
+}
+@media(prefers-reduced-motion:reduce){#app :is(.screen,#chapter-select,#hideout-panel) button{transition:none!important;animation:none!important}}

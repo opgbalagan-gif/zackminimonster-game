@@ -1,14 +1,15 @@
-import {GraffitiView} from './core__graffiti-view.js?v=8b3759ea8c13';
-import {HideoutUI} from './core__hideout-ui.js?v=8b3759ea8c13';
-import {CourtView} from './core__court-view.js?v=8b3759ea8c13';
-import {PhoneUI} from './core__phone-ui.js?v=8b3759ea8c13';
-import {PeriodTransition} from './core__period-transition.js?v=8b3759ea8c13';
-import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=8b3759ea8c13';
-import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=8b3759ea8c13';
-import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=8b3759ea8c13';
-import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=8b3759ea8c13';
-import {regionAt,gateMessage} from './core__city-progress.js?v=8b3759ea8c13';
-import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=8b3759ea8c13';
+import {GraffitiView} from './core__graffiti-view.js?v=5e1de61c4ab4';
+import {HideoutUI} from './core__hideout-ui.js?v=5e1de61c4ab4';
+import {CourtView} from './core__court-view.js?v=5e1de61c4ab4';
+import {PhoneUI} from './core__phone-ui.js?v=5e1de61c4ab4';
+import {PeriodTransition} from './core__period-transition.js?v=5e1de61c4ab4';
+import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=5e1de61c4ab4';
+import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=5e1de61c4ab4';
+import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=5e1de61c4ab4';
+import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=5e1de61c4ab4';
+import {regionAt,gateMessage} from './core__city-progress.js?v=5e1de61c4ab4';
+import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=5e1de61c4ab4';
+import {DistrictToolsUI} from './core__district-tools-ui.js?v=5e1de61c4ab4';
 const $=id=>document.getElementById(id);
 export class GameUI{
   constructor(callbacks){
@@ -54,7 +55,7 @@ export class GameUI{
     $('motion-enable').onclick=async()=>{await this.graffitiView.motion.enable();this.sync();};
     $('motion-touch').onclick=()=>{this.graffitiView.motion.useTouch();this.sync();};
     this.hideoutUI=new HideoutUI(session,renderer,()=>this.sync(),audio);
-    this.periodTransition=new PeriodTransition(session,()=>{if(this.pendingComment){const text=this.pendingComment;this.pendingComment='';this.showToast(text);}});
+    this.periodTransition=new PeriodTransition(session,()=>{if(this.pendingComment){const text=this.pendingComment;this.pendingComment='';this.showToast(text);}},renderer);
     if(session.world.tutorial)this.phoneUI=new PhoneUI(session,renderer,audio);
     $('radio-stop').onclick=()=>{audio.radio.stop();this.sync();};
     $('radio-toggle').onclick=()=>{audio.radio.toggle();this.sync();};
@@ -63,6 +64,7 @@ export class GameUI{
     $('radio-volume').oninput=()=>{audio.radio.setVolume(Number($('radio-volume').value)/100);this.sync();};
     $('radio-volume').onchange=()=>{session.save.settings.radioVolume=audio.radio.media.volume;session.persist();};
     $('title-screen').hidden=true;$('hud').hidden=false;
+    this.districtTools?.destroy();this.districtTools=new DistrictToolsUI(this);
     this.updateRoutes();this.sync();
   }
   updatePosterLinks(){
@@ -116,10 +118,12 @@ export class GameUI{
     for(const button of $('city-tabs').children)button.classList.toggle('active',button.dataset.region===(this.session.mapRegion??'all'));
     const selected=this.session.city.find(r=>r.id===this.session.mapRegion);
     $('city-status').textContent=this.session.world.sandbox?'Ты — розовая точка. Выбери место, чтобы проложить пеший маршрут.':selected?selected.open?selected.subtitle+' · Сохранено '+selected.rep+' REP':gateMessage(this.session.city,selected.id):'Единый город · река · кольцо метро. Проходы: 800 → 1200 → 1600 REP в предыдущем районе.';
+    if(this.session.world.sandbox)this.districtTools?.drawMap();
   }
   showToast(text){if(this.periodTransition?.active){this.pendingComment=text;return;}$('toast').textContent=text;$('toast').hidden=false;this.toastUntil=performance.now()+4500;}
   sync(){
     const s=this.session;if(!s)return;
+    this.districtTools?.sync();
     $('app').dataset.mode=s.mode;
     const gang=s.gangs.speech;$('gang-callout').hidden=!gang||s.mode!=='district'||this.mapOpen;
     if(gang){$('gang-name').textContent=gang.name;$('gang-line').textContent=gang.line;$('gang-requirement').textContent=gang.detail;}
@@ -145,7 +149,7 @@ export class GameUI{
     $('objective-label').textContent=s.knockedFor>0?'СБИЛИ · Зак поднимается…':s.waypoint?'↗ '+s.waypoint.label:s.runRep?'Вернись в убежище, чтобы сохранить':s.painted.size===s.world.targets.length?'Район полностью твой':'Найди свободную стену · берегись машин';
     const near=s.near;$('interaction').hidden=!near||s.hiddenFor>0||s.mode!=='district';
     $('action-button').hidden=$('interaction').hidden||!!s.tutorial?.scripted;
-    if(near){const [label,icon]=near.type==='target'?['Рисовать','spray']:near.type==='hideout'?['Войти','home']:near.type==='npc'?['Поговорить с '+near.item.name,'talk']:near.type==='court'?['Баскетбол','ball']:['Спрятаться','bin'];$('action-button').setAttribute('aria-label',label);$('action-button').title=label+' · нажми; тяни, чтобы идти';setUIButton($('action-button'),label,icon);}
+    if(near){const [label,icon]=near.type==='target'?['Рисовать','spray']:near.type==='shop'?['Магазин красок','spray']:near.type==='hideout'?['Войти','home']:near.type==='npc'?['Поговорить с '+near.item.name,'talk']:near.type==='court'?['Баскетбол','ball']:['Спрятаться','bin'];$('action-button').setAttribute('aria-label',label);$('action-button').title=label+' · нажми; тяни, чтобы идти';setUIButton($('action-button'),label,icon);}
     if(near){
       $('interaction-type').textContent=near.type==='court'?'COURT STORY':near.type==='target'?'GRAFFITI SPOT':near.type==='safe'?'SAFE SPOT':'HIDEOUT / SAVE';
       $('interaction-name').textContent=near.item.name;
@@ -172,8 +176,8 @@ export class GameUI{
       for(const el of document.querySelectorAll('[data-phase]')){
         el.classList.toggle('active',el.dataset.phase===g.phase);el.classList.toggle('complete',phases.indexOf(el.dataset.phase)<phases.indexOf(g.phase));
       }
-      const title={shake:'ВСТРЯХНИ БАЛЛОН',stencil:'РАЗМЕСТИ ТРАФАРЕТ',spray:'ОСТАВЬ СВОЙ СЛЕД',result:'СТЕНА ТВОЯ!'};
-      const help={shake:'Зажми баллон и води влево-вправо. SHAKE THE CAN!',stencil:'Подвинь рисунок в рамке и закрепи. POSITION IT.',spray:'Води баллоном по силуэту. Нужно закрасить '+Math.round(g.required*100)+'%.',result:'Работа готова. Забери награду и возвращайся на улицу.'};
+      const title={shake:'Встряхни баллон',stencil:'Размести трафарет',spray:'Оставь свой след',result:'Стена твоя!'};
+      const help={shake:'Зажми баллон и води влево-вправо.',stencil:'Подвинь рисунок в рамке и закрепи трафарет.',spray:'Води баллоном по силуэту. Нужно закрасить '+Math.round(g.required*100)+'%.',result:'Работа готова. Забери награду и возвращайся на улицу.'};
       $('phase-title').textContent=title[g.phase];$('phase-help').textContent=help[g.phase];
       const motion=this.graffitiView.motion;
       $('motion-controls').hidden=g.phase!=='shake'||!motion.mobile;
@@ -190,7 +194,7 @@ export class GameUI{
         if(motion.listening&&!motion.manual){$('phase-title').textContent='ПОТРЯСИ ТЕЛЕФОНОМ';$('phase-help').textContent='Несколько движений — и баллон готов.';}
       }
       const progress=g.done?1:g.phase==='shake'?g.shakeProgress:g.phase==='stencil'?0:g.coverage;
-      $('coverage-label').textContent=g.phase==='stencil'?'READY':Math.round(progress*100)+'%';$('graffiti-progress').value=progress;
+      $('coverage-label').textContent=g.phase==='stencil'?'✓':Math.round(progress*100)+'%';$('graffiti-progress').value=progress;
       $('confirm-stencil').hidden=!['stencil','result'].includes(g.phase);
       setUIButton($('confirm-stencil'),g.done?'ЗАБРАТЬ НАГРАДУ':'ЗАКРЕПИТЬ ТРАФАРЕТ',g.done?'rep':'spray');
     }

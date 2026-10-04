@@ -1,6 +1,6 @@
-import {COURT_LINES,STICKERS,MAX_STICKERS,COURT} from './core__basketball.js?v=8b3759ea8c13';
-import {drawBall,drawSticker} from './core__ball-art.js?v=8b3759ea8c13';
-import {heroSprite} from './core__hideout.js?v=8b3759ea8c13';
+import {COURT_LINES,STICKERS,MAX_STICKERS,COURT} from './core__basketball.js?v=5e1de61c4ab4';
+import {drawBall,drawSticker} from './core__ball-art.js?v=5e1de61c4ab4';
+import {heroSprite} from './core__hideout.js?v=5e1de61c4ab4';
 const $=id=>document.getElementById(id);
 export class CourtView{
   constructor(session,renderer){
@@ -58,7 +58,7 @@ export class CourtView{
       $('ball-screen').dataset.phase=result?'result':'paint';
       $('ball-title').textContent=result?'ТЕПЕРЬ У НЕГО ЕСТЬ ХАРАКТЕР':'НЕ ПРОСТО МЯЧ';
       const g=s.ballGame;
-      $('ball-help').textContent=result?'ТИ: «Вот это наш мяч! На всём районе второго такого нет».':g.stickers.length>=MAX_STICKERS?'На мяче 8 наклеек. Двигай, поворачивай или убери лишнюю.':g.pending?'Выбери наклейку и коснись мяча. Приклей минимум 3 — получится твой стикер-болл.':'Двигай наклейку пальцем. Меняй размер, поворачивай или выбери следующую.';
+      $('ball-help').textContent=result?'ТИ: «Теперь такого мяча ни у кого нет!»':g.stickers.length>=MAX_STICKERS?'Все 8 на месте. Поправь или убери лишнюю.':g.pending?'Выбери наклейку → коснись мяча. Нужно 3.':'Двигай наклейку пальцем. Размер и поворот — ниже.';
       $('ball-finish').textContent=result?'ВЕРНУТЬСЯ НА КОРТ →':'ПОДАРИТЬ МЯЧ →';
       $('ball-finish').disabled=painting&&!s.ballGame?.ready;
       $('ball-cancel').hidden=result;$('ball-clear').hidden=result;$('sticker-tray').hidden=result;$('sticker-tools').hidden=result;

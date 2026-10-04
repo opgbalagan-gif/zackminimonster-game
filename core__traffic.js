@@ -1,7 +1,8 @@
-import {districtCar} from './core__vehicle-styles.js?v=8b3759ea8c13';
+import {districtCar} from './core__vehicle-styles.js?v=5e1de61c4ab4';
+import {TRAFFIC_TYPES,TRAFFIC_FLEET,vehicleBody,followingDistance} from './core__traffic-fleet.js?v=5e1de61c4ab4';
 // Relative swept bounds catch crossings even when both car and player move in one frame.
 export function trafficContact(car,from,to){
-  const angle=car.heading??(car.axis==='x'?0:Math.PI/2),halfX=Math.abs(Math.cos(angle))*29+Math.abs(Math.sin(angle))*13+8,halfY=Math.abs(Math.sin(angle))*29+Math.abs(Math.cos(angle))*13+8;
+  const body=vehicleBody(car),angle=car.heading??(car.axis==='x'?0:Math.PI/2),halfX=Math.abs(Math.cos(angle))*body.length/2+Math.abs(Math.sin(angle))*body.breadth/2+8,halfY=Math.abs(Math.sin(angle))*body.length/2+Math.abs(Math.cos(angle))*body.breadth/2+8;
   let enter=0,exit=1;
   for(const [axis,half] of [['x',halfX],['y',halfY]]){
     const a=from[axis]-car.previous[axis],b=to[axis]-car[axis],delta=b-a;
@@ -15,7 +16,7 @@ export function trafficContact(car,from,to){
 
 export class TrafficSystem{
   constructor(world){
-    this.time=0;this.cars=[];this.crossings=[];this.night=false;
+    this.time=0;this.cars=[];this.crossings=[];this.night=false;this.pending=[];
     const vertical=world.roads.filter(r=>r.h>r.w),horizontal=world.roads.filter(r=>r.w>r.h);
     for(const v of vertical)for(const h of horizontal)if(v.x<h.x+h.w&&v.x+v.w>h.x&&h.y<v.y+v.h&&h.y+h.h>v.y)this.crossings.push({x:v.x,y:h.y,w:v.w,h:h.h});
     world.roads.forEach((road,index)=>{
@@ -26,9 +27,10 @@ export class TrafficSystem{
         if(world.sandbox){const b=world.mapBounds,far=b[axis]+(axis==='x'?b.w:b.h);if(road[axis]-b[axis]<180)start=b[axis]-320;if(far-road[axis]-length<180)end=far+320;}
         const span=end-start;
         const breadth=axis==='x'?road.h:road.w,center=road[other]+breadth/2,side=direction*(axis==='x'?1:-1);
-        let lane=center+side*(axis==='x'?24:16);
+        const laneOffset=axis==='x'?24:world.sandbox?22:16;
+        let lane=center+side*laneOffset;
         // Some graffiti supports sit inside the asphalt: choose a clear lane within its half-road.
-        for(let offset=axis==='x'?24:16;offset<=breadth/2-15;offset+=4){
+        for(let offset=laneOffset;offset<=breadth/2-15;offset+=4){
           const candidate=center+side*offset;
           // Both directions share the same lane offset so a U-turn rejoins an existing lane.
           if(!(turnEnds.length?[-1,1]:[side]).some(side=>[...world.buildings,...world.obstacles].some(b=>center+side*offset+13>b[other]&&center+side*offset-13<b[other]+(axis==='x'?b.h:b.w)&&b[axis]<end&&b[axis]+(axis==='x'?b.w:b.h)>start))){lane=candidate;break;}
@@ -41,17 +43,41 @@ export class TrafficSystem{
         const car={id:'traffic_'+index+'_'+direction+'_'+n,axis,direction,start,end,lane,center,turnEnds,roadId:index,heading:axis==='x'?(direction>0?0:Math.PI):(direction>0?Math.PI/2:-Math.PI/2),
           speed:88+index%3*7,hold:0,travel:0,type:['taxi','blue_car','van'][(index+n+(direction===1?1:0))%3],
           x:axis==='x'?position:lane,y:axis==='y'?position:lane};
-        if(world.sandbox)car.type=['traffic_coupe','traffic_hatch','traffic_minivan','traffic_police','traffic_lowrider','traffic_executive'][(index*2+n+(direction===1?2:0))%6];
+        if(world.sandbox)car.type=TRAFFIC_TYPES[(index*4+n+(direction===1?2:0))%TRAFFIC_TYPES.length];
         if(world.regions&&(index+n)%3!==0)car.type=districtCar(world,car.x,car.y,car.type);
-        car.previous={x:car.x,y:car.y};this.cars.push(car);
+        car.velocity=car.speed;car.previous={x:car.x,y:car.y};this.cars.push(car);
       }
     });
+    if(world.sandbox)this.spaceInitialFleet();
+  }
+  sameLane(a,b){return a.axis===b.axis&&Math.abs(a.lane-b.lane)<28&&a.direction===b.direction&&!a.turn&&!b.turn;}
+  spaceInitialFleet(){
+    // Snapping several starting cars to a red light must not stack their bodies.
+    for(const dir of [-1,1])for(const car of this.cars.filter(c=>c.direction===dir).sort((a,b)=>dir*(b[b.axis]-a[a.axis]))){
+      for(const ahead of this.cars)if(ahead!==car&&this.sameLane(car,ahead)){
+        const gap=(ahead[ahead.axis]-car[car.axis])*dir;
+        if(gap>=0&&gap<followingDistance(car,ahead))car[car.axis]=ahead[ahead.axis]-dir*followingDistance(car,ahead);
+      }
+      car.previous={x:car.x,y:car.y};
+    }
+  }
+  entryClear(car){
+    const entry=car.direction===1?car.start:car.end;
+    return !this.cars.some(other=>other!==car&&other.axis===car.axis&&Math.abs(other.lane-car.lane)<28&&Math.abs(other[other.axis]-entry)<followingDistance(car,other)+16);
+  }
+  admitPending(){
+    for(const car of this.pending.slice())if(this.entryClear(car)){
+      car.turn=null;car[car.axis]=car.direction===1?car.start:car.end;car[car.axis==='x'?'y':'x']=car.lane;
+      car.velocity=car.speed;car.previous={x:car.x,y:car.y};car.travel=0;
+      this.cars.push(car);this.pending.splice(this.pending.indexOf(car),1);
+    }
   }
   green(axis){const phase=this.time%21;return axis==='x'?phase<7:phase>=10.5&&phase<17.5;}
   setNight(night){
     if(this.night===night)return;
     this.night=night;this.fleet??=this.cars;
-    this.cars=night?this.fleet.filter((car,i)=>i%3===0):this.fleet.slice();
+    if(night){this.cars=this.fleet.filter((car,i)=>i%3===0);this.pending=[];}
+    else this.pending=this.fleet.filter(car=>!this.cars.includes(car));
     for(const car of this.cars){car.previous={x:car.x,y:car.y};car.travel=0;}
   }
   update(dt,night=this.night){
@@ -61,6 +87,7 @@ export class TrafficSystem{
     for(const car of this.cars){car.previous={x:car.x,y:car.y};car.travel=0;}
     while(remaining>1e-7){
       const step=Math.min(.05,remaining);remaining-=step;this.time+=step;
+      this.admitPending();
       const positions=new Map(this.cars.map(c=>[c.id,c[c.axis]]));
       for(const car of this.cars){
         car.hold=Math.max(0,car.hold-step);
@@ -72,32 +99,41 @@ export class TrafficSystem{
           if(t.angle>=Math.PI){car.direction=-t.dir;car.lane=car.center-t.offset;car[other]=car.lane;car.turn=null;}continue;
         }
         const pos=car[car.axis],dir=car.direction;
+        const illustrated=!!TRAFFIC_FLEET[car.type],nose=illustrated?vehicleBody(car).length/2+12:39;
+        let available=Infinity;
         if(!this.green(car.axis))for(const cross of this.crossings){
           const other=car.axis==='x'?'y':'x';
           if(car.lane<cross[other]||car.lane>cross[other]+(car.axis==='x'?cross.h:cross.w))continue;
           const low=cross[car.axis],high=low+(car.axis==='x'?cross.w:cross.h);
-          const stop=dir===1?low-39:high+39,gap=(stop-pos)*dir;
-          if(gap>=-.01)move=Math.min(move,Math.max(0,gap));
+          const stop=dir===1?low-nose:high+nose,gap=(stop-pos)*dir;
+          if(gap>=-.01)available=Math.min(available,Math.max(0,gap));
         }
         for(const ahead of this.cars){
           if(ahead===car||ahead.axis!==car.axis||Math.abs(ahead.lane-car.lane)>=28||ahead.direction!==dir)continue;
           const gap=(positions.get(ahead.id)-pos)*dir;
-          if(gap>0)move=Math.min(move,Math.max(0,gap-76));
+          if(gap>0)available=Math.min(available,Math.max(0,gap-followingDistance(car,ahead)));
         }
+        if(illustrated){
+          const desired=car.hold>0?0:Math.min(car.speed,Math.sqrt(2*65*available),available/.48);
+          const delta=desired-(car.velocity??car.speed);
+          car.velocity=(car.velocity??car.speed)+Math.sign(delta)*Math.min(Math.abs(delta),(delta<0?100:34)*step);
+          move=Math.min(car.velocity*step,available);
+        }else move=Math.min(move,available);
         const turnEnd=car.turnEnds?.find(e=>e.sign===dir),limit=dir>0?car.end:car.start;
         if(turnEnd){
           const gap=(limit-pos)*dir;
           if(gap<=move){
-            const busy=this.cars.some(o=>o!==car&&o.roadId===car.roadId&&(o.turn&&o.turn.at===limit||o.direction===-dir&&Math.abs(o[car.axis]-limit)<76));
+            const busy=this.cars.some(o=>o!==car&&o.roadId===car.roadId&&(o.turn&&o.turn.at===limit||o.direction===-dir&&Math.abs(o[car.axis]-limit)<followingDistance(car,o)));
             move=Math.min(move,Math.max(0,gap));
             if(!busy&&gap<=move+.01)car.turn={at:limit,dir,offset:car.lane-car.center,radius:Math.abs(car.lane-car.center),angle:0};
           }
         }
+        if(!turnEnd&&!this.entryClear(car))move=Math.min(move,Math.max(0,(limit-pos)*dir));
         car[car.axis]+=dir*move;car.travel+=move;
         if(car.turn)continue;
         if(car[car.axis]>car.end||car[car.axis]<car.start){
           const entry=dir===1?car.start:car.end;
-          if(!this.cars.some(other=>other!==car&&other.axis===car.axis&&other.lane===car.lane&&Math.abs(other[car.axis]-entry)<90)){
+          if(this.entryClear(car)){
             car[car.axis]=entry;car.previous={x:car.x,y:car.y};car.travel=0;
           }
         }

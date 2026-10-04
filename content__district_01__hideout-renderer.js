@@ -1,4 +1,4 @@
-import {roomLayout,roomPoint,heroSprite,ink} from './core__hideout.js?v=8b3759ea8c13';
+import {roomLayout,roomPoint,heroSprite,ink} from './core__hideout.js?v=5e1de61c4ab4';
 export function drawTrophy(c,id,atlas,x,y,size){
   if(id==='mini')atlas.draw(c,'companion',x,y,null,size);
   else if(id==='metro'){
@@ -19,12 +19,13 @@ export function drawTrophy(c,id,atlas,x,y,size){
   }
 }
 export function renderHideout(c,s,w,h,atlas){
-  c.imageSmoothingEnabled=false;c.fillStyle='#111720';c.fillRect(0,0,w,h);
+  c.imageSmoothingEnabled=true;c.fillStyle='#111720';c.fillRect(0,0,w,h);
   const backdrop=s.life&&!s.life.night?atlas.images.reference_background_day:atlas.images.reference_background;
   if(backdrop)c.drawImage(backdrop,0,600,1024,936,0,0,w,h);
   const r=roomLayout(w,h,s.world.tutorial&&!s.world.sandbox,s.room.camera);c.save();c.beginPath();c.rect(0,0,w,r.clipBottom);c.clip();
-  if(s.life&&!s.life.night)c.filter='brightness(1.16) saturate(.86)';
+  if(s.life?.night)c.filter='brightness(.82) saturate(.92)';
   c.drawImage(atlas.images.room,r.x,r.y,r.w,r.h);c.filter='none';
+  c.imageSmoothingEnabled=false;
   const local=(x,y)=>{const p=roomPoint(x,y);return {x:r.x+p.x*r.w,y:r.y+p.y*r.h};};
   const t=s.time,rest=s.room.action==='rest'||s.life?.tour&&s.life.introStep<=1,celebrate=s.room.action==='victory';
   const walking=!rest&&s.room.action==='idle'&&Math.floor(t/5)%3===1;
@@ -43,7 +44,7 @@ export function renderHideout(c,s,w,h,atlas){
     c.font='bold '+Math.max(13,r.w*.033)+'px monospace';c.textAlign='center';
     const speaker=hasPet?pet:hero;c.lineWidth=4;c.strokeStyle='#111722';c.strokeText(text,speaker.x,speaker.y-r.w*.13);c.fillStyle='#efdc99';c.fillText(text,speaker.x,speaker.y-r.w*.13);
   }
-  const trophy=local(.563,.439);if(s.save.hideout.display!=='mini'||hasPet)drawTrophy(c,s.save.hideout.display,atlas,trophy.x,trophy.y,r.w*.043);
+  const trophy=local(.602,.408);if(s.save.hideout.display!=='mini'||hasPet)drawTrophy(c,s.save.hideout.display,atlas,trophy.x,trophy.y,r.w*.043);
   const can=local(.35,.482);c.fillStyle='#131824';c.fillRect(can.x-4,can.y-17,9,18);c.fillStyle=ink(s.save.player.ink).color;c.fillRect(can.x-3,can.y-14,7,14);c.fillStyle='#ded8ca';c.fillRect(can.x-2,can.y-20,5,4);
   // Small pulsing light in the music corner.
   if(s.room.beat){const p=local(.77,.574);c.fillStyle=Math.floor(t*4)%2?'#c982df':'#e8c663';c.fillRect(p.x,p.y,3,3);}

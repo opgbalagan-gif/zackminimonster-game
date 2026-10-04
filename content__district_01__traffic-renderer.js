@@ -1,5 +1,5 @@
-import {project} from './core__geometry.js?v=8b3759ea8c13';
-import {box,polygon} from './content__district_01__terrain.js?v=8b3759ea8c13';
+import {project} from './core__geometry.js?v=5e1de61c4ab4';
+import {box,polygon} from './content__district_01__terrain.js?v=5e1de61c4ab4';
 
 export function drawTrafficCar(c,car,art){
   const palette={taxi:['#e9bf4c','#967527','#c99e39'],blue_car:['#5f91b0','#304f6a','#44758f'],van:['#b9bcb4','#676e73','#8d9597'],jdm_coupe:[car.color??'#68c6bc','#276d72','#48938f'],lowrider:['#9654a4','#492752','#70356e'],executive:['#48545c','#202931','#343d45']}[car.type];

@@ -1,6 +1,6 @@
-import {project} from './core__geometry.js?v=8b3759ea8c13';
-import {ART} from './core__art-direction.js?v=8b3759ea8c13';
-import {polygon} from './content__district_01__terrain.js?v=8b3759ea8c13';
+import {project} from './core__geometry.js?v=5e1de61c4ab4';
+import {ART} from './core__art-direction.js?v=5e1de61c4ab4';
+import {polygon} from './content__district_01__terrain.js?v=5e1de61c4ab4';
 
 const hash=text=>[...text].reduce((n,c)=>(n*31+c.charCodeAt(0))>>>0,7);
 const quad=(x,y,w,h)=>[project(x,y),project(x+w,y),project(x+w,y+h),project(x,y+h)];
@@ -51,13 +51,14 @@ export function facadeFinish(pack){
     const rect=pack.atlas.sprites[art.id].rect,scale=art.width/rect[2],seed=hash(b.id),night=s.life.night;
     c.save();c.translate(Math.round(p.x)-art.width*art.anchor[0],Math.round(p.y)-rect[3]*scale*art.anchor[1]);c.scale(scale,scale);
     if(night){const glow=windowMask(art.id);c.save();c.globalCompositeOperation='screen';c.shadowColor='#ffbd72';c.shadowBlur=7;c.drawImage(glow,0,0);c.restore();}
-    if(seed%3===0||b.nanoVariant>=3||b.poster){c.restore();return;}
-    const [x,y,width]=art.mural,w=Math.min(116,width*.83),h=21;
-    c.translate(x+5,y-55);c.transform(1,art.slope,0,1,0,0);
-    const names=['Пластинки','Кофе / 24','Мастерская','Mini Mart','Ателье'];
-    const colors=[ART.teal,ART.coral,ART.ink];
-    c.fillStyle='#07121d38';c.fillRect(3,4,w,h);c.fillStyle=colors[seed%3];c.strokeStyle=ART.ink;c.lineWidth=1.4;c.fillRect(0,0,w,h);c.strokeRect(0,0,w,h);
-    c.fillStyle=ART.paper;c.font='700 10px "Street Condensed",sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText(names[seed%5],w/2,h/2,w-9);
+    const [x,y,width]=art.mural,w=Math.min(154,width*.98),h=34;
+    c.translate(x+2,y-67);c.transform(1,art.slope,0,1,0,0);
+    const names=['VINYL CLUB','MONSTER CAFÉ','FIX IT!','MINI MART','INK STUDIO'];
+    const colors=[ART.teal,ART.coral,'#c95799'];
+    c.fillStyle='#07121d38';c.fillRect(3,4,w,h);c.fillStyle=b.shop?'#c95799':colors[seed%3];c.strokeStyle=ART.ink;c.lineWidth=2.2;c.fillRect(0,0,w,h);c.strokeRect(0,0,w,h);
+    c.fillStyle=ART.ink;c.beginPath();c.ellipse(17,16,11,10,0,0,Math.PI*2);c.fill();
+    c.fillStyle=ART.paper;for(const ex of [13,21]){c.beginPath();c.ellipse(ex,17,3.3,2.2,0,0,Math.PI*2);c.fill();}
+    c.font='900 13px "Street Condensed",sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText(b.shop?'COLOR LAB':names[seed%5],32+(w-36)/2,h/2,w-39);
     c.fillStyle=night?'#ffdc9b':'#f6eac0';c.fillRect(5,-3,w-10,2);
     if(night){c.globalCompositeOperation='screen';c.globalAlpha*=.15;c.fillStyle='#ffbf70';c.fillRect(-3,-5,w+6,h+9);}
     c.restore();

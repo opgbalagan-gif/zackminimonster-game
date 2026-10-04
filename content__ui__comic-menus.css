@@ -1,0 +1,262 @@
+/* Zak sticker-book UI: bold ink, mint paint, pink marks; live accessible controls. */
+ :root{--menu-paper:#131b22;--menu-ink:#f6f4e9;--menu-muted:#b4c5c8;--menu-teal:#78edc3;--menu-pink:#fa61b2;--menu-edge:#43565e;--menu-frame:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22256%22%20height%3D%22256%22%20viewBox%3D%220%200%20256%20256%22%3E%3Cpath%20d%3D%22M17%209%20240%207%20248%2020%20248%20240%20234%20249%2013%20246%207%20235%208%2023Z%22%20fill%3D%22%23080e15%22%2F%3E%3Cpath%20d%3D%22M16%208%20237%208%20246%2019%20244%20237%20232%20245%2016%20242%208%20233%208%2022Z%22%20fill%3D%22%23131b22%22%20stroke%3D%22%234a666e%22%20stroke-width%3D%223%22%2F%3E%3Cpath%20d%3D%22M18%208%2060%208M8%2023%208%2065M194%20245%20232%20245%20244%20234%22%20fill%3D%22none%22%20stroke%3D%22%2378edc3%22%20stroke-width%3D%225%22%2F%3E%3Cpath%20d%3D%22M217%208%20237%208%20246%2019%20245%2035%22%20fill%3D%22none%22%20stroke%3D%22%23fa61b2%22%20stroke-width%3D%226%22%2F%3E%3Cpath%20d%3D%22M17%20235%2035%20238M20%20229%2039%20232%22%20stroke%3D%22%23fa61b2%22%20stroke-width%3D%223%22%2F%3E%3Cpath%20d%3D%22M25%2015%2081%2015%22%20stroke%3D%22%23afd9d5%22%20stroke-width%3D%221%22%2F%3E%3C%2Fsvg%3E")}
+#app :is(.graffiti-card,.ball-card,.poi-card,.poster-card,.new-game-card,.hideout-panel,#tutorial-panel,.map-sidebar,.radio-panel,.title-content){
+  border:16px solid transparent!important;border-image:var(--menu-frame) 32 / 16px / 0 stretch!important;
+  background:var(--menu-paper)!important;background-clip:padding-box!important;border-radius:0!important;
+  box-shadow:0 14px 38px #081d3550!important;color:var(--menu-ink);padding:20px!important;outline:0;clip-path:none!important;
+}
+#app :is(.screen,#chapter-select,#hideout-panel,#tutorial-panel,#radio-panel) :is(.primary,.secondary),
+#app :is(#home-panel-close,#radio-stop,.upgrade-button,#sticker-tools button,#poster-gallery button,#city-tabs button){
+  min-height:48px;border:2px solid #53636b!important;border-image:none!important;border-radius:11px!important;
+  background:var(--menu-paper)!important;color:var(--menu-ink)!important;box-shadow:0 3px 0 #070c11!important;
+  padding:11px 18px!important;font:700 15px/1.25 var(--ui-heading);letter-spacing:0;text-transform:none;
+  text-shadow:none;filter:none;clip-path:none!important;outline:0;transition:background-color .15s,translate .1s,box-shadow .1s;
+}
+#app :is(.screen,#chapter-select,#hideout-panel,#tutorial-panel) .primary{
+  background:var(--menu-teal)!important;color:#102227!important;box-shadow:0 4px 0 #278d79!important;
+}
+#app :is(.screen,#chapter-select,#hideout-panel,#tutorial-panel,#radio-panel) button:disabled{
+  background:#252e36!important;color:#8c9b9e!important;border-color:#435058!important;box-shadow:none!important;filter:none;opacity:1;
+}
+#app :is(.screen,#chapter-select,#hideout-panel,#tutorial-panel,#radio-panel) button:not(:disabled):active{
+  translate:0 2px;box-shadow:0 1px 0 var(--menu-ink)!important;
+}
+#app :is(.screen,#chapter-select,#hideout-panel,#tutorial-panel) :is(.primary,.secondary) .painted-icon{filter:brightness(0) invert(1);opacity:.9}
+#app :is(.screen,#chapter-select,#hideout-panel,#tutorial-panel) .primary .painted-icon{filter:brightness(0)}
+#app :is(.screen,#chapter-select,#hideout-panel,#tutorial-panel,#radio-panel) :is(button,a,select):focus-visible{
+  outline:3px solid var(--menu-pink)!important;outline-offset:4px;box-shadow:0 0 0 2px var(--menu-paper)!important;
+}
+#app :is(.graffiti-card,.ball-card,.poi-card,.poster-card,.new-game-card,.hideout-panel,#tutorial-panel,.map-sidebar,.radio-panel) :is(h1,h2,h3,strong){color:var(--menu-ink);text-shadow:none}
+#app :is(.graffiti-card,.ball-card,.poi-card,.poster-card,.new-game-card,.hideout-panel,#tutorial-panel,.map-sidebar) :is(p,small,label,.eyebrow,.lesson-help,.graffiti-art-label){color:var(--menu-muted)}
+#app :is(.graffiti-card,.ball-card,.poi-card,.poster-card,.new-game-card,.hideout-panel,#tutorial-panel) h2{font:800 30px/1.1 var(--ui-heading);letter-spacing:0;margin:6px 0 0}
+#app :is(.graffiti-card,.ball-card,.poi-card,.poster-card,.hideout-panel) .eyebrow{font:700 11px/1.3 var(--ui-body);letter-spacing:0}
+#app :is(.graffiti-screen,.ball-screen,.poster-screen,.poi-screen,#new-game-dialog){background:#0d2634c4;backdrop-filter:blur(5px);padding:16px;overflow:auto}
+#app :is(.graffiti-heading,.ball-heading,.poi-card header,.poster-card header,.hideout-panel-heading){gap:16px;align-items:center;border:0;padding-bottom:12px;margin:0}
+#app :is(.graffiti-heading,.ball-heading,.poi-card header,.poster-card header)>div{min-width:0}
+#app :is(.graffiti-heading,.ball-heading,.poi-card header,.poster-card header) .secondary{flex-shrink:0}
+
+/* The artist's own game artwork leads the title screen. */
+#app #title-screen{background:#0c1219;padding:40px clamp(24px,7vw,90px);overflow:auto;isolation:isolate}
+#app .title-content{width:min(450px,100%);max-width:none;padding:28px!important;position:relative;border:0!important;border-image:none!important;background:transparent!important;box-shadow:none!important;z-index:2}
+#app .brand{color:#f6f4e9;text-shadow:4px 5px 0 #ec489b;font-size:clamp(84px,10vw,132px);margin:0 0 30px;letter-spacing:-.04em;transform:rotate(-3deg)}
+#app .brand>span:last-child{color:var(--menu-teal);letter-spacing:.035em;margin-top:10px;font-size:.22em}
+#app .edition{color:var(--menu-pink);font:700 11px/1.4 var(--ui-body);letter-spacing:.06em}
+#app .edition b{color:var(--menu-ink);font:800 30px/1.15 var(--ui-heading);margin-top:4px}
+#app .title-copy{color:var(--menu-muted);font:14px/1.55 var(--ui-body);margin:15px 0 20px;max-width:340px}
+#app .title-content>button{display:flex;justify-content:space-between;width:100%;margin:12px 0 0;min-height:50px}
+#app #load-status{color:var(--menu-muted);font:11px/1.4 var(--ui-body);margin:18px 0 0}
+#app .title-footer{color:#f4eedb;font:11px var(--ui-body);bottom:10px;text-shadow:0 1px 2px #132f3b}
+#app .new-game-card{padding:24px!important;width:min(490px,100%)}
+#app .new-game-card p{font:14px/1.55 var(--ui-body);margin:16px 0}
+#app .new-game-card #new-game-warning{padding:12px;background:#e9dcc3;border:1px solid #ba9c76;border-radius:6px;color:#624c32;font-size:12px}
+#app #chapter-select{background:linear-gradient(#0b1622e8,#0b1622f0),url('./content__graffiti__assets__color-crew.png') center/cover;padding:28px 20px;gap:18px;overflow:auto}
+#app #chapter-select h2{color:var(--menu-ink);font:800 38px/1.15 var(--ui-heading);letter-spacing:0}
+#app .chapter-tabs{gap:12px}
+#app #chapter-select .chapter-tabs [aria-selected=true]{background:#78edc3!important;color:#12262a!important;border-color:#a8fbe0!important;box-shadow:0 3px 0 #071c2b!important}
+#app .chapter-body{width:min(620px,100%)}
+#app .chapter-body>p{color:#d6e1dc;font:14px/1.55 var(--ui-body);margin:4px 0 20px}
+#app .chapter-card{border:13px solid transparent!important;border-image:var(--menu-frame) 32 / 13px / 0 stretch!important;background:var(--menu-paper)!important;background-clip:padding-box!important;color:var(--menu-ink);padding:18px!important;box-shadow:0 7px 18px #06172645!important;gap:6px 18px}
+#app .chapter-card b{color:var(--menu-teal);font:800 44px/1 var(--ui-heading)}
+#app .chapter-card strong{color:var(--menu-ink);font:800 25px/1.15 var(--ui-heading)}
+#app .chapter-card small{color:var(--menu-muted);font:13px/1.45 var(--ui-body)}
+#app .chapter-card:disabled{background:#25333a!important;background-clip:padding-box!important;opacity:.68;box-shadow:none!important}
+
+/* Graffiti workbench: a quiet drawing field and a readable four-step strip. */
+#app #graffiti-screen .graffiti-card{width:min(760px,100%)!important;max-height:calc(100dvh - 32px);padding:18px!important}
+#app .graffiti-art-label{font:700 11px/1.5 var(--ui-body);margin-top:3px}
+#app .phase-track{gap:8px;margin:16px 0 14px;font:700 12px/1.25 var(--ui-heading)}
+#app .phase-track span{border:1px solid #455560!important;border-image:none!important;border-radius:6px;background:#26333d!important;color:#b1c4c6;padding:10px 4px;filter:none!important}
+#app .phase-track span.active{background:var(--menu-teal)!important;color:#12262a;border:2px solid var(--menu-ink)!important;padding:9px 3px;box-shadow:0 3px 0 #173c4533!important}
+#app .phase-track span.complete{background:#214d49!important;color:#a8f4d6;border-color:#457e70!important}
+#app .graffiti-stage{border:3px solid var(--menu-ink);border-image:none;border-radius:8px;background:#193442;box-shadow:0 4px 0 #060e16;overflow:hidden}
+#app #graffiti-canvas{display:block;width:100%;height:auto;max-height:none}
+#app .graffiti-state{background:#173b47ed;color:#edf0dd;border:1px solid #b7d6c4;border-radius:4px;padding:6px 9px;font:700 10px/1.3 var(--ui-body);letter-spacing:0}
+#app .graffiti-bottom{margin-top:16px;gap:16px;align-items:flex-start}
+#app .graffiti-bottom strong{font:800 26px/1.15 var(--ui-heading);letter-spacing:0}
+#app .graffiti-bottom p{font:13px/1.5 var(--ui-body);margin:8px 0 12px}
+#app #coverage-label{color:var(--menu-pink);font:800 34px/1 var(--ui-heading);font-variant-numeric:tabular-nums}
+#app .graffiti-reward{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);width:calc(100% - 20px);pointer-events:none;border:2px solid var(--menu-ink);border-radius:7px;background:#fa61b2;box-shadow:3px 4px 0 #16334370;gap:16px;padding:10px 18px}
+#app .graffiti-reward strong{font:800 26px var(--ui-heading);color:#132635}
+#app .graffiti-reward span{font:700 12px var(--ui-body);color:#172536}
+#app :is(#graffiti-progress,#ball-progress,#load-progress){appearance:none;border:1px solid #415b63;border-radius:8px;height:10px;background:#30434b;outline:0;overflow:hidden}
+#app :is(#graffiti-progress,#ball-progress,#load-progress)::-webkit-progress-bar{background:#30434b}
+#app :is(#graffiti-progress,#ball-progress,#load-progress)::-webkit-progress-value{background:var(--menu-teal);box-shadow:none;border-radius:8px}
+#app :is(#graffiti-progress,#ball-progress,#load-progress)::-moz-progress-bar{background:var(--menu-teal)}
+#app #confirm-stencil{margin-top:16px;min-height:50px}
+#app #motion-controls{gap:10px;margin:12px 0}
+#app #motion-controls button{font-size:13px;flex:1}
+#app #motion-status{color:var(--menu-muted);font-size:12px}
+
+/* Apartment inventory, lessons, map and collectible viewers. */
+#app .hideout-panel{width:350px;scrollbar-color:#6b9592 var(--menu-paper)}
+#app .hideout-panel-heading h2{font-size:28px}
+#app #home-panel-close{width:48px;flex:0 0 48px}
+#app .loadout-card{border:2px solid #435863;border-radius:8px;background:#202d36;color:var(--menu-ink);box-shadow:none;gap:12px;padding:10px;min-height:82px;margin-bottom:10px}
+#app .loadout-card strong{font:800 17px/1.15 var(--ui-heading);letter-spacing:0}
+#app .loadout-card small{font:12px/1.4 var(--ui-body);color:var(--menu-muted)}
+#app .loadout-card .card-status{font:700 11px/1.3 var(--ui-body);letter-spacing:0;color:#b5c6c8}
+#app .loadout-card.equipped{background:#203f40;border:2px solid #78edc3;box-shadow:0 2px 0 #24647044}
+#app .loadout-card.equipped .card-status{color:#87f1c8}
+#app .loadout-card:disabled{opacity:1;border-color:#445159!important;background:#252f37!important}
+#app .loadout-card:disabled canvas{filter:grayscale(.8);opacity:.65}
+#app .pane-description{font-size:14px;line-height:1.5;margin-bottom:16px}
+#app .pane-footnote,#app .save-note{font:12px/1.5 var(--ui-body);color:var(--menu-muted)}
+#app .spray-preview{border:1px solid #4c646a;border-radius:8px;background:#24333b}
+#app .upgrade-button{width:100%;margin-bottom:4px;background:var(--menu-teal)!important;color:#11282c!important}
+#app .upgrade-button span,#app .upgrade-button b,#app .upgrade-button small{color:inherit}
+#app .trophy-list .loadout-card strong{font-size:15px}
+#app .trophy-list .loadout-card{min-height:175px;padding:10px}
+#app .loadout-summary,#app .court-trophy{border:1px solid #4f7376;border-radius:8px;background:#233c43}
+#app #tutorial-panel{padding:18px!important;max-height:calc(100dvh - 160px);overflow:auto}
+#app #tutorial-panel h2{font-size:30px;border:0;padding:0;margin:8px 0 14px}
+#app .lesson-progress i{border:0!important;border-radius:3px;background:#b6c8bc!important;height:5px}
+#app .lesson-progress i.active{background:var(--menu-teal)!important;box-shadow:none}
+#app .lesson-kicker{font:700 11px/1.4 var(--ui-body);color:var(--menu-teal)}
+#app .lesson-line{font:700 16px/1.45 var(--ui-heading);color:var(--menu-ink);margin:12px 0}
+#app .lesson-help{font:13px/1.5 var(--ui-body)}
+#app .map-screen{background:#1b3a46}
+#app .map-header h1{font:800 30px var(--ui-heading)}
+#app .map-sidebar h2{font:800 26px var(--ui-heading);color:var(--menu-ink)}
+#app .map-sidebar :is(p,label,#city-status,#map-progress){color:var(--menu-muted);font:12px/1.45 var(--ui-body)}
+#app .map-sidebar select{width:100%;border:2px solid #5b8285;border-radius:7px;background:#21323d;color:var(--menu-ink);font:14px var(--ui-body);min-height:48px}
+#app .map-sidebar #route-button{width:100%;margin-top:12px}
+#app #poster-gallery button{font-size:12px;min-height:40px;padding:7px 10px!important}
+#app #city-tabs button.active{background:#315a58!important}
+#app .poster-card{max-height:calc(100dvh - 32px);overflow:auto;gap:12px}
+#app .poster-card canvas{height:min(64dvh,660px);max-width:100%}
+#app .poster-card header{width:100%;justify-content:space-between}
+#app .poster-card h2{font-size:23px}
+#app .poster-card a{color:var(--menu-teal);font-size:13px;min-height:44px;display:flex;align-items:center}
+#app .poi-card #poi-quote{border:1px solid #517679;border-radius:8px;background:#233c43;color:var(--menu-ink)}
+#app .radio-panel #radio-status{color:var(--menu-muted)}
+#app .radio-controls label,#app .radio-controls output{color:var(--menu-ink)}
+
+/* Conversations keep portraits over the street; only the speech and controls change. */
+#app #court-screen .court-card{background:none;border:0;box-shadow:none;padding:0}
+#app #court-screen .speech-bubble{background:var(--menu-paper);border:3px solid var(--menu-ink);border-radius:20px 20px 17px 20px;box-shadow:4px 5px 0 #14374366;padding:20px}
+#app #court-screen .speech-bubble:after{background:var(--menu-paper);border-color:var(--menu-ink)}
+#app #court-screen .speech-bubble strong{background:var(--menu-teal);color:#12262a;padding:5px 9px;border-radius:4px;font:800 13px/1.2 var(--ui-heading);letter-spacing:0;margin-bottom:10px}
+#app #court-screen .speech-bubble p{font:700 20px/1.4 var(--ui-heading);color:var(--menu-ink)}
+#app .court-footer .primary{min-width:160px}
+#app .ball-card{width:min(620px,100%);max-height:calc(100dvh - 32px);overflow:auto}
+#app .ball-heading h2{font-size:28px}
+#app .ball-screen #ball-canvas{display:block;width:min(100%,32dvh);margin:12px auto;filter:drop-shadow(0 8px 7px #153a3b3b)}
+#app #ball-help{color:var(--menu-muted);font:13px/1.45 var(--ui-body);min-height:0;margin:8px 0}
+#app #sticker-tray{gap:10px;margin:14px 0}
+#app #sticker-tray button{border:2px solid #4e636e;background:#26343f;border-radius:8px;color:var(--menu-ink);padding:8px 4px;min-height:80px}
+#app #sticker-tray span{font:700 12px/1.25 var(--ui-heading);white-space:normal}
+#app #sticker-tray button[aria-pressed=true]{border:2px solid var(--menu-teal);background:#295a51;transform:none;box-shadow:0 3px 0 #2c666c}
+#app #sticker-tray button[aria-pressed=true] span:before{content:'✓ ';font-weight:900}
+#app #sticker-tools{gap:10px;flex-wrap:wrap}
+#app #sticker-tools button{min-width:48px;font-size:16px;padding:9px 14px!important}
+#app .ball-meter strong{color:var(--menu-teal);font:800 16px var(--ui-heading)}
+#app .ball-buttons{gap:12px;margin-top:14px}
+#app .ball-buttons button{font-size:15px}
+#app .ball-buttons .primary{flex:1}
+
+/* Phone hardware remains modern; its camera tools use the same drawing language. */
+#app #phone-ui .camera-help{border:12px solid transparent!important;border-image:var(--menu-frame) 32 / 12px / 0 stretch!important;background:var(--menu-paper)!important;background-clip:padding-box!important;color:var(--menu-ink);padding:10px 16px!important;box-shadow:0 8px 24px #07192555!important}
+#app #phone-ui .camera-help :is(strong,span){color:var(--menu-ink)}
+#app #phone-ui :is(.camera-back,.camera-gyro,.camera-centre){border:2px solid var(--menu-ink)!important;border-image:none!important;border-radius:9px!important;background:var(--menu-paper)!important;color:var(--menu-ink)!important;box-shadow:0 3px 0 #132f3f!important;padding:10px!important}
+#app #phone-ui .phone-camera-view h2{background:#173844e8;border:1px solid #bed7c9;border-radius:7px;color:#f5efda;font:700 15px/1.3 var(--ui-heading);padding:10px 16px}
+#app #phone-ui .camera-shutter{background:#d7e9db!important;border:3px solid var(--menu-ink)!important;box-shadow:0 0 0 3px #f4eedb,0 6px 0 #102c3b!important}
+#app #phone-ui .camera-shutter .shutter-disc{background:#f4eedb!important;border-color:#537e7c!important}
+#app #phone-ui .camera-album{border:2px solid #f4eedb!important;border-image:none!important;border-radius:10px!important;background:#173844!important;padding:0!important;overflow:hidden}
+#app #phone-ui .gallery-return,#app #phone-ui .phone-radio-play{border:1px solid #9ecbbc;border-radius:8px;background:#285c65;color:#fff3dc;padding:12px;min-height:48px;font:700 14px var(--ui-heading)}
+
+@media(hover:hover) and (pointer:fine){
+  #app :is(.screen,#chapter-select,#hideout-panel,#tutorial-panel) .secondary:not(:disabled):hover{background:#2b3f48!important;filter:none}
+  #app :is(.screen,#chapter-select,#hideout-panel,#tutorial-panel) .primary:not(:disabled):hover{background:#a8ffdf!important;filter:none}
+  #app .loadout-card:not(:disabled):hover{border-color:var(--menu-teal)}
+}
+@media(max-width:700px){
+  #app #title-screen{padding:175px 12px max(34px,env(safe-area-inset-bottom));align-items:center}
+  #app .title-content{padding:22px 18px!important}
+  #app .brand{font-size:88px;margin-bottom:26px}
+  #app .title-copy{font-size:14px}
+  #app :is(.graffiti-screen,.ball-screen,.poster-screen,.poi-screen,#new-game-dialog){padding:10px}
+  #app :is(.graffiti-card,.ball-card,.poi-card,.poster-card,.new-game-card,.hideout-panel,#tutorial-panel,.map-sidebar){border-width:12px!important;border-image-width:12px!important;padding:14px!important}
+  #app #graffiti-screen .graffiti-card{padding:12px!important;max-height:calc(100dvh - 20px)}
+  #app :is(.graffiti-heading,.ball-heading){gap:10px;padding-bottom:8px}
+  #app :is(.graffiti-heading,.ball-heading) h2{font-size:25px}
+  #app :is(.graffiti-heading,.ball-heading) .eyebrow{font-size:10px}
+  #app :is(.graffiti-heading,.ball-heading) .secondary{padding:8px 10px!important;font-size:13px}
+  #app .phase-track{gap:5px;font-size:11px;margin:12px 0}
+  #app .phase-track span{padding:10px 2px}#app .phase-track span.active{padding:9px 1px}
+  #app .graffiti-bottom{margin-top:14px;gap:10px}
+  #app .graffiti-bottom strong{font-size:22px}#app #coverage-label{font-size:28px}
+  #app .graffiti-bottom p{font-size:13px}
+  #app #sticker-tray{gap:7px}#app #sticker-tray button{min-height:74px;padding:6px 3px}#app #sticker-tray canvas{height:43px}
+  #app #sticker-tray span{font-size:11px}#app .ball-buttons button{font-size:13px;padding:10px!important}
+  #app .ball-screen #ball-canvas{width:min(100%,28dvh)}
+  #app #court-screen .speech-bubble{padding:16px}#app #court-screen .speech-bubble p{font-size:18px}
+  #app .hideout-panel{left:12px!important;right:12px!important;width:auto!important;top:100px!important;bottom:auto!important;max-height:calc(100dvh - 124px);height:auto}
+  #app .map-sidebar{max-height:42dvh;bottom:10px;left:10px;right:10px}
+  #app .map-header{padding:16px;gap:12px}#app .map-header h1{font-size:23px}
+  #app .poster-card h2{font-size:19px}
+}
+@media(min-width:701px) and (max-height:800px){
+  #app #graffiti-screen .graffiti-card{width:min(580px,calc((100dvh - 400px)*1.5 + 10px))!important}
+  #app #graffiti-screen[data-phase=shake]:has(#motion-controls:not([hidden])) .graffiti-card{width:min(570px,calc((100dvh - 380px)*1.5))!important}
+  #app .graffiti-heading h2{font-size:25px}#app .graffiti-bottom strong{font-size:22px}
+}
+@media(max-height:650px){#app #title-screen{align-items:flex-start}#app .title-content{margin:auto}#app .title-footer{display:none}}
+@media(prefers-reduced-motion:reduce){#app :is(.screen,#chapter-select,#hideout-panel,#tutorial-panel) *{transition:none!important;animation:none!important}}
+
+/* Artist signatures are decorative; they never cover drawing or touch targets. */
+#app .title-art{display:block;position:absolute;inset:0 0 0 36%;width:auto;height:100%;transform:none;border:0;background:url('./content__graffiti__assets__color-crew.png') center/contain no-repeat;opacity:1;z-index:0;pointer-events:none;mask-image:linear-gradient(90deg,transparent,#000 20%)}
+#app .title-art i{display:none}
+#app .title-content:before{content:'';position:absolute;inset:-50px -60px;z-index:-1;background:linear-gradient(90deg,#0c1219 50%,#0c1219e8 75%,transparent);pointer-events:none}
+#app :is(.graffiti-card,.ball-card,.hideout-panel,.new-game-card) .eyebrow{color:var(--menu-pink);font-weight:800}
+#app .graffiti-heading h2,#app .ball-heading h2,#app .hideout-panel-heading h2{letter-spacing:-.02em}
+#app .phase-track span.active{color:#102a2c;transform:rotate(-2deg);border-color:#78edc3!important}
+#app .new-game-card button{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%}
+#app #chapter-select{border:0!important;border-image:none!important}
+#app .chapter-card{border-radius:0!important}
+#app #home-panel-close .painted-icon{filter:brightness(0) invert(1)}
+#app .map-header{background:#101c27ed;border-bottom:2px solid #405660}
+#app .map-header h1{color:#f6f4e9}#app .map-header .eyebrow{color:#78edc3}
+#app #city-tabs{display:flex;flex-wrap:nowrap;overflow-x:auto;max-width:calc(100% - 28px);scrollbar-width:thin;gap:8px}
+#app #city-tabs button{flex:0 0 auto;white-space:nowrap}
+#app #court-screen .speech-bubble{background:#f6f4e9;border-color:#16242d;box-shadow:4px 5px 0 #fa61b288}
+#app #court-screen .speech-bubble:after{background:#f6f4e9;border-color:#16242d}
+#app #court-screen .speech-bubble p{color:#172b36}
+#app #court-screen .speech-bubble strong{color:#12272d}
+#app #phone-ui .camera-shutter{border-color:#0c1c28!important}
+#app .loadout-card.equipped{box-shadow:3px 3px 0 #fa61b2}
+@media(max-width:700px){
+ #app .title-art{inset:-25px -15px auto 0;height:330px;background-size:cover;background-position:center;mask-image:linear-gradient(#000 45%,transparent 98%)}
+ #app .title-content:before{inset:50px -25px -30px;background:linear-gradient(transparent,#0c1219 12%)}
+ #app .title-content{padding:16px 18px!important}
+ #app #outfit-list{display:grid;grid-template-columns:1fr;gap:10px}
+ #app #outfit-list .loadout-card{display:flex;flex-direction:row;align-items:center;text-align:left;min-height:94px;margin:0;padding:8px 16px;gap:18px}
+ #app #outfit-list canvas{width:64px;height:74px;flex:0 0 64px}
+ #app #outfit-list strong{font-size:20px}#app #outfit-list small{display:block;margin:5px 0}
+ #app #city-tabs{top:91px;left:14px;right:14px}
+}
+
+#app #start-button:disabled + #new-game-button{background:var(--menu-teal)!important;color:#102227!important;border-color:#aaf8da!important;box-shadow:0 4px 0 #278d79!important}
+#app :is(.graffiti-card,.ball-card,.hideout-panel,.new-game-card) .eyebrow{color:#fa61b2!important}
+#app .graffiti-stage{border-color:#667e85}
+#app .graffiti-bottom #coverage-label{color:#fa61b2}
+#app .title-content:before{background:linear-gradient(90deg,#0c1219 30%,#0c1219de 70%,transparent)}
+@media(max-width:700px){#app .title-content:before{background:linear-gradient(transparent,#0c1219 15%)}}
+
+#app :is(.graffiti-card,.ball-card,.poster-card,.map-sidebar){scrollbar-color:#78edc3 #263740;scrollbar-width:thin}
+
+#app #city-tabs{scrollbar-color:#78edc3 #20343f;scrollbar-width:thin}
+#app .map-sidebar select{background:#21323d!important;color:#f6f4e9!important;border-color:#577880!important}
+
+/* Time-lapse stays on the actual district/apartment, so framing never jumps. */
+#period-transition{background:transparent;transition:opacity .5s ease;isolation:isolate}
+#period-transition canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:fill}
+#period-transition .period-after{opacity:0}
+#period-transition .period-warmth,#period-transition .period-twilight{position:absolute;inset:0;pointer-events:none;opacity:0}
+#period-transition .period-warmth{background:linear-gradient(140deg,#ffd28b 2%,#f59b69 48%,#b16899);mix-blend-mode:soft-light}
+#period-transition[data-to=day] .period-warmth{background:linear-gradient(155deg,#f3b5c8,#ffd6a0 58%,#ffeccc);mix-blend-mode:soft-light}
+#period-transition .period-twilight{background:linear-gradient(#3d457d88,#111c4488);mix-blend-mode:multiply}
+#period-transition .period-caption{top:auto;bottom:18%;left:20px;right:20px;text-shadow:0 2px 12px #000,0 2px 2px #0c1521}
+#period-transition .period-caption small{color:#b0ffdf;font:700 13px/1.3 var(--ui-body);letter-spacing:.06em}
+#period-transition .period-caption h2{font:800 clamp(28px,5vw,46px)/1.15 var(--ui-heading);margin:10px 0;color:#fff8ed}
+#period-transition .period-skip{min-height:48px;border:2px solid #81969c;background:#14232de8;color:#fff9ed;border-radius:10px;font:700 14px var(--ui-body)}
+@media(prefers-reduced-motion:reduce){#period-transition{transition-duration:.1s}}

@@ -1,4 +1,4 @@
-import {distance,moveAlongPath} from './core__geometry.js?v=8b3759ea8c13';
+import {distance,moveAlongPath} from './core__geometry.js?v=5e1de61c4ab4';
 
 // Both speakers use the comic conversation view, never the HUD notice channel.
 export function talkToStreetNpc(s,npc){
@@ -41,7 +41,7 @@ export function updateStreetNpcs(s,dt){
           if(direction===npc.turnCandidate)npc.turnFor=(npc.turnFor??0)+dt;else{npc.turnCandidate=direction;npc.turnFor=0;}
           if(npc.turnFor>=.16)npc.direction=direction;
         }
-        if(!npc.path.length)npc.pauseFor=3;
+        if(!npc.path.length)npc.pauseFor=(npc.stopIndex??0)%3===0?11:3;
       }
     }
     if(npc.roaming)Object.assign(npc.approach,{x:npc.x,y:npc.y});

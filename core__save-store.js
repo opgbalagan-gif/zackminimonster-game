@@ -1,4 +1,4 @@
-import {cleanBallSave} from './core__basketball.js?v=8b3759ea8c13';
+import {cleanBallSave} from './core__basketball.js?v=5e1de61c4ab4';
 export const SAVE_KEY='zackminimonster.save';
 export const SAVE_VERSION=3;
 export function freshSave(){
@@ -6,7 +6,7 @@ export function freshSave(){
     campaign:{tutorialComplete:false,tutorialCheckpoint:'home',companionUnlocked:false,tutorialFacadePainted:false,homeIntroStep:0,tutorialAtHome:false,sneakComplete:false,sneakCheckpoint:'gift',giftUnlocked:false},
     money:0,recognition:{works:[],photos:[],encounters:0},streetLife:{period:'day',day:1,elapsed:0,donations:[],audienceTier:null},phone:{unlocked:false,read:false,photos:[]},
     district_progress:{district_01:{visits:0}},painted_walls:[],graffiti_by_wall:{},basketball:{completed:false,pixels:[],stickers:[]},
-    wall_styles:{},wall_damage:{},wall_drying:{},active_run:null,resume:null,graffiti_unlocks:['zack_tag','monster','crown','panda_king'],hideout:{upgrades:[],collectibles:[],display:'mini'},settings:{sound:true,radioVolume:.22}};
+    wall_styles:{},wall_damage:{},wall_drying:{},active_run:null,resume:null,graffiti_unlocks:['zack_tag','monster','crown','panda_king','monster_crew'],paintShop:{owned:[]},hideout:{upgrades:[],collectibles:[],display:'mini'},settings:{sound:true,radioVolume:.22}};
 }
 export function migrateSave(raw){
   const base=freshSave();
@@ -15,7 +15,7 @@ export function migrateSave(raw){
   const strings=value=>Array.isArray(value)?[...new Set(value.filter(v=>typeof v==='string'))]:[];
   return {...base,save_version:3,player:{
     skin:['zack','night','metro'].includes(raw.player?.skin)?raw.player.skin:'zack',
-    ink:['purple','cyan','gold'].includes(raw.player?.ink)?raw.player.ink:'purple'},
+    ink:['purple','cyan','gold','pink','lime','blue'].includes(raw.player?.ink)?raw.player.ink:'purple'},
     rep:Number.isFinite(raw.rep)?Math.max(0,Math.floor(raw.rep)):0,
     money:Number.isFinite(raw.money)?Math.max(0,Math.floor(raw.money)):0,
     recognition:{works:strings(raw.recognition?.works).slice(0,200),photos:strings(raw.recognition?.photos).slice(0,200),encounters:Number.isFinite(raw.recognition?.encounters)?Math.max(0,Math.min(60,Math.floor(raw.recognition.encounters))):0},
@@ -35,6 +35,7 @@ export function migrateSave(raw){
     basketball:cleanBallSave(raw.basketball),
     district_progress:{...base.district_progress,...raw.district_progress},
     painted_walls:strings(raw.painted_walls),graffiti_by_wall:raw.graffiti_by_wall??{},
+    paintShop:{owned:strings(raw.paintShop?.owned)},
     wall_styles:raw.wall_styles&&typeof raw.wall_styles==='object'?raw.wall_styles:{},
     wall_damage:Object.fromEntries(Object.entries(raw.wall_damage??{}).filter(([key,value])=>key.startsWith('SANDBOX_')&&['rival','cleaner','clean'].includes(value)).slice(0,200)),
     wall_drying:Object.fromEntries(Object.entries(raw.wall_drying??{}).filter(([key,value])=>key.startsWith('SANDBOX_')&&raw.wall_damage?.[key]==='cleaner'&&Number.isFinite(value)).slice(0,200).map(([key,value])=>[key,Math.max(0,Math.min(60,value))])),

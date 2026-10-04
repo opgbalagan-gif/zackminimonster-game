@@ -71,5 +71,81 @@
       "#69c4e7",
       "#b99ae2"
     ]
+  },
+  {
+    "id": "monster_crew",
+    "name": "MONSTER CREW",
+    "texture": "atlas:mural_monster_crew",
+    "stencil_texture": "alpha:mural_monster_crew",
+    "wall_asset": "urban_blocks",
+    "rarity": "signature",
+    "size": "L",
+    "required_progress": 0.88,
+    "spray_time": 5,
+    "rep_reward": 250,
+    "heat": 1,
+    "unlock_condition": "default",
+    "palette": [
+      "#31c9cd",
+      "#f9df48",
+      "#182e46"
+    ]
+  },
+  {
+    "id": "stereo_friends",
+    "name": "STEREO FRIENDS",
+    "texture": "atlas:mural_stereo_friends",
+    "stencil_texture": "alpha:mural_stereo_friends",
+    "wall_asset": "urban_blocks",
+    "rarity": "signature",
+    "size": "L",
+    "required_progress": 0.88,
+    "spray_time": 5,
+    "rep_reward": 250,
+    "heat": 1,
+    "unlock_condition": "walls:5",
+    "palette": [
+      "#31c9cd",
+      "#f9df48",
+      "#182e46"
+    ]
+  },
+  {
+    "id": "night_friends",
+    "name": "NIGHT FRIENDS",
+    "texture": "atlas:mural_night_friends",
+    "stencil_texture": "alpha:mural_night_friends",
+    "wall_asset": "urban_blocks",
+    "rarity": "signature",
+    "size": "L",
+    "required_progress": 0.88,
+    "spray_time": 5,
+    "rep_reward": 250,
+    "heat": 1,
+    "unlock_condition": "walls:12",
+    "palette": [
+      "#31c9cd",
+      "#f9df48",
+      "#182e46"
+    ]
+  },
+  {
+    "id": "toy_kings",
+    "name": "TOY KINGS",
+    "texture": "atlas:mural_toy_kings",
+    "stencil_texture": "alpha:mural_toy_kings",
+    "wall_asset": "urban_blocks",
+    "rarity": "signature",
+    "size": "L",
+    "required_progress": 0.88,
+    "spray_time": 5,
+    "rep_reward": 250,
+    "heat": 1,
+    "unlock_condition": "walls:25",
+    "palette": [
+      "#31c9cd",
+      "#f9df48",
+      "#182e46"
+    ]
   }
 ]

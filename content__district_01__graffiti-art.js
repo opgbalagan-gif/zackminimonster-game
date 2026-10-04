@@ -1,5 +1,9 @@
 // Keep legacy save IDs while replacing all four designs with the new artist series.
 export const GRAFFITI_ART={
+  monster_crew:{sprite:'mural_monster_crew',name:'MONSTER CREW',palette:['#3cdbc1','#ef59ad','#f5e8cc']},
+  stereo_friends:{sprite:'mural_stereo_friends',name:'STEREO FRIENDS',palette:['#8458dc','#288de6','#f5e8cc']},
+  night_friends:{sprite:'mural_night_friends',name:'NIGHT FRIENDS',palette:['#3f51c9','#f357aa','#f5e8cc']},
+  toy_kings:{sprite:'mural_toy_kings',name:'TOY KINGS',palette:['#f6c137','#35dcb4','#f5e8cc']},
   panda_king:{sprite:'mural_street_flow',name:'STREET FLOW',palette:['#31c9cd','#f9df48','#182e46']},
   zack_tag:{sprite:'mural_color_crew',name:'COLOR CREW',palette:['#ef69ac','#70dab9','#386bd8']},
   monster:{sprite:'mural_paper_ghost',name:'PAPER GHOST',palette:['#f3e7c8','#e04d3e','#9acbdf']},

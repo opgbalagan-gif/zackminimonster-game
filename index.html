@@ -10,6 +10,9 @@
 <link rel="stylesheet" href="./content__ui__theme.css?v=8a3890274858">
 <link rel="stylesheet" href="./content__ui__street-life.css?v=52a3c5d2d2eb">
 <link rel="stylesheet" href="./content__ui__art-direction.css?v=db032a19ba85">
+<link rel="stylesheet" href="./content__ui__comic-menus.css?v=de2871e4a5c6">
+<link rel="stylesheet" href="./content__ui__district-tools.css?v=886320d8f384">
+<link rel="stylesheet" href="./content__ui__artist-menus.css?v=c6ec472bf482">
 </head>
 <body>
   <main id="app">
@@ -19,7 +22,7 @@
       <div class="title-content">
         <div class="brand">ZACK<span>MINIMONSTER</span></div>
         <div class="edition">ГЛАВА 01 <b>СВОЙ РАЙОН</b></div>
-        <p class="title-copy">Твой дом. Твои улицы. Твой след.<br>Рисуй, знакомься и меняй район.</p>
+        <p class="title-copy">Оставь свой след.</p>
         <button id="start-button" class="primary large">ПРОДОЛЖИТЬ <span>↗</span></button>
         <button id="new-game-button" class="secondary large">НОВАЯ ИГРА</button>
         <button id="title-chapters" class="secondary">ВЫБОР УРОВНЯ</button>
@@ -27,7 +30,7 @@
       </div><div class="title-footer"><span>ZACKMINIMONSTER © 2026</span></div>
     </div>
     <section id="new-game-dialog" class="screen" role="dialog" aria-modal="true" aria-labelledby="new-game-title" hidden>
-      <div class="ui-panel new-game-card"><span class="eyebrow">НОВЫЙ ПУТЬ</span><h2 id="new-game-title">Сначала освоимся?</h2><p>Обучение познакомит с домом, рисованием и прятками. Можно сразу выйти в район и вернуться к урокам во вкладке «Обучение».</p><p id="new-game-warning" hidden>Текущий прогресс будет заменён новым.</p><button id="new-game-training" class="primary">ПРОЙТИ ОБУЧЕНИЕ</button><button id="new-game-sandbox" class="secondary">СРАЗУ В РАЙОН</button><button id="new-game-cancel" class="secondary">НАЗАД</button></div>
+      <div class="ui-panel new-game-card"><span class="eyebrow">ПЕРВЫЙ СЛЕД</span><h2 id="new-game-title">Как начнём?</h2><p>Освой баллон или сразу исследуй район.</p><p id="new-game-warning" hidden>Текущий прогресс будет заменён новым.</p><button id="new-game-training" class="primary">С ОБУЧЕНИЕМ</button><button id="new-game-sandbox" class="secondary">СРАЗУ В РАЙОН</button><button id="new-game-cancel" class="secondary">НАЗАД</button></div>
     </section>
     <button id="chapter-button" class="secondary" aria-label="Выбор уровня" hidden><small>LVL</small><strong>01</strong></button>
     <header id="hud" hidden>
@@ -95,7 +98,7 @@
     <section id="poi-screen" class="screen poster-screen" role="dialog" aria-modal="true" aria-labelledby="poi-title" hidden><div class="poi-card"><header><div><span class="eyebrow">ГОРОД / ТОЧКА ИНТЕРЕСА</span><h2 id="poi-title"></h2></div><button id="close-poi" class="secondary">ЗАКРЫТЬ ×</button></header><canvas id="poi-canvas" width="600" height="450"></canvas><p id="poi-description"></p><p id="poi-quote" role="status"></p><footer><button id="poi-talk" class="secondary">ПОГОВОРИТЬ</button><button id="poi-wall" class="primary">К СТЕНЕ РЯДОМ →</button></footer></div></section>
     <section id="graffiti-screen" class="screen graffiti-screen" hidden>
       <div class="graffiti-card panel"><div class="graffiti-heading"><div><span id="wall-id" class="eyebrow"></span><h2 id="wall-name"></h2><div class="graffiti-art-label"><span id="graffiti-art-name"></span><span id="graffiti-palette" aria-label="Палитра рисунка"><i></i><i></i><i></i></span></div></div><button id="cancel-graffiti" class="secondary">НАЗАД <kbd>Esc</kbd></button></div>
-        <div class="phase-track"><span data-phase="shake">01 / SHAKE</span><span data-phase="stencil">02 / STENCIL</span><span data-phase="spray">03 / SPRAY</span><span data-phase="result">04 / DONE</span></div>
+        <div class="phase-track" aria-label="Этапы рисунка"><span data-phase="shake">1. Баллон</span><span data-phase="stencil">2. Трафарет</span><span data-phase="spray">3. Краска</span><span data-phase="result">4. Готово</span></div>
         <div class="graffiti-stage"><canvas id="graffiti-canvas" width="768" height="512" aria-label="Стена: встряхни баллон, размести трафарет и закрась рисунок"></canvas><span id="graffiti-wall-state" class="graffiti-state">CLEAN WALL</span><div id="graffiti-reward" class="graffiti-reward" role="status" hidden><strong id="graffiti-rep"></strong><span id="graffiti-heat"></span></div></div>
         <div class="graffiti-bottom"><div><strong id="phase-title"></strong><p id="phase-help"></p></div><strong id="coverage-label"></strong></div>
         <div id="motion-controls" hidden><button id="motion-enable" class="secondary">ВКЛЮЧИТЬ ВСТРЯХИВАНИЕ</button><button id="motion-touch" class="secondary">ПАЛЬЦЕМ</button><span id="motion-status" role="status"></span></div><progress id="graffiti-progress" max="1" value="0"></progress><button id="confirm-stencil" class="primary" hidden>ЗАКРЕПИТЬ ТРАФАРЕТ</button>
@@ -119,7 +122,7 @@
     <div id="toast" role="status" aria-live="polite" hidden></div><pre id="debug-overlay" hidden></pre>
     <div id="transition" aria-hidden="true"></div>
   </main>
-  <script type="module" src="./core__boot.js?v=8b3759ea8c13"></script>
+  <script type="module" src="./core__boot.js?v=5e1de61c4ab4"></script>
 </body>
 </html>
 

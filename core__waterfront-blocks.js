@@ -1,5 +1,8 @@
 // Coastal plan: marina on the west, canal-side courtyard blocks in the centre,
 // wooded park on the east and workshops / tanks at the southern end.
+import {calibrateBuildings,clearBuildingBins} from './core__building-scale.js?v=5e1de61c4ab4';
+import {dressDistrict} from './core__street-dressing.js?v=5e1de61c4ab4';
+import {addPaintFacades} from './core__paint-facades.js?v=5e1de61c4ab4';
 export function densifyWaterfront(w){
   w.obstacles=w.obstacles.filter(o=>!o.water&&!o.railway&&!(o.w===16&&o.h===16)&&!(o.w===160&&o.h===145));
   for(const h of w.hoops)w.obstacles.push({x:h.x-8,y:h.y-8,w:16,h:16});
@@ -12,10 +15,11 @@ export function densifyWaterfront(w){
   for(const b of w.bridges)w.paths.push({x:350,y:b.y+20,w:2180,h:80});
   w.roads[0].w=w.roads[1].w=3520;
   w.roads[2].h=1220;
-  w.roads.push({x:80,y:1270,w:2130,h:160},{x:2220,y:1460,w:120,h:2550},{x:1060,y:3030,w:2550,h:110});
+  w.roads.push({x:w.mapBounds.x,y:1270,w:w.mapBounds.w,h:160},{x:2220,y:1460,w:120,h:2550},{x:1060,y:3030,w:2550,h:110});
+  Object.assign(w.surfaceMetro,{start:w.mapBounds.x-1000,end:w.mapBounds.x+w.mapBounds.w+1000,activeStart:w.mapBounds.x,activeEnd:w.mapBounds.x+w.mapBounds.w});
   // Columns are outside the two traffic lanes. The street below the viaduct is walkable.
   w.metroPiers=[];
-  for(let x=180;x<2190;x+=240)for(const y of [1246,1454]){if(w.targets.some(t=>Math.hypot(x-t.approach.x,y-t.approach.y)<50))continue;w.metroPiers.push({x,y});w.obstacles.push({x:x-8,y:y-8,w:16,h:16,metroPier:true});}
+  for(let x=-1020;x<w.surfaceMetro.end;x+=240)for(const y of [1246,1454]){if(w.targets.some(t=>Math.hypot(x-t.approach.x,y-t.approach.y)<50))continue;w.metroPiers.push({x,y});if(x>w.mapBounds.x&&x<w.mapBounds.x+w.mapBounds.w)w.obstacles.push({x:x-8,y:y-8,w:16,h:16,metroPier:true});}
   const original=new Set(['first_house','north_house','corner_house','brick_house','music_house','end_house','record_house','east_house','yard_house','studio_house']);
   const moved=w.buildings.filter(b=>!original.has(b.id));w.buildings=w.buildings.filter(b=>original.has(b.id));
   const slots=[];
@@ -29,10 +33,13 @@ export function densifyWaterfront(w){
     delete b.longHouse;w.buildings.push(b);
     const target=w.targets.find(t=>t.buildingId===b.id);if(target){b.nanoVariant=i%2?2:0;Object.assign(target,{x:x+b.w,y:y+b.h,approach:{x:x+b.w+27,y:y+b.h+20}});}
   }
-  for(const [i,[x,y]] of [[1350,150],[1770,150],[550,650],[1330,650],[1480,650],[1100,1090],[1350,1090],[1580,1090]].entries())w.buildings.push({id:'north_infill_'+i,type:'apartment',nanoVariant:[1,2,0,4][i%4],x,y,w:120,h:120});
+  for(const [i,[x,y]] of [[1350,150],[1770,150],[550,650],[1330,650],[2200,150],[1100,1090],[1350,1090]].entries())w.buildings.push({id:'north_infill_'+i,type:'apartment',nanoVariant:[1,2,0,4][i%4],x,y,w:120,h:120});
   for(const y of [1685,2245,2805])w.parks.push({x:1340,y,w:520,h:42});
   // Purpose-built long buildings and industrial yards, not stretched house sprites.
   for(const [i,x,y,v,bw,bh] of [[0,2590,3180,3,135,240],[1,3100,3180,3,135,240],[2,2620,3590,5,130,380],[3,3230,3620,5,130,380]])w.buildings.push({id:'industrial_bar_'+i,type:'apartment',nanoVariant:v,x,y,w:bw,h:bh});
+  // Open the southeast sightline to the second basket; no transparent house over the court.
+  w.buildings=w.buildings.filter(b=>b.id!=='dense_block_60');
+  calibrateBuildings(w);clearBuildingBins(w);
   w.nature=[];
   const clear=(x,y,pad=30)=>!w.buildings.some(b=>x>b.x-pad&&x<b.x+b.w+pad&&y>b.y-pad&&y<b.y+b.h+pad)&&!w.targets.some(t=>Math.hypot(x-t.approach.x,y-t.approach.y)<48)&&!w.paths.some(p=>x>p.x-28&&x<p.x+p.w+28&&y>p.y-28&&y<p.y+p.h+28)&&!w.roads.some(p=>x>p.x-20&&x<p.x+p.w+20&&y>p.y-20&&y<p.y+p.h+20);
   for(const r of w.parks)for(let x=r.x+38;x<r.x+r.w-30;x+=90)for(let y=r.y+38;y<r.y+r.h-25;y+=98){const xx=x+Math.sin(x*.1+y)*17,yy=y+Math.cos(y*.07+x)*17;if(clear(xx,yy,65))w.nature.push({id:'comic_tree',x:xx,y:yy,w:132+Math.abs(Math.sin(x+y))*28});}
@@ -43,5 +50,5 @@ export function densifyWaterfront(w){
   for(const p of w.nature.filter(p=>p.id==='comic_tree'))w.obstacles.push({x:p.x-7,y:p.y-7,w:14,h:14});
   for(const [x,y] of [[1080,1900],[1850,2090],[2500,2520],[3000,2160],[430,3020],[1930,3570]])w.blockProps.push({id:'bench',x,y,w:82},{id:'lamp',x:x+65,y,w:44},{id:'litter',x:x-35,y,w:27});
   w.mapRoutes=[{id:'walk_park',name:'Восточный лесопарк',x:2990,y:2160},{id:'walk_marina',name:'Причал и набережная',x:370,y:1990},{id:'walk_garden',name:'Дворы у канала',x:1310,y:2440},{id:'walk_factory',name:'Старые резервуары',x:3000,y:3500},{id:'walk_south',name:'Южный мост',x:1050,y:3840},{id:'walk_metro',name:'Станция метро',...w.surfaceMetro.approach}];
-  return w;
+  return addPaintFacades(dressDistrict(w));
 }

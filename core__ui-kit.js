@@ -1,4 +1,4 @@
-import {installArtTokens} from './core__art-direction.js?v=8b3759ea8c13';
+import {installArtTokens} from './core__art-direction.js?v=5e1de61c4ab4';
 const paths={
   talk:'<path d="M3 4h20v14H12l-6 5v-5H3Z"/><path d="M7 9h12M7 13h8"/>',
   ball:'<circle cx="13" cy="13" r="10"/><path d="M3 13h20M13 3v20M6 6c9 2 9 12 0 14M20 6c-9 2-9 12 0 14"/>',
@@ -69,6 +69,16 @@ export function initUITheme(){
   document.getElementById('radio-toggle').innerHTML=uiIcon('music');
   document.getElementById('home-route').innerHTML=uiIcon('home')+'<span>ДОМОЙ</span>';
   const meter=UIProgressBar(null,{max:6,value:1});meter.id='lesson-meter';meter.setAttribute('aria-label','Прогресс уровня');document.getElementById('run-rep').after(meter);
+  for(const id of ['new-game-dialog','graffiti-screen','ball-screen','court-screen','poster-screen','poi-screen','map-screen']){
+    const panel=document.getElementById(id);if(panel.dataset.keyboardScope)continue;panel.dataset.keyboardScope='true';
+    panel.addEventListener('keydown',e=>{
+      if(e.key==='Escape'&&id==='new-game-dialog'){e.preventDefault();e.stopPropagation();document.getElementById('new-game-cancel').click();return;}
+      if(e.key!=='Tab')return;
+      const controls=[...panel.querySelectorAll('button:not(:disabled),a[href],select,input')].filter(el=>el.getClientRects().length&&!el.closest('[hidden]'));
+      const i=controls.indexOf(document.activeElement);if(!controls.length)return;
+      if(i<0||e.shiftKey&&i===0||!e.shiftKey&&i===controls.length-1){e.preventDefault();controls[e.shiftKey?controls.length-1:0].focus();}
+    });
+  }
 }
 export function syncUIStats(session,radio){
   const heat=document.getElementById('heat-stars');

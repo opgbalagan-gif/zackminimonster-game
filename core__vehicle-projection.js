@@ -6,7 +6,11 @@ const SLOPES={
   traffic_minivan:[[.49,-.26],[.49,-.26]],
   traffic_police:[[.44,-.27],[.44,-.27]],
   traffic_lowrider:[[.43,-.26],[.43,-.26]],
-  traffic_executive:[[.46,-.26],[.46,-.26]]
+  traffic_executive:[[.46,-.26],[.46,-.26]],
+  traffic_delivery:[[.45,-.27],[.45,-.27]],
+  traffic_pickup:[[.43,-.27],[.43,-.27]],
+  traffic_kei:[[.47,-.27],[.47,-.27]],
+  traffic_taxi:[[.46,-.27],[.46,-.27]]
 };
 export function vehicleProjection(type,direction){
   const rear=direction==='nw'||direction==='ne',mirror=direction==='sw'||direction==='ne';

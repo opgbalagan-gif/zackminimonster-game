@@ -1,8 +1,8 @@
-import {createSneakWorld} from './core__sneak.js?v=8b3759ea8c13';
-import {distance,moveAlongPath} from './core__geometry.js?v=8b3759ea8c13';
-import {updateStreetNpcs} from './core__street-npcs.js?v=8b3759ea8c13';
-import {addWaterfront} from './core__waterfront-layout.js?v=8b3759ea8c13';
-import {WallRivals} from './core__wall-rivals.js?v=8b3759ea8c13';
+import {createSneakWorld} from './core__sneak.js?v=5e1de61c4ab4';
+import {distance,moveAlongPath} from './core__geometry.js?v=5e1de61c4ab4';
+import {updateStreetNpcs} from './core__street-npcs.js?v=5e1de61c4ab4';
+import {addWaterfront} from './core__waterfront-layout.js?v=5e1de61c4ab4';
+import {WallRivals} from './core__wall-rivals.js?v=5e1de61c4ab4';
 
 export function createSandboxWorld(){
   const w=createSneakWorld();w.id='sandbox';w.sandbox=true;w.levelNumber=1;w.name='СВОЙ РАЙОН';
@@ -40,6 +40,11 @@ export class SandboxFlow{
     s.mode=s.save.campaign.sandboxAtHome?'hideout':'district';s.save.phone.unlocked=true;
     const resume=s.save.resume;if(resume?.level==='sandbox'){
       s.mode=resume.mode;if(s.nav.canWalk(resume.x,resume.y))Object.assign(s.player,{x:resume.x,y:resume.y,facing:resume.facing});
+      else if(s.world.obstacles.some(o=>o.dressing&&resume.x>=o.x-9&&resume.x<=o.x+o.w+9&&resume.y>=o.y-9&&resume.y<=o.y+o.h+9)){
+        // A newly placed planter must not send an existing save back across town.
+        const cell=s.nav.closest(resume),point=cell>=0?s.nav.point(cell):null;
+        if(point&&distance(point,resume)<120)Object.assign(s.player,point,{facing:resume.facing});
+      }
       s.heat=s.mode==='district'?resume.heat:0;if(s.heat>0){this.age=4;this.actor={...s.world.tutorialEntry,sprite:'officer',path:[],repath:0,moving:false};}
     }
     if(!s.save.campaign.sandboxStarted){s.save.campaign.sandboxStarted=true;s.save.streetLife.period='night';s.save.streetLife.elapsed=0;}
@@ -53,12 +58,14 @@ export class SandboxFlow{
   goHome(){const s=this.s;this.bin=null;this.actor=null;s.hiddenFor=0;s.heat=0;s.mode='hideout';s.near=null;s.player.path=[];s.save.campaign.sandboxAtHome=true;s.persist();s.emit('mode');}
   painted(){
     const s=this.s,g=s.graffiti,target=g.target,first=!s.painted.has(target.wall_id);
+    target.graffiti_id=g.definition?.id??target.graffiti_id;
     s.painted.add(target.wall_id);target.state='PAINTED';s.save.painted_walls=[...s.painted];s.save.graffiti_by_wall[target.wall_id]=target.graffiti_id;s.save.wall_styles[target.wall_id]=g.ink??'purple';
     this.rivals.repaired(target.wall_id);
     if(first)s.save.rep+=target.rep_reward;
     this.wall=s.painted.has(s.world.targets[0].wall_id)?'own':'blank';s.graffiti=null;s.mode='district';s.player.state='IDLE';s.near=null;
     s.heat=Math.min(5,s.heat+1);this.age=0;
     if(!this.actor)this.actor={...s.world.tutorialEntry,sprite:'officer',path:[],repath:0,moving:false};
+    s.save.graffiti_by_wall[target.wall_id]=g.definition?.id??target.graffiti_id;
     s.save.campaign.sandboxComplete=s.world.targets.every(t=>s.painted.has(t.wall_id));s.persist();
     s.notice(first?'Ещё одна моя стена. +'+target.rep_reward+' REP.':'Свежая краска. Теперь звучит по-другому.');s.emit('mode');
   }

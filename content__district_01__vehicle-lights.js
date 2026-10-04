@@ -5,7 +5,11 @@ const LENSES={
   traffic_minivan:[[.59,.68],[.88,.60]],
   traffic_police:[[.62,.65],[.91,.57]],
   traffic_lowrider:[[.71,.81],[.95,.73]],
-  traffic_executive:[[.67,.70],[.95,.61]]
+  traffic_executive:[[.67,.70],[.95,.61]],
+  traffic_delivery:[[.67,.73],[.95,.62]],
+  traffic_pickup:[[.68,.67],[.96,.55]],
+  traffic_kei:[[.65,.68],[.95,.58]],
+  traffic_taxi:[[.66,.71],[.95,.58]]
 };
 export function vehicleLenses(c,atlas,type,direction,width){
   if(direction==='nw'||direction==='ne')return;
