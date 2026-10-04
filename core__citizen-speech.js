@@ -2,7 +2,7 @@
 export function citizenSpeakers(session){
   const visitors=(session.life?.visitors??[]).filter(v=>['photo','tip'].includes(v.phase)&&v.line).map(v=>({actor:v,line:v.line}));
   const tutorial=session.tutorial,lesson=tutorial?.lesson;
-  const rival=tutorial?.rivals?.actor;if(rival?.line)visitors.push({actor:rival,line:rival.line});
+  for(const actor of tutorial?.rivals?.actors??[])if(actor.line)visitors.push({actor,line:actor.line});
   for(const npc of session.world.streetNpcs??[])if(npc.line&&npc.speakingFor>0)visitors.push({actor:npc,line:npc.line});
   if(tutorial?.actor&&lesson?.who&&!lesson.who.startsWith('ЗАК'))visitors.push({actor:tutorial.actor,line:lesson.line});
   return visitors;

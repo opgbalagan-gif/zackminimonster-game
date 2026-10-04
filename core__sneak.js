@@ -1,5 +1,5 @@
-import {createTutorialWorld,TutorialFlow} from './core__tutorial.js?v=5e1de61c4ab4';
-import {distance,moveAlongPath} from './core__geometry.js?v=5e1de61c4ab4';
+import {createTutorialWorld,TutorialFlow} from './core__tutorial.js?v=97af9e9c19c3';
+import {distance,moveAlongPath} from './core__geometry.js?v=97af9e9c19c3';
 export function createSneakWorld(){
   const w=createTutorialWorld();w.id='sneak';w.levelNumber=2;w.name='ТИШЕ УЛИЦЫ';w.width=980;w.height=700;
   w.walkableAreas=[{x:72,y:92,w:810,h:460}];w.mapBounds={x:70,y:70,w:820,h:510};w.tutorialEntry={x:838,y:470};
@@ -9,12 +9,12 @@ export function createSneakWorld(){
   return w;
 }
 const lessons={
-  gift:{step:1,title:'Подарок без бантика',who:'ЗАК',line:'Новый рисунок. Осталось найти стену, которая ещё не в курсе.',help:'В подарок открыт PAPER GHOST. Район стал больше; зелёные баки помогут скрыться от патруля.',button:'ЗАБРАТЬ РИСУНОК'},
-  paint:{step:2,title:'Новый рисунок, старая стена',who:'ЗАК',line:'Сегодня у стены премьера. Билеты не нужны.',help:'Подойди к стене и нарисуй подарочный PAPER GHOST. Запомни, где стоят баки.',button:'К СТЕНЕ'},
-  hide:{step:3,title:'Тише мусора',who:'ЗАК',line:'Критик в форме. Кажется, пора в закрытую выставку.',help:'Патруль идёт сюда! Подойди к зелёному баку и нажми «Спрятаться». Пережди поиск внутри.',button:'К БЛИЖНЕМУ БАКУ'},
-  hidden:{step:4,title:'Современное укрытие',who:'ЗАК',line:'Аромат сложный. Зато меня не видно.',help:'Оставайся в баке, пока патруль не уйдёт. Поиск займёт несколько секунд.'},
-  photo:{step:5,title:'Работа в кадре',who:'SMS · ZAK MINI MONSTER',line:'У стены жизнь короткая. У хорошего снимка — подлиннее.',help:'На раскладушку пришло сообщение. Открой телефон, прочти SMS и сфотографируй новый рисунок.',button:'ОТКРЫТЬ ТЕЛЕФОН'},
-  complete:{step:6,title:'Исчезнуть. И оставить след.',who:'ЗАК',line:'Патруль ушёл, работа осталась. Фотография — тоже.',help:'Прятки и съёмка освоены: +75 REP. Снимок сохранён в телефоне. Днём здесь будут зрители.',button:'ДОМОЙ'}
+  gift:{step:1,title:'Новый рисунок',who:'ЗАК',line:'Новый рисунок. Осталось найти стену, которая ещё не в курсе.',help:'PAPER GHOST — твой. Зелёные баки помогут скрыться.',button:'ЗАБРАТЬ РИСУНОК'},
+  paint:{step:2,title:'На стену',who:'ЗАК',line:'Сегодня у стены премьера. Билеты не нужны.',help:'Нарисуй PAPER GHOST. Запомни ближайший бак.',button:'К СТЕНЕ'},
+  hide:{step:3,title:'Спрячься',who:'ЗАК',line:'Критик в форме. Кажется, пора в закрытую выставку.',help:'Подойди к зелёному баку → «Спрятаться».',button:'К БЛИЖНЕМУ БАКУ'},
+  hidden:{step:4,title:'Пережди патруль',who:'ЗАК',line:'Аромат сложный. Зато меня не видно.',help:'Оставайся внутри, пока полицейский не уйдёт.'},
+  photo:{step:5,title:'Сохрани в кадре',who:'SMS · ZAK MINI MONSTER',line:'У стены жизнь короткая. У хорошего снимка — подлиннее.',help:'Открой телефон у стены и сфотографируй рисунок.',button:'ОТКРЫТЬ ТЕЛЕФОН'},
+  complete:{step:6,title:'Чисто!',who:'ЗАК',line:'Патруль ушёл, работа осталась. Фотография — тоже.',help:'+75 REP. Снимок ждёт в галерее.',button:'ДОМОЙ'}
 };
 export class SneakFlow extends TutorialFlow{
   constructor(s){

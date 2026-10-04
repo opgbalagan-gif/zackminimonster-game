@@ -1,5 +1,5 @@
-import {clamp} from './core__geometry.js?v=5e1de61c4ab4';
-import {GRAFFITI_CONFIG as CONFIG} from './content__graffiti__config.js?v=5e1de61c4ab4';
+import {clamp} from './core__geometry.js?v=97af9e9c19c3';
+import {GRAFFITI_CONFIG as CONFIG} from './content__graffiti__config.js?v=97af9e9c19c3';
 export class GraffitiGame{
   constructor(target,definition,sprayRack=false){
     this.target=target;this.definition=definition;this.phase='shake';this.shakeProgress=0;
@@ -20,7 +20,7 @@ export class GraffitiGame{
     if(!this.valid.some(Boolean))this.valid.fill(1);
   }
   move(x,y,down=true){
-    if(!down||this.phase==='result'||!Number.isFinite(x)||!Number.isFinite(y))return;
+    if(this.choosing||!down||this.phase==='result'||!Number.isFinite(x)||!Number.isFinite(y))return;
     const point={x,y};
     if(this.phase==='shake'){
       if(this.lastPoint){
@@ -51,13 +51,13 @@ export class GraffitiGame{
   }
   end(){this.lastPoint=null;this.canOffset=0;}
   shakeDevice(amount){
-    if(this.phase!=='shake'||!Number.isFinite(amount)||amount<=0)return;
+    if(this.choosing||this.phase!=='shake'||!Number.isFinite(amount)||amount<=0)return;
     this.shakeProgress=clamp(this.shakeProgress+Math.min(.18,amount),0,1);
     this.shakeTravel=this.shakeProgress*CONFIG.shakeTravel;
     this.canOffset=this.canOffset>0?-20:20;
     if(this.shakeProgress>=1){this.phase='stencil';this.lastPoint=null;this.canOffset=0;}
   }
-  confirm(){if(this.phase==='stencil'){this.phase='spray';this.lastPoint=null;}}
+  confirm(){if(this.choosing){this.choosing=false;return;}if(this.phase==='stencil'){this.phase='spray';this.lastPoint=null;}}
   get coverage(){let total=0,filled=0;for(let i=0;i<this.valid.length;i++)if(this.valid[i]){total++;filled+=this.covered[i];}return total?filled/total:0;}
   get done(){return this.phase==='result';}
 }

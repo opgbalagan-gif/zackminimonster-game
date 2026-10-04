@@ -1,9 +1,9 @@
-import {uiIcon,setUIButton,UIPanel,applyUIComponents} from './core__ui-kit.js?v=5e1de61c4ab4';
+import {uiIcon,setUIButton,applyUIComponents} from './core__ui-kit.js?v=97af9e9c19c3';
 export class TutorialUI{
   constructor(session,onComplete){
-    this.s=session;this.signature='';this.panel=document.createElement('section');this.panel.id='tutorial-panel';this.panel.className='ui-panel';this.panel.setAttribute('aria-label','Обучение');
-    this.panel.innerHTML='<div class="lesson-progress" aria-label="Этапы обучения"></div><div class="lesson-kicker"></div><h2></h2><p class="lesson-help"></p><details class="lesson-aside"><summary>Реплика Зака</summary><p class="lesson-line"></p></details><button class="primary"></button>';
-    UIPanel(this.panel);applyUIComponents(this.panel);document.getElementById('app').append(this.panel);
+    this.s=session;this.signature='';this.panel=document.createElement('section');this.panel.id='tutorial-panel';this.panel.className='tutorial-hint';this.panel.setAttribute('aria-label','Обучение');
+    this.panel.innerHTML='<div class="lesson-copy" aria-live="polite" aria-atomic="true"><div class="lesson-kicker"></div><h2></h2><p class="lesson-help"></p></div><button class="primary"></button>';
+    document.getElementById('app').append(this.panel);
     this.panel.querySelector('button').onclick=()=>{session.tutorial.act();this.sync();};
     this.markers=document.createElement('div');this.markers.id='tutorial-markers';document.getElementById('app').append(this.markers);
     this.status=document.createElement('div');this.status.id='street-status';this.status.setAttribute('aria-label','Время и деньги');document.getElementById('app').append(this.status);
@@ -16,14 +16,25 @@ export class TutorialUI{
     for(const npc of session.world.streetNpcs??[]){const b=document.createElement('button');b.className='world-marker';b.dataset.marker=npc.id;b.setAttribute('aria-label',npc.name+' · подойти поговорить');b.innerHTML=uiIcon('talk');b.onclick=()=>session.routeTo(npc.approach,npc.name);this.markers.append(b);}
     if(session.world.sandbox)for(const [id,label,icon,point] of [['court','Баскетбольная площадка','ball',session.court],['station','Станция наземного метро','metro',session.world.surfaceMetro.approach]]){const b=document.createElement('button');b.className='world-marker';b.dataset.marker=id;b.setAttribute('aria-label',label);b.innerHTML=uiIcon(icon);b.onclick=()=>session.routeTo(point,label);this.markers.append(b);}
     for(const target of session.world.targets.slice(2)){const b=document.createElement('button');b.className='world-marker';b.dataset.marker=target.wall_id;b.setAttribute('aria-label',target.name);b.innerHTML=uiIcon('spray');b.onclick=()=>session.routeTo(target.approach,target.name);this.markers.append(b);}
+    this.paintTargets=new Map(session.world.targets.map((target,i)=>[i===0?'wall':i===1?'facade':target.wall_id,target]));
+    for(const b of this.markers.children){
+      if(!this.paintTargets.has(b.dataset.marker))continue;
+      b.classList.add('paint-marker');
+      const label=document.createElement('span');label.className='paint-marker-label';label.setAttribute('aria-hidden','true');label.textContent='Рисовать';b.append(label);
+      b.setAttribute('aria-label','Место для граффити · '+this.paintTargets.get(b.dataset.marker).name);
+    }
   }
   updateWorldMarkers(renderer){
     const s=this.s,canvas=document.getElementById('game'),rect=canvas.getBoundingClientRect();this.markers.hidden=s.mode!=='district';
-    for(const b of this.markers.children){const p=renderer.markerHits?.find(p=>p.id===b.dataset.marker);b.hidden=!p||p.x<0||p.x>canvas.width||p.y<0||p.y>canvas.height;if(b.hidden)continue;b.style.left=p.x*rect.width/canvas.width+'px';b.style.top=p.y*rect.height/canvas.height+'px';b.dataset.active=String(b.dataset.marker==='home'?s.tutorial.stage==='escape':['walk','paint','return_wall','repaint'].includes(s.tutorial.stage));}
+    let nearest=null,nearestDistance=180;
+    for(const [id,t] of this.paintTargets){const d=Math.hypot(t.approach.x-s.player.x,t.approach.y-s.player.y);if(d<nearestDistance){nearest=id;nearestDistance=d;}}
+    for(const b of this.markers.children){const p=renderer.markerHits?.find(p=>p.id===b.dataset.marker);b.hidden=!p||p.x<0||p.x>canvas.width||p.y<0||p.y>canvas.height;if(b.hidden)continue;b.style.left=p.x*rect.width/canvas.width+'px';b.style.top=p.y*rect.height/canvas.height+'px';b.dataset.active=String(b.dataset.marker==='home'?s.tutorial.stage==='escape':['walk','paint','return_wall','repaint'].includes(s.tutorial.stage));
+      if(this.paintTargets.has(b.dataset.marker)){b.dataset.near=String(b.dataset.marker===nearest);const text=s.life.night?'Рисовать':'Рисовать ночью',label=b.querySelector('.paint-marker-label');if(label.textContent!==text)label.textContent=text;b.title=text+' · '+this.paintTargets.get(b.dataset.marker).name;}
+    }
   }
   sync(){
     const s=this.s,t=s.tutorial,l=t.lesson;this.panel.hidden=s.world.sandbox||['graffiti','phone'].includes(s.mode)||(s.mode==='hideout'&&document.getElementById('hideout-ui').dataset.tab!=='home');
-    const app=document.getElementById('app');app.dataset.homeIntro=String(!!s.life?.tour);app.dataset.period=s.life?.state.period??'night';
+    const app=document.getElementById('app');app.dataset.lessonVisible=String(!this.panel.hidden);app.dataset.homeIntro=String(!!s.life?.tour);app.dataset.period=s.life?.state.period??'night';
     app.dataset.sandbox=String(!!s.world.sandbox);
     app.dataset.phone=String(s.mode==='phone');
     this.status.hidden=!!s.life?.tour;
@@ -51,12 +62,8 @@ export class TutorialUI{
     else if(s.near?.type==='court')setUIButton(document.getElementById('action-button'),'БАСКЕТБОЛ','ball');
     const signature=JSON.stringify([t.stage,l,s.mode,s.life?.sleeping>0]);if(this.signature===signature)return;this.signature=signature;
     const count=s.life?.tour?7:6,step=s.life?.tour?s.life.introStep+1:l.step;
-    this.panel.querySelector('.lesson-progress').style.gridTemplateColumns='repeat('+count+',1fr)';
-    this.panel.querySelector('.lesson-progress').innerHTML=Array.from({length:count},(_,i)=>'<i class="'+(i<step?'active':'')+'"></i>').join('');
-    this.panel.querySelector('.lesson-kicker').textContent=s.life?.tour?'ДОМА · '+step+' / 7 · ЗАК':l.step+' / 6 · '+l.who;
-    this.panel.querySelector('h2').textContent=l.title;this.panel.querySelector('.lesson-line').textContent='«'+l.line+'»';
-    this.panel.querySelector('.lesson-line').hidden=!l.who.startsWith('ЗАК')&&!!t.actor;
-    this.panel.querySelector('.lesson-aside').hidden=this.panel.querySelector('.lesson-line').hidden;
+    this.panel.querySelector('.lesson-kicker').textContent=(s.life?.tour?'ДОМА':'ПЕРВЫЕ ШАГИ')+' · '+step+' / '+count;
+    this.panel.querySelector('h2').textContent=l.title;
     this.panel.querySelector('.lesson-help').textContent=l.help;
     const button=this.panel.querySelector('button');button.hidden=!l.button;setUIButton(button,l.button??'',t.stage==='paint'?'spray':['home','recovery','escape'].includes(t.stage)?'home':'');
     button.disabled=!!s.life?.sleeping;

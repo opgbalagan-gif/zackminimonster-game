@@ -1,9 +1,9 @@
-import {project,unproject} from './core__geometry.js?v=5e1de61c4ab4';
-import {polygon} from './content__district_01__terrain.js?v=5e1de61c4ab4';
+import {project,unproject} from './core__geometry.js?v=97af9e9c19c3';
+import {polygon} from './content__district_01__terrain.js?v=97af9e9c19c3';
 const corners=r=>[project(r.x,r.y),project(r.x+r.w,r.y),project(r.x+r.w,r.y+r.h),project(r.x,r.y+r.h)];
 
-export function districtSurroundings(c,cam,w,h,kit,night,bounds){
-  const points=[[-1,-1],[1,-1],[1,1],[-1,1]].map(([x,y])=>unproject(cam.x+x*(w/2/cam.zoom+300),cam.y+y*(h/2/cam.zoom+300)));
+export function districtSurroundings(c,cam,w,h,kit,night,bounds,origin={x:w/2,y:h/2}){
+  const points=[[-300,-300],[w+300,-300],[w+300,h+300],[-300,h+300]].map(([x,y])=>unproject(cam.x+(x-origin.x)/cam.zoom,cam.y+(y-origin.y)/cam.zoom));
   const minX=Math.min(...points.map(p=>p.x)),maxX=Math.max(...points.map(p=>p.x));
   const minY=Math.min(...points.map(p=>p.y)),maxY=Math.max(...points.map(p=>p.y));
   c.save();c.imageSmoothingEnabled=true;

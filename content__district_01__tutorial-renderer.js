@@ -1,30 +1,30 @@
-import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=5e1de61c4ab4';
-import {vehicleLenses} from './content__district_01__vehicle-lights.js?v=5e1de61c4ab4';
-import {streetFinish,facadeFinish,sceneGrade} from './content__levels__sandbox__street-finish.js?v=5e1de61c4ab4';
-import {vehicleProjection} from './core__vehicle-projection.js?v=5e1de61c4ab4';
-import {vehicleBody} from './core__traffic-fleet.js?v=5e1de61c4ab4';
-import {buildingFrontDepth,natureDepth} from './core__building-scale.js?v=5e1de61c4ab4';
-import {facadePaintArea} from './core__paint-facades.js?v=5e1de61c4ab4';
-import {courtPlay,drawCourtPlayer,drawCourtBall} from './content__levels__sandbox__court-animation.js?v=5e1de61c4ab4';
-import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=5e1de61c4ab4';
-import {surfaceTrain} from './core__sandbox-metro.js?v=5e1de61c4ab4';
-import {drawWaterfront,drawNeighbourhoodMap} from './content__levels__sandbox__waterfront-art.js?v=5e1de61c4ab4';
-import {districtSurroundings,boundaryRailing,cloudShadows} from './content__levels__sandbox__atmosphere.js?v=5e1de61c4ab4';
-import {districtContinuation,roadToBoundary} from './core__district-continuation.js?v=5e1de61c4ab4';
-import {dryingOpacity} from './core__wall-rivals.js?v=5e1de61c4ab4';
-import {routeFade} from './core__route-fade.js?v=5e1de61c4ab4';
-import {groundLighting} from './content__levels__sandbox__lighting-art.js?v=5e1de61c4ab4';
-import {lampBrightness} from './core__lighting.js?v=5e1de61c4ab4';
-import {NpcAnimation} from './core__npc-animation.js?v=5e1de61c4ab4';
-import {SpriteAtlas} from './core__sprites.js?v=5e1de61c4ab4';
-import {project} from './core__geometry.js?v=5e1de61c4ab4';
-import {heroSprite} from './core__hideout.js?v=5e1de61c4ab4';
-import {polygon,box} from './content__district_01__terrain.js?v=5e1de61c4ab4';
-import {drawGraffiti} from './content__district_01__graffiti-art.js?v=5e1de61c4ab4';
-import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=5e1de61c4ab4';
-import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=5e1de61c4ab4';
-import {OccluderFade} from './core__occluder-fade.js?v=5e1de61c4ab4';
-import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=5e1de61c4ab4';
+import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=97af9e9c19c3';
+import {vehicleLenses} from './content__district_01__vehicle-lights.js?v=97af9e9c19c3';
+import {streetFinish,facadeFinish,sceneGrade} from './content__levels__sandbox__street-finish.js?v=97af9e9c19c3';
+import {vehicleProjection} from './core__vehicle-projection.js?v=97af9e9c19c3';
+import {vehicleBody} from './core__traffic-fleet.js?v=97af9e9c19c3';
+import {buildingFrontDepth,natureDepth} from './core__building-scale.js?v=97af9e9c19c3';
+import {facadePaintArea} from './core__paint-facades.js?v=97af9e9c19c3';
+import {courtPlay,drawCourtPlayer,drawCourtBall} from './content__levels__sandbox__court-animation.js?v=97af9e9c19c3';
+import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=97af9e9c19c3';
+import {surfaceTrain} from './core__sandbox-metro.js?v=97af9e9c19c3';
+import {drawWaterfront,drawNeighbourhoodMap} from './content__levels__sandbox__waterfront-art.js?v=97af9e9c19c3';
+import {districtSurroundings,boundaryRailing,cloudShadows} from './content__levels__sandbox__atmosphere.js?v=97af9e9c19c3';
+import {districtContinuation,roadToBoundary,perimeterWoodland} from './core__district-continuation.js?v=97af9e9c19c3';
+import {dryingOpacity} from './core__wall-rivals.js?v=97af9e9c19c3';
+import {routeFade} from './core__route-fade.js?v=97af9e9c19c3';
+import {groundLighting} from './content__levels__sandbox__lighting-art.js?v=97af9e9c19c3';
+import {lampBrightness} from './core__lighting.js?v=97af9e9c19c3';
+import {NpcAnimation} from './core__npc-animation.js?v=97af9e9c19c3';
+import {SpriteAtlas} from './core__sprites.js?v=97af9e9c19c3';
+import {project} from './core__geometry.js?v=97af9e9c19c3';
+import {heroSprite} from './core__hideout.js?v=97af9e9c19c3';
+import {polygon,box} from './content__district_01__terrain.js?v=97af9e9c19c3';
+import {drawGraffiti} from './content__district_01__graffiti-art.js?v=97af9e9c19c3';
+import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=97af9e9c19c3';
+import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=97af9e9c19c3';
+import {OccluderFade} from './core__occluder-fade.js?v=97af9e9c19c3';
+import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=97af9e9c19c3';
 
 function fightCloud(c,s){
   const t=s.tutorial.fightBurst,p=project(s.tutorial.actor.x-11,s.tutorial.actor.y+10),pulse=Math.sin(t*27);
@@ -53,7 +53,7 @@ export function createTutorialRenderer(pack){
   const atlas=new SpriteAtlas(pack.atlas,pack.images),kit=createStreetKit(pack.images);
   const neighbourhood=neighbourhoodArt(pack.images,atlas);
   const finishFacade=facadeFinish(pack);
-  let continuation;
+  let continuation,woodland,woodlandKey;
   const fades=new OccluderFade(),masks=new Map(),npcAnimation=new NpcAnimation();let lastTime,followPoint;
   function spriteMask(id){
     if(!masks.has(id)){
@@ -82,7 +82,8 @@ export function createTutorialRenderer(pack){
       const [px,py,pw,ph]=art.poster;c.translate(px,py);c.transform(1,art.slope,0,1,0,0);
       c.fillStyle='#eee2bc';c.fillRect(-2,-2,pw+4,ph+4);atlas.draw(c,'poster_'+building.poster,pw/2,ph,pw,ph);c.restore();
     }
-    const paintedFaces=s.world.sandbox?s.world.targets.filter(t=>t.buildingId===building.id&&s.painted.has(t.wall_id)):s.save.campaign.tutorialFacadePainted?[target]:[];
+    const preview=s.mode==='graffiti'&&s.graffiti?.choosing?s.graffiti:null;
+    const paintedFaces=s.world.targets.filter(t=>t.buildingId===building.id&&(preview?.target===t||(s.world.sandbox?s.painted.has(t.wall_id)||s.save.wall_damage[t.wall_id]||s.tutorial.rivals.actors.some(a=>a.target===t&&a.phase==='paint'):s.save.campaign.tutorialFacadePainted)));
     for(const target of paintedFaces){
     // The drawn side facades are blank: no windows or pipes cut through the artwork.
     const surface=facadePaintArea(art,building,target?.face),scale=art.width/rect[2],[mx,my,fullWidth,mh]=surface.rect,mw=building.poster&&!target?.face?Math.min(128,fullWidth):fullWidth;
@@ -90,15 +91,16 @@ export function createTutorialRenderer(pack){
     // Normalize the sloping wall axis: shear alone lengthened every horizontal stroke.
     const axisScale=1/Math.hypot(1,surface.slope);
     c.translate(mx,my);c.transform(axisScale,surface.slope*axisScale,0,1,0,0);c.beginPath();c.rect(0,0,mw,mh);c.clip();
-    if(s.world.sandbox)c.globalAlpha*=dryingOpacity(s.save,target.wall_id);
-    drawGraffiti(c,s.save.graffiti_by_wall[target?.wall_id]??target?.graffiti_id??'zack_tag',0,0,mw,mh,atlas);damage(c,s,target,0,0,mw,mh);c.restore();
+    const choosing=preview?.target===target;
+    c.save();if(s.world.sandbox&&!choosing)c.globalAlpha*=dryingOpacity(s.save,target.wall_id);
+    if(choosing||!s.world.sandbox||s.painted.has(target.wall_id))drawGraffiti(c,choosing?preview.definition.id:s.save.graffiti_by_wall[target?.wall_id]??target?.graffiti_id??'zack_tag',0,0,mw,mh,atlas);c.restore();if(!choosing)damage(c,s,target,0,0,mw,mh);c.restore();
     }
   }
   function damage(c,s,target,x,y,w,h){
     if(!target||!s.world.sandbox)return;
-    const a=s.tutorial.rivals?.actor,working=a?.target.wall_id===target.wall_id&&a.phase==='paint';
-    const kind=working?a.kind:s.save.wall_damage[target.wall_id];if(!kind)return;
-    c.save();c.beginPath();c.rect(x,y,w*(working?a.progress:1),h);c.clip();
+    const a=s.tutorial.rivals?.actors.find(a=>a.target.wall_id===target.wall_id&&a.phase==='paint'),working=!!a;
+    const kind=working?a.kind:s.save.wall_damage[target.wall_id];if(!kind||kind==='clean')return;
+    c.save();if(!working)c.globalAlpha*=dryingOpacity(s.save,target.wall_id);c.beginPath();c.rect(x,y,w*(working?a.progress:1),h);c.clip();
     if(kind==='cleaner')c.drawImage(pack.images.roller_patch,0,100,1536,824,x+w*.06,y+h*.05,w*.88,h*.9);
     else atlas.draw(c,'gang_colour',x+w*.5,y+h*.85,w*.92,h*.74);
     c.restore();
@@ -109,11 +111,12 @@ export function createTutorialRenderer(pack){
     polygon(c,top,'#9e957c','#27323a',2);
     const face=[project(392,266,90),project(594,266,90),b,a];polygon(c,face,'#727766');kit.material.quad(c,'wall',face,.2);
     c.save();c.transform(1,.5,0,1,a.x,a.y-90);c.beginPath();c.rect(0,0,202,90);c.clip();
-    c.save();if(s.world.sandbox)c.globalAlpha*=dryingOpacity(s.save,target.wall_id);
-    if(s.world.sandbox?s.painted.has(target.wall_id):s.tutorial.wall==='own'||s.tutorial.coating>0)drawGraffiti(c,target.graffiti_id,12,4,176,82,atlas);
-    damage(c,s,target,12,4,176,82);c.restore();
-    if(s.tutorial.tag>0){c.save();c.beginPath();c.rect(0,0,202*s.tutorial.tag,90);c.clip();atlas.draw(c,'gang_colour',106,72,186,56);c.restore();}
-    if(s.tutorial.coating>0){
+    const preview=s.mode==='graffiti'&&s.graffiti?.choosing&&s.graffiti.target===target?s.graffiti:null;
+    c.save();if(s.world.sandbox&&!preview)c.globalAlpha*=dryingOpacity(s.save,target.wall_id);
+    if(preview)drawGraffiti(c,preview.definition.id,12,4,176,82,atlas);
+    else if(s.world.sandbox?s.painted.has(target.wall_id):s.tutorial.wall==='own'||s.tutorial.coating>0)drawGraffiti(c,target.graffiti_id,12,4,176,82,atlas);c.restore();if(!preview)damage(c,s,target,12,4,176,82);
+    if(!preview&&s.tutorial.tag>0){c.save();c.beginPath();c.rect(0,0,202*s.tutorial.tag,90);c.clip();atlas.draw(c,'gang_colour',106,72,186,56);c.restore();}
+    if(!preview&&s.tutorial.coating>0){
       c.save();c.beginPath();c.rect(14,0,174*s.tutorial.coating,90);c.clip();
       // A separate decal preserves bare wall and old artwork around the roller strokes.
       c.drawImage(pack.images.roller_patch,0,100,1536,824,14,7,174,78);c.restore();
@@ -122,41 +125,49 @@ export function createTutorialRenderer(pack){
   }
   function world(c,s,w,h,photo=null){
     c.imageSmoothingEnabled=false;atlas.drawCalls=0;const day=s.life&&!s.life.night;c.fillStyle=day?'#708b98':'#071018';c.fillRect(0,0,w,h);
-    const sky=pack.images.comic_sky,skyH=sky.height/2,scale=Math.max(w/sky.width,h/skyH),sw=w/scale;
-    if(!s.world.sandbox){
-    c.save();c.imageSmoothingEnabled=true;c.drawImage(sky,(sky.width-sw)/2,day?0:skyH,sw,skyH,0,0,w,h);c.restore();
-    }
     c.filter='none';
     // Keep the complete first block visible; the street is deliberately small.
-    const cam=photo?{...photo}:s.camera,mobile=w<=700,sandbox=s.world.sandbox,originX=photo||sandbox?w/2:mobile?w/2:(w-420)/2,originY=photo?h/2:h*(sandbox?.50:mobile?.30:.46);
+    const choosing=!photo&&s.mode==='graffiti'&&s.graffiti?.choosing;
+    const cam=photo?{...photo}:s.camera,mobile=w<=700,sandbox=s.world.sandbox,originX=photo||sandbox||choosing?w/2:mobile?w/2:(w-420)/2,originY=photo?h/2:h*(choosing?.40:sandbox?.50:mobile?.30:.46);
     if(!photo){
     cam.zoom=1.18*Math.max(.12,Math.min(.85,(mobile?w:w-450)/(s.world.id==='sneak'?1260:940),(mobile?h*.53:h-100)/730));cam.x=s.world.id==='sneak'?130:45;cam.y=230;cam.ready=true;
     const followDt=lastTime===undefined?1/60:Math.max(1/60,s.time-lastTime);
     if(sandbox){const p=project(s.player.x,s.player.y);followPoint??={x:p.x,y:p.y-70};const f=1-Math.exp(-followDt*6);followPoint.x+=(p.x-followPoint.x)*f;followPoint.y+=(p.y-70-followPoint.y)*f;cam.x=followPoint.x;cam.y=followPoint.y;cam.zoom=Math.min(1.18,Math.max(.78,w/470));}
     cam.zoom*=Math.max(.65,Math.min(1.8,cam.zoomFactor??1));
+    if(choosing){
+      const target=s.graffiti.target,b=s.world.buildings.find(b=>b.id===target.buildingId);
+      if(b){const art=houseArt(b,day),r=atlas.rect(art.id),scale=art.width/r[2],p=project(b.x+b.w,b.y+b.h),surface=facadePaintArea(art,b,target.face),[mx,my,mw,mh]=surface.rect,axis=1/Math.hypot(1,surface.slope);
+        cam.x=p.x-art.width*art.anchor[0]+(mx+mw*.5*axis)*scale;cam.y=p.y-r[3]*scale*art.anchor[1]+(my+mw*.5*axis*surface.slope+mh*.5)*scale;cam.zoom=Math.min(2.6,Math.min(w*.64,460)/(mw*scale));
+      }else{const p=project(target.x,target.y,48);cam.x=p.x;cam.y=p.y;cam.zoom=Math.min(2.2,w*.67/202);}
+    }
     }
     const dt=lastTime===undefined?1/60:Math.max(1/60,s.time-lastTime);if(!photo)lastTime=s.time;
     const frontDepth=point=>sandbox?buildingFrontDepth(point,s.world.buildings):point.x+point.y;
     const heroPoint=project(s.player.x,s.player.y),hero=photo||s.tutorial.bin?null:{x:heroPoint.x-13,y:heroPoint.y-61,w:26,h:57,depth:frontDepth(s.player)};
     const protectedSubjects=hero?[hero]:[];
     if(sandbox&&!photo){
-      const actors=[...s.world.streetNpcs,...s.life?.visitors??[],...s.court.friends,s.tutorial.actor,s.tutorial.rivals?.actor].filter(Boolean);
+      const actors=[...s.world.streetNpcs,...s.life?.visitors??[],...s.court.friends,s.tutorial.actor,...s.tutorial.rivals?.actors??[]].filter(Boolean);
       for(const actor of actors){if(Math.hypot(actor.x-s.player.x,actor.y-s.player.y)>650)continue;const p=project(actor.x,actor.y);protectedSubjects.push({x:p.x-18,y:p.y-68,w:36,h:68,depth:frontDepth(actor)});}
     }
     let heroObscured=false;
-    function faded(id,bounds,depth,draw,mask){c.save();if(!photo){const alpha=fades.alpha(id,bounds,depth,protectedSubjects,dt,mask);c.globalAlpha*=alpha;if(hero&&depth>hero.depth&&alpha<.55)heroObscured=true;}draw();c.restore();}
+    function faded(id,bounds,depth,draw,mask){c.save();if(!photo&&!choosing){const alpha=fades.alpha(id,bounds,depth,protectedSubjects,dt,mask);c.globalAlpha*=alpha;if(hero&&depth>hero.depth&&alpha<.55)heroObscured=true;}draw();c.restore();}
     function spriteObject(id,x,y,width,depth,draw){const p=project(x,y),rect=atlas.rect(id),height=width*rect[3]/rect[2],anchor=pack.atlas.sprites[id].groundAnchor??[.5,1];faded(id+':'+x+':'+y,{x:p.x-width*anchor[0],y:p.y-height*anchor[1],w:width,h:height},depth,draw??(()=>atlas.draw(c,id,p.x,p.y,width)),spriteMask(id));}
     c.save();c.translate(originX,originY);c.scale(cam.zoom,cam.zoom);c.translate(-cam.x,-cam.y);
+    const sceneryView=districtSurroundings(c,cam,w,h,kit,!day,s.world.mapBounds,{x:originX,y:originY});
+    const forestCell=384,forestLeft=Math.floor(sceneryView.x/forestCell)*forestCell,forestTop=Math.floor(sceneryView.y/forestCell)*forestCell;
+    const forestRight=Math.ceil((sceneryView.x+sceneryView.w)/forestCell)*forestCell,forestBottom=Math.ceil((sceneryView.y+sceneryView.h)/forestCell)*forestCell;
+    const nextWoodlandKey=[forestLeft,forestTop,forestRight,forestBottom].join(':');
+    if(nextWoodlandKey!==woodlandKey){woodland=perimeterWoodland(s.world,{x:forestLeft,y:forestTop,w:forestRight-forestLeft,h:forestBottom-forestTop});woodlandKey=nextWoodlandKey;}
     if(sandbox){
       const quad=(x,y,ww,hh)=>[project(x,y),project(x+ww,y),project(x+ww,y+hh),project(x,y+hh)];
       const bounds=s.world.mapBounds;
       continuation??=districtContinuation(s.world);
-      const view=districtSurroundings(c,cam,w,h,kit,!day,bounds);
+      const view=sceneryView;
       const visibleRects=items=>items.map(r=>({x:Math.max(r.x,view.x),y:Math.max(r.y,view.y),w:Math.min(r.x+r.w,view.x+view.w)-Math.max(r.x,view.x),h:Math.min(r.y+r.h,view.y+view.h)-Math.max(r.y,view.y)})).filter(r=>r.w>0&&r.h>0);
       // The scenic ring uses the same ground and building art as the playable streets.
-      c.save();c.beginPath();for(const r of [continuation.bounds,bounds]){const q=quad(r.x,r.y,r.w,r.h);c.moveTo(q[0].x,q[0].y);for(const p of q.slice(1))c.lineTo(p.x,p.y);c.closePath();}c.clip('evenodd');
-      drawWaterfront(c,{water:continuation.water,parks:visibleRects(continuation.parks),paths:visibleRects(continuation.paths)},kit,!day,s.time,view);
-      for(const r of visibleRects(continuation.roads)){
+      c.save();c.beginPath();for(const r of [view,bounds]){const q=quad(r.x,r.y,r.w,r.h);c.moveTo(q[0].x,q[0].y);for(const p of q.slice(1))c.lineTo(p.x,p.y);c.closePath();}c.clip('evenodd');
+      drawWaterfront(c,{water:woodland.water,parks:woodland.parks,paths:[]},kit,!day,s.time,view);
+      for(const r of visibleRects(woodland.roads)){
         kit.road(c,r.x,r.y,r.w,r.h);
       }
       c.restore();
@@ -178,9 +189,14 @@ export function createTutorialRenderer(pack){
       c.save();c.transform(1,.5,-1,.5,0,0);c.fillStyle='#c2b99e';for(const x of [100,900,1080,1450])for(const y of [424,928])for(let k=0;k<6;k++)c.fillRect(x,y+k*15,16,7);c.restore();
       neighbourhood.court(c,s.world.court);
       streetFinish(c,s,view);
-      groundLighting(c,s,w,h,continuation);
+      groundLighting(c,s,w,h,{nature:woodland.nature});
       cloudShadows(c,s,w,h);
-    }else kit.floor(c,{night:!day});
+    }else{
+      const view=sceneryView;
+      drawWaterfront(c,{water:[],parks:woodland.parks,paths:[]},kit,!day,s.time,view);
+      for(const r of woodland.roads)kit.road(c,r.x,r.y,r.w,r.h);
+      kit.floor(c,{night:!day});
+    }
     if(s.world.id==='sneak'){
       box(c,632,92,250,460,0,'#504d43','#1c2a32','#29323a',-22);
       const quad=(x,y,ww,hh)=>[project(x,y),project(x+ww,y),project(x+ww,y+hh),project(x,y+hh)];
@@ -189,9 +205,10 @@ export function createTutorialRenderer(pack){
     if(sandbox)drawTrafficSignals(c,s.traffic);
     const firstHouse=s.world.buildings[0];
     const queue=[{kind:'house',depth:sandbox?firstHouse.x+firstHouse.w+firstHouse.y+firstHouse.h:566},{kind:'wall',depth:760},{kind:'zack',depth:s.player.x+s.player.y}];
+    const visibleNature=item=>{const p=project(item.x,item.y),x=originX+(p.x-cam.x)*cam.zoom,y=originY+(p.y-cam.y)*cam.zoom;return x>-220*cam.zoom&&x<w+220*cam.zoom&&y>-40*cam.zoom&&y<h+260*cam.zoom;};
+    for(const item of woodland.nature)if(visibleNature(item))queue.push({kind:'nature',...item,depth:item.x+item.y});
     if(sandbox){
-      for(const building of continuation.buildings)queue.push({kind:'block-house',building,depth:building.x+building.w+building.y+building.h});
-      for(const item of continuation.nature)queue.push({kind:'nature',...item,depth:item.x+item.y});
+      // Outside the active district, woodland continues to the current view's edge.
       for(const rail of continuation.barriers)queue.push({kind:'boundary',...rail,depth:rail.x+rail.y+(rail.dx+rail.dy)/2});
       const metro=s.world.surfaceMetro;
       for(let x=metro.start;x<metro.end;x+=80)queue.push({kind:'viaduct',x,depth:Math.min(x+80,metro.end)+metro.y+34});
@@ -216,10 +233,10 @@ export function createTutorialRenderer(pack){
     if(s.tutorial.actor)queue.push({kind:'guest',depth:s.tutorial.actor.x+s.tutorial.actor.y});
     for(const b of s.world.bins??[])queue.push({kind:'bin',...b,depth:b.x+b.y});
     for(const v of s.life?.visitors??[])queue.push({kind:'visitor',actor:v,depth:v.x+v.y});
-    const rival=s.tutorial.rivals?.actor;if(rival)queue.push({kind:'visitor',actor:rival,depth:rival.x+rival.y});
+    for(const rival of s.tutorial.rivals?.actors??[])queue.push({kind:'visitor',actor:rival,depth:rival.x+rival.y});
     for(const npc of s.world.streetNpcs??[])queue.push({kind:'npc',actor:npc,depth:npc.x+npc.y});
     if(s.player.path.length){c.strokeStyle='#f1ce7888';c.lineWidth=3;c.setLineDash([6,7]);c.beginPath();const start=project(s.player.x,s.player.y);c.moveTo(start.x,start.y);for(const n of s.player.path){const p=project(n.x,n.y);c.lineTo(p.x,p.y);}c.stroke();c.setLineDash([]);}
-    const depthBuildings=sandbox?[...s.world.buildings,...continuation.buildings]:s.world.buildings;
+    const depthBuildings=s.world.buildings;
     for(const o of queue){
       if(sandbox&&o.kind==='nature'){o.depth=natureDepth(o,depthBuildings);continue;}
       const point=o.kind==='zack'?s.player:o.kind==='guest'?s.tutorial.actor:o.actor??(o.kind==='car'?o.car:['prop','bin'].includes(o.kind)?o:null);
@@ -229,7 +246,7 @@ export function createTutorialRenderer(pack){
       if(o.kind==='court-player'){drawCourtPlayer(c,o.actor,atlas);continue;}
       if(o.kind==='court-ball'){drawCourtBall(c,o.ball);continue;}
       if(o.kind==='boundary'){const p=project(o.x,o.y);if(Math.abs(p.x-cam.x)<w/cam.zoom/2+150&&Math.abs(p.y-cam.y)<h/cam.zoom/2+150)boundaryRailing(c,o,!day);continue;}
-      if(o.kind==='nature'){const p=project(o.x,o.y);if(Math.abs(p.x-cam.x)<w/cam.zoom/2+200&&Math.abs(p.y-cam.y)<h/cam.zoom/2+240){c.save();c.imageSmoothingEnabled=true;if(!day)c.filter='brightness(.62) saturate(.8)';spriteObject(o.id,o.x,o.y,o.w,o.depth);c.restore();}continue;}
+      if(o.kind==='nature'){if(visibleNature(o)){c.save();c.imageSmoothingEnabled=true;if(!day)c.filter='brightness(.62) saturate(.8)';spriteObject(o.id,o.x,o.y,o.w,o.depth);c.restore();}continue;}
       if(o.kind==='viaduct'){const m=s.world.surfaceMetro,p=project(o.x+40,m.y,m.height);if(Math.abs(p.x-cam.x)>w/cam.zoom/2+150||Math.abs(p.y-cam.y)>h/cam.zoom/2+150)continue;c.save();c.globalAlpha*=routeFade(o.x+40,m.start,m.end,260);neighbourhood.rails(c,m,o.x);c.restore();continue;}
       if(o.kind==='metro-pier'){const m=s.world.surfaceMetro,p=project(o.x,o.y,m.height/2);if(Math.abs(p.x-cam.x)>w/cam.zoom/2+170||Math.abs(p.y-cam.y)>h/cam.zoom/2+190)continue;c.save();c.globalAlpha*=routeFade(o.x,m.start,m.end,260);neighbourhood.pier(c,o,m);c.restore();continue;}
       if(o.kind==='metro'){c.save();c.globalAlpha*=o.car.opacity;neighbourhood.train(c,o.car,s.world.surfaceMetro,!day);c.restore();continue;}

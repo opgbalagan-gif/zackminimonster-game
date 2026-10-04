@@ -177,3 +177,129 @@
  #app #graffiti-screen .graffiti-card{max-height:calc(100dvh - 24px)}
 }
 @media(prefers-reduced-motion:reduce){#app :is(.screen,#chapter-select,#hideout-panel) button{transition:none!important;animation:none!important}}
+
+/* World-native teaching: one instruction, readable lettering, no panel. */
+#app[data-lesson-visible=true] .control-hint{display:none!important}
+#app[data-lesson-visible=true] #room-pan-hint{display:none!important}
+/* Large spray silhouettes remain readable independently of camera zoom. */
+#app .world-marker.paint-marker{width:68px;height:76px;padding:0;background:transparent!important;border:0!important;filter:none;z-index:1}
+#app .world-marker.paint-marker .ui-icon{width:52px;height:52px;bottom:18px;left:50%;margin:0;transform:translateX(-50%);filter:drop-shadow(1px 0 0 #fffcf2) drop-shadow(-1px 0 0 #fffcf2) drop-shadow(0 2px 2px #172f3c);transition:transform .15s ease}
+#app .world-marker.paint-marker::after{content:'';position:absolute;left:calc(50% - 4px);bottom:7px;width:8px;height:8px;border-right:2px solid #fffcf2;border-bottom:2px solid #fffcf2;transform:rotate(45deg);filter:drop-shadow(0 2px 1px #172f3c)}
+#app .paint-marker-label{position:absolute;top:calc(100% + 2px);left:50%;transform:translateX(-50%);white-space:nowrap;font:800 13px/1.2 var(--ui-heading);color:#fffcf2;text-shadow:0 2px 2px #172f3c,1px 0 1px #172f3c,-1px 0 1px #172f3c;opacity:0;pointer-events:none}
+#app .paint-marker:is([data-near=true],:hover,:focus-visible){z-index:2}
+#app .paint-marker:is([data-near=true],:hover,:focus-visible) .paint-marker-label{opacity:1}
+#app .world-marker.paint-marker:is([data-near=true],:hover,:focus-visible) .ui-icon{transform:translateX(-50%) scale(1.12)}
+#app .world-marker.paint-marker:active .ui-icon{transform:translateX(-50%) scale(.94)}
+#app .world-marker.paint-marker:focus-visible{outline:2px dashed #e4bf72;outline-offset:2px;border-radius:12px}
+@media(prefers-reduced-motion:reduce){#app .world-marker.paint-marker .ui-icon{transition:none}}
+
+/* Browse real facade artwork with a swipe; keep the scene visible. */
+#app #graffiti-picker.wall-swipe-picker{position:absolute;inset:0;z-index:65;display:block;max-height:none;width:100%;height:100%;padding:0;overflow:hidden;touch-action:none;background:linear-gradient(0deg,#071723e8,transparent 34%,transparent 80%,#07172366);color:#fffcf2}
+#app #graffiti-picker.wall-swipe-picker button{display:grid;place-items:center;min-height:48px;min-width:48px;padding:8px;flex:none;background:#172f3cbb;color:#fffcf2;border:1px solid #fffcf288;border-radius:50%;font:800 36px/1 var(--ui-heading);touch-action:manipulation;box-shadow:0 2px 6px #07172344;cursor:pointer}
+#app #graffiti-picker.wall-swipe-picker button:focus-visible{outline:3px solid #e4bf72;outline-offset:4px}
+#app #graffiti-picker.wall-swipe-picker button:active{transform:scale(.94)}
+#app #graffiti-picker.wall-swipe-picker .wall-choice-close{position:absolute;right:20px;top:max(20px,env(safe-area-inset-top))}
+#app .wall-choice-help{position:absolute;top:max(34px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);font:700 14px/1.3 var(--ui-body);text-shadow:0 2px 3px #071723;white-space:nowrap}
+#app #graffiti-picker.wall-swipe-picker .wall-choice-prev{position:absolute;left:16px;top:38%}
+#app #graffiti-picker.wall-swipe-picker .wall-choice-next{position:absolute;right:16px;top:38%}
+#app .wall-choice-footer{position:absolute;bottom:max(28px,env(safe-area-inset-bottom));left:24px;right:24px;text-align:center;pointer-events:none}
+#app #graffiti-picker .wall-choice-count{color:#e4bf72;font:700 12px/1.3 var(--ui-body);letter-spacing:2px}
+#app .wall-choice-name{margin:8px 0;color:#fffcf2;font:800 32px/1.1 var(--ui-heading);text-shadow:0 2px 4px #071723}
+#app .wall-choice-name::after,#app .wall-choice-name::before{display:none!important}
+#app .wall-choice-unlocks{margin:8px 0 18px;font:13px/1.3 var(--ui-body);color:#e3dece}
+#app #graffiti-picker.wall-swipe-picker .wall-choice-confirm{pointer-events:auto;margin:auto;border-radius:3px;background:#f4eedb;color:#172f3c;border:2px solid #172f3c;min-width:190px;font:800 20px/1 var(--ui-heading);padding:14px 24px;box-shadow:4px 4px 0 #cf7e67}
+#app[data-choosing-graffiti=true] :is(#hud,#street-status,#phone-toggle,#tutorial-markers,#poster-links,#toast){visibility:hidden!important}
+#app #tutorial-panel.tutorial-hint{--hint-ink:#fffcf2;--hint-edge:#172f3c;left:auto;right:32px;bottom:32px;width:min(340px,38vw);padding:0!important;border:0!important;border-image:none!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;overflow:visible;max-height:none;pointer-events:none;color:var(--hint-ink)!important;text-shadow:0 2px 3px var(--hint-edge),1px 0 1px var(--hint-edge),-1px 0 1px var(--hint-edge),0 -1px 1px var(--hint-edge)}
+#app #tutorial-panel.tutorial-hint::before,#app #tutorial-panel.tutorial-hint::after{display:none!important}
+#app #tutorial-panel.tutorial-hint h2::before,#app #tutorial-panel.tutorial-hint h2::after{display:none!important}
+#app #tutorial-panel.tutorial-hint :is(h2,p,.lesson-kicker){color:var(--hint-ink)!important;text-shadow:inherit}
+#app #tutorial-panel.tutorial-hint .lesson-kicker{font:700 10px/1.4 var(--ui-body);letter-spacing:1.5px;opacity:.85;margin:0 0 6px}
+#app #tutorial-panel.tutorial-hint h2{font:800 28px/1.08 var(--ui-heading);margin:0 0 8px;padding:0;border:0}
+#app #tutorial-panel.tutorial-hint .lesson-help{font:600 14px/1.4 var(--ui-body);margin:0;max-width:34ch;text-wrap:pretty}
+#app #tutorial-panel.tutorial-hint button.primary{pointer-events:auto;display:inline-flex;align-items:center;justify-content:flex-start;gap:8px;width:auto;min-height:48px;margin:8px 0 0;padding:8px 0!important;border:0!important;border-bottom:2px solid currentColor!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:var(--hint-ink)!important;text-shadow:inherit;font:800 16px/1.15 var(--ui-heading)}
+#app #tutorial-panel.tutorial-hint button.primary::after{content:'↗';margin-left:12px;font-size:22px}
+#app #tutorial-panel.tutorial-hint button.primary:hover{background:transparent!important;box-shadow:none!important;color:#e4bf72!important;transform:translateX(3px)}
+#app #tutorial-panel.tutorial-hint button.primary:disabled{background:transparent!important;border-color:currentColor!important;opacity:.5}
+#app #tutorial-panel.tutorial-hint button.primary[hidden]{display:none!important}
+#app #tutorial-panel.tutorial-hint button .painted-icon{display:none}
+#app[data-period=day]:not([data-home-intro=true]) #tutorial-panel.tutorial-hint{--hint-ink:#172f3c;--hint-edge:#fffcf2}
+@media(max-width:700px){
+ #app #tutorial-panel.tutorial-hint{left:24px;right:24px;bottom:158px;width:auto;text-align:center}
+ #app #tutorial-panel.tutorial-hint h2{font-size:25px;margin-bottom:6px}
+ #app #tutorial-panel.tutorial-hint .lesson-help{font-size:14px;max-width:32ch;margin:auto}
+ #app #tutorial-panel.tutorial-hint button.primary{justify-content:center}
+ #app[data-home-intro=true] #tutorial-panel.tutorial-hint,#app #tutorial-panel.tutorial-hint:is([data-stage=home],[data-stage=complete],[data-stage=recovery]){bottom:max(26px,env(safe-area-inset-bottom))}
+}
+@media(max-height:550px) and (min-width:701px){#app #tutorial-panel.tutorial-hint{right:24px;bottom:20px;width:280px}#app #tutorial-panel.tutorial-hint h2{font-size:24px}}
+/* Territory colors are repeated in text; the canvas also names every owner. */
+#app .map-legend .territory-zak{color:#24755e;font-weight:800}
+#app .map-legend .territory-rival{color:#ac453e;font-weight:800}
+@media(max-width:700px){
+  #app[data-sandbox=true] #map-screen{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:8px;padding:10px;padding-top:max(10px,env(safe-area-inset-top));padding-bottom:max(10px,env(safe-area-inset-bottom))}
+  #app[data-sandbox=true] #map-screen .map-header{position:static;padding:12px;min-height:76px}
+  #app[data-sandbox=true] #map-screen #map-canvas{width:100%;height:100%;min-height:0}
+  #app[data-sandbox=true] #map-screen .map-sidebar{position:static;width:100%;max-height:35dvh;padding:12px!important;display:grid;grid-template-columns:1fr 1fr;gap:8px;overflow:auto}
+  #app[data-sandbox=true] #map-screen #city-status,#app[data-sandbox=true] #map-screen .map-legend,#app[data-sandbox=true] #map-screen #map-progress{grid-column:1/-1;margin:0}
+  #app[data-sandbox=true] #map-screen #route-select,#app[data-sandbox=true] #map-screen #route-button{margin:0;min-width:0;font-size:12px}
+  #app[data-sandbox=true] #map-screen #route-button{padding:8px}
+}
+@media(min-width:701px){
+  #app[data-sandbox=true] #map-screen{display:grid;grid-template-columns:minmax(0,1fr) 280px;grid-template-rows:auto minmax(0,1fr);gap:16px;padding:20px}
+  #app[data-sandbox=true] #map-screen .map-header{position:static;grid-column:1/-1;padding:12px}
+  #app[data-sandbox=true] #map-screen #map-canvas{width:100%;height:100%;min-height:0}
+  #app[data-sandbox=true] #map-screen .map-sidebar{position:static;width:100%;height:100%;max-height:none;padding:18px!important}
+}
+/* Full-bleed street atlas: world first, controls float over it. */
+#app[data-sandbox=true] #map-screen{display:block;padding:0;background:#213d49}
+#app[data-sandbox=true] #map-screen #map-canvas{position:absolute;inset:0;width:100%;height:100%;padding:0!important;touch-action:none;image-rendering:auto}
+#app[data-sandbox=true] #map-screen .map-sidebar{display:none!important}
+#app[data-sandbox=true] #map-screen .map-header{position:absolute;inset:24px 24px auto;display:flex;padding:0;min-height:0;border:0;background:none;box-shadow:none;pointer-events:none;z-index:3}
+#app[data-sandbox=true] #map-screen .map-header h1{font:900 38px/1 'Street Condensed',sans-serif;color:#eef3df;letter-spacing:1px;margin:0;text-shadow:0 2px 8px #102a3d}
+#app[data-sandbox=true] #map-screen .map-header .eyebrow{display:none}
+#app[data-sandbox=true] #map-screen #close-map{pointer-events:auto;width:48px;min-width:48px;height:48px;display:grid;place-items:center;padding:0!important;border:1px solid #9bb6b15c!important;background:#163341c9!important;color:#eff4df!important;border-radius:50%!important;box-shadow:none!important;font:32px/1 Arial}
+#app[data-sandbox=true] .atlas-controls{position:absolute;inset:0;pointer-events:none;z-index:2;color:#edf2df;font-family:Arial,sans-serif;background:linear-gradient(#102937d9,transparent 23%,transparent 73%,#102937eb)}
+#app[data-sandbox=true] .atlas-controls button{pointer-events:auto;min-width:48px;min-height:48px;padding:10px 16px;background:#173643dc!important;color:#edf2df!important;border:1px solid #8fabab55!important;box-shadow:0 3px 12px #0b22364d!important;border-radius:8px!important;font:700 13px/1 Arial;transition:background .15s,transform .15s}
+#app[data-sandbox=true] .atlas-controls button:active{transform:scale(.94)}
+#app[data-sandbox=true] .atlas-controls button:focus-visible{outline:3px solid #e4bf72;outline-offset:3px}
+#app[data-sandbox=true] .atlas-controls button:disabled{opacity:.38}
+#app[data-sandbox=true] .atlas-score{position:absolute;left:165px;top:38px;display:flex;gap:12px;align-items:center;font:800 15px/1 Arial;text-shadow:0 2px 7px #102937}
+#app[data-sandbox=true] .atlas-score i{font-style:normal;color:#98aeb3}
+#app[data-sandbox=true] .atlas-score .zak{color:#70dab9}
+#app[data-sandbox=true] .atlas-score .rivals{color:#ef8177}
+#app[data-sandbox=true] .atlas-filters{position:absolute;right:92px;top:24px;display:flex;gap:6px}
+#app[data-sandbox=true] .atlas-controls .atlas-filters button{background:transparent!important;border-color:transparent!important;box-shadow:none!important;border-radius:0!important;color:#b5cbc9!important}
+#app[data-sandbox=true] .atlas-controls .atlas-filters button[aria-pressed=true]{border-bottom:2px solid #70dab9!important;color:#eff4df!important}
+#app[data-sandbox=true] .atlas-zoom{position:absolute;right:24px;top:34%;display:grid;gap:8px}
+#app[data-sandbox=true] .atlas-zoom button{font-size:24px;padding:0;width:48px}
+#app[data-sandbox=true] .atlas-places{position:absolute;left:24px;bottom:120px;display:flex;gap:8px}
+#app[data-sandbox=true] .atlas-places button{font-size:23px;padding:0;width:48px}
+#app[data-sandbox=true] .atlas-route{position:absolute;bottom:max(28px,env(safe-area-inset-bottom));left:24px;right:24px;display:flex;align-items:center;gap:24px;justify-content:space-between;text-shadow:0 2px 6px #102937}
+#app[data-sandbox=true] .atlas-route>div{min-width:0}
+#app[data-sandbox=true] .atlas-route small{display:block;color:#98b9ba;font:700 9px/1.4 Arial;letter-spacing:2px;margin-bottom:7px}
+#app[data-sandbox=true] .atlas-route strong{display:block;color:#eef3df;font:800 24px/1.1 'Street Condensed',sans-serif;max-width:60vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#app[data-sandbox=true] .atlas-controls .atlas-go{background:#70dab9!important;border:0!important;color:#173642!important;border-radius:4px!important;min-width:150px;min-height:54px;font:800 20px 'Street Condensed',sans-serif;padding:14px 20px}
+#app[data-sandbox=true] .atlas-route:not(.has-destination) small{display:none}
+@media(max-width:700px){
+ #app[data-sandbox=true] #map-screen .map-header{inset:max(22px,env(safe-area-inset-top)) 20px auto}
+ #app[data-sandbox=true] .atlas-score{left:20px;top:70px;font-size:12px;gap:10px}
+ #app[data-sandbox=true] .atlas-filters{top:94px;left:12px;right:auto}
+ #app[data-sandbox=true] .atlas-zoom{right:16px;top:35%;gap:7px}
+ #app[data-sandbox=true] .atlas-places{left:20px;bottom:118px}
+ #app[data-sandbox=true] .atlas-route{left:20px;right:20px;gap:14px}
+ #app[data-sandbox=true] .atlas-route strong{font-size:21px;max-width:47vw}
+ #app[data-sandbox=true] .atlas-controls .atlas-go{min-width:128px;font-size:19px;padding:14px 12px}
+}
+@media(prefers-reduced-motion:reduce){#app .atlas-controls button{transition:none}}
+#app[data-sandbox=true] #map-screen .atlas-controls .atlas-go:disabled{background:#274754!important;color:#93aeac!important;border:1px solid #74959055!important;opacity:.7;box-shadow:none!important}
+#app[data-sandbox=true] #map-screen #close-map:not(:disabled):hover{background:#274c5a!important;color:#eff4df!important}
+/* Brighter team atlas: original graffiti marks, vivid terrain, restrained ink controls. */
+#app[data-sandbox=true] .atlas-controls{background:linear-gradient(#102937ae,transparent 22%,transparent 76%,#102937bd)}
+#app[data-sandbox=true] .atlas-score{top:24px;gap:12px}
+#app[data-sandbox=true] .atlas-score>span{display:flex;align-items:center;gap:8px}
+#app[data-sandbox=true] .atlas-score canvas{width:50px;height:32px;image-rendering:auto}
+#app[data-sandbox=true] .atlas-score .rivals canvas{width:60px}
+#app[data-sandbox=true] .atlas-score .zak{color:#51f4ac}
+#app[data-sandbox=true] .atlas-score .rivals{color:#ff8873}
+#app[data-sandbox=true] #map-screen .atlas-controls .atlas-go{background:#51eeb4!important}
+#app[data-sandbox=true] #map-screen .atlas-controls .atlas-go:disabled{background:#244e57!important}
+@media(max-width:700px){#app[data-sandbox=true] .atlas-score{top:62px;gap:8px}#app[data-sandbox=true] .atlas-score canvas{width:35px;height:24px}#app[data-sandbox=true] .atlas-score .rivals canvas{width:48px}#app[data-sandbox=true] .atlas-score>span{gap:5px}}

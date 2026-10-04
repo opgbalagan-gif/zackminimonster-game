@@ -1,22 +1,22 @@
-import {NavigationGrid} from './core__navigation.js?v=5e1de61c4ab4';
-import {PoliceSystem} from './core__police.js?v=5e1de61c4ab4';
-import {GraffitiGame} from './core__graffiti.js?v=5e1de61c4ab4';
-import {Camera,clamp,distance,moveAlongPath,project} from './core__geometry.js?v=5e1de61c4ab4';
-import {EffectPool} from './core__effects.js?v=5e1de61c4ab4';
-import {OUTFITS,INKS,TROPHIES} from './core__hideout.js?v=5e1de61c4ab4';
-import {TrafficSystem} from './core__traffic.js?v=5e1de61c4ab4';
-import {CitizenSystem} from './core__citizens.js?v=5e1de61c4ab4';
-import {COURT,COURT_LINES,BallArtGame} from './core__basketball.js?v=5e1de61c4ab4';
-import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=5e1de61c4ab4';
-import {cityProgress,canEnter,regionAt,gateMessage} from './core__city-progress.js?v=5e1de61c4ab4';
-import {POSTERS,posterApproach} from './content__district_01__posters.js?v=5e1de61c4ab4';
-import {BridgeGangs} from './core__bridge-gangs.js?v=5e1de61c4ab4';
-import {TutorialFlow} from './core__tutorial.js?v=5e1de61c4ab4';
-import {StreetLife} from './core__street-life.js?v=5e1de61c4ab4';
-import {SneakFlow} from './core__sneak.js?v=5e1de61c4ab4';
-import {SandboxFlow} from './core__sandbox.js?v=5e1de61c4ab4';
-import {talkToStreetNpc} from './core__street-npcs.js?v=5e1de61c4ab4';
-import {graffitiUnlocked,unlockGraffiti} from './core__graffiti-catalog.js?v=5e1de61c4ab4';
+import {NavigationGrid} from './core__navigation.js?v=97af9e9c19c3';
+import {PoliceSystem} from './core__police.js?v=97af9e9c19c3';
+import {GraffitiGame} from './core__graffiti.js?v=97af9e9c19c3';
+import {Camera,clamp,distance,moveAlongPath,project} from './core__geometry.js?v=97af9e9c19c3';
+import {EffectPool} from './core__effects.js?v=97af9e9c19c3';
+import {OUTFITS,INKS,TROPHIES} from './core__hideout.js?v=97af9e9c19c3';
+import {TrafficSystem} from './core__traffic.js?v=97af9e9c19c3';
+import {CitizenSystem} from './core__citizens.js?v=97af9e9c19c3';
+import {COURT,COURT_LINES,BallArtGame} from './core__basketball.js?v=97af9e9c19c3';
+import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=97af9e9c19c3';
+import {cityProgress,canEnter,regionAt,gateMessage} from './core__city-progress.js?v=97af9e9c19c3';
+import {POSTERS,posterApproach} from './content__district_01__posters.js?v=97af9e9c19c3';
+import {BridgeGangs} from './core__bridge-gangs.js?v=97af9e9c19c3';
+import {TutorialFlow} from './core__tutorial.js?v=97af9e9c19c3';
+import {StreetLife} from './core__street-life.js?v=97af9e9c19c3';
+import {SneakFlow} from './core__sneak.js?v=97af9e9c19c3';
+import {SandboxFlow} from './core__sandbox.js?v=97af9e9c19c3';
+import {talkToStreetNpc} from './core__street-npcs.js?v=97af9e9c19c3';
+import {graffitiUnlocked,unlockGraffiti} from './core__graffiti-catalog.js?v=97af9e9c19c3';
 
 export class GameSession{
   constructor(pack,store){
@@ -180,12 +180,13 @@ export class GameSession{
     item.state='PAINTING';
     this.graffiti=new GraffitiGame(item,this.definitions.find(g=>g.id===item.graffiti_id),this.save.hideout.upgrades.includes('spray_rack'));
     this.graffiti.ink=this.save.player.ink;
-    this.mode='graffiti';this.player.state='SHAKE_CAN';this.emit('graffiti-start');
+    this.graffiti.choosing=true;
+    this.mode='graffiti';this.player.state='IDLE';this.emit('graffiti-start');
   }
   chooseGraffiti(id){
     const g=this.graffiti;if(!g||g.phase!=='shake'||g.shakeProgress>0||!graffitiUnlocked(this.save,id))return false;
     const definition=this.definitions.find(d=>d.id===id);if(!definition)return false;
-    this.graffiti=new GraffitiGame(g.target,definition,g.sprayRack);this.graffiti.ink=g.ink;return true;
+    this.graffiti=new GraffitiGame(g.target,definition,g.sprayRack);this.graffiti.ink=g.ink;this.graffiti.choosing=g.choosing;return true;
   }
   advanceCourt(){
     if(this.mode!=='court-dialogue')return;
@@ -266,7 +267,7 @@ export class GameSession{
       return;
     }
     if(this.mode==='graffiti'){
-      this.player.state=this.graffiti.phase==='shake'?'SHAKE_CAN':'SPRAY';
+      this.player.state=this.graffiti.choosing?'IDLE':this.graffiti.phase==='shake'?'SHAKE_CAN':'SPRAY';
       if(this.graffiti.done){this.checkpointResult(this.graffiti);this.graffiti.resultTime+=dt;if(this.graffiti.resultTime>GRAFFITI_CONFIG.resultSeconds)this.completeGraffiti();}
       return;
     }

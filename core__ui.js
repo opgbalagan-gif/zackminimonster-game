@@ -1,15 +1,15 @@
-import {GraffitiView} from './core__graffiti-view.js?v=5e1de61c4ab4';
-import {HideoutUI} from './core__hideout-ui.js?v=5e1de61c4ab4';
-import {CourtView} from './core__court-view.js?v=5e1de61c4ab4';
-import {PhoneUI} from './core__phone-ui.js?v=5e1de61c4ab4';
-import {PeriodTransition} from './core__period-transition.js?v=5e1de61c4ab4';
-import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=5e1de61c4ab4';
-import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=5e1de61c4ab4';
-import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=5e1de61c4ab4';
-import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=5e1de61c4ab4';
-import {regionAt,gateMessage} from './core__city-progress.js?v=5e1de61c4ab4';
-import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=5e1de61c4ab4';
-import {DistrictToolsUI} from './core__district-tools-ui.js?v=5e1de61c4ab4';
+import {GraffitiView} from './core__graffiti-view.js?v=97af9e9c19c3';
+import {HideoutUI} from './core__hideout-ui.js?v=97af9e9c19c3';
+import {CourtView} from './core__court-view.js?v=97af9e9c19c3';
+import {PhoneUI} from './core__phone-ui.js?v=97af9e9c19c3';
+import {PeriodTransition} from './core__period-transition.js?v=97af9e9c19c3';
+import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=97af9e9c19c3';
+import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=97af9e9c19c3';
+import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=97af9e9c19c3';
+import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=97af9e9c19c3';
+import {regionAt,gateMessage} from './core__city-progress.js?v=97af9e9c19c3';
+import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=97af9e9c19c3';
+import {DistrictToolsUI} from './core__district-tools-ui.js?v=97af9e9c19c3';
 const $=id=>document.getElementById(id);
 export class GameUI{
   constructor(callbacks){
@@ -104,7 +104,7 @@ export class GameUI{
     if(!this.session||!['hideout','district'].includes(this.session.mode))return;
     this.mapOpen=force??!this.mapOpen;$('map-screen').hidden=!this.mapOpen;
     $('app').dataset.map=String(this.mapOpen);
-    if(this.session.world.sandbox){document.querySelector('.map-header h1').textContent='КАРТА РАЙОНА';document.querySelector('.map-header .eyebrow').textContent='КВАРТАЛЫ · КАНАЛ · ПАРК';$('poster-gallery').hidden=true;}
+    if(this.session.world.sandbox){document.querySelector('.map-header h1').textContent='РАЙОН';document.querySelector('.map-header .eyebrow').textContent='КВАРТАЛЫ · КАНАЛ · ПАРК';$('poster-gallery').hidden=true;}
     if(this.mapOpen){this.updateRoutes();this.drawMap();}
   }
   drawMap(){
@@ -137,7 +137,7 @@ export class GameUI{
     $('radio-volume-value').textContent=Math.round(radio.media.volume*100)+'%';
     if(s.mode==='hideout')this.hideoutUI?.sync();
     $('hideout-ui').hidden=s.mode!=='hideout';$('district-ui').hidden=!['district','caught'].includes(s.mode);
-    $('graffiti-screen').hidden=s.mode!=='graffiti';
+    $('graffiti-screen').hidden=s.mode!=='graffiti'||!!s.graffiti?.choosing;
     this.courtView.sync();
     $('rep-label').innerHTML=s.save.rep+' <small>REP</small>';$('run-rep').textContent='Вылазка +'+s.runRep;
     syncUIStats(s,radio);
@@ -198,7 +198,7 @@ export class GameUI{
       $('confirm-stencil').hidden=!['stencil','result'].includes(g.phase);
       setUIButton($('confirm-stencil'),g.done?'ЗАБРАТЬ НАГРАДУ':'ЗАКРЕПИТЬ ТРАФАРЕТ',g.done?'rep':'spray');
     }
-    this.graffitiView.motion.setActive(this.graffitiView.motion.mobile&&s.mode==='graffiti'&&s.graffiti?.phase==='shake');
+    this.graffitiView.motion.setActive(this.graffitiView.motion.mobile&&s.mode==='graffiti'&&!s.graffiti?.choosing&&s.graffiti?.phase==='shake');
     $('debug-overlay').hidden=!this.debug;
     if(this.debug)$('debug-overlay').textContent='FPS '+s.metrics.fps+'\nFRAME '+s.metrics.frame+' ms\nMEM '+s.metrics.memory+'\nPACK '+s.world.id+'\nDRAW '+s.metrics.drawCalls+'\nPOLICE '+s.metrics.activePolice+'\nNPC '+s.citizens.people.length+'\nTRAFFIC '+s.traffic.cars.filter(c=>c.travel>0).length+' / '+s.traffic.cars.length+'\nHEAT '+s.heat;
     if(performance.now()>this.toastUntil)$('toast').hidden=true;

@@ -1,6 +1,6 @@
-import {project} from './core__geometry.js?v=5e1de61c4ab4';
-import {ART} from './core__art-direction.js?v=5e1de61c4ab4';
-import {polygon} from './content__district_01__terrain.js?v=5e1de61c4ab4';
+import {project} from './core__geometry.js?v=97af9e9c19c3';
+import {ART} from './core__art-direction.js?v=97af9e9c19c3';
+import {polygon} from './content__district_01__terrain.js?v=97af9e9c19c3';
 
 const hash=text=>[...text].reduce((n,c)=>(n*31+c.charCodeAt(0))>>>0,7);
 const quad=(x,y,w,h)=>[project(x,y),project(x+w,y),project(x+w,y+h),project(x,y+h)];

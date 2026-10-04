@@ -1,4 +1,4 @@
-import {NavigationGrid} from './core__navigation.js?v=5e1de61c4ab4';
+import {NavigationGrid} from './core__navigation.js?v=97af9e9c19c3';
 export function addPaintFacades(w){
   const nav=new NavigationGrid(w),template=w.targets[0];
   for(const b of w.buildings){

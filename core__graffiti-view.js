@@ -1,8 +1,8 @@
-import {EffectPool} from './core__effects.js?v=5e1de61c4ab4';
-import {MotionShake} from './core__motion-shake.js?v=5e1de61c4ab4';
-import {wallSurface} from './core__surfaces.js?v=5e1de61c4ab4';
-import {ink} from './core__hideout.js?v=5e1de61c4ab4';
-import {GRAFFITI_CONFIG as CONFIG} from './content__graffiti__config.js?v=5e1de61c4ab4';
+import {EffectPool} from './core__effects.js?v=97af9e9c19c3';
+import {MotionShake} from './core__motion-shake.js?v=97af9e9c19c3';
+import {wallSurface} from './core__surfaces.js?v=97af9e9c19c3';
+import {ink} from './core__hideout.js?v=97af9e9c19c3';
+import {GRAFFITI_CONFIG as CONFIG} from './content__graffiti__config.js?v=97af9e9c19c3';
 
 export function renderPaintLayer(context,art,game,width,height){
   context.clearRect(0,0,width,height);
@@ -47,7 +47,7 @@ export class GraffitiView{
   bounds(){const g=this.game;return {...this.area,x:this.area.x+(g?.phase==='stencil'?0:g?.stencilOffset.x??0),y:this.area.y+(g?.phase==='stencil'?0:g?.stencilOffset.y??0)};}
   bind(game){
     this.game=game;this.activePointer=null;this.cursor=null;this.time=0;this.lastStroke=-1;this.effects=new EffectPool(48);
-    this.motionUntil=0;this.motion.setActive(false);this.motion.setActive(this.motion.mobile&&game.phase==='shake');
+    this.motionUntil=0;this.motion.setActive(false);this.motion.setActive(this.motion.mobile&&!game.choosing&&game.phase==='shake');
     const create=()=>{const v=document.createElement('canvas');v.width=this.area.w;v.height=this.area.h;return v;};
     this.art=create();this.stencil=create();this.painted=create();
     const c=this.art.getContext('2d',{willReadFrequently:true});c.imageSmoothingEnabled=false;

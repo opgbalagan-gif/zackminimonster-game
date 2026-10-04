@@ -1,6 +1,6 @@
-import {COURT_LINES,STICKERS,MAX_STICKERS,COURT} from './core__basketball.js?v=5e1de61c4ab4';
-import {drawBall,drawSticker} from './core__ball-art.js?v=5e1de61c4ab4';
-import {heroSprite} from './core__hideout.js?v=5e1de61c4ab4';
+import {COURT_LINES,STICKERS,MAX_STICKERS,COURT} from './core__basketball.js?v=97af9e9c19c3';
+import {drawBall,drawSticker} from './core__ball-art.js?v=97af9e9c19c3';
+import {heroSprite} from './core__hideout.js?v=97af9e9c19c3';
 const $=id=>document.getElementById(id);
 export class CourtView{
   constructor(session,renderer){
