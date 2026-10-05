@@ -1,9 +1,16 @@
-import {uiIcon,setUIButton,applyUIComponents} from './core__ui-kit.js?v=97af9e9c19c3';
+import {uiIcon,setUIButton,applyUIComponents} from './core__ui-kit.js?v=f08d1772f1b8';
+import {gestureHint} from './core__gesture-hints.js?v=f08d1772f1b8';
 export class TutorialUI{
   constructor(session,onComplete){
     this.s=session;this.signature='';this.panel=document.createElement('section');this.panel.id='tutorial-panel';this.panel.className='tutorial-hint';this.panel.setAttribute('aria-label','Обучение');
     this.panel.innerHTML='<div class="lesson-copy" aria-live="polite" aria-atomic="true"><div class="lesson-kicker"></div><h2></h2><p class="lesson-help"></p></div><button class="primary"></button>';
     document.getElementById('app').append(this.panel);
+    this.zoomHint=document.createElement('aside');this.zoomHint.id='zoom-lesson';this.zoomHint.hidden=true;this.zoomHint.setAttribute('aria-label','Изменение масштаба');
+    this.zoomHint.innerHTML=gestureHint('pinch')+'<strong>Приблизь район</strong><span>Разведи пальцы · сведи, чтобы отдалить</span><small>На компьютере — колесо мыши</small><button aria-label="Закрыть подсказку масштаба">Понятно</button>';
+    this.zoomHint.querySelector('button').onclick=()=>{session.save.campaign.zoomLearned=true;session.persist();this.sync();};document.getElementById('app').append(this.zoomHint);
+    const pad=document.getElementById('joystick'),app=document.getElementById('app');
+    this.layout=()=>{const r=pad.getBoundingClientRect();if(r.height)this.panel.style.setProperty('--lesson-control-clearance',Math.ceil(app.getBoundingClientRect().bottom-r.top+20)+'px');};
+    this.resize=new ResizeObserver(this.layout);this.resize.observe(pad);this.resize.observe(app);this.layout();
     this.panel.querySelector('button').onclick=()=>{session.tutorial.act();this.sync();};
     this.markers=document.createElement('div');this.markers.id='tutorial-markers';document.getElementById('app').append(this.markers);
     this.status=document.createElement('div');this.status.id='street-status';this.status.setAttribute('aria-label','Время и деньги');document.getElementById('app').append(this.status);
@@ -20,7 +27,6 @@ export class TutorialUI{
     for(const b of this.markers.children){
       if(!this.paintTargets.has(b.dataset.marker))continue;
       b.classList.add('paint-marker');
-      const label=document.createElement('span');label.className='paint-marker-label';label.setAttribute('aria-hidden','true');label.textContent='Рисовать';b.append(label);
       b.setAttribute('aria-label','Место для граффити · '+this.paintTargets.get(b.dataset.marker).name);
     }
   }
@@ -29,13 +35,19 @@ export class TutorialUI{
     let nearest=null,nearestDistance=180;
     for(const [id,t] of this.paintTargets){const d=Math.hypot(t.approach.x-s.player.x,t.approach.y-s.player.y);if(d<nearestDistance){nearest=id;nearestDistance=d;}}
     for(const b of this.markers.children){const p=renderer.markerHits?.find(p=>p.id===b.dataset.marker);b.hidden=!p||p.x<0||p.x>canvas.width||p.y<0||p.y>canvas.height;if(b.hidden)continue;b.style.left=p.x*rect.width/canvas.width+'px';b.style.top=p.y*rect.height/canvas.height+'px';b.dataset.active=String(b.dataset.marker==='home'?s.tutorial.stage==='escape':['walk','paint','return_wall','repaint'].includes(s.tutorial.stage));
-      if(this.paintTargets.has(b.dataset.marker)){b.dataset.near=String(b.dataset.marker===nearest);const text=s.life.night?'Рисовать':'Рисовать ночью',label=b.querySelector('.paint-marker-label');if(label.textContent!==text)label.textContent=text;b.title=text+' · '+this.paintTargets.get(b.dataset.marker).name;}
+      if(this.paintTargets.has(b.dataset.marker)){b.dataset.near=String(b.dataset.marker===nearest);b.title=(s.life.night?'Место для граффити':'Граффити ночью')+' · '+this.paintTargets.get(b.dataset.marker).name;}
     }
   }
   sync(){
     const s=this.s,t=s.tutorial,l=t.lesson;this.panel.hidden=s.world.sandbox||['graffiti','phone'].includes(s.mode)||(s.mode==='hideout'&&document.getElementById('hideout-ui').dataset.tab!=='home');
+    this.zoomHint.hidden=s.mode!=='district'||s.cinematic||s.save.campaign.zoomLearned||!(t.stage==='walk'||s.world.sandbox&&s.time<24)||!document.getElementById('map-screen').hidden;
+    if(!this.zoomHint.hidden||s.cinematic)this.panel.hidden=true;
+    if(t.stage==='fight')this.panel.hidden=true;
     const app=document.getElementById('app');app.dataset.lessonVisible=String(!this.panel.hidden);app.dataset.homeIntro=String(!!s.life?.tour);app.dataset.period=s.life?.state.period??'night';
     app.dataset.sandbox=String(!!s.world.sandbox);
+    app.dataset.gameMode=s.mode;
+    const centreAction=!s.world.sandbox&&!t.scripted&&s.mode==='district'&&['target','hideout','bin'].includes(s.near?.type);
+    app.dataset.tutorialAction=String(centreAction);
     app.dataset.phone=String(s.mode==='phone');
     this.status.hidden=!!s.life?.tour;
     this.status.querySelector('.street-time').textContent=(s.life?.night?'Ночь ':'День ')+(s.life?.state.day??1);
@@ -55,17 +67,20 @@ export class TutorialUI{
     document.querySelector('#chapter-button strong').textContent=number;
     document.getElementById('home-route').hidden=t.stage!=='escape';
     if(t.scripted)document.getElementById('interaction').hidden=true;
+    if(t.stage==='fight')return;
     if(s.near?.type==='target')setUIButton(document.getElementById('action-button'),'РИСОВАТЬ','spray');
     else if(s.near?.type==='hideout')setUIButton(document.getElementById('action-button'),'ВОЙТИ','home');
     else if(s.near?.type==='bin')setUIButton(document.getElementById('action-button'),'СПРЯТАТЬСЯ','bin');
     else if(s.near?.type==='npc')setUIButton(document.getElementById('action-button'),'ПОГОВОРИТЬ','talk');
     else if(s.near?.type==='court')setUIButton(document.getElementById('action-button'),'БАСКЕТБОЛ','ball');
-    const signature=JSON.stringify([t.stage,l,s.mode,s.life?.sleeping>0]);if(this.signature===signature)return;this.signature=signature;
+    const title=centreAction?{target:'Нажми на баллон',hideout:'Нажми на дверь',bin:'Нажми на бак'}[s.near.type]:l.title;
+    const help=centreAction?'В центре джойстика — нужное действие.':l.help;
+    const signature=JSON.stringify([t.stage,l,s.mode,s.life?.sleeping>0,title]);if(this.signature===signature)return;this.signature=signature;
     const count=s.life?.tour?7:6,step=s.life?.tour?s.life.introStep+1:l.step;
     this.panel.querySelector('.lesson-kicker').textContent=(s.life?.tour?'ДОМА':'ПЕРВЫЕ ШАГИ')+' · '+step+' / '+count;
-    this.panel.querySelector('h2').textContent=l.title;
-    this.panel.querySelector('.lesson-help').textContent=l.help;
-    const button=this.panel.querySelector('button');button.hidden=!l.button;setUIButton(button,l.button??'',t.stage==='paint'?'spray':['home','recovery','escape'].includes(t.stage)?'home':'');
+    this.panel.querySelector('h2').textContent=title;
+    this.panel.querySelector('.lesson-help').textContent=help;
+    const button=this.panel.querySelector('button');button.hidden=centreAction||!l.button||!!s.life?.tour;setUIButton(button,l.button??'',t.stage==='paint'?'spray':['home','recovery','escape'].includes(t.stage)?'home':'');
     button.disabled=!!s.life?.sleeping;
     this.panel.dataset.stage=t.stage;
     applyUIComponents(this.panel);

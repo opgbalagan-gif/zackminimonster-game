@@ -1,18 +1,19 @@
-import {ContentLoader} from './core__content-loader.js?v=97af9e9c19c3';
-import {SaveStore,freshSave} from './core__save-store.js?v=97af9e9c19c3';
-import {AudioManager} from './core__audio.js?v=97af9e9c19c3';
-import {GameSession} from './core__session.js?v=97af9e9c19c3';
-import {InputController} from './core__input.js?v=97af9e9c19c3';
-import {GameUI} from './core__ui.js?v=97af9e9c19c3';
-import {POSTERS,posterApproach} from './content__district_01__posters.js?v=97af9e9c19c3';
-import {TutorialUI} from './core__tutorial-ui.js?v=97af9e9c19c3';
-import {showChapters} from './core__chapters.js?v=97af9e9c19c3';
-import {setUIButton} from './core__ui-kit.js?v=97af9e9c19c3';
+import {ContentLoader} from './core__content-loader.js?v=f08d1772f1b8';
+import {SaveStore,freshSave} from './core__save-store.js?v=f08d1772f1b8';
+import {AudioManager} from './core__audio.js?v=f08d1772f1b8';
+import {GameSession} from './core__session.js?v=f08d1772f1b8';
+import {InputController} from './core__input.js?v=f08d1772f1b8';
+import {GameUI} from './core__ui.js?v=f08d1772f1b8';
+import {POSTERS,posterApproach} from './content__district_01__posters.js?v=f08d1772f1b8';
+import {TutorialUI} from './core__tutorial-ui.js?v=f08d1772f1b8';
+import {showChapters} from './core__chapters.js?v=f08d1772f1b8';
+import {setUIButton} from './core__ui-kit.js?v=f08d1772f1b8';
 
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d',{alpha:false});
 const loader=new ContentLoader(),store=new SaveStore(),audio=new AudioManager();
 let session=null,renderer=null,starting=false,loadedPack=null,tutorialUI=null;
 const ui=new GameUI({
+  nextLevel:level=>{input.reset();sessionStorage.setItem('zack.chapter',level);location.reload();},
   start,leave,action,upgrade:()=>session?.upgrade(),
   home:()=>{if(session){const h=(session.world.hideouts??[session.world.hideout]).reduce((a,b)=>Math.hypot(a.x-session.player.x,a.y-session.player.y)<Math.hypot(b.x-session.player.x,b.y-session.player.y)?a:b);session.routeTo(h,h.name);}},
   route:id=>{
@@ -39,7 +40,7 @@ const ui=new GameUI({
   confirm:()=>{if(session?.graffiti?.done)session.completeGraffiti();else session?.graffiti?.confirm();ui.sync();}
 });
 const input=new InputController(canvas,{
-  zoom:factor=>{if(session?.mode==='district'&&!ui.mapOpen){session.camera.zoomFactor=Math.max(.65,Math.min(1.8,(session.camera.zoomFactor??1)*factor));session.player.path=[];}},
+  zoom:factor=>{if(!ui.mapOpen)session?.zoomBy(factor);},
   action,map:()=>ui.toggleMap(),back:()=>{
     if(session?.mode==='phone')ui.phoneUI.close();else if(session?.mode==='poi')ui.closePoi();else if(session?.mode==='poster')ui.closePoster();else if(ui.mapOpen)ui.toggleMap(false);else if(session?.mode==='graffiti')session.cancelGraffiti();
     else if(['court-dialogue','ball-art','ball-result'].includes(session?.mode)){session.cancelCourt();ui.sync();}

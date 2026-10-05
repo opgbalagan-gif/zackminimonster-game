@@ -303,3 +303,76 @@
 #app[data-sandbox=true] #map-screen .atlas-controls .atlas-go{background:#51eeb4!important}
 #app[data-sandbox=true] #map-screen .atlas-controls .atlas-go:disabled{background:#244e57!important}
 @media(max-width:700px){#app[data-sandbox=true] .atlas-score{top:62px;gap:8px}#app[data-sandbox=true] .atlas-score canvas{width:35px;height:24px}#app[data-sandbox=true] .atlas-score .rivals canvas{width:48px}#app[data-sandbox=true] .atlas-score>span{gap:5px}}
+
+/* v18: small transparent demonstrations, consistent with the illustrated world. */
+#app .gesture-demo{width:144px;height:68px;overflow:visible;fill:none;stroke:#fff9e5;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 2px 3px #102637)}
+#app .gesture-track{stroke-dasharray:4 5;opacity:.65}
+#app .gesture-finger circle{fill:#71e3d322;stroke:#71e3d3;stroke-width:2}
+#app .gesture-finger path{fill:#172f3cee}
+#app .gesture-swipe .gesture-first{animation:gesture-swipe 2.5s ease-in-out infinite}
+#app .gesture-pinch .gesture-first{animation:gesture-pinch-left 2.8s ease-in-out infinite}
+#app .gesture-pinch .gesture-second{animation:gesture-pinch-right 2.8s ease-in-out infinite}
+@keyframes gesture-swipe{0%,15%,100%{transform:translateX(24px)}55%,75%{transform:translateX(-24px)}}
+@keyframes gesture-pinch-left{0%,100%{transform:translateX(10px)}50%{transform:translateX(-20px)}}
+@keyframes gesture-pinch-right{0%,100%{transform:translateX(-10px)}50%{transform:translateX(20px)}}
+#app #zoom-lesson{position:absolute;z-index:28;top:24%;left:50%;transform:translateX(-50%);width:min(330px,85vw);display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;color:#fff9e5;text-shadow:0 2px 3px #102637,1px 0 2px #102637;pointer-events:none;background:none;border:0}
+#app #zoom-lesson strong{font:800 22px/1.2 var(--ui-heading)}
+#app #zoom-lesson span{font:600 13px/1.4 var(--ui-body)}
+#app #zoom-lesson small{font:12px/1.4 var(--ui-body);opacity:.85}
+#app #zoom-lesson button{pointer-events:auto;min-height:44px;padding:8px 16px;background:transparent;border:0;border-bottom:1px solid currentColor;color:inherit;font:700 14px var(--ui-body);text-shadow:inherit}
+#app #zoom-lesson[hidden]{display:none}
+#app #graffiti-picker .wall-choice-help{top:54%;display:flex;flex-direction:column;align-items:center;pointer-events:none}
+#app #graffiti-picker[data-swiped=true] .wall-choice-help .gesture-demo{visibility:hidden;animation:none}
+#app #graffiti-picker[data-swiped=true] .gesture-first{animation:none}
+#app #prefight-scene{position:absolute;inset:0;z-index:120;background:#08121b;display:grid;place-items:center}
+#app #prefight-scene[hidden]{display:none}
+#app #prefight-scene video{width:100%;height:100%;object-fit:contain}
+#app .prefight-controls{position:absolute;left:max(24px,env(safe-area-inset-left));right:max(24px,env(safe-area-inset-right));bottom:max(24px,env(safe-area-inset-bottom));display:flex;align-items:center;gap:12px;color:#fff9e5;text-shadow:0 2px 4px #08121b}
+#app .prefight-controls span{margin-right:auto;font:800 20px var(--ui-heading)}
+#app .prefight-controls button{min-height:48px;padding:10px 16px;border:1px solid #fff9e588;background:#172f3ccc;color:#fff9e5;border-radius:4px;font:700 16px var(--ui-heading)}
+@media(prefers-reduced-motion:reduce){#app .gesture-finger{animation:none!important}}
+@media(max-width:700px){#app .prefight-controls{flex-wrap:wrap}#app .prefight-controls span{width:100%;font-size:18px}}
+#app[data-tutorial-action=true] #joystick #action-button{outline:3px solid #ffe27a;outline-offset:6px;box-shadow:0 0 0 11px #ffe27a22!important;animation:lesson-action 1.8s ease-in-out infinite}
+@keyframes lesson-action{50%{outline-offset:10px;box-shadow:0 0 0 16px #ffe27a11}}
+@media(max-width:700px){
+ #app[data-game-mode=district] #tutorial-panel.tutorial-hint{bottom:var(--lesson-control-clearance,176px);left:20px;right:20px}
+ #app[data-game-mode=district] #tutorial-panel.tutorial-hint h2{font-size:23px}
+ #app[data-game-mode=district] #tutorial-panel.tutorial-hint .lesson-help{font-size:13px;max-width:30ch}
+}
+@media(prefers-reduced-motion:reduce){#app[data-tutorial-action=true] #joystick #action-button{animation:none}}
+/* Apartment affordances follow the illustrated furniture instead of floating app icons. */
+#app .object-hotspot polygon{fill:#ffe27a24;stroke:#fff4c9;stroke-width:2.5;opacity:1;filter:drop-shadow(0 0 2px #172f3c) drop-shadow(0 0 5px #f0c25a)}
+#app .object-hotspot>span{bottom:-12px;opacity:1;background:#172f3ce8;color:#fff4d2;border:1px solid #ffe294;border-radius:12px;padding:5px 9px;font-size:11px;white-space:nowrap;box-shadow:0 2px 5px #08121b80;pointer-events:auto;cursor:pointer}
+#app .object-hotspot::before{content:'';position:absolute;left:50%;top:50%;width:13px;height:13px;transform:translate(-50%,-50%);border-radius:50%;background:#ffe077;border:2px solid #172f3c;box-shadow:0 0 0 4px #fff4c999;pointer-events:none}
+#app .object-hotspot:hover polygon,#app .object-hotspot:focus-visible polygon{fill:#ffe27a55;stroke-width:3}
+#app .object-hotspot:active polygon{fill:#fff4c999;stroke-width:4}
+#app .object-hotspot.new-room-icon polygon{fill:#ffe27a45;stroke:#ffe077;stroke-width:4;animation:room-outline 1.6s ease-in-out infinite}
+#app .object-hotspot .room-tap-cue{display:none;position:absolute;left:calc(50% + 5px);top:calc(50% - 3px);width:36px;height:44px;pointer-events:none;filter:drop-shadow(0 2px 2px #08121b)}
+#app .object-hotspot .room-tap-cue svg{width:36px;height:44px}
+#app .object-hotspot.new-room-icon .room-tap-cue{display:block;animation:room-tap 1.6s ease-in-out infinite}
+#app .object-hotspot.new-room-icon>span{background:#ffe077;color:#172f3c;border:2px solid #172f3c;font-size:13px;font-weight:900}
+#app #room-pan-hint{left:50%;bottom:max(24px,env(safe-area-inset-bottom));transform:translateX(-50%);width:max-content;max-width:90%;text-align:center;padding:8px 12px;border:0;background:none;font-weight:700;text-shadow:0 2px 3px #172f3c,0 0 4px #172f3c;color:#fff4d2}
+@keyframes room-outline{50%{fill:#ffe27a70;stroke-width:5}}
+@keyframes room-tap{50%{transform:translate(-3px,-5px) scale(.9)}}
+#app #room-music-scene{position:absolute;inset:0;z-index:120;background:#08121b;display:grid;place-items:center}
+#app #room-music-scene[hidden]{display:none}
+#app #room-music-scene video{width:100%;height:100%;object-fit:contain}
+#app .room-film-controls{position:absolute;left:24px;right:24px;bottom:max(24px,env(safe-area-inset-bottom));display:flex;flex-wrap:wrap;align-items:center;gap:12px;color:#fff4d2;text-shadow:0 2px 4px #08121b}
+#app .room-film-controls span{margin-right:auto;font:900 20px var(--ui-heading)}
+#app .room-film-controls button{min-height:48px;padding:10px 16px;border:1px solid #fff4d2;background:#172f3ccc;color:#fff4d2;font:800 16px var(--ui-heading)}
+#app #prefight-scene .film-stage{position:relative;height:100%;width:min(100%,calc(100dvh * 9 / 16));overflow:hidden}
+#app #prefight-scene .film-stage>video,#app #prefight-scene .film-last-frame{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+#app #prefight-scene [hidden]{display:none!important}
+#app #prefight-scene .film-duel{position:absolute;inset:0;color:#fff4d2;text-align:center;text-shadow:0 2px 4px #07121d}
+#app #prefight-scene:focus{outline:none!important}
+#app #prefight-scene .prefight-play{position:absolute;inset:0;width:100%;height:100%;border:0;background:#08121b22;color:#fff4d2;font-size:64px;cursor:pointer}
+#app .film-tap-sides{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;gap:0}
+#app .film-tap-zak,#app .film-tap-rival{position:relative;min-width:0;padding:0;border:0;border-radius:0;background:transparent;color:#e6fff4;touch-action:none;user-select:none;-webkit-tap-highlight-color:transparent;overflow:hidden}
+#app .film-tap-rival{pointer-events:none}
+#app #prefight-scene .film-tap-zak{cursor:pointer;outline:none!important;box-shadow:none!important}
+#app #prefight-scene .film-duel[data-ready=true] .film-tap-zak{background:linear-gradient(0deg,#6aefd04d,#6aefd015);box-shadow:inset 0 0 0 2px #6aefd0aa!important}
+#app .film-tap-mark{position:absolute;transform:translate(-50%,-50%);display:grid;place-items:center;width:56px;height:56px;border:2px solid #6aefd0;border-radius:50%;background:#123b3f88;color:#effff9;font:900 26px var(--ui-heading);pointer-events:none;animation:film-tap-mark .48s ease-out forwards}
+#app .film-tap-rival .film-tap-mark{border-color:#ff997f;background:#63382988;color:#fff0e9}
+@keyframes film-tap-mark{0%{opacity:1;transform:translate(-50%,-50%) scale(.65)}35%{opacity:1;transform:translate(-50%,-60%) scale(1)}100%{opacity:0;transform:translate(-50%,-100%) scale(1.2)}}
+@media(prefers-reduced-motion:reduce){#app .film-tap-mark{animation:none}}
+@media(prefers-reduced-motion:reduce){#app .object-hotspot.new-room-icon polygon,#app .object-hotspot.new-room-icon .room-tap-cue,#app .film-tap-zak{animation:none!important}}

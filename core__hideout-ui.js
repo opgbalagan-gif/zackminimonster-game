@@ -1,14 +1,15 @@
-import {OUTFITS,INKS,TROPHIES,outfit,ink,heroSprite,roomLayout,ROOM_POINTS,ROOM_REGIONS,wallCount} from './core__hideout.js?v=97af9e9c19c3';
-import {homeIcon} from './core__home-icons.js?v=97af9e9c19c3';
-import {drawBall} from './core__ball-art.js?v=97af9e9c19c3';
+import {OUTFITS,INKS,TROPHIES,outfit,ink,heroSprite,roomLayout,ROOM_POINTS,ROOM_REGIONS,wallCount} from './core__hideout.js?v=f08d1772f1b8';
+import {homeIcon} from './core__home-icons.js?v=f08d1772f1b8';
+import {drawBall} from './core__ball-art.js?v=f08d1772f1b8';
+import {RoomMusicScene} from './core__room-music-scene.js?v=f08d1772f1b8';
 const $=id=>document.getElementById(id);
 export class HideoutUI{
   constructor(session,renderer,onChange,audio){
-    this.s=session;this.renderer=renderer;this.onChange=onChange;this.tab='home';this.signature='';
+    this.s=session;this.renderer=renderer;this.onChange=onChange;this.tab='home';this.signature='';this.musicScene=new RoomMusicScene(session,audio);
     session.room.camera??={x:0,y:0};
     delete session.room.camera.overview;
     const canvas=$('game');
-    const hint=document.createElement('span');hint.id='room-pan-hint';hint.textContent='Нажми на предмет · потяни, чтобы осмотреться';$('hideout-ui').append(hint);
+    const hint=document.createElement('span');hint.id='room-pan-hint';hint.textContent='Нажми на светящийся предмет';$('hideout-ui').append(hint);
     let pan=null;
     canvas.addEventListener('pointerdown',e=>{
       if(e.button!==0||session.mode!=='hideout'||this.tab!=='home')return;
@@ -24,15 +25,18 @@ export class HideoutUI{
     });
     for(const type of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(type,()=>{pan=null;});
     for(const el of document.querySelectorAll('.home-dock button,.room-hotspot')){
+      const caption={exit:'В РАЙОН',wardrobe:'ОДЕЖДА',sprays:'КРАСКИ',collection:'КОЛЛЕКЦИЯ',rest:'СПАТЬ',save:'СОХРАНИТЬ',music:'МУЗЫКА'}[el.dataset.hotspot];
       const icon=el.querySelector('i');if(icon)icon.innerHTML=homeIcon(el.dataset.homeTab??el.dataset.roomAction??'exit');
       const region=ROOM_REGIONS[el.dataset.hotspot];
       if(region){const xs=region.map(p=>p[0]),ys=region.map(p=>p[1]),x=Math.min(...xs),y=Math.min(...ys),w=Math.max(...xs)-x,h=Math.max(...ys)-y;el.classList.add('object-hotspot');el.innerHTML='<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" aria-hidden="true"><polygon points="'+region.map(p=>(p[0]-x)+','+(p[1]-y)).join(' ')+'"/></svg><span>'+el.querySelector('span').textContent+'</span>';el.roomBounds={x,y,w,h};}
-      el.addEventListener('click',()=>el.animate([{filter:'brightness(2) drop-shadow(0 0 10px #ffe195)',scale:'.84'},{filter:'brightness(1)',scale:'1'}],{duration:420,easing:'ease-out'}));
+      if(region){el.querySelector(':scope>span').textContent=caption;el.insertAdjacentHTML('beforeend','<i class="room-tap-cue" aria-hidden="true"><svg viewBox="0 0 40 48" fill="none"><path d="M15 26V9a4 4 0 0 1 8 0v13l3-2 5 2 5 2v12l-7 8H17L7 31a4 4 0 0 1 6-5l2 2Z" fill="#fff7df" stroke="#172f3c" stroke-width="2.5"/></svg></i>');}
+      el.addEventListener('click',()=>{if(!matchMedia('(prefers-reduced-motion: reduce)').matches)el.animate([{filter:'brightness(2) drop-shadow(0 0 10px #ffe195)'},{filter:'brightness(1)'}],{duration:420,easing:'ease-out'});});
     }
     for(const el of document.querySelectorAll('[data-home-tab]'))el.onclick=()=>this.open(el.dataset.homeTab);
     this.audio=audio;
     for(const el of document.querySelectorAll('[data-room-action]'))el.onclick=()=>{
-      if(el.dataset.roomAction==='music')audio.radio.toggle();else session.roomAction(el.dataset.roomAction);
+      if(session.cinematic)return;
+      if(el.dataset.roomAction==='music'){const turningOn=!audio.radio.wanted;audio.radio.toggle();if(turningOn){this.focusObject('music');session.roomAction('music');this.musicScene.play();}}else session.roomAction(el.dataset.roomAction);
       onChange();
     };
     $('home-panel-close').onclick=()=>this.open('home');
@@ -47,8 +51,9 @@ export class HideoutUI{
     this.populate();this.open('home');
   }
   open(tab){
+    if(this.s.cinematic)return;
     if(tab!=='home'&&this.s.life&&!this.s.life.iconVisible(tab))return;
-    const was=this.tab;this.tab=tab;document.getElementById('hideout-ui').dataset.tab=tab;
+    const was=this.tab;this.tab=tab;document.getElementById('hideout-ui').dataset.tab=tab;if(tab==='home'&&was!=='home')this.s.life?.finishHomeObject(was);
     for(const el of document.querySelectorAll('[data-home-pane]'))el.hidden=el.dataset.homePane!==tab;
     for(const el of document.querySelectorAll('.home-dock [data-home-tab]')){el.classList.toggle('active',el.dataset.homeTab===tab);el.setAttribute('aria-pressed',el.dataset.homeTab===tab);}
     $('home-panel-title').textContent={home:'Твоя территория',wardrobe:'ТВОЙ СТИЛЬ',sprays:'ЦВЕТ УЛИЦЫ',collection:'ТВОЯ КОЛЛЕКЦИЯ'}[tab];
@@ -81,15 +86,23 @@ export class HideoutUI{
     const trophy=document.createElement('div');trophy.id='court-trophy';trophy.className='court-trophy';trophy.hidden=true;
     trophy.innerHTML='<canvas width="160" height="160" aria-label="Твой расписанный мяч"></canvas><div><strong>COURT CUSTOM</strong><p>Мяч с твоим рисунком.<br>Подарок от Дэна и Ти.</p></div>';$('trophy-list').append(trophy);
   }
+  focusObject(id){
+    const points=ROOM_REGIONS[id];if(!points)return;const canvas=$('game'),r=roomLayout(canvas.width,canvas.height),x=points.reduce((sum,p)=>sum+p[0],0)/points.length/1024,y=points.reduce((sum,p)=>sum+p[1],0)/points.length/1536;
+    this.s.room.camera.x=canvas.width*.5-x*r.w-(canvas.width-r.w)/2;
+    this.s.room.camera.y=canvas.height*.42-y*r.h-(canvas.height-r.h)/2;
+  }
   sync(){
+    const focusKey=this.s.life?.homeFocus+':'+$('game').width+':'+$('game').height;
+    if(this.s.life?.tour&&this.lastHomeFocus!==focusKey){this.lastHomeFocus=focusKey;this.focusObject(this.s.life.homeFocus);}
     const s=this.s,canvas=$('game'),rect=canvas.getBoundingClientRect(),r=roomLayout(canvas.width,canvas.height,s.world.tutorial&&!s.world.sandbox,s.room.camera);
     $('room-pan-hint').hidden=this.tab!=='home';
     document.querySelector('[data-room-action="pet"]').hidden=s.world.tutorial||s.save.campaign?.companionUnlocked===false;
     document.querySelector('.home-status>strong').textContent=s.save.campaign?.companionUnlocked===false?'ZACK / ДОМА':'ZACK + MINI';
     for(const el of document.querySelectorAll('[data-hotspot]')){
-      if(s.life){el.hidden=!s.life.iconVisible(el.dataset.hotspot);el.classList.toggle('new-room-icon',s.life.tour&&({rest:1,wardrobe:2,sprays:3,collection:4,save:5,music:6}[el.dataset.hotspot]===s.life.introStep));}
+      if(s.life){el.hidden=!s.life.iconVisible(el.dataset.hotspot);el.classList.toggle('new-room-icon',s.life.tour&&s.life.homeFocus===el.dataset.hotspot);}
       const p=ROOM_POINTS[el.dataset.hotspot];el.style.left=((r.x+p.x*r.w)*rect.width/canvas.width)+'px';el.style.top=((r.y+p.y*r.h)*rect.height/canvas.height)+'px';
       if(el.roomBounds){const b=el.roomBounds;el.style.left=(r.x+b.x/1024*r.w)*rect.width/canvas.width+'px';el.style.top=(r.y+b.y/1536*r.h)*rect.height/canvas.height+'px';el.style.width=b.w/1024*r.w*rect.width/canvas.width+'px';el.style.height=b.h/1536*r.h*rect.height/canvas.height+'px';}
+      if(el.roomBounds){const left=parseFloat(el.style.left),width=parseFloat(el.style.width);el.querySelector(':scope>span').style.left=(Math.max(60,Math.min(rect.width-60,left+width/2))-left)+'px';}
     }
     if(s.life){const rest=document.querySelector('[data-room-action="rest"]');rest.setAttribute('aria-label',s.life.night?'Спать до утра':'Спать до ночи');rest.disabled=!!s.life.sleeping;}
     $('home-status-text').textContent=s.room.action==='rest'?'Пять минут тишины…':s.room.action==='pet'?'MINI рад тебя видеть.':s.room.beat?'Наш маленький afterparty.':'Дома. Можно выдохнуть.';

@@ -1,5 +1,6 @@
-import {installArtTokens} from './core__art-direction.js?v=97af9e9c19c3';
+import {installArtTokens} from './core__art-direction.js?v=f08d1772f1b8';
 const paths={
+  fight:'<path d="M6 12V7a2 2 0 0 1 4 0V5a2 2 0 0 1 4 0v1a2 2 0 0 1 4 0v2a2 2 0 0 1 4 0v8l-4 7H9l-6-9a2 2 0 0 1 3-2ZM10 7v5m4-6v6m4-4v5M9 19h10"/>',
   talk:'<path d="M3 4h20v14H12l-6 5v-5H3Z"/><path d="M7 9h12M7 13h8"/>',
   ball:'<circle cx="13" cy="13" r="10"/><path d="M3 13h20M13 3v20M6 6c9 2 9 12 0 14M20 6c-9 2-9 12 0 14"/>',
   metro:'<rect x="5" y="3" width="16" height="17" rx="3"/><path d="M8 7h10v6H8zM8 20l-3 4m13-4 3 4M8 17h2m6 0h2"/>',

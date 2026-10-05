@@ -1,4 +1,5 @@
-import {distance,moveAlongPath} from './core__geometry.js?v=97af9e9c19c3';
+import {distance,moveAlongPath} from './core__geometry.js?v=f08d1772f1b8';
+import {TapDuel} from './core__tap-duel.js?v=f08d1772f1b8';
 
 export const TUTORIAL_WALL='TUTORIAL_FIRST_WALL';
 export const TUTORIAL_FACADE='TUTORIAL_HOME_FACADE';
@@ -15,21 +16,21 @@ export function createTutorialWorld(){
 
 export const LESSONS={
   home:{step:1,title:'Твой дом',who:'ЗАК',line:'Дом есть. Денег почти нет. Зато баллон полный — уже подозрительно хорошее начало.',help:'Возвращайся домой, чтобы сохранить REP и снять розыск.',button:'ВЫЙТИ ИЗ ДОМА'},
-  walk:{step:1,title:'К первой стене',who:'ЗАК',line:'Сначала научимся ходить. Легендой района лёжа не станешь.',help:'Подойди к стене справа. Двигайся джойстиком, WASD или нажми на землю.',button:'ПОКАЗАТЬ ПУТЬ'},
-  paint:{step:2,title:'Оставь свой след',who:'ЗАК',line:'Чистая стена. Даже неловко прерывать такую скучную жизнь.',help:'Встряхни баллон → размести рисунок → закрась.',button:'РИСОВАТЬ'},
-  first_done:{step:2,title:'Первая работа!',who:'ЗАК',line:'Ну всё. Мама, я художник. Правда, выставку пока никто не согласовал.',help:'+50 REP. Кто-то подошёл к твоей работе…',button:'ПОСМОТРЕТЬ'},
-  rival:{step:3,title:'Конкурент',who:'ГРАФФИТЧИК',line:'Неплохо, новичок. Теперь тут хотя бы моя подпись есть.',help:'Другие райтеры могут перекрыть твою работу.'},
+  walk:{step:1,title:'К первой стене',who:'ЗАК',line:'Сначала научимся ходить. Легендой района лёжа не станешь.',help:'Двигай джойстик к баллону справа.',button:'ПОКАЗАТЬ ПУТЬ'},
+  paint:{step:2,title:'Оставь свой след',who:'ЗАК',line:'Чистая стена. Даже неловко прерывать такую скучную жизнь.',help:'Выбери рисунок. Встряхни и закрась.',button:'РИСОВАТЬ'},
+  first_done:{step:2,title:'Первая работа!',who:'ЗАК',line:'Ну всё. Мама, я художник. Правда, выставку пока никто не согласовал.',help:'+50 REP. К стене идёт соперник.',button:'ПОСМОТРЕТЬ'},
+  rival:{step:3,title:'Конкурент',who:'ГРАФФИТЧИК',line:'Неплохо, новичок. Теперь тут хотя бы моя подпись есть.',help:'Соперники перекрывают твои рисунки.'},
   rival_done:{step:3,title:'Чья это стена?',who:'ЗАК',line:'Подпись вижу. А разрешение где? Сейчас обсудим твою композицию.',help:'Зак идёт поговорить с соперником.'},
   fight:{step:3,title:'Спор за стену',who:'ЗАК',line:'Аргументы закончились. Началась физкультура.',help:'Не каждый спор заканчивается мирно.'},
   recovery:{step:3,title:'Снова дома',who:'ЗАК',line:'Так. Это моя квартира. Значит, художественную дискуссию я проиграл.',help:'Вернись к стене и посмотри, что осталось.',button:'СНОВА НА УЛИЦУ'},
   return_wall:{step:4,title:'Проверь стену',who:'ЗАК',line:'Только не говорите, что этот с валиком тоже из творческой тусовки.',help:'Подойди к мужчине с валиком.',button:'К СТЕНЕ'},
   cleaner:{step:4,title:'Свежая краска',who:'РАБОЧИЙ',line:'У меня тоже стиль. Называется «два слоя белого».',help:'Дворник закрашивает оба рисунка.'},
   cleaner_done:{step:4,title:'Можно заново',who:'ЗАК',line:'Вот это продуктивность. За минуту отменил две карьеры.',help:'На чистой стене снова можно рисовать.',button:'ВЕРНУТЬ СВОЮ РАБОТУ'},
-  repaint:{step:4,title:'Верни свой рисунок',who:'ЗАК',line:'Ладно. Второй заход. Белому тоже нужен достойный соперник.',help:'Подойди к стене и нарисуй ещё раз.',button:'К СТЕНЕ'},
+  repaint:{step:4,title:'Верни свой рисунок',who:'ЗАК',line:'Ладно. Второй заход. Белому тоже нужен достойный соперник.',help:'Верни свой рисунок на стену.',button:'К СТЕНЕ'},
   cop:{step:5,title:'Тебя заметили',who:'ПОЛИЦЕЙСКИЙ',line:'Гражданин художник, автограф оставите в объяснительной.',help:'Рисование повышает розыск. Укройся дома.',button:'ПОРА ДОМОЙ'},
-  escape:{step:5,title:'Скорее домой',who:'ЗАК',line:'Выставка закрывается по техническим причинам. Технические причины догоняют.',help:'Доберись до двери и нажми «Войти».',button:'ДОМОЙ'},
-  caught:{step:5,title:'Ещё попытка',who:'ПОЛИЦЕЙСКИЙ',line:'Для первого раза — лекция. В следующий раз будет длиннее и с протоколом.',help:'Без потерь. Держись подальше от патруля.',button:'ПОПРОБОВАТЬ ЕЩЁ'},
-  complete:{step:6,title:'Ты готов',who:'ЗАК',line:'Стена пережила троих. Я — тоже. Для первого дня вполне прилично.',help:'+100 REP. Следующий урок — в телефоне.',button:'НА УЛИЦУ'},
+  escape:{step:5,title:'Скорее домой',who:'ЗАК',line:'Выставка закрывается по техническим причинам. Технические причины догоняют.',help:'Добеги до двери. Действие — в центре джойстика.',button:'ДОМОЙ'},
+  caught:{step:5,title:'Ещё попытка',who:'ПОЛИЦЕЙСКИЙ',line:'Для первого раза — лекция. В следующий раз будет длиннее и с протоколом.',help:'Попробуй снова. Обойди патруль.',button:'ПОПРОБОВАТЬ ЕЩЁ'},
+  complete:{step:6,title:'Первый след оставлен',who:'ЗАК',line:'Стена пережила троих. Я — тоже. Для первого дня вполне прилично.',help:'+100 REP. Дальше — укрытия и камера.',button:'СЛЕДУЮЩИЙ УРОК'},
   free:{step:6,title:'Твой район',who:'ЗАК',line:'Ночью — краска. Днём — признание. Неплохой график.',help:'Ночью рисуй. Днём собирай зрителей. Время меняется в кровати.',button:'ДОМОЙ'}
 };
 
@@ -45,7 +46,7 @@ export class TutorialFlow{
       this.wall='own';this.tag=saved==='first_done'?0:1;this.stage=saved;
       if(saved!=='recovery'){session.mode='district';Object.assign(session.player,{x:440,y:340});}
       if(saved==='first_done'){session.painted.add(TUTORIAL_WALL);session.runRep=50;}
-      if(saved==='rival_done')this.actor={x:514,y:302,sprite:'citizen_3_0',path:[],moving:false};
+      if(saved==='rival_done')this.actor={x:514,y:302,kind:'rival',sprite:'citizen_0_0',path:[],moving:false};
       if(saved==='return_wall')this.placeCleaner();
     }
     if(saved==='repaint'){this.stage='repaint';this.coating=1;this.wall='blank';session.world.targets[0].heat_reward=1;session.mode='district';Object.assign(session.player,{x:360,y:354});}
@@ -64,7 +65,8 @@ export class TutorialFlow{
   leave(){
     if(this.s.life?.tour||this.s.life?.sleeping)return;
     if(this.homeReturnStage){this.stage=this.homeReturnStage;this.homeReturnStage=null;this.s.mode='district';Object.assign(this.s.player,this.s.world.spawn);this.s.save.campaign.tutorialAtHome=false;this.s.persist();return;}
-    if(this.stage==='complete'||this.stage==='free'){this.stage='free';this.s.mode='district';this.s.save.campaign.tutorialAtHome=false;this.s.persist();return;}
+    if(this.stage==='complete')return this.nextLevel('sneak');
+    if(this.stage==='free'){this.stage='free';this.s.mode='district';this.s.save.campaign.tutorialAtHome=false;this.s.persist();return;}
     const returning=this.stage==='recovery';
     this.s.mode='district';Object.assign(this.s.player,this.s.world.spawn,{path:[],moving:false,state:'IDLE'});this.s.camera.ready=false;
     if(returning){this.placeCleaner();this.set('return_wall','return_wall');}
@@ -84,19 +86,30 @@ export class TutorialFlow{
     if(this.stage==='home'||this.stage==='recovery')return this.leave();
     if(['walk','repaint','return_wall'].includes(this.stage)){s.routeTo(s.world.targets[0].approach,'Первая стена');return;}
     if(this.stage==='paint'){s.near={type:'target',item:s.world.targets[0]};s.interact();return;}
-    if(this.stage==='first_done')return this.beginActor('rival','citizen_3_0');
+    if(this.stage==='first_done')return this.beginActor('rival','citizen_0_0');
     if(this.stage==='cleaner_done'){this.actor=null;s.world.targets[0].heat_reward=1;this.set('repaint','repaint');return;}
     if(this.stage==='cop'||this.stage==='caught')return this.prepareEscape();
     if(this.stage==='escape')s.routeTo(s.world.hideout,'Дом / сохранить');
   }
   beginActor(stage,sprite){
-    this.actor={...this.s.world.tutorialEntry,sprite,path:this.s.nav.path(this.s.world.tutorialEntry,{x:514,y:302}),moving:false};this.set(stage);
+    this.actor={...this.s.world.tutorialEntry,kind:stage,sprite,path:this.s.nav.path(this.s.world.tutorialEntry,{x:514,y:302}),moving:false};this.set(stage);
   }
-  placeCleaner(){this.actor={x:514,y:302,sprite:'citizen_2_0',path:[],moving:false};}
+  placeCleaner(){this.actor={x:514,y:302,kind:'cleaner',sprite:'comic_cleaner_front_0',path:[],moving:false};}
   beginFight(){
-    this.set('fight');this.fightBurst=0;
+    this.set('fight');this.fightBurst=0;this.duel=new TapDuel();
     this.s.player.path=this.s.nav.path(this.s.player,{x:this.actor.x-22,y:this.actor.y+20});
+    this.s.emit('prefight');
   }
+  nextLevel(level){
+    if(this.nextLevelQueued)return;
+    this.nextLevelQueued=true;
+    this.s.save.campaign.activeLevel=level;
+    this.s.save.campaign.tutorialAtHome=false;
+    if(level==='sneak')this.s.save.campaign.sneakCheckpoint='gift';
+    if(level==='sandbox'){this.s.save.campaign.sandboxAtHome=false;if(this.s.save.resume)this.s.save.resume.mode='district';}
+    this.s.persist();this.s.emit('next-level',{level});
+  }
+  finishFight(won){if(this.stage!=='fight')return;if(won){this.placeCleaner();this.set('return_wall','return_wall');}else this.recoverAtHome();}
   recoverAtHome(){
     const s=this.s;s.mode='hideout';s.heat=0;s.runRep=0;s.near=null;this.actor=null;
     Object.assign(s.player,s.world.spawn,{path:[],moving:false,state:'IDLE'});
@@ -130,13 +143,20 @@ export class TutorialFlow{
   }
   update(dt){
     this.age+=dt;const s=this.s;
+    if(this.stage==='complete'){if(this.age>=1.2)this.nextLevel('sneak');return;}
     if(s.mode!=='district')return;
     if(this.stage==='walk'&&s.life?.night&&distance(s.player,s.world.targets[0].approach)<60)this.set('paint');
     if(this.stage==='return_wall'&&distance(s.player,s.world.targets[0].approach)<95)this.set('cleaner');
     if(this.stage==='rival_done'&&this.age>=2.2)this.beginFight();
     if(this.stage==='fight'){
       moveAlongPath(s.player,s.player.path,120,dt);
-      if(!s.player.path.length){this.fightBurst+=dt;if(this.fightBurst>=3.6)this.recoverAtHome();}
+      this.duel.update(dt);
+      if(this.duel.phase==='result'){
+        this.fightBurst=this.duel.resultAge;
+        if(this.duel.resultAge>=3.2){
+          this.finishFight(this.duel.won);
+        }
+      }
       return;
     }
     if(['rival','cleaner'].includes(this.stage)){

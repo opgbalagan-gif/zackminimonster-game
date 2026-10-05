@@ -1,4 +1,4 @@
-import {cleanBallSave} from './core__basketball.js?v=97af9e9c19c3';
+import {cleanBallSave} from './core__basketball.js?v=f08d1772f1b8';
 export const SAVE_KEY='zackminimonster.save';
 export const SAVE_VERSION=3;
 export function freshSave(){
@@ -25,6 +25,7 @@ export function migrateSave(raw){
       tutorialFacadePainted:raw.campaign?.tutorialFacadePainted===true,
       homeIntroStep:Number.isInteger(raw.campaign?.homeIntroStep)?Math.max(0,Math.min(7,raw.campaign.homeIntroStep)):0,
       tutorialAtHome:raw.campaign?.tutorialAtHome===true,
+      zoomLearned:raw.campaign?.zoomLearned===true,
       activeLevel:['sandbox','sneak','tutorial'].includes(raw.campaign?.activeLevel)?raw.campaign.activeLevel:'tutorial',
       started:raw.campaign?.started===true,
       sandboxStarted:raw.campaign?.sandboxStarted===true,sandboxAtHome:raw.campaign?.sandboxAtHome===true,sandboxComplete:raw.campaign?.sandboxComplete===true,

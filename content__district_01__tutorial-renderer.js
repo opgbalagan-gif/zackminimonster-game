@@ -1,52 +1,30 @@
-import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=97af9e9c19c3';
-import {vehicleLenses} from './content__district_01__vehicle-lights.js?v=97af9e9c19c3';
-import {streetFinish,facadeFinish,sceneGrade} from './content__levels__sandbox__street-finish.js?v=97af9e9c19c3';
-import {vehicleProjection} from './core__vehicle-projection.js?v=97af9e9c19c3';
-import {vehicleBody} from './core__traffic-fleet.js?v=97af9e9c19c3';
-import {buildingFrontDepth,natureDepth} from './core__building-scale.js?v=97af9e9c19c3';
-import {facadePaintArea} from './core__paint-facades.js?v=97af9e9c19c3';
-import {courtPlay,drawCourtPlayer,drawCourtBall} from './content__levels__sandbox__court-animation.js?v=97af9e9c19c3';
-import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=97af9e9c19c3';
-import {surfaceTrain} from './core__sandbox-metro.js?v=97af9e9c19c3';
-import {drawWaterfront,drawNeighbourhoodMap} from './content__levels__sandbox__waterfront-art.js?v=97af9e9c19c3';
-import {districtSurroundings,boundaryRailing,cloudShadows} from './content__levels__sandbox__atmosphere.js?v=97af9e9c19c3';
-import {districtContinuation,roadToBoundary,perimeterWoodland} from './core__district-continuation.js?v=97af9e9c19c3';
-import {dryingOpacity} from './core__wall-rivals.js?v=97af9e9c19c3';
-import {routeFade} from './core__route-fade.js?v=97af9e9c19c3';
-import {groundLighting} from './content__levels__sandbox__lighting-art.js?v=97af9e9c19c3';
-import {lampBrightness} from './core__lighting.js?v=97af9e9c19c3';
-import {NpcAnimation} from './core__npc-animation.js?v=97af9e9c19c3';
-import {SpriteAtlas} from './core__sprites.js?v=97af9e9c19c3';
-import {project} from './core__geometry.js?v=97af9e9c19c3';
-import {heroSprite} from './core__hideout.js?v=97af9e9c19c3';
-import {polygon,box} from './content__district_01__terrain.js?v=97af9e9c19c3';
-import {drawGraffiti} from './content__district_01__graffiti-art.js?v=97af9e9c19c3';
-import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=97af9e9c19c3';
-import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=97af9e9c19c3';
-import {OccluderFade} from './core__occluder-fade.js?v=97af9e9c19c3';
-import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=97af9e9c19c3';
-
-function fightCloud(c,s){
-  const t=s.tutorial.fightBurst,p=project(s.tutorial.actor.x-11,s.tutorial.actor.y+10),pulse=Math.sin(t*27);
-  c.save();c.translate(p.x+Math.round(pulse*4),p.y-36);
-  c.fillStyle='#101c2855';c.beginPath();c.ellipse(0,35,63,12,0,0,Math.PI*2);c.fill();
-  // Chunky scallops and a dark outline keep this cartoon scuffle readable at game scale.
-  c.lineWidth=3;c.strokeStyle='#33424b';c.fillStyle='#dce4db';c.beginPath();
-  for(let i=0;i<12;i++){
-    const angle=i*Math.PI/6,r=1+Math.sin(t*19+i*2)*.08,x=Math.cos(angle)*42*r,y=Math.sin(angle)*24*r;
-    c.moveTo(x+22,y);c.arc(x,y,22+(i%3)*2,0,Math.PI*2);
-  }c.fill();c.stroke();
-  c.fillStyle='#eef0da';c.beginPath();c.ellipse(0,-3,46,29,0,0,Math.PI*2);c.fill();
-  c.strokeStyle='#839a9e';c.lineWidth=3;
-  for(let i=0;i<3;i++){c.beginPath();c.arc((i-1)*25,Math.sin(t*14+i)*7,11,0.2+t+i,Math.PI*1.35+t+i);c.stroke();}
-  for(let i=0;i<5;i++){
-    const angle=t*1.7+i*Math.PI*2/5,x=Math.cos(angle)*(72+Math.sin(t*12+i)*6),y=Math.sin(angle)*46-8;
-    c.save();c.translate(Math.round(x),Math.round(y));c.rotate(-angle+t*3);c.beginPath();
-    for(let k=0;k<10;k++){const a=k*Math.PI/5-Math.PI/2,r=k%2?5:12;k?c.lineTo(Math.cos(a)*r,Math.sin(a)*r):c.moveTo(Math.cos(a)*r,Math.sin(a)*r);}
-    c.closePath();c.fillStyle=i%2?'#ffe6a0':'#ffd25b';c.strokeStyle='#77572e';c.lineWidth=2;c.fill();c.stroke();c.restore();
-  }
-  c.restore();
-}
+import {drawTrafficSignals} from './content__district_01__traffic-renderer.js?v=f08d1772f1b8';
+import {vehicleLenses} from './content__district_01__vehicle-lights.js?v=f08d1772f1b8';
+import {streetFinish,facadeFinish,sceneGrade} from './content__levels__sandbox__street-finish.js?v=f08d1772f1b8';
+import {vehicleProjection} from './core__vehicle-projection.js?v=f08d1772f1b8';
+import {vehicleBody} from './core__traffic-fleet.js?v=f08d1772f1b8';
+import {buildingFrontDepth,natureDepth} from './core__building-scale.js?v=f08d1772f1b8';
+import {facadePaintArea} from './core__paint-facades.js?v=f08d1772f1b8';
+import {courtPlay,drawCourtPlayer,drawCourtBall} from './content__levels__sandbox__court-animation.js?v=f08d1772f1b8';
+import {neighbourhoodArt} from './content__levels__sandbox__neighbourhood-art.js?v=f08d1772f1b8';
+import {surfaceTrain} from './core__sandbox-metro.js?v=f08d1772f1b8';
+import {drawWaterfront,drawNeighbourhoodMap} from './content__levels__sandbox__waterfront-art.js?v=f08d1772f1b8';
+import {districtSurroundings,boundaryRailing,cloudShadows} from './content__levels__sandbox__atmosphere.js?v=f08d1772f1b8';
+import {districtContinuation,roadToBoundary,perimeterWoodland} from './core__district-continuation.js?v=f08d1772f1b8';
+import {dryingOpacity} from './core__wall-rivals.js?v=f08d1772f1b8';
+import {routeFade} from './core__route-fade.js?v=f08d1772f1b8';
+import {groundLighting} from './content__levels__sandbox__lighting-art.js?v=f08d1772f1b8';
+import {lampBrightness} from './core__lighting.js?v=f08d1772f1b8';
+import {NpcAnimation} from './core__npc-animation.js?v=f08d1772f1b8';
+import {SpriteAtlas} from './core__sprites.js?v=f08d1772f1b8';
+import {project} from './core__geometry.js?v=f08d1772f1b8';
+import {heroSprite} from './core__hideout.js?v=f08d1772f1b8';
+import {polygon,box} from './content__district_01__terrain.js?v=f08d1772f1b8';
+import {drawGraffiti} from './content__district_01__graffiti-art.js?v=f08d1772f1b8';
+import {renderHideout,drawTrophy} from './content__district_01__hideout-renderer.js?v=f08d1772f1b8';
+import {createStreetKit,STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=f08d1772f1b8';
+import {OccluderFade} from './core__occluder-fade.js?v=f08d1772f1b8';
+import {citizenSpeakers,drawCitizenSpeech} from './core__citizen-speech.js?v=f08d1772f1b8';
 
 export function createTutorialRenderer(pack){
   const markerHits=[],posterHits=[];
@@ -92,7 +70,7 @@ export function createTutorialRenderer(pack){
     const axisScale=1/Math.hypot(1,surface.slope);
     c.translate(mx,my);c.transform(axisScale,surface.slope*axisScale,0,1,0,0);c.beginPath();c.rect(0,0,mw,mh);c.clip();
     const choosing=preview?.target===target;
-    c.save();if(s.world.sandbox&&!choosing)c.globalAlpha*=dryingOpacity(s.save,target.wall_id);
+    c.save();if(choosing)c.globalAlpha*=.32;else if(s.world.sandbox)c.globalAlpha*=dryingOpacity(s.save,target.wall_id);
     if(choosing||!s.world.sandbox||s.painted.has(target.wall_id))drawGraffiti(c,choosing?preview.definition.id:s.save.graffiti_by_wall[target?.wall_id]??target?.graffiti_id??'zack_tag',0,0,mw,mh,atlas);c.restore();if(!choosing)damage(c,s,target,0,0,mw,mh);c.restore();
     }
   }
@@ -112,7 +90,7 @@ export function createTutorialRenderer(pack){
     const face=[project(392,266,90),project(594,266,90),b,a];polygon(c,face,'#727766');kit.material.quad(c,'wall',face,.2);
     c.save();c.transform(1,.5,0,1,a.x,a.y-90);c.beginPath();c.rect(0,0,202,90);c.clip();
     const preview=s.mode==='graffiti'&&s.graffiti?.choosing&&s.graffiti.target===target?s.graffiti:null;
-    c.save();if(s.world.sandbox&&!preview)c.globalAlpha*=dryingOpacity(s.save,target.wall_id);
+    c.save();if(preview)c.globalAlpha*=.32;else if(s.world.sandbox)c.globalAlpha*=dryingOpacity(s.save,target.wall_id);
     if(preview)drawGraffiti(c,preview.definition.id,12,4,176,82,atlas);
     else if(s.world.sandbox?s.painted.has(target.wall_id):s.tutorial.wall==='own'||s.tutorial.coating>0)drawGraffiti(c,target.graffiti_id,12,4,176,82,atlas);c.restore();if(!preview)damage(c,s,target,12,4,176,82);
     if(!preview&&s.tutorial.tag>0){c.save();c.beginPath();c.rect(0,0,202*s.tutorial.tag,90);c.clip();atlas.draw(c,'gang_colour',106,72,186,56);c.restore();}
@@ -128,7 +106,8 @@ export function createTutorialRenderer(pack){
     c.filter='none';
     // Keep the complete first block visible; the street is deliberately small.
     const choosing=!photo&&s.mode==='graffiti'&&s.graffiti?.choosing;
-    const cam=photo?{...photo}:s.camera,mobile=w<=700,sandbox=s.world.sandbox,originX=photo||sandbox||choosing?w/2:mobile?w/2:(w-420)/2,originY=photo?h/2:h*(choosing?.40:sandbox?.50:mobile?.30:.46);
+    const duelling=!photo&&s.tutorial.stage==='fight'&&s.tutorial.actor;
+    const cam=photo?{...photo}:s.camera,mobile=w<=700,sandbox=s.world.sandbox,originX=photo||sandbox||choosing||duelling?w/2:mobile?w/2:(w-420)/2,originY=photo?h/2:h*(duelling?.39:choosing?.40:sandbox?.50:mobile?.30:.46);
     if(!photo){
     cam.zoom=1.18*Math.max(.12,Math.min(.85,(mobile?w:w-450)/(s.world.id==='sneak'?1260:940),(mobile?h*.53:h-100)/730));cam.x=s.world.id==='sneak'?130:45;cam.y=230;cam.ready=true;
     const followDt=lastTime===undefined?1/60:Math.max(1/60,s.time-lastTime);
@@ -140,6 +119,7 @@ export function createTutorialRenderer(pack){
         cam.x=p.x-art.width*art.anchor[0]+(mx+mw*.5*axis)*scale;cam.y=p.y-r[3]*scale*art.anchor[1]+(my+mw*.5*axis*surface.slope+mh*.5)*scale;cam.zoom=Math.min(2.6,Math.min(w*.64,460)/(mw*scale));
       }else{const p=project(target.x,target.y,48);cam.x=p.x;cam.y=p.y;cam.zoom=Math.min(2.2,w*.67/202);}
     }
+    if(duelling){const p=project(s.tutorial.actor.x-11,s.tutorial.actor.y+10);cam.x=p.x;cam.y=p.y-36;cam.zoom=Math.min(2,Math.max(1.3,w/260));}
     }
     const dt=lastTime===undefined?1/60:Math.max(1/60,s.time-lastTime);if(!photo)lastTime=s.time;
     const frontDepth=point=>sandbox?buildingFrontDepth(point,s.world.buildings):point.x+point.y;
@@ -223,8 +203,6 @@ export function createTutorialRenderer(pack){
     for(const car of s.traffic.cars)queue.push({kind:'car',car,depth:car.x+car.y});
     for(const building of s.world.buildings.slice(1))queue.push({kind:'block-house',building,depth:building.x+building.w+building.y+building.h});
     for(const [i,placement] of (s.world.extraWalls??[]).entries())queue.push({kind:'extra-wall',placement,target:s.world.targets[i+2],depth:placement.x+placement.w/2+placement.y+14});
-    const fighting=s.tutorial.stage==='fight'&&s.tutorial.fightBurst>0;
-    if(fighting)queue.push({kind:'fight',depth:s.tutorial.actor.x+s.tutorial.actor.y+25});
     for(const p of STREET_PROPS)queue.push({kind:'prop',...p,depth:p.x+p.y});
     for(const p of s.world.blockProps??[])queue.push({kind:'prop',...p,depth:p.x+p.y});
     queue.push({kind:'fence',depth:500});
@@ -274,14 +252,12 @@ export function createTutorialRenderer(pack){
       if(o.kind==='bin'){const p=project(o.x,o.y);c.save();c.imageSmoothingEnabled=true;if(!day)c.filter='brightness(.66)';spriteObject('comic_dumpster',o.x,o.y,90,o.depth);c.restore();if(s.tutorial.bin?.id===o.id){c.fillStyle='#f3d283';c.font='bold 13px monospace';c.textAlign='center';c.fillText('ТИШЕ…',p.x,p.y-58);}continue;}
       if(o.kind==='wall'){const p=project(392,266);faded('wall',{x:p.x,y:p.y-94,w:202,h:195},o.depth,()=>wall(c,s),(u,v)=>{const yy=v*195-94;return yy<=u*101&&yy>=u*101-94;});continue;}
       if(o.kind==='extra-wall'){const p=project(o.placement.x,o.placement.y+14),width=o.placement.w;faded(o.target.wall_id,{x:p.x,y:p.y-94,w:width,h:94+width/2},o.depth,()=>wall(c,s,o.target,o.placement));continue;}
-      if(o.kind==='fight'){fightCloud(c,s);continue;}
-      if(fighting&&(o.kind==='zack'||o.kind==='guest'))continue;
       if(o.kind==='zack'&&(photo||s.tutorial.bin))continue;
       const actor=o.kind==='visitor'||o.kind==='npc'?o.actor:o.kind==='zack'?s.player:s.tutorial.actor,p=project(actor.x,actor.y);
       c.fillStyle='#15202055';c.beginPath();c.ellipse(p.x,p.y,15,6,0,0,Math.PI*2);c.fill();
       const frame=actor.moving&&Math.floor(s.time*7)%2;
       const cleaner=actor.kind==='cleaner'||o.kind==='guest'&&s.tutorial.stage.startsWith('cleaner');
-      const painting=cleaner&&(actor.phase==='paint'||o.kind==='guest'&&!actor.moving);
+      const painting=cleaner&&(actor.phase==='paint'||o.kind==='guest'&&s.tutorial.stage==='cleaner');
       const animated=o.kind==='npc'?'roby':actor.sprite==='officer'?'officer':null;
       if(painting&&atlas.rect('comic_cleaner_paint_0')){
         const pose=npcAnimation.pose(actor,dt),step=Math.floor(s.time*4)%4;
@@ -340,7 +316,7 @@ export function createTutorialRenderer(pack){
         c.strokeStyle='#344b53';c.lineWidth=2;c.beginPath();c.arc(p.x+20,p.y-12,7,Math.PI,Math.PI*2);c.stroke();
       }
     }
-    if(heroObscured&&hero&&!fighting){
+    if(heroObscured&&hero){
       // Restore character contrast through the existing translucent occluder.
       c.save();c.globalAlpha=.82;atlas.draw(c,heroSprite(s.save.player.skin,s.player.state,s.player.facing,s.player.moving&&Math.floor(s.time*7)%2),heroPoint.x,heroPoint.y,null,66);c.restore();
     }
@@ -362,7 +338,6 @@ export function createTutorialRenderer(pack){
     for(const npc of s.world.streetNpcs??[]){if(npc.speakingFor>0)continue;const p=project(npc.x,npc.y,94);markerHits.push({id:npc.id,x:originX+(p.x-cam.x)*cam.zoom,y:originY+(p.y-cam.y)*cam.zoom});}
     if(sandbox)for(const [id,point,z] of [['court',s.court,98],['station',s.world.surfaceMetro.approach,35]]){const p=project(point.x,point.y,z);markerHits.push({id,x:originX+(p.x-cam.x)*cam.zoom,y:originY+(p.y-cam.y)*cam.zoom});}
     for(const target of s.world.targets.slice(2)){const p=target.buildingId?project(target.x+20,target.y-20,14):project(target.x,target.y,106);markerHits.push({id:target.wall_id,x:originX+(p.x-cam.x)*cam.zoom,y:originY+(p.y-cam.y)*cam.zoom});}
-    if(fighting&&s.tutorial.fightBurst>3.1){c.fillStyle='rgba(12,19,26,'+Math.min(1,(s.tutorial.fightBurst-3.1)/.5)+')';c.fillRect(0,0,w,h);}
     // Camera input uses a screen-centred origin; compensate for the raised composition.
     cam.x+=(w/2-originX)/cam.zoom;cam.y+=(h/2-originY)/cam.zoom;
     return cam;

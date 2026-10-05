@@ -1,5 +1,5 @@
-import {project,unproject} from './core__geometry.js?v=97af9e9c19c3';
-import {polygon} from './content__district_01__terrain.js?v=97af9e9c19c3';
+import {project,unproject} from './core__geometry.js?v=f08d1772f1b8';
+import {polygon} from './content__district_01__terrain.js?v=f08d1772f1b8';
 const corners=r=>[project(r.x,r.y),project(r.x+r.w,r.y),project(r.x+r.w,r.y+r.h),project(r.x,r.y+r.h)];
 
 export function districtSurroundings(c,cam,w,h,kit,night,bounds,origin={x:w/2,y:h/2}){

@@ -1,15 +1,16 @@
-import {GraffitiView} from './core__graffiti-view.js?v=97af9e9c19c3';
-import {HideoutUI} from './core__hideout-ui.js?v=97af9e9c19c3';
-import {CourtView} from './core__court-view.js?v=97af9e9c19c3';
-import {PhoneUI} from './core__phone-ui.js?v=97af9e9c19c3';
-import {PeriodTransition} from './core__period-transition.js?v=97af9e9c19c3';
-import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=97af9e9c19c3';
-import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=97af9e9c19c3';
-import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=97af9e9c19c3';
-import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=97af9e9c19c3';
-import {regionAt,gateMessage} from './core__city-progress.js?v=97af9e9c19c3';
-import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=97af9e9c19c3';
-import {DistrictToolsUI} from './core__district-tools-ui.js?v=97af9e9c19c3';
+import {GraffitiView} from './core__graffiti-view.js?v=f08d1772f1b8';
+import {HideoutUI} from './core__hideout-ui.js?v=f08d1772f1b8';
+import {CourtView} from './core__court-view.js?v=f08d1772f1b8';
+import {PhoneUI} from './core__phone-ui.js?v=f08d1772f1b8';
+import {PeriodTransition} from './core__period-transition.js?v=f08d1772f1b8';
+import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=f08d1772f1b8';
+import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=f08d1772f1b8';
+import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=f08d1772f1b8';
+import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=f08d1772f1b8';
+import {regionAt,gateMessage} from './core__city-progress.js?v=f08d1772f1b8';
+import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=f08d1772f1b8';
+import {DistrictToolsUI} from './core__district-tools-ui.js?v=f08d1772f1b8';
+import {PrefightScene} from './core__prefight-scene.js?v=f08d1772f1b8';
 const $=id=>document.getElementById(id);
 export class GameUI{
   constructor(callbacks){
@@ -33,6 +34,7 @@ export class GameUI{
   }
   bind(session,renderer,audio){
     this.session=session;this.renderer=renderer;this.audio=audio;
+    this.prefight=new PrefightScene(session,audio);
     if(session.world.sandbox){document.querySelector('.map-legend').innerHTML='<span><i class="gold"></i> Дом</span><span><i class="purple"></i> Граффити</span><span><i class="blue"></i> Канал</span><span>● Зак — розовая точка</span>';}
     this.graffitiView=new GraffitiView($('graffiti-canvas'),session,renderer,audio);
     this.courtView=new CourtView(session,renderer);
@@ -147,7 +149,7 @@ export class GameUI{
     const bought=s.save.hideout.upgrades.includes('spray_rack');
     $('upgrade-button').disabled=bought;$('upgrade-button').querySelector('b').textContent=bought?'УСТАНОВЛЕН':'500 REP';
     $('objective-label').textContent=s.knockedFor>0?'СБИЛИ · Зак поднимается…':s.waypoint?'↗ '+s.waypoint.label:s.runRep?'Вернись в убежище, чтобы сохранить':s.painted.size===s.world.targets.length?'Район полностью твой':'Найди свободную стену · берегись машин';
-    const near=s.near;$('interaction').hidden=!near||s.hiddenFor>0||s.mode!=='district';
+    const near=s.tutorial?.stage==='fight'?null:s.near;$('interaction').hidden=!near||s.hiddenFor>0||s.mode!=='district';
     $('action-button').hidden=$('interaction').hidden||!!s.tutorial?.scripted;
     if(near){const [label,icon]=near.type==='target'?['Рисовать','spray']:near.type==='shop'?['Магазин красок','spray']:near.type==='hideout'?['Войти','home']:near.type==='npc'?['Поговорить с '+near.item.name,'talk']:near.type==='court'?['Баскетбол','ball']:['Спрятаться','bin'];$('action-button').setAttribute('aria-label',label);$('action-button').title=label+' · нажми; тяни, чтобы идти';setUIButton($('action-button'),label,icon);}
     if(near){
@@ -203,6 +205,8 @@ export class GameUI{
     if(this.debug)$('debug-overlay').textContent='FPS '+s.metrics.fps+'\nFRAME '+s.metrics.frame+' ms\nMEM '+s.metrics.memory+'\nPACK '+s.world.id+'\nDRAW '+s.metrics.drawCalls+'\nPOLICE '+s.metrics.activePolice+'\nNPC '+s.citizens.people.length+'\nTRAFFIC '+s.traffic.cars.filter(c=>c.travel>0).length+' / '+s.traffic.cars.length+'\nHEAT '+s.heat;
     if(performance.now()>this.toastUntil)$('toast').hidden=true;
     for(const event of s.events.splice(0)){
+      if(event.type==='prefight')this.prefight.play();
+      if(event.type==='next-level')this.callbacks.nextLevel?.(event.level);
       if(event.type==='period-change')this.periodTransition.play(event.from,event.to);
       if(event.type==='phone-open')this.phoneUI?.open();
       if(event.type==='poster-open')this.openPoster(event.id);

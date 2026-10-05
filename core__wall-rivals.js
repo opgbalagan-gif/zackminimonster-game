@@ -1,5 +1,5 @@
-import {distance,moveAlongPath} from './core__geometry.js?v=97af9e9c19c3';
-import {wallOwner} from './core__territory.js?v=97af9e9c19c3';
+import {distance,moveAlongPath} from './core__geometry.js?v=f08d1772f1b8';
+import {wallOwner} from './core__territory.js?v=f08d1772f1b8';
 export const PAINT_DRY_SECONDS=60;
 export function dryingOpacity(save,id){return save.wall_damage[id]==='clean'?0:save.wall_damage[id]==='cleaner'?Math.max(0,Math.min(1,(save.wall_drying?.[id]??PAINT_DRY_SECONDS)/PAINT_DRY_SECONDS)):1;}
 export function wallCrewSize(s){
@@ -27,7 +27,7 @@ export class WallRivals{
       for(const start of entries.slice(0,6)){
         const path=s.nav.path(start,p);if(!path.length)continue;
         this.actors.push({id:'wall-crew-'+(++this.count),x:start.x,y:start.y,entry:{x:start.x,y:start.y},path,target,
-          kind:s.life.night?'rival':'cleaner',sprite:s.life.night?'citizen_3_0':'citizen_2_0',phase:'walk',age:0,progress:0,moving:false});
+          kind:s.life.night?'rival':'cleaner',sprite:s.life.night?'citizen_0_0':'comic_cleaner_front_0',phase:'walk',age:0,progress:0,moving:false});
         return true;
       }
     }

@@ -1,9 +1,10 @@
-import {AtlasControls} from './core__atlas-controls.js?v=97af9e9c19c3';
-import {drawDistrictMap} from './core__district-map.js?v=97af9e9c19c3';
-import {GRAFFITI_CATALOG,graffitiUnlocked} from './core__graffiti-catalog.js?v=97af9e9c19c3';
-import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=97af9e9c19c3';
-import {PAINT_STOCK,buyPaint} from './core__paint-shop.js?v=97af9e9c19c3';
-import {uiIcon} from './core__ui-kit.js?v=97af9e9c19c3';
+import {AtlasControls} from './core__atlas-controls.js?v=f08d1772f1b8';
+import {drawDistrictMap} from './core__district-map.js?v=f08d1772f1b8';
+import {GRAFFITI_CATALOG,graffitiUnlocked} from './core__graffiti-catalog.js?v=f08d1772f1b8';
+import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=f08d1772f1b8';
+import {PAINT_STOCK,buyPaint} from './core__paint-shop.js?v=f08d1772f1b8';
+import {uiIcon} from './core__ui-kit.js?v=f08d1772f1b8';
+import {gestureHint} from './core__gesture-hints.js?v=f08d1772f1b8';
 export class DistrictToolsUI{
   constructor(ui){
     this.ui=ui;this.s=ui.session;this.destination=null;this.lastMap=0;this.signature='';this.events=new AbortController();document.getElementById('app').dataset.sandbox=String(!!this.s.world.sandbox);
@@ -12,6 +13,7 @@ export class DistrictToolsUI{
     this.picker=document.createElement('div');this.picker.id='graffiti-picker';this.picker.className='wall-swipe-picker';this.picker.hidden=true;this.picker.setAttribute('role','dialog');this.picker.setAttribute('aria-modal','true');this.picker.setAttribute('aria-label','Выбор граффити на стене');document.getElementById('app').append(this.picker);
     this.picker.innerHTML='<button class="wall-choice-close" aria-label="Отменить выбор граффити">×</button><div class="wall-choice-help">Свайпни по стене</div><button class="wall-choice-prev" aria-label="Предыдущее граффити">‹</button><button class="wall-choice-next" aria-label="Следующее граффити">›</button><div class="wall-choice-footer"><div aria-live="polite" aria-atomic="true"><small class="wall-choice-count"></small><h2 class="wall-choice-name"></h2><p class="wall-choice-unlocks"></p></div><button class="wall-choice-confirm">Рисовать ↗</button></div>';
     this.picker.querySelector('.wall-choice-close').onclick=()=>{this.s.cancelGraffiti();this.ui.sync();};
+    this.picker.querySelector('.wall-choice-help').innerHTML=gestureHint('swipe')+'<span>Свайпни — выбери рисунок</span>';
     this.picker.querySelector('.wall-choice-prev').onclick=()=>this.cycleArt(-1);
     this.picker.querySelector('.wall-choice-next').onclick=()=>this.cycleArt(1);
     this.picker.querySelector('.wall-choice-confirm').onclick=()=>{this.s.graffiti?.confirm();this.ui.sync();document.getElementById('cancel-graffiti').focus({preventScroll:true});};
@@ -31,7 +33,7 @@ export class DistrictToolsUI{
   }
   destroy(){this.events.abort();}
   availableArt(){return GRAFFITI_CATALOG.filter(item=>graffitiUnlocked(this.s.save,item.id)&&this.s.definitions.some(d=>d.id===item.id));}
-  cycleArt(direction){const g=this.s.graffiti;if(!g?.choosing)return;const list=this.availableArt(),at=list.findIndex(a=>a.id===g.definition.id);if(!list.length)return;this.s.chooseGraffiti(list[(Math.max(0,at)+direction+list.length)%list.length].id);this.ui.sync();}
+  cycleArt(direction){const g=this.s.graffiti;if(!g?.choosing)return;const list=this.availableArt(),at=list.findIndex(a=>a.id===g.definition.id);if(!list.length)return;this.picker.dataset.swiped='true';this.s.chooseGraffiti(list[(Math.max(0,at)+direction+list.length)%list.length].id);this.ui.sync();}
   closeShop(){this.s.mode='district';this.shop.hidden=true;this.s.emit('mode');this.ui.sync();}
   drawMap(){const canvas=document.getElementById('map-canvas');this.map=drawDistrictMap(canvas.getContext('2d'),this.s,canvas.width,canvas.height,false,this.destination??this.s.waypoint,this.atlas?.view);const zones=this.map.territories;this.atlas?.sync(zones);canvas.setAttribute('aria-label','Карта территорий. '+zones.map(z=>z.name+': Зак '+z.zak+', оппы '+z.rival).join('. '));const zak=zones.filter(z=>z.owner==='zak').length,rival=zones.filter(z=>z.owner==='rival').length;document.getElementById('map-progress').textContent='КВАРТАЛЫ  ЗАК '+zak+' : '+rival+' ОППЫ';document.getElementById('city-status').textContent=this.destination?this.destination.label+' · нажми «Проложить маршрут»':'Нажми на карту или метку, чтобы поставить точку маршрута.';}
   sync(){
@@ -47,7 +49,7 @@ export class DistrictToolsUI{
     const g=s.graffiti,wasHidden=this.picker.hidden;this.picker.hidden=s.mode!=='graffiti'||!g?.choosing;
     document.getElementById('app').dataset.choosingGraffiti=String(!this.picker.hidden);
     if(this.picker.hidden)return;
-    if(wasHidden)this.picker.querySelector('.wall-choice-confirm').focus({preventScroll:true});
+    if(wasHidden){this.picker.dataset.swiped='false';this.picker.querySelector('.wall-choice-confirm').focus({preventScroll:true});}
     const signature=g.definition.id+':'+s.save.graffiti_unlocks.join(',');if(signature===this.signature)return;this.signature=signature;
     const available=this.availableArt(),index=available.findIndex(a=>a.id===g.definition.id),next=GRAFFITI_CATALOG.find(a=>!graffitiUnlocked(s.save,a.id));
     this.picker.querySelector('.wall-choice-name').textContent=GRAFFITI_ART[g.definition.id]?.name??g.definition.id;

@@ -1,4 +1,4 @@
-import {routeFade} from './core__route-fade.js?v=97af9e9c19c3';
+import {routeFade} from './core__route-fade.js?v=f08d1772f1b8';
 // The line extends beyond the playable bounds. Whole cars fade only in that
 // scenic continuation; the complete tail has left before the next train loops.
 export function surfaceTrain(m,time){

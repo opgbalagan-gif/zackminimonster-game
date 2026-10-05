@@ -1,6 +1,6 @@
-import {drawTeamMark} from './core__team-marks.js?v=97af9e9c19c3';
-import {drawMapAtlas} from './core__map-atlas.js?v=97af9e9c19c3';
-import {districtTerritories,TERRITORY_COLORS} from './core__territory.js?v=97af9e9c19c3';
+import {drawTeamMark} from './core__team-marks.js?v=f08d1772f1b8';
+import {drawMapAtlas} from './core__map-atlas.js?v=f08d1772f1b8';
+import {districtTerritories,TERRITORY_COLORS} from './core__territory.js?v=f08d1772f1b8';
 export function mapTransform(world,width,height,player=null,view=null){
   const b=player?{x:player.x-550,y:player.y-550,w:1100,h:1100}:world.mapBounds;
   const scale=Math.min((width-(view?40:18))/b.w,(height-(view?210:18))/b.h)*(view?.zoom??1),center=view?.center??{x:b.x+b.w/2,y:b.y+b.h/2},ox=width/2-center.x*scale,oy=height/2+ (view?14:0)-center.y*scale;

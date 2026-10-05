@@ -1,14 +1,14 @@
-import {moveAlongPath,distance} from './core__geometry.js?v=97af9e9c19c3';
-import {recognition,rememberWorks,RECOGNITION_TIERS} from './core__recognition.js?v=97af9e9c19c3';
+import {moveAlongPath,distance} from './core__geometry.js?v=f08d1772f1b8';
+import {recognition,rememberWorks,RECOGNITION_TIERS} from './core__recognition.js?v=f08d1772f1b8';
 
 export const HOME_TOUR=[
-  ['Знакомый потолок','Кровать — мой первый спонсор. Пока платит только сном.','Нажимай на подсвеченные предметы. Начнём с кровати.','О КРОВАТИ'],
-  ['Ночью — на стены','Днём все куда-то спешат. Ночью хотя бы стены свободны.','Поспи до ночи — тогда можно рисовать.','СПАТЬ ДО НОЧИ'],
-  ['Шкаф с характером','Одежда чистая. Ненадолго.','Нажми на одежду в шкафу и примерь образ.','ДАЛЬШЕ'],
-  ['Цвет вместо слов','Баллон маленький. Амбиции — нет.','Нажми на полку с баллонами. Выбери цвет брызг.','ДАЛЬШЕ'],
-  ['Место для истории','Полка пока не ломится. Есть над чем работать.','На верхней полке — трофеи за твои работы.','ДАЛЬШЕ'],
-  ['Сохраняй своё','Память у города короткая. У этой кнопки — получше.','Нажми на рабочий стол, чтобы сохранить прогресс.','ДАЛЬШЕ'],
-  ['Пора оставить след','Квартира осмотрена. Теперь посмотрим, что скажет улица.','Выходи во двор. Первая стена рядом с домом.','НА УЛИЦУ']
+  ['Нажми на кровать','Кровать — мой первый спонсор. Пока платит только сном.','Светящийся предмет — доступное действие.','О КРОВАТИ'],
+  ['Ночью — на стены','Днём все куда-то спешат. Ночью хотя бы стены свободны.','Поспи до ночи.','СПАТЬ ДО НОЧИ'],
+  ['Шкаф с характером','Одежда чистая. Ненадолго.','Шкаф — выбрать одежду.','ДАЛЬШЕ'],
+  ['Цвет вместо слов','Баллон маленький. Амбиции — нет.','Баллоны — выбрать цвет.','ДАЛЬШЕ'],
+  ['Место для истории','Полка пока не ломится. Есть над чем работать.','Полка — твои трофеи.','ДАЛЬШЕ'],
+  ['Сохраняй своё','Память у города короткая. У этой кнопки — получше.','Рабочий стол — сохранить игру.','ДАЛЬШЕ'],
+  ['Пора оставить след','Квартира осмотрена. Теперь посмотрим, что скажет улица.','Дверь — выйти на улицу.','НА УЛИЦУ']
 ];
 export class StreetLife{
   constructor(s){this.s=s;this.visitors=[];this.spawnIn=2;this.sleeping=0;this.saveIn=15;if(rememberWorks(s))s.persist();this.knownLevel=this.fame.level;}
@@ -23,7 +23,9 @@ export class StreetLife{
   get night(){return this.state.period==='night';}
   get tour(){return !this.s.world.sandbox&&this.s.mode==='hideout'&&this.s.save.campaign.homeIntroStep<7;}
   get introStep(){return this.s.save.campaign.homeIntroStep;}
-  iconVisible(id){if(!this.tour)return id!=='pet';return ({rest:1,wardrobe:2,sprays:3,collection:4,save:5,music:6}[id]??99)<=this.introStep;}
+  get homeFocus(){return ['rest','rest','wardrobe','sprays','collection','save','exit'][this.introStep]??null;}
+  iconVisible(id){if(!this.tour)return id!=='pet';return ({rest:0,wardrobe:2,sprays:3,collection:4,save:5,music:6,exit:6}[id]??99)<=this.introStep;}
+  finishHomeObject(id){if(this.tour&&this.homeFocus===id&&['wardrobe','sprays','collection','save'].includes(id))this.nextIntro();}
   tourLesson(){const [title,line,help,button]=HOME_TOUR[this.introStep];return {step:1,who:'ЗАК · ДОМА '+(this.introStep+1)+'/7',title,line,help,button};}
   nextIntro(){
     if(this.sleeping)return;

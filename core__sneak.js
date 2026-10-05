@@ -1,5 +1,5 @@
-import {createTutorialWorld,TutorialFlow} from './core__tutorial.js?v=97af9e9c19c3';
-import {distance,moveAlongPath} from './core__geometry.js?v=97af9e9c19c3';
+import {createTutorialWorld,TutorialFlow} from './core__tutorial.js?v=f08d1772f1b8';
+import {distance,moveAlongPath} from './core__geometry.js?v=f08d1772f1b8';
 export function createSneakWorld(){
   const w=createTutorialWorld();w.id='sneak';w.levelNumber=2;w.name='ТИШЕ УЛИЦЫ';w.width=980;w.height=700;
   w.walkableAreas=[{x:72,y:92,w:810,h:460}];w.mapBounds={x:70,y:70,w:820,h:510};w.tutorialEntry={x:838,y:470};
@@ -9,12 +9,12 @@ export function createSneakWorld(){
   return w;
 }
 const lessons={
-  gift:{step:1,title:'Новый рисунок',who:'ЗАК',line:'Новый рисунок. Осталось найти стену, которая ещё не в курсе.',help:'PAPER GHOST — твой. Зелёные баки помогут скрыться.',button:'ЗАБРАТЬ РИСУНОК'},
-  paint:{step:2,title:'На стену',who:'ЗАК',line:'Сегодня у стены премьера. Билеты не нужны.',help:'Нарисуй PAPER GHOST. Запомни ближайший бак.',button:'К СТЕНЕ'},
-  hide:{step:3,title:'Спрячься',who:'ЗАК',line:'Критик в форме. Кажется, пора в закрытую выставку.',help:'Подойди к зелёному баку → «Спрятаться».',button:'К БЛИЖНЕМУ БАКУ'},
-  hidden:{step:4,title:'Пережди патруль',who:'ЗАК',line:'Аромат сложный. Зато меня не видно.',help:'Оставайся внутри, пока полицейский не уйдёт.'},
-  photo:{step:5,title:'Сохрани в кадре',who:'SMS · ZAK MINI MONSTER',line:'У стены жизнь короткая. У хорошего снимка — подлиннее.',help:'Открой телефон у стены и сфотографируй рисунок.',button:'ОТКРЫТЬ ТЕЛЕФОН'},
-  complete:{step:6,title:'Чисто!',who:'ЗАК',line:'Патруль ушёл, работа осталась. Фотография — тоже.',help:'+75 REP. Снимок ждёт в галерее.',button:'ДОМОЙ'}
+  gift:{step:1,title:'Новый рисунок',who:'ЗАК',line:'Новый рисунок. Осталось найти стену, которая ещё не в курсе.',help:'Новый рисунок — твой.',button:'ЗАБРАТЬ РИСУНОК'},
+  paint:{step:2,title:'На стену',who:'ЗАК',line:'Сегодня у стены премьера. Билеты не нужны.',help:'Нарисуй его на стене.',button:'К СТЕНЕ'},
+  hide:{step:3,title:'Спрячься',who:'ЗАК',line:'Критик в форме. Кажется, пора в закрытую выставку.',help:'Беги к зелёному баку.',button:'К БЛИЖНЕМУ БАКУ'},
+  hidden:{step:4,title:'Пережди патруль',who:'ЗАК',line:'Аромат сложный. Зато меня не видно.',help:'Подожди, пока патруль уйдёт.'},
+  photo:{step:5,title:'Сохрани в кадре',who:'SMS · ZAK MINI MONSTER',line:'У стены жизнь короткая. У хорошего снимка — подлиннее.',help:'У стены открой телефон → камеру.',button:'ОТКРЫТЬ ТЕЛЕФОН'},
+  complete:{step:6,title:'Район ждёт',who:'ЗАК',line:'Патруль ушёл, работа осталась. Фотография — тоже.',help:'+75 REP. Выходим в открытый район.',button:'В РАЙОН'}
 };
 export class SneakFlow extends TutorialFlow{
   constructor(s){
@@ -41,7 +41,7 @@ export class SneakFlow extends TutorialFlow{
     if(this.stage==='paint'){if(!s.life.night)s.routeTo(s.world.hideout,'Дом / поспать');else s.routeTo(s.world.targets[0].approach,'Новый рисунок');}
     if(this.stage==='hide'){const b=s.world.bins.reduce((a,b)=>distance(a.approach,s.player)<distance(b.approach,s.player)?a:b);s.routeTo(b.approach,'Бак / спрятаться');}
     if(this.stage==='photo')s.emit('phone-open');
-    if(this.stage==='complete')s.routeTo(s.world.hideout,'Дом');
+    if(this.stage==='complete')this.nextLevel('sandbox');
   }
   painted(){const s=this.s;s.graffiti=null;s.mode='district';s.player.state='IDLE';this.wall='own';s.painted.add(s.world.targets[0].wall_id);s.world.targets[0].state='PAINTED';this.set('hide');this.startPatrol();}
   startPatrol(){this.actor={...this.s.world.tutorialEntry,sprite:'officer',path:[],repath:0,moving:false};this.s.heat=2;this.age=0;}
@@ -49,6 +49,7 @@ export class SneakFlow extends TutorialFlow{
   finishPhoto(){if(this.stage!=='photo')return;const s=this.s;if(!s.save.campaign.sneakComplete)s.save.rep+=75;s.save.campaign.sneakComplete=true;this.set('complete');s.notice('УРОВЕНЬ 02 ПРОЙДЕН · +75 REP');}
   goHome(){if(['hide','hidden'].includes(this.stage)){this.s.notice('Сначала спрячься от патруля в баке.');return;}this.s.mode='hideout';this.s.near=null;this.s.persist();}
   update(dt){
+    if(this.stage==='complete'){this.age+=dt;if(this.age>=1.2)this.nextLevel('sandbox');return;}
     if(this.s.mode!=='district')return;this.age+=dt;
     if(this.stage==='hide'){
       this.actor.repath-=dt;if(this.actor.repath<=0){this.actor.path=this.s.nav.path(this.actor,this.s.player);this.actor.repath=.5;}
