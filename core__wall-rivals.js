@@ -1,5 +1,5 @@
-import {distance,moveAlongPath} from './core__geometry.js?v=f08d1772f1b8';
-import {wallOwner} from './core__territory.js?v=f08d1772f1b8';
+import {distance,moveAlongPath} from './core__geometry.js?v=8a0ece6e2747';
+import {wallOwner} from './core__territory.js?v=8a0ece6e2747';
 export const PAINT_DRY_SECONDS=60;
 export function dryingOpacity(save,id){return save.wall_damage[id]==='clean'?0:save.wall_damage[id]==='cleaner'?Math.max(0,Math.min(1,(save.wall_drying?.[id]??PAINT_DRY_SECONDS)/PAINT_DRY_SECONDS)):1;}
 export function wallCrewSize(s){

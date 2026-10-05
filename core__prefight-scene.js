@@ -1,4 +1,4 @@
-import {dialogFocus} from './core__dialog-focus.js?v=f08d1772f1b8';
+import {dialogFocus} from './core__dialog-focus.js?v=8a0ece6e2747';
 export class PrefightScene{
   constructor(session,audio){
     this.s=session;this.audio=audio;this.active=false;this.phase='intro';
@@ -18,7 +18,7 @@ export class PrefightScene{
     this.video.onplaying=()=>{clearTimeout(this.timer);this.timer=setTimeout(()=>this.failed(),18000);};
   }
   play(){
-    if(this.active)return;this.active=true;this.s.cinematic=true;this.s.player.moving=false;this.el.hidden=false;this.focus.open();this.el.focus();this.audio.radio.media.muted=true;
+    if(this.active)return;this.active=true;this.s.cinematic=true;this.s.player.moving=false;this.el.hidden=false;this.focus.open();this.el.focus();this.resumeRadio=this.audio.radio.wanted;this.audio.radio.media.muted=true;
     this.startVideo();
   }
   startVideo(){
@@ -61,6 +61,6 @@ export class PrefightScene{
     this.startVideo();
   }
   finish(){
-    if(!this.active)return;this.active=false;clearTimeout(this.timer);cancelAnimationFrame(this.raf);this.video.pause();this.audio.radio.media.muted=!this.audio.enabled;this.el.hidden=true;this.focus.close();this.s.cinematic=false;this.s.tutorial.finishFight(this.s.tutorial.duel.won);
+    if(!this.active)return;this.active=false;clearTimeout(this.timer);cancelAnimationFrame(this.raf);this.video.pause();this.audio.radio.media.muted=!this.audio.enabled;this.el.hidden=true;this.focus.close();this.s.cinematic=false;this.s.tutorial.finishFight(this.s.tutorial.duel.won);if(this.resumeRadio)void this.audio.radio.resume();
   }
 }

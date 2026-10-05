@@ -1,9 +1,9 @@
-import {project} from './core__geometry.js?v=f08d1772f1b8';
-import {sceneLight,shadowFootprint} from './core__lighting.js?v=f08d1772f1b8';
-import {polygon} from './content__district_01__terrain.js?v=f08d1772f1b8';
-import {routeFade} from './core__route-fade.js?v=f08d1772f1b8';
-import {STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=f08d1772f1b8';
-import {vehicleBody} from './core__traffic-fleet.js?v=f08d1772f1b8';
+import {project} from './core__geometry.js?v=8a0ece6e2747';
+import {sceneLight,shadowFootprint} from './core__lighting.js?v=8a0ece6e2747';
+import {polygon} from './content__district_01__terrain.js?v=8a0ece6e2747';
+import {routeFade} from './core__route-fade.js?v=8a0ece6e2747';
+import {STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=8a0ece6e2747';
+import {vehicleBody} from './core__traffic-fleet.js?v=8a0ece6e2747';
 export function groundLighting(c,s,w,h,continuation={}){
   const light=sceneLight(s.life.night),cam=s.camera;
   const visible=(x,y,margin=500)=>{const p=project(x,y);return Math.abs(p.x-cam.x)<w/cam.zoom/2+margin&&Math.abs(p.y-cam.y)<h/cam.zoom/2+margin;};

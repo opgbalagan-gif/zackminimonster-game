@@ -1,5 +1,5 @@
-import {moveAlongPath,distance} from './core__geometry.js?v=f08d1772f1b8';
-import {recognition,rememberWorks,RECOGNITION_TIERS} from './core__recognition.js?v=f08d1772f1b8';
+import {moveAlongPath,distance} from './core__geometry.js?v=8a0ece6e2747';
+import {recognition,rememberWorks,RECOGNITION_TIERS} from './core__recognition.js?v=8a0ece6e2747';
 
 export const HOME_TOUR=[
   ['Нажми на кровать','Кровать — мой первый спонсор. Пока платит только сном.','Светящийся предмет — доступное действие.','О КРОВАТИ'],

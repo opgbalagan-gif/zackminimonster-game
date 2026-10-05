@@ -1,4 +1,4 @@
-import {project} from './core__geometry.js?v=f08d1772f1b8';
+import {project} from './core__geometry.js?v=8a0ece6e2747';
 
 // Shared wheel registration; retain fractional placement during movement.
 export function illustratedTrain(c,car,m,night,images){

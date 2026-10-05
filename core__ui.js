@@ -1,16 +1,16 @@
-import {GraffitiView} from './core__graffiti-view.js?v=f08d1772f1b8';
-import {HideoutUI} from './core__hideout-ui.js?v=f08d1772f1b8';
-import {CourtView} from './core__court-view.js?v=f08d1772f1b8';
-import {PhoneUI} from './core__phone-ui.js?v=f08d1772f1b8';
-import {PeriodTransition} from './core__period-transition.js?v=f08d1772f1b8';
-import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=f08d1772f1b8';
-import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=f08d1772f1b8';
-import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=f08d1772f1b8';
-import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=f08d1772f1b8';
-import {regionAt,gateMessage} from './core__city-progress.js?v=f08d1772f1b8';
-import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=f08d1772f1b8';
-import {DistrictToolsUI} from './core__district-tools-ui.js?v=f08d1772f1b8';
-import {PrefightScene} from './core__prefight-scene.js?v=f08d1772f1b8';
+import {GraffitiView} from './core__graffiti-view.js?v=8a0ece6e2747';
+import {HideoutUI} from './core__hideout-ui.js?v=8a0ece6e2747';
+import {CourtView} from './core__court-view.js?v=8a0ece6e2747';
+import {PhoneUI} from './core__phone-ui.js?v=8a0ece6e2747';
+import {PeriodTransition} from './core__period-transition.js?v=8a0ece6e2747';
+import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=8a0ece6e2747';
+import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=8a0ece6e2747';
+import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=8a0ece6e2747';
+import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=8a0ece6e2747';
+import {regionAt,gateMessage} from './core__city-progress.js?v=8a0ece6e2747';
+import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=8a0ece6e2747';
+import {DistrictToolsUI} from './core__district-tools-ui.js?v=8a0ece6e2747';
+import {PrefightScene} from './core__prefight-scene.js?v=8a0ece6e2747';
 const $=id=>document.getElementById(id);
 export class GameUI{
   constructor(callbacks){
@@ -133,9 +133,9 @@ export class GameUI{
     document.querySelector('.district-title .eyebrow').textContent=region?'DISTRICT 0'+(s.city.findIndex(r=>r.id===region.id)+1):'MINI MONSTER CITY';
     const radio=this.audio.radio;
     $('radio-panel').hidden=radio.state==='off';
-    $('radio-status').textContent=radio.state==='error'?radio.message:radio.state==='loading'?'Подключаемся к эфиру…':!this.audio.enabled?'Звук выключен · кнопка ♪':radio.media.volume===0?'Громкость 0%':'В ЭФИРЕ · HIP-HOP / R&B';
+    $('radio-status').textContent=['error','paused'].includes(radio.state)?radio.message:radio.state==='loading'?'Подключаемся к эфиру…':!this.audio.enabled?'Звук выключен · кнопка ♪':radio.media.volume===0?'Громкость 0%':'В ЭФИРЕ · HIP-HOP / R&B';
     $('radio-panel').dataset.state=radio.state;
-    $('radio-retry').hidden=radio.state!=='error';
+    $('radio-retry').hidden=!['error','paused'].includes(radio.state);
     $('radio-volume-value').textContent=Math.round(radio.media.volume*100)+'%';
     if(s.mode==='hideout')this.hideoutUI?.sync();
     $('hideout-ui').hidden=s.mode!=='hideout';$('district-ui').hidden=!['district','caught'].includes(s.mode);

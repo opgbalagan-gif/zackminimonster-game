@@ -1,11 +1,11 @@
-import {AimController,MotionAim} from './core__motion-aim.js?v=f08d1772f1b8';
-import {setUIButton,uiIcon} from './core__ui-kit.js?v=f08d1772f1b8';
-import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=f08d1772f1b8';
-import {nearbyPhotoSpot} from './core__photo-spots.js?v=f08d1772f1b8';
-import {bindCanvasGesture} from './core__canvas-gesture.js?v=f08d1772f1b8';
-import {appIcon,foldPhoneIcon,phoneGlyph} from './core__phone-icons.js?v=f08d1772f1b8';
-import {dialogFocus} from './core__dialog-focus.js?v=f08d1772f1b8';
-import {instagramScreen} from './core__phone-instagram.js?v=f08d1772f1b8';
+import {AimController,MotionAim} from './core__motion-aim.js?v=8a0ece6e2747';
+import {setUIButton,uiIcon} from './core__ui-kit.js?v=8a0ece6e2747';
+import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=8a0ece6e2747';
+import {nearbyPhotoSpot} from './core__photo-spots.js?v=8a0ece6e2747';
+import {bindCanvasGesture} from './core__canvas-gesture.js?v=8a0ece6e2747';
+import {appIcon,foldPhoneIcon,phoneGlyph} from './core__phone-icons.js?v=8a0ece6e2747';
+import {dialogFocus} from './core__dialog-focus.js?v=8a0ece6e2747';
+import {instagramScreen} from './core__phone-instagram.js?v=8a0ece6e2747';
 export class PhoneUI{
   constructor(s,renderer,audio){
     this.s=s;this.renderer=renderer;this.audio=audio;this.aim=new AimController();this.motion=new MotionAim(this.aim);this.steady=0;this.screen='messages';this.previous={x:0,y:0};
@@ -92,8 +92,8 @@ export class PhoneUI{
     const camera=this.el.querySelector('.phone-camera');camera.hidden=!photoSpot;
     camera.title=photoSpot?'Снять: '+photoSpot.name:'';
     if(this.s.mode==='phone'&&this.screen==='radio'){
-      const radio=this.audio.radio;this.el.querySelector('.phone-radio-status').textContent=radio.state==='error'?radio.message:radio.state==='loading'?'Подключаемся…':radio.state==='playing'?'В ЭФИРЕ · HIP-HOP / R&B':'Твой саундтрек улиц';
-      const button=this.el.querySelector('.phone-radio-play');button.textContent=radio.wanted?'Выключить':'Включить';button.setAttribute('aria-pressed',String(radio.wanted));
+      const radio=this.audio.radio;this.el.querySelector('.phone-radio-status').textContent=['error','paused'].includes(radio.state)?radio.message:radio.state==='loading'?'Подключаемся…':radio.state==='playing'?'В ЭФИРЕ · HIP-HOP / R&B':'Твой саундтрек улиц';
+      const button=this.el.querySelector('.phone-radio-play');button.textContent=['error','paused'].includes(radio.state)?'Продолжить':radio.wanted?'Выключить':'Включить';button.setAttribute('aria-pressed',String(radio.wanted));
     }
     if(this.s.mode!=='phone'||this.screen!=='camera')return;
     const r=this.canvas.getBoundingClientRect();this.canvas.width=Math.round(r.width);this.canvas.height=Math.round(r.height);

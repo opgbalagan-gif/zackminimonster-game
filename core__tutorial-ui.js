@@ -1,5 +1,5 @@
-import {uiIcon,setUIButton,applyUIComponents} from './core__ui-kit.js?v=f08d1772f1b8';
-import {gestureHint} from './core__gesture-hints.js?v=f08d1772f1b8';
+import {uiIcon,setUIButton,applyUIComponents} from './core__ui-kit.js?v=8a0ece6e2747';
+import {gestureHint} from './core__gesture-hints.js?v=8a0ece6e2747';
 export class TutorialUI{
   constructor(session,onComplete){
     this.s=session;this.signature='';this.panel=document.createElement('section');this.panel.id='tutorial-panel';this.panel.className='tutorial-hint';this.panel.setAttribute('aria-label','Обучение');

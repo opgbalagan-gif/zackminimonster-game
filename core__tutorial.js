@@ -1,5 +1,5 @@
-import {distance,moveAlongPath} from './core__geometry.js?v=f08d1772f1b8';
-import {TapDuel} from './core__tap-duel.js?v=f08d1772f1b8';
+import {distance,moveAlongPath} from './core__geometry.js?v=8a0ece6e2747';
+import {TapDuel} from './core__tap-duel.js?v=8a0ece6e2747';
 
 export const TUTORIAL_WALL='TUTORIAL_FIRST_WALL';
 export const TUTORIAL_FACADE='TUTORIAL_HOME_FACADE';

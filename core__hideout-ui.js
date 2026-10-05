@@ -1,7 +1,7 @@
-import {OUTFITS,INKS,TROPHIES,outfit,ink,heroSprite,roomLayout,ROOM_POINTS,ROOM_REGIONS,wallCount} from './core__hideout.js?v=f08d1772f1b8';
-import {homeIcon} from './core__home-icons.js?v=f08d1772f1b8';
-import {drawBall} from './core__ball-art.js?v=f08d1772f1b8';
-import {RoomMusicScene} from './core__room-music-scene.js?v=f08d1772f1b8';
+import {OUTFITS,INKS,TROPHIES,outfit,ink,heroSprite,roomLayout,ROOM_POINTS,ROOM_REGIONS,wallCount} from './core__hideout.js?v=8a0ece6e2747';
+import {homeIcon} from './core__home-icons.js?v=8a0ece6e2747';
+import {drawBall} from './core__ball-art.js?v=8a0ece6e2747';
+import {RoomMusicScene} from './core__room-music-scene.js?v=8a0ece6e2747';
 const $=id=>document.getElementById(id);
 export class HideoutUI{
   constructor(session,renderer,onChange,audio){
@@ -36,7 +36,7 @@ export class HideoutUI{
     this.audio=audio;
     for(const el of document.querySelectorAll('[data-room-action]'))el.onclick=()=>{
       if(session.cinematic)return;
-      if(el.dataset.roomAction==='music'){const turningOn=!audio.radio.wanted;audio.radio.toggle();if(turningOn){this.focusObject('music');session.roomAction('music');this.musicScene.play();}}else session.roomAction(el.dataset.roomAction);
+      if(el.dataset.roomAction==='music'){const retry=['paused','error'].includes(audio.radio.state),turningOn=!audio.radio.wanted&&!retry;audio.radio.toggle();if(turningOn){this.focusObject('music');session.roomAction('music');this.musicScene.play();}}else session.roomAction(el.dataset.roomAction);
       onChange();
     };
     $('home-panel-close').onclick=()=>this.open('home');
@@ -108,7 +108,7 @@ export class HideoutUI{
     $('home-status-text').textContent=s.room.action==='rest'?'Пять минут тишины…':s.room.action==='pet'?'MINI рад тебя видеть.':s.room.beat?'Наш маленький afterparty.':'Дома. Можно выдохнуть.';
     for(const el of document.querySelectorAll('[data-room-action="music"]')){
       el.setAttribute('aria-pressed',String(this.audio.radio.wanted));
-      el.setAttribute('aria-label',this.audio.radio.wanted?'Выключить радио':'Включить хип-хоп радио');
+      el.setAttribute('aria-label',['paused','error'].includes(this.audio.radio.state)?'Продолжить радио':this.audio.radio.wanted?'Выключить радио':'Включить хип-хоп радио');
     }
     const signature=JSON.stringify([s.save.player,s.save.hideout,s.save.painted_walls.length,s.save.basketball]);
     if(signature===this.signature)return;this.signature=signature;

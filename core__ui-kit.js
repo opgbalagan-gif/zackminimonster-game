@@ -1,4 +1,4 @@
-import {installArtTokens} from './core__art-direction.js?v=f08d1772f1b8';
+import {installArtTokens} from './core__art-direction.js?v=8a0ece6e2747';
 const paths={
   fight:'<path d="M6 12V7a2 2 0 0 1 4 0V5a2 2 0 0 1 4 0v1a2 2 0 0 1 4 0v2a2 2 0 0 1 4 0v8l-4 7H9l-6-9a2 2 0 0 1 3-2ZM10 7v5m4-6v6m4-4v5M9 19h10"/>',
   talk:'<path d="M3 4h20v14H12l-6 5v-5H3Z"/><path d="M7 9h12M7 13h8"/>',
