@@ -1,9 +1,9 @@
-import {dialogFocus} from './core__dialog-focus.js?v=8a0ece6e2747';
+import {dialogFocus} from './core__dialog-focus.js?v=76f80bdf5bd9';
 export class PrefightScene{
   constructor(session,audio){
     this.s=session;this.audio=audio;this.active=false;this.phase='intro';
     this.el=document.createElement('section');this.el.id='prefight-scene';this.el.hidden=true;this.el.setAttribute('role','dialog');this.el.setAttribute('aria-modal','true');this.el.setAttribute('aria-label','Дуэль за стену');
-    this.el.innerHTML='<div class="film-stage"><img class="film-last-frame" alt="Зак и соперник перед дракой" hidden><video playsinline muted preload="none"></video><div class="film-duel" hidden><div class="film-tap-sides"><button class="film-tap-zak" aria-label="Тапай за Зака"></button><div class="film-tap-rival" aria-label="Соперник играет автоматически"></div></div></div><button class="prefight-play" aria-label="Продолжить видео" hidden><span aria-hidden="true">▷</span></button></div>';
+    this.el.innerHTML='<div class="film-stage"><img class="film-last-frame" alt="Зак и соперник перед дракой" hidden><video playsinline muted preload="none"></video><div class="film-duel" hidden><div class="film-tap-sides"><button class="film-tap-zak" aria-label="Тапай за Зака"><span class="film-tap-prompt" aria-hidden="true">TAP!</span></button><div class="film-tap-rival" aria-label="Соперник играет автоматически"></div></div></div><button class="prefight-play" aria-label="Продолжить видео" hidden><span aria-hidden="true">▷</span></button></div>';
     document.getElementById('app').append(this.el);this.el.tabIndex=-1;this.video=this.el.querySelector('video');this.frame=this.el.querySelector('.film-last-frame');
     this.frame.src='./content__levels__first-mark__art__prefight-last-frame-v19.png';
     this.video.poster='./content__levels__first-mark__art__prefight-portrait-v18.png';this.video.src='./content__levels__first-mark__art__prefight-kling-portrait-v18.mp4';this.video.muted=true;
@@ -18,6 +18,7 @@ export class PrefightScene{
     this.video.onplaying=()=>{clearTimeout(this.timer);this.timer=setTimeout(()=>this.failed(),18000);};
   }
   play(){
+    if(!this.active){this.phase='intro';this.el.dataset.phase='intro';this.shownRival=0;this.paused=false;this.frame.hidden=true;this.duelEl.hidden=true;this.playButton.hidden=true;this.video.hidden=false;this.video.muted=true;this.video.poster='./content__levels__first-mark__art__prefight-portrait-v18.png';this.video.src='./content__levels__first-mark__art__prefight-kling-portrait-v18.mp4';this.video.currentTime=0;for(const mark of this.el.querySelectorAll('.film-tap-mark'))mark.remove();}
     if(this.active)return;this.active=true;this.s.cinematic=true;this.s.player.moving=false;this.el.hidden=false;this.focus.open();this.el.focus();this.resumeRadio=this.audio.radio.wanted;this.audio.radio.media.muted=true;
     this.startVideo();
   }

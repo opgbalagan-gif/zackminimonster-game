@@ -1,4 +1,4 @@
-import {dialogFocus} from './core__dialog-focus.js?v=8a0ece6e2747';
+import {dialogFocus} from './core__dialog-focus.js?v=76f80bdf5bd9';
 export class RoomMusicScene{
   constructor(session,audio){
     this.audio=audio;

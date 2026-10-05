@@ -1,4 +1,4 @@
-import {roomLayout,roomPoint,heroSprite,ink} from './core__hideout.js?v=8a0ece6e2747';
+import {roomLayout,roomPoint,heroSprite,ink} from './core__hideout.js?v=76f80bdf5bd9';
 export function drawTrophy(c,id,atlas,x,y,size){
   if(id==='mini')atlas.draw(c,'companion',x,y,null,size);
   else if(id==='metro'){
@@ -20,10 +20,11 @@ export function drawTrophy(c,id,atlas,x,y,size){
 }
 export function renderHideout(c,s,w,h,atlas){
   c.imageSmoothingEnabled=true;c.fillStyle='#111720';c.fillRect(0,0,w,h);
-  const backdrop=s.life&&!s.life.night?atlas.images.reference_background_day:atlas.images.reference_background;
+  const dark=s.life?.clock.darkness??1,backdrop=atlas.images.reference_background_day;
   if(backdrop)c.drawImage(backdrop,0,600,1024,936,0,0,w,h);
+  if(atlas.images.reference_background){c.save();c.globalAlpha=dark;c.drawImage(atlas.images.reference_background,0,600,1024,936,0,0,w,h);c.restore();}
   const r=roomLayout(w,h,s.world.tutorial&&!s.world.sandbox,s.room.camera);c.save();c.beginPath();c.rect(0,0,w,r.clipBottom);c.clip();
-  if(s.life?.night)c.filter='brightness(.82) saturate(.92)';
+  c.filter='brightness('+(1-.18*dark)+') saturate('+(1-.08*dark)+')';
   c.drawImage(atlas.images.room,r.x,r.y,r.w,r.h);c.filter='none';
   c.imageSmoothingEnabled=false;
   const local=(x,y)=>{const p=roomPoint(x,y);return {x:r.x+p.x*r.w,y:r.y+p.y*r.h};};

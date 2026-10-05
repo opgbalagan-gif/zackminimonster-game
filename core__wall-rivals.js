@@ -1,5 +1,5 @@
-import {distance,moveAlongPath} from './core__geometry.js?v=8a0ece6e2747';
-import {wallOwner} from './core__territory.js?v=8a0ece6e2747';
+import {distance,moveAlongPath} from './core__geometry.js?v=76f80bdf5bd9';
+import {wallOwner} from './core__territory.js?v=76f80bdf5bd9';
 export const PAINT_DRY_SECONDS=60;
 export function dryingOpacity(save,id){return save.wall_damage[id]==='clean'?0:save.wall_damage[id]==='cleaner'?Math.max(0,Math.min(1,(save.wall_drying?.[id]??PAINT_DRY_SECONDS)/PAINT_DRY_SECONDS)):1;}
 export function wallCrewSize(s){
@@ -65,6 +65,11 @@ export class WallRivals{
       if(this.noticeIn===0){s.notice(a.kind==='cleaner'?'Дворники закрашивают стены. Контроль кварталов — на карте.':'Соперники занимают стены. Смотри контроль кварталов на карте.');this.noticeIn=25;}
       this.leave(a);
     }
+  }
+  canChallenge(a){
+    const s=this.s;if(!a||s.mode!=='district'||!this.actors.includes(a)||a.kind!=='rival'||!['walk','paint'].includes(a.phase)||distance(s.player,a)>72)return false;
+    const path=s.nav.path(s.player,a);let length=0,last=s.player;for(const p of path){length+=distance(last,p);last=p;}
+    return (path.length>0||distance(s.player,a)<20)&&length<110;
   }
   leave(a){a.phase='leave';a.line='';a.path=this.s.nav.path(a,a.entry);}
   repaired(id){

@@ -1,11 +1,11 @@
-import {AimController,MotionAim} from './core__motion-aim.js?v=8a0ece6e2747';
-import {setUIButton,uiIcon} from './core__ui-kit.js?v=8a0ece6e2747';
-import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=8a0ece6e2747';
-import {nearbyPhotoSpot} from './core__photo-spots.js?v=8a0ece6e2747';
-import {bindCanvasGesture} from './core__canvas-gesture.js?v=8a0ece6e2747';
-import {appIcon,foldPhoneIcon,phoneGlyph} from './core__phone-icons.js?v=8a0ece6e2747';
-import {dialogFocus} from './core__dialog-focus.js?v=8a0ece6e2747';
-import {instagramScreen} from './core__phone-instagram.js?v=8a0ece6e2747';
+import {AimController,MotionAim} from './core__motion-aim.js?v=76f80bdf5bd9';
+import {setUIButton,uiIcon} from './core__ui-kit.js?v=76f80bdf5bd9';
+import {cameraFrame,CAMERA_MURAL} from './core__camera-framing.js?v=76f80bdf5bd9';
+import {nearbyPhotoSpot} from './core__photo-spots.js?v=76f80bdf5bd9';
+import {bindCanvasGesture} from './core__canvas-gesture.js?v=76f80bdf5bd9';
+import {appIcon,foldPhoneIcon,phoneGlyph} from './core__phone-icons.js?v=76f80bdf5bd9';
+import {dialogFocus} from './core__dialog-focus.js?v=76f80bdf5bd9';
+import {instagramScreen} from './core__phone-instagram.js?v=76f80bdf5bd9';
 export class PhoneUI{
   constructor(s,renderer,audio){
     this.s=s;this.renderer=renderer;this.audio=audio;this.aim=new AimController();this.motion=new MotionAim(this.aim);this.steady=0;this.screen='messages';this.previous={x:0,y:0};
@@ -17,7 +17,7 @@ export class PhoneUI{
     this.el.setAttribute('role','dialog');this.el.setAttribute('aria-modal','true');
     this.focusScope=dialogFocus(this.el,()=>this.screen==='camera'?this.messages():this.close());
     this.el.querySelector('.phone-close').innerHTML=phoneGlyph('close');this.el.querySelector('.camera-centre').innerHTML=phoneGlyph('reset');
-    this.toggle.innerHTML=foldPhoneIcon();this.el.querySelector('.flip-phone header>span').textContent='ZAK DUO';this.el.querySelector('.phone-model').textContent='Designed for your streets';
+    this.toggle.innerHTML=foldPhoneIcon();this.el.querySelector('.flip-phone header>span').innerHTML='<time class=phone-clock></time><small class=phone-clock-period></small>';this.el.querySelector('.phone-model').textContent='Designed for your streets';
     this.el.querySelector('.phone-lcd').insertAdjacentHTML('beforeend','<div class="phone-radio" hidden><small>STREET RADIO</small><h2>181.FM<br>THE BEAT</h2><p class="phone-radio-status" role="status"></p><button class="phone-radio-play">ВКЛЮЧИТЬ</button><label class="phone-volume-label">Громкость <input class="phone-radio-volume" type="range" min="0" max="100" aria-label="Громкость радио в телефоне"></label></div>');
     this.el.querySelector('nav').insertAdjacentHTML('beforeend','<button class="phone-app phone-radio-app">'+uiIcon('music')+'<span>Радио</span></button><button class="phone-app phone-levels">'+uiIcon('rep')+'<span>Уровни</span></button>');
     const bind=(q,f)=>this.el.querySelector(q).onclick=f;
@@ -86,6 +86,7 @@ export class PhoneUI{
   }
   thumbnail(){const photo=this.s.save.phone.photos.at(-1);if(!photo)return;const button=this.el.querySelector('.camera-album');button.replaceChildren(this.photoMedia(photo));}
   update(dt){
+    const clock=this.s.life?.clock;this.el.querySelector('.phone-clock').textContent=clock?.text??'';this.el.querySelector('.phone-clock-period').textContent=clock?clock.label+' · день '+this.s.life.state.day:'';
     this.toggle.hidden=!['district','hideout'].includes(this.s.mode);this.toggle.dataset.unread=String(this.s.save.phone.unlocked&&!this.s.save.phone.read);
     for(const selector of ['.phone-sms','.phone-camera','.phone-album'])this.el.querySelector(selector).disabled=!this.s.save.phone.unlocked;
     const photoSpot=nearbyPhotoSpot(this.s,this.s.mode==='phone'?this.returnMode:this.s.mode);

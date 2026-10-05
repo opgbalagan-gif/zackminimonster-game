@@ -1,16 +1,16 @@
-import {GraffitiView} from './core__graffiti-view.js?v=8a0ece6e2747';
-import {HideoutUI} from './core__hideout-ui.js?v=8a0ece6e2747';
-import {CourtView} from './core__court-view.js?v=8a0ece6e2747';
-import {PhoneUI} from './core__phone-ui.js?v=8a0ece6e2747';
-import {PeriodTransition} from './core__period-transition.js?v=8a0ece6e2747';
-import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=8a0ece6e2747';
-import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=8a0ece6e2747';
-import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=8a0ece6e2747';
-import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=8a0ece6e2747';
-import {regionAt,gateMessage} from './core__city-progress.js?v=8a0ece6e2747';
-import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=8a0ece6e2747';
-import {DistrictToolsUI} from './core__district-tools-ui.js?v=8a0ece6e2747';
-import {PrefightScene} from './core__prefight-scene.js?v=8a0ece6e2747';
+import {GraffitiView} from './core__graffiti-view.js?v=76f80bdf5bd9';
+import {HideoutUI} from './core__hideout-ui.js?v=76f80bdf5bd9';
+import {CourtView} from './core__court-view.js?v=76f80bdf5bd9';
+import {PhoneUI} from './core__phone-ui.js?v=76f80bdf5bd9';
+import {PeriodTransition} from './core__period-transition.js?v=76f80bdf5bd9';
+import {POSTERS,ARTIST_URL} from './content__district_01__posters.js?v=76f80bdf5bd9';
+import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=76f80bdf5bd9';
+import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=76f80bdf5bd9';
+import {URBAN_WALL} from './content__graffiti__walls__urban.js?v=76f80bdf5bd9';
+import {regionAt,gateMessage} from './core__city-progress.js?v=76f80bdf5bd9';
+import {initUITheme,syncUIStats,setUIButton} from './core__ui-kit.js?v=76f80bdf5bd9';
+import {DistrictToolsUI} from './core__district-tools-ui.js?v=76f80bdf5bd9';
+import {PrefightScene} from './core__prefight-scene.js?v=76f80bdf5bd9';
 const $=id=>document.getElementById(id);
 export class GameUI{
   constructor(callbacks){
@@ -151,10 +151,11 @@ export class GameUI{
     $('objective-label').textContent=s.knockedFor>0?'СБИЛИ · Зак поднимается…':s.waypoint?'↗ '+s.waypoint.label:s.runRep?'Вернись в убежище, чтобы сохранить':s.painted.size===s.world.targets.length?'Район полностью твой':'Найди свободную стену · берегись машин';
     const near=s.tutorial?.stage==='fight'?null:s.near;$('interaction').hidden=!near||s.hiddenFor>0||s.mode!=='district';
     $('action-button').hidden=$('interaction').hidden||!!s.tutorial?.scripted;
-    if(near){const [label,icon]=near.type==='target'?['Рисовать','spray']:near.type==='shop'?['Магазин красок','spray']:near.type==='hideout'?['Войти','home']:near.type==='npc'?['Поговорить с '+near.item.name,'talk']:near.type==='court'?['Баскетбол','ball']:['Спрятаться','bin'];$('action-button').setAttribute('aria-label',label);$('action-button').title=label+' · нажми; тяни, чтобы идти';setUIButton($('action-button'),label,icon);}
+    if(near){const [label,icon]=near.type==='rival'?['Вызвать на дуэль','fight']:near.type==='target'?['Рисовать','spray']:near.type==='shop'?['Магазин красок','spray']:near.type==='hideout'?['Войти','home']:near.type==='npc'?['Поговорить с '+near.item.name,'talk']:near.type==='court'?['Баскетбол','ball']:['Спрятаться','bin'];$('action-button').setAttribute('aria-label',label);$('action-button').title=label+' · нажми; тяни, чтобы идти';setUIButton($('action-button'),label,icon);}
     if(near){
       $('interaction-type').textContent=near.type==='court'?'COURT STORY':near.type==='target'?'GRAFFITI SPOT':near.type==='safe'?'SAFE SPOT':'HIDEOUT / SAVE';
-      $('interaction-name').textContent=near.item.name;
+      $('interaction-name').textContent=near.item.name??(near.type==='rival'?'Соперник':'');
+      if(near.type==='rival'){$('interaction-type').textContent='ДУЭЛЬ';$('interaction-detail').textContent='Не дай перекрыть свою работу';}
       $('interaction-detail').textContent=near.type==='court'?(s.save.basketball.completed?'Поговорить и украсить новый мяч':'Два друга спорят о мяче · +300 REP'):near.type==='target'?'+'+near.item.rep_reward+' REP · HEAT +'+near.item.heat_reward:near.type==='safe'?(near.item.cooldown>0?'Повторно через '+Math.ceil(near.item.cooldown)+' сек.':'Спрятаться и снизить розыск'):'Сохранить вылазку и сбросить HEAT';
       $('action-button').disabled=near.type==='safe'&&near.item.cooldown>0;
       if(near.type==='bin'){$('interaction-type').textContent='УКРЫТИЕ';$('interaction-detail').textContent='Спрятаться и переждать патруль';}
@@ -207,7 +208,7 @@ export class GameUI{
     for(const event of s.events.splice(0)){
       if(event.type==='prefight')this.prefight.play();
       if(event.type==='next-level')this.callbacks.nextLevel?.(event.level);
-      if(event.type==='period-change')this.periodTransition.play(event.from,event.to);
+      // Continuous time changes lighting in place, without a blocking cutscene.
       if(event.type==='phone-open')this.phoneUI?.open();
       if(event.type==='poster-open')this.openPoster(event.id);
       if(event.type==='poi-open')this.openPoi(event.id);

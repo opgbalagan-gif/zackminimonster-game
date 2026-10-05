@@ -1,5 +1,5 @@
-import {districtCar} from './core__vehicle-styles.js?v=8a0ece6e2747';
-import {TRAFFIC_TYPES,TRAFFIC_FLEET,vehicleBody,followingDistance} from './core__traffic-fleet.js?v=8a0ece6e2747';
+import {districtCar} from './core__vehicle-styles.js?v=76f80bdf5bd9';
+import {TRAFFIC_TYPES,TRAFFIC_FLEET,vehicleBody,followingDistance} from './core__traffic-fleet.js?v=76f80bdf5bd9';
 // Relative swept bounds catch crossings even when both car and player move in one frame.
 export function trafficContact(car,from,to){
   const body=vehicleBody(car),angle=car.heading??(car.axis==='x'?0:Math.PI/2),halfX=Math.abs(Math.cos(angle))*body.length/2+Math.abs(Math.sin(angle))*body.breadth/2+8,halfY=Math.abs(Math.sin(angle))*body.length/2+Math.abs(Math.cos(angle))*body.breadth/2+8;

@@ -1,10 +1,10 @@
-import {AtlasControls} from './core__atlas-controls.js?v=8a0ece6e2747';
-import {drawDistrictMap} from './core__district-map.js?v=8a0ece6e2747';
-import {GRAFFITI_CATALOG,graffitiUnlocked} from './core__graffiti-catalog.js?v=8a0ece6e2747';
-import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=8a0ece6e2747';
-import {PAINT_STOCK,buyPaint} from './core__paint-shop.js?v=8a0ece6e2747';
-import {uiIcon} from './core__ui-kit.js?v=8a0ece6e2747';
-import {gestureHint} from './core__gesture-hints.js?v=8a0ece6e2747';
+import {AtlasControls} from './core__atlas-controls.js?v=76f80bdf5bd9';
+import {drawDistrictMap} from './core__district-map.js?v=76f80bdf5bd9';
+import {GRAFFITI_CATALOG,graffitiUnlocked} from './core__graffiti-catalog.js?v=76f80bdf5bd9';
+import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=76f80bdf5bd9';
+import {PAINT_STOCK,buyPaint} from './core__paint-shop.js?v=76f80bdf5bd9';
+import {uiIcon} from './core__ui-kit.js?v=76f80bdf5bd9';
+import {gestureHint} from './core__gesture-hints.js?v=76f80bdf5bd9';
 export class DistrictToolsUI{
   constructor(ui){
     this.ui=ui;this.s=ui.session;this.destination=null;this.lastMap=0;this.signature='';this.events=new AbortController();document.getElementById('app').dataset.sandbox=String(!!this.s.world.sandbox);

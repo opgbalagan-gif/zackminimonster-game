@@ -370,9 +370,14 @@
 #app .film-tap-zak,#app .film-tap-rival{position:relative;min-width:0;padding:0;border:0;border-radius:0;background:transparent;color:#e6fff4;touch-action:none;user-select:none;-webkit-tap-highlight-color:transparent;overflow:hidden}
 #app .film-tap-rival{pointer-events:none}
 #app #prefight-scene .film-tap-zak{cursor:pointer;outline:none!important;box-shadow:none!important}
-#app #prefight-scene .film-duel[data-ready=true] .film-tap-zak{background:linear-gradient(0deg,#6aefd04d,#6aefd015);box-shadow:inset 0 0 0 2px #6aefd0aa!important}
+#app .film-tap-prompt{display:none;position:absolute;left:50%;top:68%;transform:translate(-50%,-50%) rotate(-12deg);font:italic 900 clamp(50px,16vw,80px)/1 Impact,'Arial Black',sans-serif;letter-spacing:-3px;color:#ffe66a;-webkit-text-stroke:3px #152634;paint-order:stroke fill;text-shadow:4px 5px 0 #ee6d8d,7px 8px 0 #152634;pointer-events:none}
+#app .film-duel[data-ready=true] .film-tap-prompt,#app #prefight-scene[data-paused=true] .film-tap-prompt{display:block}
 #app .film-tap-mark{position:absolute;transform:translate(-50%,-50%);display:grid;place-items:center;width:56px;height:56px;border:2px solid #6aefd0;border-radius:50%;background:#123b3f88;color:#effff9;font:900 26px var(--ui-heading);pointer-events:none;animation:film-tap-mark .48s ease-out forwards}
 #app .film-tap-rival .film-tap-mark{border-color:#ff997f;background:#63382988;color:#fff0e9}
 @keyframes film-tap-mark{0%{opacity:1;transform:translate(-50%,-50%) scale(.65)}35%{opacity:1;transform:translate(-50%,-60%) scale(1)}100%{opacity:0;transform:translate(-50%,-100%) scale(1.2)}}
 @media(prefers-reduced-motion:reduce){#app .film-tap-mark{animation:none}}
 @media(prefers-reduced-motion:reduce){#app .object-hotspot.new-room-icon polygon,#app .object-hotspot.new-room-icon .room-tap-cue,#app .film-tap-zak{animation:none!important}}
+
+#app .phone-clock{display:block;font:800 24px/1.1 var(--ui-heading);font-variant-numeric:tabular-nums;letter-spacing:1px}
+#app .phone-clock-period{display:block;font-size:10px;letter-spacing:.3px;opacity:.75}
+#app .world-marker[data-marker=home] .ui-icon{color:#ffe3a1;filter:drop-shadow(0 2px 1px #172f3c);stroke-width:2.5}

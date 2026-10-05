@@ -1,5 +1,5 @@
-import {distance,moveAlongPath} from './core__geometry.js?v=8a0ece6e2747';
-import {TapDuel} from './core__tap-duel.js?v=8a0ece6e2747';
+import {distance,moveAlongPath} from './core__geometry.js?v=76f80bdf5bd9';
+import {TapDuel} from './core__tap-duel.js?v=76f80bdf5bd9';
 
 export const TUTORIAL_WALL='TUTORIAL_FIRST_WALL';
 export const TUTORIAL_FACADE='TUTORIAL_HOME_FACADE';
@@ -16,7 +16,7 @@ export function createTutorialWorld(){
 
 export const LESSONS={
   home:{step:1,title:'Твой дом',who:'ЗАК',line:'Дом есть. Денег почти нет. Зато баллон полный — уже подозрительно хорошее начало.',help:'Возвращайся домой, чтобы сохранить REP и снять розыск.',button:'ВЫЙТИ ИЗ ДОМА'},
-  walk:{step:1,title:'К первой стене',who:'ЗАК',line:'Сначала научимся ходить. Легендой района лёжа не станешь.',help:'Двигай джойстик к баллону справа.',button:'ПОКАЗАТЬ ПУТЬ'},
+  walk:{step:1,title:'Двигайся джойстиком',who:'ЗАК',line:'Сначала научимся ходить. Легендой района лёжа не станешь.',help:'Подойди к стене справа.'},
   paint:{step:2,title:'Оставь свой след',who:'ЗАК',line:'Чистая стена. Даже неловко прерывать такую скучную жизнь.',help:'Выбери рисунок. Встряхни и закрась.',button:'РИСОВАТЬ'},
   first_done:{step:2,title:'Первая работа!',who:'ЗАК',line:'Ну всё. Мама, я художник. Правда, выставку пока никто не согласовал.',help:'+50 REP. К стене идёт соперник.',button:'ПОСМОТРЕТЬ'},
   rival:{step:3,title:'Конкурент',who:'ГРАФФИТЧИК',line:'Неплохо, новичок. Теперь тут хотя бы моя подпись есть.',help:'Соперники перекрывают твои рисунки.'},

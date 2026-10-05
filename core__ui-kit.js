@@ -1,4 +1,4 @@
-import {installArtTokens} from './core__art-direction.js?v=8a0ece6e2747';
+import {installArtTokens} from './core__art-direction.js?v=76f80bdf5bd9';
 const paths={
   fight:'<path d="M6 12V7a2 2 0 0 1 4 0V5a2 2 0 0 1 4 0v1a2 2 0 0 1 4 0v2a2 2 0 0 1 4 0v8l-4 7H9l-6-9a2 2 0 0 1 3-2ZM10 7v5m4-6v6m4-4v5M9 19h10"/>',
   talk:'<path d="M3 4h20v14H12l-6 5v-5H3Z"/><path d="M7 9h12M7 13h8"/>',
@@ -20,7 +20,7 @@ const paths={
 const painted={spray:0,home:1,music:2,camera:3,rest:4,wardrobe:5,sprays:6,collection:7,save:8,bin:9,arrow:10,close:11,sound:12,mute:13,phone:14,star:15};
 export function uiIcon(name){
   if(name==='star')return '<span class="ui-icon graffiti-star" aria-hidden="true"></span>';
-  const cell=painted[name];
+  const cell=name==='home'?undefined:painted[name];
   if(cell!==undefined)return '<span class="ui-icon painted-icon" aria-hidden="true" style="background-position:'+(cell%4*100/3)+'% '+(Math.floor(cell/4)*100/3)+'%"></span>';
   return '<svg class="ui-icon" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="miter" aria-hidden="true">'+(paths[name]??paths.arrow)+'</svg>';
 }

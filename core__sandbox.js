@@ -1,8 +1,10 @@
-import {createSneakWorld} from './core__sneak.js?v=8a0ece6e2747';
-import {distance,moveAlongPath} from './core__geometry.js?v=8a0ece6e2747';
-import {updateStreetNpcs} from './core__street-npcs.js?v=8a0ece6e2747';
-import {addWaterfront} from './core__waterfront-layout.js?v=8a0ece6e2747';
-import {WallRivals} from './core__wall-rivals.js?v=8a0ece6e2747';
+import {createSneakWorld} from './core__sneak.js?v=76f80bdf5bd9';
+import {distance,moveAlongPath} from './core__geometry.js?v=76f80bdf5bd9';
+import {updateStreetNpcs} from './core__street-npcs.js?v=76f80bdf5bd9';
+import {addWaterfront} from './core__waterfront-layout.js?v=76f80bdf5bd9';
+import {TapDuel} from './core__tap-duel.js?v=76f80bdf5bd9';
+import {needsPaint} from './core__paint-markers.js?v=76f80bdf5bd9';
+import {WallRivals} from './core__wall-rivals.js?v=76f80bdf5bd9';
 
 export function createSandboxWorld(){
   const w=createSneakWorld();w.id='sandbox';w.sandbox=true;w.levelNumber=1;w.name='СВОЙ РАЙОН';
@@ -50,9 +52,20 @@ export class SandboxFlow{
     if(!s.save.campaign.sandboxStarted){s.save.campaign.sandboxStarted=true;s.save.streetLife.period='night';s.save.streetLife.elapsed=0;}
     this.wall=s.painted.has(s.world.targets[0].wall_id)?'own':'blank';s.persist();
   }
-  get scripted(){return false;}
+  get scripted(){return this.stage==='fight';}
   get lesson(){return {step:1,who:'ЗАК',title:'Свой район',line:'Стены есть. Остальное — дело краски.',help:'Ночью рисуй и прячься от патруля. Днём собирай зрителей. Дом, сон и телефон всегда доступны.'};}
-  allowedTarget(){return this.s.life?.night&&!this.bin;}
+  allowedTarget(target){return !this.bin&&!this.scripted&&needsPaint(this.s,target);}
+  beginFight(rival){
+    if(this.scripted||!this.rivals.canChallenge(rival))return false;
+    this.fightRival=rival;this.duel=new TapDuel();this.stage='fight';
+    this.s.player.path=[];this.s.player.moving=false;this.s.near=null;this.s.emit('prefight');return true;
+  }
+  finishFight(won){
+    if(this.stage!=='fight')return;
+    const rival=this.fightRival;this.fightRival=null;this.stage='free';
+    if(won){if(this.rivals.actors.includes(rival)){this.rivals.leave(rival);this.rivals.protectedUntil.set(rival.target.wall_id,this.rivals.clock+45);}this.s.notice('Соперник отступил. Стена пока в безопасности.');}
+    else{this.goHome();this.s.notice('Пришлось отступить домой.');}
+  }
   act(){if(this.s.mode==='hideout')this.leave();}
   leave(){if(this.s.life.sleeping)return;this.s.mode='district';this.s.save.campaign.sandboxAtHome=false;Object.assign(this.s.player,this.s.world.spawn,{path:[],state:'IDLE'});this.s.persist();}
   goHome(){const s=this.s;this.bin=null;this.actor=null;s.hiddenFor=0;s.heat=0;s.mode='hideout';s.near=null;s.player.path=[];s.save.campaign.sandboxAtHome=true;s.persist();s.emit('mode');}
@@ -71,6 +84,7 @@ export class SandboxFlow{
   }
   hideIn(bin){this.bin=bin;this.age=0;this.s.hiddenFor=600;Object.assign(this.s.player,bin.approach,{path:[],state:'HIDE'});this.s.notice('У этого укрытия сложный аромат.');}
   update(dt){
+    if(this.scripted){this.duel.update(dt);if(this.duel.phase==='result'&&this.duel.resultAge>3.2)this.finishFight(this.duel.won);return;}
     const s=this.s;updateStreetNpcs(s,dt);this.rivals.update(dt);if(s.mode!=='district')return;this.age+=dt;
     this.saveIn-=dt;if(this.saveIn<=0){this.saveIn=3;s.persist();}
     if(this.bin){

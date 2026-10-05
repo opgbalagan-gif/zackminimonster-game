@@ -1,11 +1,11 @@
-import {project} from './core__geometry.js?v=8a0ece6e2747';
-import {sceneLight,shadowFootprint} from './core__lighting.js?v=8a0ece6e2747';
-import {polygon} from './content__district_01__terrain.js?v=8a0ece6e2747';
-import {routeFade} from './core__route-fade.js?v=8a0ece6e2747';
-import {STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=8a0ece6e2747';
-import {vehicleBody} from './core__traffic-fleet.js?v=8a0ece6e2747';
+import {project} from './core__geometry.js?v=76f80bdf5bd9';
+import {sceneLight,shadowFootprint} from './core__lighting.js?v=76f80bdf5bd9';
+import {polygon} from './content__district_01__terrain.js?v=76f80bdf5bd9';
+import {routeFade} from './core__route-fade.js?v=76f80bdf5bd9';
+import {STREET_PROPS} from './content__levels__first-mark__street-kit.js?v=76f80bdf5bd9';
+import {vehicleBody} from './core__traffic-fleet.js?v=76f80bdf5bd9';
 export function groundLighting(c,s,w,h,continuation={}){
-  const light=sceneLight(s.life.night),cam=s.camera;
+  const light=sceneLight(s.life.clock.darkness),cam=s.camera;
   const visible=(x,y,margin=500)=>{const p=project(x,y);return Math.abs(p.x-cam.x)<w/cam.zoom/2+margin&&Math.abs(p.y-cam.y)<h/cam.zoom/2+margin;};
   c.save();c.fillStyle=light.color;c.globalAlpha=light.alpha;
   for(const b of [...s.world.buildings,...continuation.buildings??[]])if(visible(b.x,b.y))polygon(c,shadowFootprint(b,b.nanoVariant===1?140:b.nanoVariant===3?130:245,light).map(p=>project(...p)),light.color);
@@ -30,7 +30,7 @@ export function groundLighting(c,s,w,h,continuation={}){
   polygon(c,shadowFootprint({x:m.start,y:m.y-36,w:m.end-m.start,h:72},m.height,light).map(p=>project(...p)),light.color);
   c.restore();
   if(light.night)for(const lamp of props.filter(p=>p.id==='lamp'))if(visible(lamp.x,lamp.y,220)){
-    const p=project(lamp.x+20,lamp.y);c.save();c.translate(p.x,p.y);c.scale(1,.55);c.globalCompositeOperation='screen';
+    const p=project(lamp.x+20,lamp.y);c.save();c.globalAlpha*=light.amount;c.translate(p.x,p.y);c.scale(1,.55);c.globalCompositeOperation='screen';
     const g=c.createRadialGradient(0,0,0,0,0,145);g.addColorStop(0,'#ffd58a80');g.addColorStop(.45,'#e0a45232');g.addColorStop(1,'#e0a45200');c.fillStyle=g;c.fillRect(-145,-145,290,290);c.restore();
   }
   if(light.night)for(const car of s.traffic.cars)if(visible(car.x,car.y,200)){
@@ -38,7 +38,7 @@ export function groundLighting(c,s,w,h,continuation={}){
     for(const side of [-1,1]){
       const nose=vehicleBody(car).length/2-5,x=car.x+dx*nose-dy*side*12,y=car.y+dy*nose+dx*side*12;
       const a=project(x,y),along=project(dx,dy),across=project(-dy,dx);
-      c.save();if(!car.turn)c.globalAlpha*=routeFade(car[car.axis],car.start,car.end);c.globalCompositeOperation='screen';
+      c.save();c.globalAlpha*=light.amount;if(!car.turn)c.globalAlpha*=routeFade(car[car.axis],car.start,car.end);c.globalCompositeOperation='screen';
       // Soft overlapping ellipses have no clipped triangular boundary, including at the lens.
       c.transform(along.x,along.y,across.x,across.y,a.x,a.y);
       for(const [offset,length,breadth,alpha] of [[40,84,27,.18],[5,23,16,.16]]){

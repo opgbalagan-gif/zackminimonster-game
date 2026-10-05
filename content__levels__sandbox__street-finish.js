@@ -1,11 +1,11 @@
-import {project} from './core__geometry.js?v=8a0ece6e2747';
-import {ART} from './core__art-direction.js?v=8a0ece6e2747';
-import {polygon} from './content__district_01__terrain.js?v=8a0ece6e2747';
+import {project} from './core__geometry.js?v=76f80bdf5bd9';
+import {ART} from './core__art-direction.js?v=76f80bdf5bd9';
+import {polygon} from './content__district_01__terrain.js?v=76f80bdf5bd9';
 
 const hash=text=>[...text].reduce((n,c)=>(n*31+c.charCodeAt(0))>>>0,7);
 const quad=(x,y,w,h)=>[project(x,y),project(x+w,y),project(x+w,y+h),project(x,y+h)];
 export function streetFinish(c,s,view){
-  const night=s.life.night,visible=(x,y)=>x>view.x-100&&x<view.x+view.w+100&&y>view.y-100&&y<view.y+view.h+100;
+  const night=false,visible=(x,y)=>x>view.x-100&&x<view.x+view.w+100&&y>view.y-100&&y<view.y+view.h+100;
   c.save();
   // Contact strips make the buildings sit on the paving without adding obstacles.
   for(const b of s.world.buildings){if(!visible(b.x,b.y))continue;
@@ -48,9 +48,9 @@ export function facadeFinish(pack){
     c.putImageData(pixels,0,0);windows.set(id,canvas);return canvas;
   }
   return function(c,s,b,art,p){
-    const rect=pack.atlas.sprites[art.id].rect,scale=art.width/rect[2],seed=hash(b.id),night=s.life.night;
+    const rect=pack.atlas.sprites[art.id].rect,scale=art.width/rect[2],seed=hash(b.id),night=s.life.clock.darkness;
     c.save();c.translate(Math.round(p.x)-art.width*art.anchor[0],Math.round(p.y)-rect[3]*scale*art.anchor[1]);c.scale(scale,scale);
-    if(night){const glow=windowMask(art.id);c.save();c.globalCompositeOperation='screen';c.shadowColor='#ffbd72';c.shadowBlur=7;c.drawImage(glow,0,0);c.restore();}
+    if(night){const glow=windowMask(art.id);c.save();c.globalAlpha*=night;c.globalCompositeOperation='screen';c.shadowColor='#ffbd72';c.shadowBlur=7;c.drawImage(glow,0,0);c.restore();}
     const [x,y,width]=art.mural,w=Math.min(154,width*.98),h=34;
     c.translate(x+2,y-67);c.transform(1,art.slope,0,1,0,0);
     const names=['VINYL CLUB','MONSTER CAFÉ','FIX IT!','MINI MART','INK STUDIO'];
@@ -60,15 +60,16 @@ export function facadeFinish(pack){
     c.fillStyle=ART.paper;for(const ex of [13,21]){c.beginPath();c.ellipse(ex,17,3.3,2.2,0,0,Math.PI*2);c.fill();}
     c.font='900 13px "Street Condensed",sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText(b.shop?'COLOR LAB':names[seed%5],32+(w-36)/2,h/2,w-39);
     c.fillStyle=night?'#ffdc9b':'#f6eac0';c.fillRect(5,-3,w-10,2);
-    if(night){c.globalCompositeOperation='screen';c.globalAlpha*=.15;c.fillStyle='#ffbf70';c.fillRect(-3,-5,w+6,h+9);}
+    if(night){c.globalCompositeOperation='screen';c.globalAlpha*=.15*night;c.fillStyle='#ffbf70';c.fillRect(-3,-5,w+6,h+9);}
     c.restore();
   };
 }
 
-export function sceneGrade(c,w,h,night){
+export function sceneGrade(c,w,h,night,warmth=0){
   c.save();
-  c.fillStyle=night?'#10213c30':'#ffe6b306';c.fillRect(0,0,w,h);
+  c.fillStyle=`rgba(16,33,60,${.025+.16*night})`;c.fillRect(0,0,w,h);
+  c.fillStyle=`rgba(255,164,90,${warmth*.12})`;c.fillRect(0,0,w,h);
   const vignette=c.createRadialGradient(w*.5,h*.48,Math.min(w,h)*.26,w*.5,h*.48,Math.max(w,h)*.77);
-  vignette.addColorStop(0,'#14293900');vignette.addColorStop(1,night?'#0717254a':'#19303c14');
+  vignette.addColorStop(0,'#14293900');vignette.addColorStop(1,`rgba(7,23,37,${.08+.21*night})`);
   c.fillStyle=vignette;c.fillRect(0,0,w,h);c.restore();
 }

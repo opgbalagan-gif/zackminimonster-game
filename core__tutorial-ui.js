@@ -1,5 +1,6 @@
-import {uiIcon,setUIButton,applyUIComponents} from './core__ui-kit.js?v=8a0ece6e2747';
-import {gestureHint} from './core__gesture-hints.js?v=8a0ece6e2747';
+import {uiIcon,setUIButton,applyUIComponents} from './core__ui-kit.js?v=76f80bdf5bd9';
+import {paintMarkerVisible} from './core__paint-markers.js?v=76f80bdf5bd9';
+import {gestureHint} from './core__gesture-hints.js?v=76f80bdf5bd9';
 export class TutorialUI{
   constructor(session,onComplete){
     this.s=session;this.signature='';this.panel=document.createElement('section');this.panel.id='tutorial-panel';this.panel.className='tutorial-hint';this.panel.setAttribute('aria-label','Обучение');
@@ -32,25 +33,25 @@ export class TutorialUI{
   }
   updateWorldMarkers(renderer){
     const s=this.s,canvas=document.getElementById('game'),rect=canvas.getBoundingClientRect();this.markers.hidden=s.mode!=='district';
-    let nearest=null,nearestDistance=180;
+    let nearest=null,nearestDistance=110;
     for(const [id,t] of this.paintTargets){const d=Math.hypot(t.approach.x-s.player.x,t.approach.y-s.player.y);if(d<nearestDistance){nearest=id;nearestDistance=d;}}
-    for(const b of this.markers.children){const p=renderer.markerHits?.find(p=>p.id===b.dataset.marker);b.hidden=!p||p.x<0||p.x>canvas.width||p.y<0||p.y>canvas.height;if(b.hidden)continue;b.style.left=p.x*rect.width/canvas.width+'px';b.style.top=p.y*rect.height/canvas.height+'px';b.dataset.active=String(b.dataset.marker==='home'?s.tutorial.stage==='escape':['walk','paint','return_wall','repaint'].includes(s.tutorial.stage));
-      if(this.paintTargets.has(b.dataset.marker)){b.dataset.near=String(b.dataset.marker===nearest);b.title=(s.life.night?'Место для граффити':'Граффити ночью')+' · '+this.paintTargets.get(b.dataset.marker).name;}
+    for(const b of this.markers.children){const p=renderer.markerHits?.find(p=>p.id===b.dataset.marker),target=this.paintTargets.get(b.dataset.marker),far=target&&!paintMarkerVisible(s,target);b.hidden=!!far||!p||p.x<0||p.x>canvas.width||p.y<0||p.y>canvas.height;if(b.hidden)continue;b.style.left=p.x*rect.width/canvas.width+'px';b.style.top=p.y*rect.height/canvas.height+'px';b.dataset.active=String(b.dataset.marker==='home'?s.tutorial.stage==='escape':['walk','paint','return_wall','repaint'].includes(s.tutorial.stage));
+      if(this.paintTargets.has(b.dataset.marker)){b.dataset.near=String(b.dataset.marker===nearest);b.title='Место для граффити'+' · '+this.paintTargets.get(b.dataset.marker).name;}
     }
   }
   sync(){
     const s=this.s,t=s.tutorial,l=t.lesson;this.panel.hidden=s.world.sandbox||['graffiti','phone'].includes(s.mode)||(s.mode==='hideout'&&document.getElementById('hideout-ui').dataset.tab!=='home');
-    this.zoomHint.hidden=s.mode!=='district'||s.cinematic||s.save.campaign.zoomLearned||!(t.stage==='walk'||s.world.sandbox&&s.time<24)||!document.getElementById('map-screen').hidden;
+    this.zoomHint.hidden=s.mode!=='district'||s.cinematic||s.save.campaign.zoomLearned||!(t.stage==='walk'&&Math.hypot(s.player.x-s.world.spawn.x,s.player.y-s.world.spawn.y)>80||s.world.sandbox&&s.time<24)||!document.getElementById('map-screen').hidden;
     if(!this.zoomHint.hidden||s.cinematic)this.panel.hidden=true;
     if(t.stage==='fight')this.panel.hidden=true;
     const app=document.getElementById('app');app.dataset.lessonVisible=String(!this.panel.hidden);app.dataset.homeIntro=String(!!s.life?.tour);app.dataset.period=s.life?.state.period??'night';
     app.dataset.sandbox=String(!!s.world.sandbox);
     app.dataset.gameMode=s.mode;
-    const centreAction=!s.world.sandbox&&!t.scripted&&s.mode==='district'&&['target','hideout','bin'].includes(s.near?.type);
+    const centreAction=!s.world.sandbox&&!t.scripted&&t.stage!=='walk'&&s.mode==='district'&&['target','hideout','bin'].includes(s.near?.type);
     app.dataset.tutorialAction=String(centreAction);
     app.dataset.phone=String(s.mode==='phone');
     this.status.hidden=!!s.life?.tour;
-    this.status.querySelector('.street-time').textContent=(s.life?.night?'Ночь ':'День ')+(s.life?.state.day??1);
+    this.status.querySelector('.street-time').textContent=(s.life?.clock.label??'День')+' '+(s.life?.state.day??1);
     this.status.querySelector('.street-money').textContent=s.save.money.toLocaleString('ru-RU')+' ₽';
     this.status.querySelector('.street-fame').textContent=s.life.fame.name;
     this.status.title='Узнаваемость: '+s.life.fame.score+(s.life.fame.next?' / '+s.life.fame.next:' · максимальная ступень')+'. Новые работы, снимки разных работ и встречи со зрителями.';
@@ -68,11 +69,6 @@ export class TutorialUI{
     document.getElementById('home-route').hidden=t.stage!=='escape';
     if(t.scripted)document.getElementById('interaction').hidden=true;
     if(t.stage==='fight')return;
-    if(s.near?.type==='target')setUIButton(document.getElementById('action-button'),'РИСОВАТЬ','spray');
-    else if(s.near?.type==='hideout')setUIButton(document.getElementById('action-button'),'ВОЙТИ','home');
-    else if(s.near?.type==='bin')setUIButton(document.getElementById('action-button'),'СПРЯТАТЬСЯ','bin');
-    else if(s.near?.type==='npc')setUIButton(document.getElementById('action-button'),'ПОГОВОРИТЬ','talk');
-    else if(s.near?.type==='court')setUIButton(document.getElementById('action-button'),'БАСКЕТБОЛ','ball');
     const title=centreAction?{target:'Нажми на баллон',hideout:'Нажми на дверь',bin:'Нажми на бак'}[s.near.type]:l.title;
     const help=centreAction?'В центре джойстика — нужное действие.':l.help;
     const signature=JSON.stringify([t.stage,l,s.mode,s.life?.sleeping>0,title]);if(this.signature===signature)return;this.signature=signature;

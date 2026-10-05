@@ -1,5 +1,6 @@
-import {moveAlongPath,distance} from './core__geometry.js?v=8a0ece6e2747';
-import {recognition,rememberWorks,RECOGNITION_TIERS} from './core__recognition.js?v=8a0ece6e2747';
+import {gameClock,PERIOD_SECONDS} from './core__game-clock.js?v=76f80bdf5bd9';
+import {moveAlongPath,distance} from './core__geometry.js?v=76f80bdf5bd9';
+import {recognition,rememberWorks,RECOGNITION_TIERS} from './core__recognition.js?v=76f80bdf5bd9';
 
 export const HOME_TOUR=[
   ['Нажми на кровать','Кровать — мой первый спонсор. Пока платит только сном.','Светящийся предмет — доступное действие.','О КРОВАТИ'],
@@ -20,6 +21,7 @@ export class StreetLife{
     return promoted;
   }
   get state(){return this.s.save.streetLife;}
+  get clock(){return gameClock(this.state);}
   get night(){return this.state.period==='night';}
   get tour(){return !this.s.world.sandbox&&this.s.mode==='hideout'&&this.s.save.campaign.homeIntroStep<7;}
   get introStep(){return this.s.save.campaign.homeIntroStep;}
@@ -42,15 +44,15 @@ export class StreetLife{
     if(this.night){state.period='day';state.day++;state.donations=[];state.audienceTier=null;}else state.period='night';
     state.elapsed=0;this.visitors=[];this.spawnIn=2;this.s.persist();
     this.s.emit('period-change',{from,to:state.period});
-    this.s.notice(this.night?'Наступила ночь. Пора рисовать.':'Доброе утро. Посмотрим, кому понравились работы.');
+    this.s.notice(this.night?'Вечереет. На улицы выходят соперники.':'Рассвет. Район просыпается.');
   }
   works(){return this.s.world.targets.filter(t=>this.s.painted.has(t.wall_id)&&!this.s.save.wall_damage?.[t.wall_id]&&(this.s.world.sandbox||t.buildingId||this.s.tutorial.wall==='own'&&this.s.tutorial.tag===0&&this.s.tutorial.coating===0));}
   update(dt){
     this.syncRecognition();
     if(this.sleeping){this.sleeping=Math.max(0,this.sleeping-dt);if(!this.sleeping){if(!(this.tour&&this.introStep===1&&this.night))this.changePeriod();if(this.tour&&this.introStep===1){this.s.save.campaign.homeIntroStep=2;this.s.persist();}}return;}
-    if(this.tour||this.s.mode==='graffiti'||this.s.mode==='phone'||this.s.tutorial.scripted)return;
+    if(this.tour||this.s.tutorial.scripted)return;
     this.state.elapsed+=dt;this.saveIn-=dt;
-    if(this.state.elapsed>=(this.night?300:180))this.changePeriod();
+    while(this.state.elapsed>=PERIOD_SECONDS){const extra=this.state.elapsed-PERIOD_SECONDS;this.changePeriod();this.state.elapsed=extra;}
     if(this.saveIn<=0){this.saveIn=15;this.s.persist();}
     if(this.night||this.s.mode!=='district'){this.visitors=[];return;}
     this.spawnIn-=dt;

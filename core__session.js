@@ -1,22 +1,22 @@
-import {NavigationGrid} from './core__navigation.js?v=8a0ece6e2747';
-import {PoliceSystem} from './core__police.js?v=8a0ece6e2747';
-import {GraffitiGame} from './core__graffiti.js?v=8a0ece6e2747';
-import {Camera,clamp,distance,moveAlongPath,project} from './core__geometry.js?v=8a0ece6e2747';
-import {EffectPool} from './core__effects.js?v=8a0ece6e2747';
-import {OUTFITS,INKS,TROPHIES} from './core__hideout.js?v=8a0ece6e2747';
-import {TrafficSystem} from './core__traffic.js?v=8a0ece6e2747';
-import {CitizenSystem} from './core__citizens.js?v=8a0ece6e2747';
-import {COURT,COURT_LINES,BallArtGame} from './core__basketball.js?v=8a0ece6e2747';
-import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=8a0ece6e2747';
-import {cityProgress,canEnter,regionAt,gateMessage} from './core__city-progress.js?v=8a0ece6e2747';
-import {POSTERS,posterApproach} from './content__district_01__posters.js?v=8a0ece6e2747';
-import {BridgeGangs} from './core__bridge-gangs.js?v=8a0ece6e2747';
-import {TutorialFlow} from './core__tutorial.js?v=8a0ece6e2747';
-import {StreetLife} from './core__street-life.js?v=8a0ece6e2747';
-import {SneakFlow} from './core__sneak.js?v=8a0ece6e2747';
-import {SandboxFlow} from './core__sandbox.js?v=8a0ece6e2747';
-import {talkToStreetNpc} from './core__street-npcs.js?v=8a0ece6e2747';
-import {graffitiUnlocked,unlockGraffiti} from './core__graffiti-catalog.js?v=8a0ece6e2747';
+import {NavigationGrid} from './core__navigation.js?v=76f80bdf5bd9';
+import {PoliceSystem} from './core__police.js?v=76f80bdf5bd9';
+import {GraffitiGame} from './core__graffiti.js?v=76f80bdf5bd9';
+import {Camera,clamp,distance,moveAlongPath,project} from './core__geometry.js?v=76f80bdf5bd9';
+import {EffectPool} from './core__effects.js?v=76f80bdf5bd9';
+import {OUTFITS,INKS,TROPHIES} from './core__hideout.js?v=76f80bdf5bd9';
+import {TrafficSystem} from './core__traffic.js?v=76f80bdf5bd9';
+import {CitizenSystem} from './core__citizens.js?v=76f80bdf5bd9';
+import {COURT,COURT_LINES,BallArtGame} from './core__basketball.js?v=76f80bdf5bd9';
+import {GRAFFITI_CONFIG} from './content__graffiti__config.js?v=76f80bdf5bd9';
+import {cityProgress,canEnter,regionAt,gateMessage} from './core__city-progress.js?v=76f80bdf5bd9';
+import {POSTERS,posterApproach} from './content__district_01__posters.js?v=76f80bdf5bd9';
+import {BridgeGangs} from './core__bridge-gangs.js?v=76f80bdf5bd9';
+import {TutorialFlow} from './core__tutorial.js?v=76f80bdf5bd9';
+import {StreetLife} from './core__street-life.js?v=76f80bdf5bd9';
+import {SneakFlow} from './core__sneak.js?v=76f80bdf5bd9';
+import {SandboxFlow} from './core__sandbox.js?v=76f80bdf5bd9';
+import {talkToStreetNpc} from './core__street-npcs.js?v=76f80bdf5bd9';
+import {graffitiUnlocked,unlockGraffiti} from './core__graffiti-catalog.js?v=76f80bdf5bd9';
 
 export class GameSession{
   constructor(pack,store){
@@ -154,7 +154,7 @@ export class GameSession{
     for(const npc of this.world.streetNpcs??[])add('npc',npc,npc.approach,62);
     if(this.world.paintShop)add('shop',this.world.paintShop,this.world.paintShop,60);
     if(this.world.sandbox)add('court',this.court,this.court,68);
-    if(this.tutorial){for(const target of this.world.targets)if(this.tutorial.allowedTarget(target))add('target',target,target.approach,62);if(this.tutorial.stage==='hide'||this.world.sandbox)for(const bin of this.world.bins??[])add('bin',bin,bin.approach,58);options.sort((a,b)=>a.d-b.d);return options[0]??null;}
+    if(this.tutorial){const rival=this.tutorial.rivals?.actors.filter(a=>this.tutorial.rivals.canChallenge(a)).sort((a,b)=>distance(this.player,a)-distance(this.player,b))[0];if(rival)return {type:'rival',item:rival,d:distance(this.player,rival)};for(const target of this.world.targets)if(this.tutorial.allowedTarget(target))add('target',target,target.approach,62);if(this.tutorial.stage==='hide'||this.world.sandbox)for(const bin of this.world.bins??[])add('bin',bin,bin.approach,58);options.sort((a,b)=>a.d-b.d);return options[0]??null;}
     for(const poster of POSTERS)add('poster',{...poster,name:'Плакат '+poster.brand},posterApproach(this.world,poster),65);
     for(const bridge of this.world.bridges??[])add('bridge',bridge,bridge.approach,100);
     for(const poi of this.world.pointsOfInterest??[])add('poi',poi,poi,68);
@@ -169,6 +169,7 @@ export class GameSession{
     if(this.mode!=='district'||this.hiddenFor>0||this.knockedFor>0||this.gangs.push||!this.near)return;
     const {type,item}=this.near;this.player.path=[];this.waypoint=null;
     if(type==='target'&&this.tutorial&&!this.tutorial.allowedTarget(item))return;
+    if(type==='rival')return this.tutorial.beginFight(item);
     if(type==='bin')return this.tutorial.hideIn(item);
     if(type==='shop'){this.mode='paint-shop';this.emit('shop-open');return;}
     if(type==='npc')return talkToStreetNpc(this,item);

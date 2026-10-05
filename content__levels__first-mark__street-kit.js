@@ -1,7 +1,7 @@
-import {project} from './core__geometry.js?v=8a0ece6e2747';
-import {polygon,box} from './content__district_01__terrain.js?v=8a0ece6e2747';
-import {createMetroArt} from './content__district_01__metro-art.js?v=8a0ece6e2747';
-import {ART} from './core__art-direction.js?v=8a0ece6e2747';
+import {project} from './core__geometry.js?v=76f80bdf5bd9';
+import {polygon,box} from './content__district_01__terrain.js?v=76f80bdf5bd9';
+import {createMetroArt} from './content__district_01__metro-art.js?v=76f80bdf5bd9';
+import {ART} from './core__art-direction.js?v=76f80bdf5bd9';
 
 // Art dimensions are in world units. Anchors sit on the ground, never on a walk lane.
 export const STREET_PROPS=[

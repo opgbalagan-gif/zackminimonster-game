@@ -1,5 +1,5 @@
-import {project,unproject} from './core__geometry.js?v=8a0ece6e2747';
-import {polygon} from './content__district_01__terrain.js?v=8a0ece6e2747';
+import {project,unproject} from './core__geometry.js?v=76f80bdf5bd9';
+import {polygon} from './content__district_01__terrain.js?v=76f80bdf5bd9';
 const corners=r=>[project(r.x,r.y),project(r.x+r.w,r.y),project(r.x+r.w,r.y+r.h),project(r.x,r.y+r.h)];
 
 export function districtSurroundings(c,cam,w,h,kit,night,bounds,origin={x:w/2,y:h/2}){
@@ -21,8 +21,7 @@ export function boundaryRailing(c,r,night){
   c.restore();
 }
 export function cloudShadows(c,s,w,h){
-  if(s.life.night)return;
-  c.save();polygon(c,corners(s.world.mapBounds),'#0000');c.clip();
+  c.save();c.globalAlpha*=1-s.life.clock.darkness;polygon(c,corners(s.world.mapBounds),'#0000');c.clip();
   const time=s.time,cam=s.camera;
   for(let i=0;i<7;i++){
     const x=((time*10+i*823)%5600)-2200,y=((i*677+time*3)%4800)-500;
