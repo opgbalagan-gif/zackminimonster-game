@@ -1,5 +1,5 @@
-import {NavigationGrid} from './core__navigation.js?v=76f80bdf5bd9';
-import {inside,moveAlongPath,project} from './core__geometry.js?v=76f80bdf5bd9';
+import {NavigationGrid} from './core__navigation.js?v=252855055fad';
+import {inside,moveAlongPath,project} from './core__geometry.js?v=252855055fad';
 
 // Pedestrians use the same solid footprints as Zack, with the carriageway excluded.
 export class CitizenSystem{

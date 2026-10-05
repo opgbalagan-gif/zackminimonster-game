@@ -1,8 +1,8 @@
 // Coastal plan: marina on the west, canal-side courtyard blocks in the centre,
 // wooded park on the east and workshops / tanks at the southern end.
-import {calibrateBuildings,clearBuildingBins} from './core__building-scale.js?v=76f80bdf5bd9';
-import {dressDistrict} from './core__street-dressing.js?v=76f80bdf5bd9';
-import {addPaintFacades} from './core__paint-facades.js?v=76f80bdf5bd9';
+import {calibrateBuildings,clearBuildingBins} from './core__building-scale.js?v=252855055fad';
+import {dressDistrict} from './core__street-dressing.js?v=252855055fad';
+import {addPaintFacades} from './core__paint-facades.js?v=252855055fad';
 export function densifyWaterfront(w){
   w.obstacles=w.obstacles.filter(o=>!o.water&&!o.railway&&!(o.w===16&&o.h===16)&&!(o.w===160&&o.h===145));
   for(const h of w.hoops)w.obstacles.push({x:h.x-8,y:h.y-8,w:16,h:16});

@@ -1,10 +1,10 @@
-import {createSneakWorld} from './core__sneak.js?v=76f80bdf5bd9';
-import {distance,moveAlongPath} from './core__geometry.js?v=76f80bdf5bd9';
-import {updateStreetNpcs} from './core__street-npcs.js?v=76f80bdf5bd9';
-import {addWaterfront} from './core__waterfront-layout.js?v=76f80bdf5bd9';
-import {TapDuel} from './core__tap-duel.js?v=76f80bdf5bd9';
-import {needsPaint} from './core__paint-markers.js?v=76f80bdf5bd9';
-import {WallRivals} from './core__wall-rivals.js?v=76f80bdf5bd9';
+import {createSneakWorld} from './core__sneak.js?v=252855055fad';
+import {distance,moveAlongPath} from './core__geometry.js?v=252855055fad';
+import {updateStreetNpcs} from './core__street-npcs.js?v=252855055fad';
+import {addWaterfront} from './core__waterfront-layout.js?v=252855055fad';
+import {TapDuel} from './core__tap-duel.js?v=252855055fad';
+import {needsPaint} from './core__paint-markers.js?v=252855055fad';
+import {WallRivals} from './core__wall-rivals.js?v=252855055fad';
 
 export function createSandboxWorld(){
   const w=createSneakWorld();w.id='sandbox';w.sandbox=true;w.levelNumber=1;w.name='СВОЙ РАЙОН';

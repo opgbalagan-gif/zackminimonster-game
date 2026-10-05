@@ -1,6 +1,6 @@
-import {gameClock,PERIOD_SECONDS} from './core__game-clock.js?v=76f80bdf5bd9';
-import {moveAlongPath,distance} from './core__geometry.js?v=76f80bdf5bd9';
-import {recognition,rememberWorks,RECOGNITION_TIERS} from './core__recognition.js?v=76f80bdf5bd9';
+import {gameClock,PERIOD_SECONDS} from './core__game-clock.js?v=252855055fad';
+import {moveAlongPath,distance} from './core__geometry.js?v=252855055fad';
+import {recognition,rememberWorks,RECOGNITION_TIERS} from './core__recognition.js?v=252855055fad';
 
 export const HOME_TOUR=[
   ['Нажми на кровать','Кровать — мой первый спонсор. Пока платит только сном.','Светящийся предмет — доступное действие.','О КРОВАТИ'],

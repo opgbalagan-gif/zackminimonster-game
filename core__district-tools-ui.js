@@ -1,10 +1,10 @@
-import {AtlasControls} from './core__atlas-controls.js?v=76f80bdf5bd9';
-import {drawDistrictMap} from './core__district-map.js?v=76f80bdf5bd9';
-import {GRAFFITI_CATALOG,graffitiUnlocked} from './core__graffiti-catalog.js?v=76f80bdf5bd9';
-import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=76f80bdf5bd9';
-import {PAINT_STOCK,buyPaint} from './core__paint-shop.js?v=76f80bdf5bd9';
-import {uiIcon} from './core__ui-kit.js?v=76f80bdf5bd9';
-import {gestureHint} from './core__gesture-hints.js?v=76f80bdf5bd9';
+import {AtlasControls} from './core__atlas-controls.js?v=252855055fad';
+import {drawDistrictMap} from './core__district-map.js?v=252855055fad';
+import {GRAFFITI_CATALOG,graffitiUnlocked} from './core__graffiti-catalog.js?v=252855055fad';
+import {GRAFFITI_ART} from './content__district_01__graffiti-art.js?v=252855055fad';
+import {PAINT_STOCK,buyPaint} from './core__paint-shop.js?v=252855055fad';
+import {uiIcon} from './core__ui-kit.js?v=252855055fad';
+import {gestureHint} from './core__gesture-hints.js?v=252855055fad';
 export class DistrictToolsUI{
   constructor(ui){
     this.ui=ui;this.s=ui.session;this.destination=null;this.lastMap=0;this.signature='';this.events=new AbortController();document.getElementById('app').dataset.sandbox=String(!!this.s.world.sandbox);
@@ -16,7 +16,7 @@ export class DistrictToolsUI{
     this.picker.querySelector('.wall-choice-help').innerHTML=gestureHint('swipe')+'<span>Свайпни — выбери рисунок</span>';
     this.picker.querySelector('.wall-choice-prev').onclick=()=>this.cycleArt(-1);
     this.picker.querySelector('.wall-choice-next').onclick=()=>this.cycleArt(1);
-    this.picker.querySelector('.wall-choice-confirm').onclick=()=>{this.s.graffiti?.confirm();this.ui.sync();document.getElementById('cancel-graffiti').focus({preventScroll:true});};
+    this.picker.querySelector('.wall-choice-confirm').onclick=()=>{this.s.graffiti?.confirm();this.ui.sync();(document.querySelector('#wall-paint canvas')??document.getElementById('cancel-graffiti')).focus({preventScroll:true});};
     let swipe=null;
     this.picker.addEventListener('pointerdown',e=>{if(e.target.closest('button')||swipe||e.button!==0)return;e.preventDefault();swipe={id:e.pointerId,x:e.clientX,y:e.clientY};this.picker.setPointerCapture(e.pointerId);},{signal:this.events.signal});
     this.picker.addEventListener('pointerup',e=>{if(!swipe||swipe.id!==e.pointerId)return;const dx=e.clientX-swipe.x,dy=e.clientY-swipe.y;swipe=null;if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.25)this.cycleArt(dx<0?1:-1);},{signal:this.events.signal});

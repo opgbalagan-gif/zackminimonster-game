@@ -1,6 +1,6 @@
-import {uiIcon,setUIButton,applyUIComponents} from './core__ui-kit.js?v=76f80bdf5bd9';
-import {paintMarkerVisible} from './core__paint-markers.js?v=76f80bdf5bd9';
-import {gestureHint} from './core__gesture-hints.js?v=76f80bdf5bd9';
+import {uiIcon,setUIButton,applyUIComponents} from './core__ui-kit.js?v=252855055fad';
+import {paintMarkerVisible} from './core__paint-markers.js?v=252855055fad';
+import {gestureHint} from './core__gesture-hints.js?v=252855055fad';
 export class TutorialUI{
   constructor(session,onComplete){
     this.s=session;this.signature='';this.panel=document.createElement('section');this.panel.id='tutorial-panel';this.panel.className='tutorial-hint';this.panel.setAttribute('aria-label','Обучение');

@@ -1,8 +1,9 @@
-import {EffectPool} from './core__effects.js?v=76f80bdf5bd9';
-import {MotionShake} from './core__motion-shake.js?v=76f80bdf5bd9';
-import {wallSurface} from './core__surfaces.js?v=76f80bdf5bd9';
-import {ink} from './core__hideout.js?v=76f80bdf5bd9';
-import {GRAFFITI_CONFIG as CONFIG} from './content__graffiti__config.js?v=76f80bdf5bd9';
+import {WallPaint} from './core__wall-paint.js?v=252855055fad';
+import {EffectPool} from './core__effects.js?v=252855055fad';
+import {MotionShake} from './core__motion-shake.js?v=252855055fad';
+import {wallSurface} from './core__surfaces.js?v=252855055fad';
+import {ink} from './core__hideout.js?v=252855055fad';
+import {GRAFFITI_CONFIG as CONFIG} from './content__graffiti__config.js?v=252855055fad';
 
 export function renderPaintLayer(context,art,game,width,height){
   context.clearRect(0,0,width,height);
@@ -43,19 +44,27 @@ export class GraffitiView{
     const end=e=>{if(e?.pointerId!==undefined&&this.activePointer!==null&&e.pointerId!==this.activePointer)return;this.activePointer=null;this.cursor=null;this.game?.end();};
     for(const name of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(name,end);
     window.addEventListener('blur',end);
+    if(session.world.tutorial)this.world=new WallPaint(this);
   }
   bounds(){const g=this.game;return {...this.area,x:this.area.x+(g?.phase==='stencil'?0:g?.stencilOffset.x??0),y:this.area.y+(g?.phase==='stencil'?0:g?.stencilOffset.y??0)};}
   bind(game){
     this.game=game;this.activePointer=null;this.cursor=null;this.time=0;this.lastStroke=-1;this.effects=new EffectPool(48);
-    this.motionUntil=0;this.motion.setActive(false);this.motion.setActive(this.motion.mobile&&!game.choosing&&game.phase==='shake');
+    this.motionUntil=0;this.motion.setActive(false);this.motion.setActive(!this.world&&this.motion.mobile&&!game.choosing&&game.phase==='shake');
     const create=()=>{const v=document.createElement('canvas');v.width=this.area.w;v.height=this.area.h;return v;};
     this.art=create();this.stencil=create();this.painted=create();
     const c=this.art.getContext('2d',{willReadFrequently:true});c.imageSmoothingEnabled=false;
     this.renderer.drawGraffiti(c,game.definition.id,0,0,this.area.w,this.area.h,ink(game.ink).color);
     game.setMask(c.getImageData(0,0,this.area.w,this.area.h).data,this.area.w,this.area.h);
+    game.wallDraw=(ctx,x,y,w,h)=>{
+      if(game.done){ctx.drawImage(this.art,x,y,w,h);return;}
+      ctx.save();ctx.globalAlpha*=.22;ctx.drawImage(this.stencil,x,y,w,h);ctx.restore();
+      if(this.lastStroke!==game.strokeCount){renderPaintLayer(this.painted.getContext('2d'),this.art,game,this.area.w,this.area.h);this.lastStroke=game.strokeCount;}
+      ctx.drawImage(this.painted,x,y,w,h);
+    };
     const stencil=this.stencil.getContext('2d');stencil.filter='grayscale(1)';stencil.drawImage(this.art,0,0);stencil.filter='none';
   }
   draw(dt){
+    if(this.world){this.world.draw(dt);return;}
     const g=this.game;if(!g)return;const c=this.c,a=this.area,atlas=this.renderer.atlas;this.time+=dt;
     c.clearRect(0,0,768,512);c.imageSmoothingEnabled=false;
     if(this.session.world.tutorial){atlas.draw(c,'graffiti_wall',384,512,768,512);c.fillStyle='#15292566';c.fillRect(0,0,768,512);}

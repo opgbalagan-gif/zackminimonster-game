@@ -1,5 +1,5 @@
-import {UIPanel,UISecondaryButton,UITitleLarge} from './core__ui-kit.js?v=76f80bdf5bd9';
-import {dialogFocus} from './core__dialog-focus.js?v=76f80bdf5bd9';
+import {UIPanel,UISecondaryButton,UITitleLarge} from './core__ui-kit.js?v=252855055fad';
+import {dialogFocus} from './core__dialog-focus.js?v=252855055fad';
 export function showChapters(save,onPick,initialTab='path'){
   document.getElementById('chapter-select')?.remove();
   const panel=document.createElement('section');panel.id='chapter-select';panel.setAttribute('aria-label','Путь и обучение');

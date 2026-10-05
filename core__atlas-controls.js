@@ -1,4 +1,4 @@
-import {drawTeamMark} from './core__team-marks.js?v=76f80bdf5bd9';
+import {drawTeamMark} from './core__team-marks.js?v=252855055fad';
 export class AtlasControls{
   constructor(owner){
     this.owner=owner;this.view={zoom:window.innerWidth<700?1.5:1.15,center:null,filter:'all',atlas:owner.ui.renderer.atlas};this.pointers=new Map();

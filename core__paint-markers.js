@@ -1,4 +1,4 @@
-import {wallOwner} from './core__territory.js?v=76f80bdf5bd9';
+import {wallOwner} from './core__territory.js?v=252855055fad';
 export function needsPaint(s,target){
   if(!target)return false;
   if(!s.world.sandbox&&target===s.world.targets[0])return s.tutorial.wall!=='own'||s.tutorial.tag>0||s.tutorial.coating>0;
